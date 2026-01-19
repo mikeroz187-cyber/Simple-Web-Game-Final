@@ -11,7 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
-- (placeholder)
+- What: Added a full location catalog document covering MVP and Vision tiers.
+- Why: Provide a config-ready reference for all planned location data.
+- Files touched: docs/DATA_LOCATIONS.md, CHANGELOG.md.
 
 ### Changed
 - (placeholder)
