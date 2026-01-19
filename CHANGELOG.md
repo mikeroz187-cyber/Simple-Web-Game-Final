@@ -37,6 +37,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Declared config.toml as the single source of truth for MVP numeric values and added a balancing note for intentional placeholders.
+- Why: Remove ambiguity about where tuning values live while keeping data tables in sync.
+- Files touched: docs/MVP/MVP_FORMULAS.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
+- What: Added performer, location, and theme catalog values to config.toml to match MVP data tables.
+- Why: Centralize all MVP numeric values in the config source of truth.
+- Files touched: config.toml, CHANGELOG.md.
 - What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
