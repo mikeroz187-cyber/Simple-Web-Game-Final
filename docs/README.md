@@ -16,8 +16,6 @@ This folder contains all planning and design documentation for **Studio Empire**
 
 ## Documentation Index
 
-*(We will create two lists: one for MVP/Implementation docs and one for Vision/Future docs, each entry with a short description.)*
-
 **MVP / Implementation Docs:**
 - **CURRENT_SCOPE.md** – **(MVP)** Authoritative current scope document (what features are in/out for the MVP).
 - **15-mvp-scope.md** – **(MVP)** Detailed MVP scope and early access plan, listing features included in MVP and which are deferred.
@@ -27,26 +25,17 @@ This folder contains all planning and design documentation for **Studio Empire**
 - **24-ui-blueprint.md** – **(MVP)** Blueprint for the MVP user interface (layout patterns, common UI components, style guide).
 - **25-mvp-state-and-flow.md** – **(MVP)** Definition of the MVP game state structure and game flow logic.
 
-**Vision / Future Docs:**
-- **01-game-overview.md** – **(Vision)** High-level concept overview and core gameplay idea.
-- **02-game-story.md** – **(Vision)** Narrative outline, including story arcs and moral alignment paths.
-- **03-game-core-systems.md** – **(Vision)** Details of core systems (booking, content types, analytics, economy, performer management) beyond MVP.
-- **04-game-performers.md** – **(Vision)** Deep dive on performer mechanics: contracts, loyalty, fatigue, etc.
-- **05-game-progression-and-locations.md** – **(Vision)** Game progression, unlockable locations tiers, equipment upgrades, reputation system.
-- **06-game-social-media.md** – **(Vision)** Social media mechanics and marketing strategies (followers conversion, platform-specific notes).
-- **07-game-competition.md** – **(Vision)** Rival studios and competition mechanics (rankings, poaching, seduction, etc).
-- **08-game-assets-and-implementation.md** – **(Vision)** Asset production strategy and technical considerations (art generation, integration, roadmap).
-- **09-game-monetization.md** – **(Vision)** Monetization design and revenue model (both in-game economy and possibly how the game project could generate revenue).
-- **10-quick-reference-controls.md** – **(Vision)** Quick reference for controls, input schemes, and example save data formats.
-- **11-screen-layouts.md** – **(Vision)** Textual mockups and layouts for all game screens (detailed UI layout descriptions).
-- **12-ux-overview.md** – **(Vision)** Overall user experience flow, describing the player’s journey through the game’s screens and loops.
-- **13-tech-stack.md** – **(Vision)** Technical architecture plan, data structure details, and save/load system design.
-- **14-roadmap.md** – **(Vision)** Long-term development roadmap with phases and milestones beyond the MVP.
-- **15-ux-screen-by-screen-01.md** – **(Vision)** UX breakdown, screen-by-screen (part 1) – step-by-step narrative of user flow (early game).
-- **16-ux-screen-by-screen-02.md** – **(Vision)** UX breakdown screen-by-screen (part 2) – continued user flow (mid-game).
-- **17-ux-screen-by-screen-03.md** – **(Vision)** UX breakdown screen-by-screen (part 3) – continued user flow (late-game).
-- **18-ux-screen-by-screen-04.md** – **(Vision)** UX breakdown screen-by-screen (part 4) – concluding user flow (endgame and future acts).
-- **19-asset-categories-and-requirements.md** – **(Vision)** Asset types needed, specifications (image resolutions, file naming conventions), and content guidelines.
-- **20-distribution-authentication-and-monetization.md** – **(Vision)** Plans for game distribution (platform), user authentication (or lack thereof), and monetization approach for the project.
+**Vision / Future Docs (authoritative for full-game planning):**
+- **VISION_OVERVIEW.md** – **(Vision)** High-level overview for Acts 2–3 planning and design goals.
+- **ACT2_SCOPE.md** – **(Vision)** Act 2 scope boundaries and feature intent.
+- **ACT2_SYSTEMS.md** – **(Vision)** Act 2 systems expansions beyond MVP.
+- **ACT2_STATE_EXTENSIONS.md** – **(Vision)** Act 2 gameState additions and schema extensions.
+- **ACT2_UI_BLUEPRINT.md** – **(Vision)** Act 2 UI layout additions and screen coverage.
+- **ACT2_BALANCING_CONFIG.md** – **(Vision)** Act 2 balance parameters and tuning references.
+- **ACT3_SCOPE.md** – **(Vision)** Act 3 scope boundaries and feature intent.
+- **ACT3_SYSTEMS.md** – **(Vision)** Act 3 systems expansions and late-game mechanics.
+- **ACT3_STATE_EXTENSIONS.md** – **(Vision)** Act 3 gameState additions and schema extensions.
+- **ACT3_UI_BLUEPRINT.md** – **(Vision)** Act 3 UI layout additions and screen coverage.
+- **ACT3_ENDGAME_LOOPS.md** – **(Vision)** Act 3 endgame loops and long-tail progression notes.
 
 Refer to `../README.md` in the repository root for a general introduction and setup instructions.

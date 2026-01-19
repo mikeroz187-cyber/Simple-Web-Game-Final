@@ -20,8 +20,8 @@ Studio Empire is an adult content production management simulator. It runs entir
 4. **Run the game:** Open `index.html` in a web browser (or use a simple static server) to load the game. No build process is required.
 
 ## Documentation
-- The documentation in `docs/` is the **source of truth** for design. For MVP implementation details, see the MVP docs (`docs/15-mvp-scope.md` and related files listed in docs/README). Long-term design ideas are captured in the Vision docs (sections 01–14).
-- If a feature is in the older design docs but **not** mentioned in the MVP docs, it is out of scope for the MVP.
+- The documentation in `docs/` is the **source of truth** for design. For MVP implementation details, see the MVP docs (`docs/15-mvp-scope.md` and related files listed in docs/README). Long-term design ideas live in `docs/VISION/` (Act 2/Act 3 planning documents listed in `docs/README.md`).
+- If a feature is in the Vision docs but **not** mentioned in the MVP docs, it is out of scope for the MVP.
 
 ## Contributing
 - Currently, development is AI-driven using ChatGPT/Codex. Human contributors should read the docs and possibly discuss via issues before coding.
