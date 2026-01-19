@@ -11,7 +11,7 @@ Studio Empire is an adult content production management simulator. It runs entir
 - **.codex/config.toml** – Codex AI configuration settings for this project.
 - **AGENTS.md** – guidelines for AI contributors (Codex/ChatGPT) on how to work within project scope.
 - **docs/** – contains all design documentation (both MVP-specific and future vision docs). `docs/README.md` contains an index of all docs.
-- **src/** (to be created) – will contain the game’s source code (HTML, CSS, JS files) as outlined in the technical docs (e.g. `docs/22-file-and-folder-map.md` and `docs/13-tech-stack.md`).
+- **src/** (to be created) – will contain the game’s source code (HTML, CSS, JS files) as outlined in the technical docs (e.g. `docs/MVP/MVP_FILE_STRUCTURE.md`).
 
 ## Getting Started
 1. **Read the docs:** Start with `docs/README.md` for an index of all documentation and to understand project scope.
@@ -20,7 +20,7 @@ Studio Empire is an adult content production management simulator. It runs entir
 4. **Run the game:** Open `index.html` in a web browser (or use a simple static server) to load the game. No build process is required.
 
 ## Documentation
-- The documentation in `docs/` is the **source of truth** for design. For MVP implementation details, see the MVP docs (`docs/15-mvp-scope.md` and related files listed in docs/README). Long-term design ideas are captured in the Vision docs (sections 01–14).
+- The documentation in `docs/` is the **source of truth** for design. For MVP implementation details, see the MVP docs (`docs/SCOPE_MVP.md` and the files in `docs/MVP/` listed in docs/README). Long-term design ideas are captured in the Vision docs under `docs/VISION/`.
 - If a feature is in the older design docs but **not** mentioned in the MVP docs, it is out of scope for the MVP.
 
 ## Contributing
