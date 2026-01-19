@@ -13,6 +13,7 @@
 
 ## Repo Layout (MVP) — Exact Tree
 Codex must create and maintain the following layout exactly. OPTIONAL entries are explicitly labeled.
+Repo layout is authoritative here: JS lives in `/js`, and CSS lives in `/css/style.css`.
 
 ```
 /
