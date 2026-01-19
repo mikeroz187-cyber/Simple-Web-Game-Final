@@ -43,9 +43,26 @@ This changelog is optimized for:
 - What: Added performer, location, and theme catalog values to config.toml to match MVP data tables.
 - Why: Centralize all MVP numeric values in the config source of truth.
 - Files touched: config.toml, CHANGELOG.md.
+- What: Rephrased CURRENT_SCOPE language to reflect planned MVP scope and removed implementation claims.
+- Why: Keep scope documentation neutral about implementation status and point progress elsewhere.
+- What: Updated MVP file structure docs to list current Vision files as read-only inspiration.
+- Why: Keep MVP documentation aligned with the actual Vision directory contents and scope status.
+- Files touched: docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
+- What: Aligned repo layout references to the /js + /css/style.css structure.
+- Why: Resolve documentation and config conflicts about the authoritative project layout.
+- Files touched: AGENTS.md, config.toml, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
+- What: Noted that repo layout authority lives in CURRENT_SCOPE.
+- Why: Prevent future drift across MVP documents.
+- Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
+- What: Updated documentation index to reference the Act 2/Act 3 Vision files now present in docs/VISION.
+- Why: Keep the docs index aligned with the actual Vision planning source of truth.
+- Files touched: docs/README.md, CHANGELOG.md.
+- What: Adjusted the root README to point to the Vision docs in docs/VISION instead of the legacy numbered list.
+- Why: Ensure contributors can find the correct full-game planning documents.
+- Files touched: README.md, CHANGELOG.md.
 - What: Added Act 1 story trigger days to config.toml and mirrored them in js/config.js.
 - Why: Keep story event timing fully config-driven and consistent across sources.
 - Files touched: config.toml, js/config.js, CHANGELOG.md.
@@ -58,6 +75,9 @@ This changelog is optimized for:
 - What: Clarified MVP day advancement rules and referenced them in the build order.
 - Why: Remove ambiguity around when days advance and how fatigue recovery aligns with day boundaries.
 - Files touched: docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
+- What: Updated documentation references to the current MVP and Vision doc sets.
+- Why: Align scope guidance with the actual files present in docs/SCOPE_MVP.md and docs/MVP/.
+- Files touched: docs/CURRENT_SCOPE.md, docs/README.md, README.md, CHANGELOG.md.
 
 ### Fixed
 - N/A (no changes this run)
