@@ -28,6 +28,9 @@ This changelog is optimized for:
 - What: Added fatigue tuning values to the config for shoot cost and recovery math.
 - Why: Keep fatigue calculations fully config-driven and explicit for MVP.
 - Files touched: config.toml, CHANGELOG.md.
+- What: Clarified MVP day advancement rules and referenced them in the build order.
+- Why: Remove ambiguity around when days advance and how fatigue recovery aligns with day boundaries.
+- Files touched: docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
 
 ### Fixed
 - N/A (no changes this run)
