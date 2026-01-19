@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added MVP test scenarios document with manual verification cases for core gameplay loops.
+- Why: Provide clear, config-driven checks for validating MVP behavior without guessing.
+- Files touched: docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
 - What: Added a full story events catalog covering Act 1 MVP beats and Act 2/3 placeholders.
 - Why: Define narrative triggers and text consistently across MVP and Vision planning.
 - Files touched: docs/DATA_STORY_EVENTS.md, CHANGELOG.md.
