@@ -37,6 +37,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
+- Why: Make the build order document hierarchy explicit for MVP execution guidance.
+- Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
 - What: Added Act 1 story trigger days to config.toml and mirrored them in js/config.js.
 - Why: Keep story event timing fully config-driven and consistent across sources.
 - Files touched: config.toml, js/config.js, CHANGELOG.md.

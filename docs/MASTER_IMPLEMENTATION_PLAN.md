@@ -7,6 +7,7 @@
 - If any step fails, **fix it before moving on**.
 - Do **not** implement Act 2/Act 3 work inside MVP tasks.
 - If scope is unclear, mark it **TBD** and defer to the authoritative scope docs.
+- For detailed MVP phase execution, follow **docs/MVP/MVP_BUILD_ORDER.md** as the step-by-step guide. This Master Plan provides the high-level sequence across all acts.
 
 ## 1) Global Non-Negotiables (Applies to All Acts)
 - Desktop-only, single-page app.
