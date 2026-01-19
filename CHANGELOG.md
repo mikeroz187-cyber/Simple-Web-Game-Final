@@ -37,6 +37,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Rephrased CURRENT_SCOPE language to reflect planned MVP scope and removed implementation claims.
+- Why: Keep scope documentation neutral about implementation status and point progress elsewhere.
+- Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
