@@ -101,3 +101,9 @@ starting_reputation = 0 # Placeholder
 
 # Tier 1 location unlock
 location_tier_1_unlock_cost = 2000 # Placeholder
+
+[story]
+# Act 1 story event trigger days (from docs/DATA_STORY_EVENTS.md)
+act1_intro_day = 1
+act1_debt_reminder_days = [30, 60, 80]
+act1_end_day = 90

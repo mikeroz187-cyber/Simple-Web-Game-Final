@@ -37,6 +37,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Added Act 1 story trigger days to config.toml and mirrored them in js/config.js.
+- Why: Keep story event timing fully config-driven and consistent across sources.
+- Files touched: config.toml, js/config.js, CHANGELOG.md.
 - What: Added fatigue tuning values to the config for shoot cost and recovery math.
 - Why: Keep fatigue calculations fully config-driven and explicit for MVP.
 - Files touched: config.toml, CHANGELOG.md.
