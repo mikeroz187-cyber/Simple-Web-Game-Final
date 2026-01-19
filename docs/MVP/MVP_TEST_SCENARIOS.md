@@ -1,6 +1,6 @@
 # MVP Test Scenarios
 
-This document lists simple **Given X, expect Y** checks to verify MVP gameplay behavior. All values are sourced from `config.toml`, `docs/DATA_LOCATIONS.md`, `docs/DATA_PERFORMERS.md`, and `docs/MVP/MVP_FORMULAS.md`.
+This document lists simple **Given X, expect Y** checks to verify MVP gameplay behavior. All numeric values are sourced from `config.toml` and mirrored into `docs/DATA_*.md` and `docs/MVP/MVP_FORMULAS.md` for reference.
 
 ---
 

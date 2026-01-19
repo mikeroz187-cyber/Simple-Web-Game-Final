@@ -37,6 +37,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Declared config.toml as the single source of truth for MVP numeric values and added a balancing note for intentional placeholders.
+- Why: Remove ambiguity about where tuning values live while keeping data tables in sync.
+- Files touched: docs/MVP/MVP_FORMULAS.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
+- What: Added performer, location, and theme catalog values to config.toml to match MVP data tables.
+- Why: Centralize all MVP numeric values in the config source of truth.
+- Files touched: config.toml, CHANGELOG.md.
 - What: Rephrased CURRENT_SCOPE language to reflect planned MVP scope and removed implementation claims.
 - Why: Keep scope documentation neutral about implementation status and point progress elsewhere.
 - What: Updated MVP file structure docs to list current Vision files as read-only inspiration.

@@ -4,6 +4,13 @@ This document defines the **exact MVP formulas** used for gameplay calculations.
 
 All formulas reference **`config.toml`** values via `CONFIG.*` and use only MVP data inputs.
 
+**Single Source of Truth (MVP numeric values)**
+- `config.toml` is authoritative for **all MVP numeric values**, including economy tuning and catalog data (locations, performers, themes).
+- The `docs/DATA_*.md` tables are **mirrors for readability** and must be kept in sync with `config.toml`.
+
+**Balancing Note**
+- Economy tuning values (promo followers, premium base revenue, subscriber conversion, base shoot cost) and theme modifiers are intentionally conservative placeholders for MVP balancing. Update them in `config.toml` first, then mirror changes into the data tables.
+
 ---
 
 ## 1) Shoot Cost Formula
