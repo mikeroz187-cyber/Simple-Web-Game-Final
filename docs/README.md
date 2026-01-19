@@ -16,8 +16,6 @@ This folder contains all planning and design documentation for **Studio Empire**
 
 ## Documentation Index
 
-*(We will create two lists: one for MVP/Implementation docs and one for Vision/Future docs, each entry with a short description.)*
-
 **MVP / Implementation Docs:**
 - **CURRENT_SCOPE.md** – **(MVP)** Authoritative current scope document (what features are in/out for the MVP).
 - **SCOPE_MVP.md** – **(MVP)** Detailed MVP scope and early access plan, listing features included in MVP and which are deferred.
