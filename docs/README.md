@@ -40,6 +40,7 @@ This folder contains all planning and design documentation for **Studio Empire**
 - **VISION/ACT3_STATE_EXTENSIONS.md** – **(Vision)** State model extensions for Act 3.
 - **VISION/ACT3_UI_BLUEPRINT.md** – **(Vision)** UI layout concepts for Act 3.
 - **VISION/ACT3_ENDGAME_LOOPS.md** – **(Vision)** Endgame loop concepts for Act 3.
+- **VISION/ACT3_BALANCING_CONFIG.md** – **(Vision)** Act 3 balancing notes and config guidance.
 
 Refer to `../README.md` in the repository root for a general introduction and setup instructions.
 

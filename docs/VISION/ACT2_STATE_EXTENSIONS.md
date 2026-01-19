@@ -22,20 +22,70 @@
 ## 4) Act 2 Extensions — Additive Schema
 
 ### New Top-Level Keys (v2)
-- performerManagement: object — bucket for contracts/retention/availability (TBD) — default: {}
-- analyticsHistory: array — historical analytics snapshots (TBD record shape) — default: []
-- equipment: object — equipment upgrade state (TBD upgrade map) — default: {}
-- milestones: array — studio milestone tracking list (TBD record shape) — default: []
+- performerManagement: object — contracts/retention/availability tracking — default: `{ contracts: {}, availability: {}, retentionFlags: {} }`
+- analyticsHistory: array — historical analytics snapshots — default: `[]`
+- equipment: object — equipment upgrade state — default: `{ lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 }`
+- milestones: array — studio milestone tracking list — default: `[]`
 
 ### New Nested Keys Under Existing Branches (v2)
-- unlocks.locationTiers: object — expanded location tier unlock states (TBD tier map) — default: {}
-- story.act2: object — Act 2 story flags/event tracking (TBD) — default: {}
-- social.strategy: object — platform emphasis settings (TBD) — default: {}
-- roster.performerRoles: object — performer role definitions/assignments (TBD) — default: {}
+- unlocks.locationTiers: object — expanded location tier unlock states — default: `{ tier0: true, tier1: false, tier2: false }`
+- story.act2: object — Act 2 story flags/event tracking — default: `{ eventsShown: [], lastEventId: null }`
+- social.strategy: object — platform emphasis settings — default: `{ activeStrategyId: "balanced" }`
+- roster.performerRoles: object — performer role definitions/assignments — default: `{}` (keyed by performerId)
 
 ## 5) Derived Values Are Not Stored
 - Never store computed/derived values if they can be calculated at render-time or system-call-time.
 - Examples: totals, per-tick income, computed multipliers. These belong in systems, not state.
+
+## 5.1) Act 2 Record Shapes (Concrete)
+
+### performerManagement.contracts[performerId]
+```json
+{
+  "contractDaysRemaining": 90,
+  "contractLengthDays": 90,
+  "renewalCost": 500,
+  "status": "active"
+}
+```
+
+### performerManagement.availability[performerId]
+```json
+{
+  "consecutiveBookings": 0,
+  "restDaysRemaining": 0
+}
+```
+
+### performerManagement.retentionFlags[performerId]
+```json
+{
+  "warned": false,
+  "left": false
+}
+```
+
+### analyticsHistory entry
+```json
+{
+  "day": 98,
+  "windowDays": 7,
+  "revenue": 4200,
+  "followers": 1200,
+  "subscribers": 80,
+  "promoCount": 4,
+  "premiumCount": 3
+}
+```
+
+### milestone record
+```json
+{
+  "id": "ms_followers_1000",
+  "completed": true,
+  "completedAt": "2025-01-01T00:00:00.000Z"
+}
+```
 
 ## 6) Migration Plan: v1 → v2 (Deterministic)
 Algorithm:

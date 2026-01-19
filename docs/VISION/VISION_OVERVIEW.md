@@ -31,91 +31,91 @@ Vision describes **post-MVP** expansion only. It is a planning layer for Act 2 a
 Based strictly on `docs/SCOPE_VISION.md`:
 
 ### Theme: Expanded performer management
-- Summary: Deeper talent management such as contracts, loyalty pressures, and long-term retention. (Details TBD.)
+- Summary: Contract lengths (30/60/90 days), retention risk checks, and availability rules layered on top of fatigue.
 - What it touches: State (performer fields), systems (performer management), UI (roster), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP performer roster, fatigue/loyalty systems, save/load.
 
 ### Theme: Rival studios / competitive pressure
-- Summary: Competitive pressure and market positioning challenges. (Details TBD.)
+- Summary: Two rival studios with quarterly score checks, market shift modifiers, and reputation impacts.
 - What it touches: State (rival metadata), systems (competition), UI (status/alerts), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP economy, reputation, and progression systems.
 
 ### Theme: Advanced analytics
-- Summary: Deeper insights that reward strategic planning. (Details TBD.)
+- Summary: Rolling 7/30-day averages plus content-type performance splits and platform effectiveness.
 - What it touches: State (analytics history), systems (analytics aggregation), UI (analytics screen), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP analytics outputs and content history.
 
 ### Theme: Additional location tiers
-- Summary: More unlockable spaces with escalating costs and benefits. (Details TBD.)
+- Summary: Tier 2 (Act 2) and Tier 3 (Act 3) locations gated by reputation thresholds.
 - What it touches: State (unlock tiers), systems (progression), UI (shop/booking), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP location unlock flow and reputation gating.
 
 ### Theme: Equipment upgrades
-- Summary: Optional investments that affect output quality. (Details TBD.)
+- Summary: Lighting, camera, and set-dressing upgrades that add deterministic multipliers.
 - What it touches: State (equipment levels), systems (economy/output), UI (shop), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP economy and progression systems.
 
 ### Theme: Structured events
-- Summary: High-impact moments that test preparedness. (Details TBD.)
+- Summary: Day-triggered Act 3 events with deterministic outcomes and clear player messaging.
 - What it touches: State (event queue), systems (story/events), UI (event modal/panel), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP story/event framework and day progression.
 
 ### Theme: Reputation branches
-- Summary: Distinct studio identities with different strengths. (Details TBD.)
+- Summary: Three studio identity branches with fixed modifiers and gated unlock requirements.
 - What it touches: State (reputation path), systems (progression/modifiers), UI (reputation display), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP reputation stat and unlock gating.
 
 ### Theme: Additional content themes
-- Summary: Broader planning options without new core loops. (Details TBD.)
+- Summary: Act 2 and Act 3 theme packs with explicit follower/revenue modifiers.
 - What it touches: State (content catalog), systems (booking/results), UI (booking selection), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP booking flow and content history.
 
 ### Theme: Long-term story arcs
-- Summary: Act 2/3 narrative beats after the debt storyline. (Details TBD.)
+- Summary: Act 2 events at Days 95/120/145/170 and Act 3 events at Days 200/225/245/270.
 - What it touches: State (story flags), systems (story progression), UI (story events), save (schema extension).
 - Act: Act 2 and Act 3
 - Dependencies: MVP Act 1 story structure and day progression.
 
 ### Theme: Expanded roster depth
-- Summary: More performers and clearer role differentiation. (Details TBD.)
+- Summary: Act 2 adds four performers with roles; Act 3 adds three elite performers.
 - What it touches: State (roster size/roles), systems (roster management), UI (roster screen), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP roster and booking selection.
 
 ### Theme: Deeper social strategy
-- Summary: Platform emphasis and audience composition choices. (Details TBD.)
+- Summary: Three social strategies with platform weighting and subscriber conversion modifiers.
 - What it touches: State (platform tuning), systems (social impact), UI (social screen), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP social platforms (Instagram/X) and promo posting.
 
 ### Theme: Studio milestones
-- Summary: Visible achievements that mark progress. (Details TBD.)
+- Summary: Milestones triggered by revenue, followers, subscribers, and reputation thresholds.
 - What it touches: State (milestones), systems (progress tracking), UI (hub/summary), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP progression signals (reputation, unlocks).
 
 ### Theme: Optional automation
-- Summary: Late-game tools that reduce repetitive actions. (Details TBD.)
+- Summary: Config-driven auto-booking rules with safety caps and opt-in toggles.
 - What it touches: State (automation flags), systems (automation), UI (controls), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP core loop actions and booking system.
 
 ### Theme: Content performance variance
-- Summary: Greater risk/reward in output results. (Details TBD.)
+- Summary: Bounded ±15% variance with seed-based rolls logged per content entry.
 - What it touches: State (result rolls), systems (content results), UI (analytics feedback), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP content result generation and analytics.
 
 ### Theme: Advanced scheduling
-- Summary: Balancing multiple shoots or parallel planning. (Details TBD.)
+- Summary: Queue up to 3 bookings with deterministic resolution on day advance.
 - What it touches: State (schedule), systems (booking/time), UI (booking), save (schema extension).
 - Act: Act 3
 - Dependencies: MVP booking flow and day advancement.

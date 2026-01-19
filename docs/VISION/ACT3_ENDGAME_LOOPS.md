@@ -13,31 +13,31 @@ The Act 3 endgame loop is a repeatable cycle that builds on the MVP booking loop
 6) Evaluate milestone/branch progress and claim eligible rewards.
 7) Repeat with the next milestone tier or story beat.
 
-If any step depends on a system that is not yet confirmed, it must remain **TBD (requires validation from source repo)**.
+All steps are confirmed in Act 3 scope and must be implemented as described.
 
 ## 3) Milestones / Goals Model
 Act 3 goals are represented by **tiered, config-driven milestones** that do not replace Act 2 milestones.
 - **Primary milestone types (config-driven):** legacy milestones and reputation branch progress (if enabled).
-- **Objective categories:** TBD (requires validation from source repo). Use a generic model until categories are confirmed.
-- **Progress evaluation rules:** evaluate after key actions (booking completion, event resolution, or day advance), with thresholds defined in config. If exact thresholds are unknown, they remain **TBD**.
+- **Objective categories:** revenue, reputation, subscribers, legacyScore, storyCompletion.
+- **Progress evaluation rules:** evaluate after booking completion, event resolution, or day advance using config-defined thresholds.
 
-**Generic milestone record shape (placeholder):**
+**Milestone record shape:**
 ```
 {
   id: "milestone-id",
   name: "Milestone Name",
   tier: 1,
   status: "locked" | "in_progress" | "complete" | "claimed",
-  requirements: [/* config-defined thresholds, TBD */],
-  rewards: [/* config-defined rewards, TBD */]
+  requirements: [{ key: "revenue", threshold: 250000 }],
+  rewards: [{ type: "cash_bonus", amount: 5000 }]
 }
 ```
 
 ## 4) Reward Model (What You Get for Completing Milestones)
 Rewards are **config-driven** and limited to what Act 3 scope allows. Allowed reward types:
 - **Unlock next milestone tiers** (tier gating via config).
-- **One-time bonus payouts** (if configured by Act 3 economy tuning; exact amounts TBD).
-- **Permanent modifiers** only if explicitly confirmed by config and scope (TBD).
+- **One-time bonus payouts** (fixed by config).
+- **Permanent modifiers** are not used in Act 3.
 - **Cosmetic/log flavor** (optional, non-mechanical).
 
 No new currencies, monetization, or narrative systems are introduced beyond what Act 3 scope permits.
@@ -47,7 +47,7 @@ No reset/prestige mechanics are implemented in Act 3 unless explicitly confirmed
 
 ## 6) Risk, Consequence, and Constraints (Late-Game Pressure)
 Act 3 difficulty comes from **config-driven constraints**:
-- **Resource constraints:** cash, reputation, and milestone gating (TBD exact thresholds).
+- **Resource constraints:** cash, reputation, and milestone gating (thresholds defined in `CONFIG.legacyMilestones` and `CONFIG.reputation.branches`).
 - **Opportunity cost:** choosing between rival/market responses and milestone progress.
 - **Failure states:** soft failure preferred (e.g., delayed milestones, reduced impact), with recovery through standard booking loop.
 - **Recovery:** return to the core loop to rebuild metrics; no hard resets unless explicitly confirmed.
@@ -56,11 +56,11 @@ All constraints must be adjustable through config and surfaced in the UI with cl
 
 ## 7) Anti-Runaway Scaling Controls
 Act 3 must avoid runaway growth using config-driven controls consistent with scope:
-- **Soft caps or diminishing returns:** TBD (only if confirmed in config).
+- **Soft caps or diminishing returns:** not used beyond variance and market caps.
 - **Tier gating:** legacy milestone tiers and reputation branches gate progression.
-- **Escalating costs:** allowed only if defined by Act 3 economy config (TBD).
+- **Escalating costs:** not used in Act 3.
 
-If scaling controls are not explicitly confirmed in the Act 3 scope or config, mark them as **TBD** and do not implement.
+Scaling controls are limited to market and variance caps.
 
 ## 8) UI Surfacing Requirements
 Endgame loop status must be visible without new screens:

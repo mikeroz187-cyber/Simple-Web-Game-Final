@@ -40,16 +40,16 @@ Surface Act 2 progression signals and narrative messaging without changing MVP n
 #### Panels / Sections
 - **Panel Name:** Milestones Summary
   - Reads from gameState: `milestones`
-  - Displays: list of milestone names/statuses (TBD record shape)
+  - Displays: list of milestone names/statuses (locked/in-progress/complete)
   - Actions (buttons/controls):
-    - TBD (read-only unless milestone actions are defined)
+    - None (read-only in Act 2)
   - Empty/edge states: “No milestones yet.”
 
 - **Panel Name:** Act 2 Story Status
   - Reads from gameState: `story.act2`, `player.day`
-  - Displays: current Act 2 story status/flags (TBD fields)
+  - Displays: last Act 2 event title + day, plus “Next event at Day X” hint
   - Actions (buttons/controls):
-    - TBD (only if story events require acknowledgement)
+    - None (events auto-fire on day start)
   - Empty/edge states: “Act 2 story not started.”
 
 #### Notes
@@ -70,17 +70,17 @@ Expose Act 2 availability and expanded catalogs while preserving MVP booking flo
 #### Panels / Sections
 - **Panel Name:** Performer Availability
   - Reads from gameState: `roster.performers`, `performerManagement`, `roster.performerRoles`
-  - Displays: availability/contract status indicators (TBD fields) alongside MVP stats
+  - Displays: availability status, contract days remaining, consecutive bookings
   - Actions (buttons/controls):
     - Performer selection (same as MVP)
-    - Enabled/disabled rule: selection blocked if `performerManagement` marks performer unavailable (TBD rule)
+    - Enabled/disabled rule: selection blocked if `restDaysRemaining > 0` or `consecutiveBookings >= maxConsecutiveBookings`
     - On click: calls `booking.validateBooking(...)` (selection validation only)
-    - Result handling: inline validation message (TBD)
+    - Result handling: inline validation message (“Performer must rest.” / “Contract expired.”)
   - Empty/edge states: “No available performers.”
 
 - **Panel Name:** Location Tiers (Expanded)
   - Reads from gameState: `unlocks.locationTiers`
-  - Displays: tiered location list with lock status (TBD tier structure)
+  - Displays: tiered location list with lock status (Tier 0–2) and reputation gates
   - Actions (buttons/controls):
     - Location selection (same as MVP)
     - Enabled/disabled rule: locked tiers disabled
@@ -90,10 +90,10 @@ Expose Act 2 availability and expanded catalogs while preserving MVP booking flo
 
 - **Panel Name:** Theme Catalog (Expanded)
   - Reads from gameState: (config-driven only; no new state)
-  - Displays: expanded theme list (TBD definitions)
+  - Displays: expanded theme list (MVP + Act 2 themes)
   - Actions (buttons/controls):
     - Theme selection (same as MVP)
-    - Enabled/disabled rule: none unless theme gated (TBD)
+    - Enabled/disabled rule: none (themes are not gated)
     - On click: calls `booking.validateBooking(...)`
     - Result handling: inline validation message
   - Empty/edge states: “No themes available.”
@@ -116,14 +116,14 @@ Add advanced summaries derived from history without changing MVP results display
 #### Panels / Sections
 - **Panel Name:** Advanced Analytics Summary
   - Reads from gameState: `analyticsHistory`, `content.entries`, `social.posts`, `player`
-  - Displays: rollups/summary metrics (TBD fields and windows)
+  - Displays: 7-day and 30-day rollups for revenue, followers, subscribers, promo/premium counts
   - Actions (buttons/controls):
-    - TBD (read-only summary)
+    - None (read-only summary)
   - Empty/edge states: “No analytics history yet.”
 
 - **Panel Name:** Equipment Impact Notes
   - Reads from gameState: `equipment` (and latest content entry via `content.entries`)
-  - Displays: any equipment modifiers applied to latest results (TBD fields)
+  - Displays: equipment levels and applied multipliers (lighting/camera/set dressing)
   - Actions (buttons/controls):
     - None (read-only)
   - Empty/edge states: “No equipment upgrades.”
@@ -146,16 +146,16 @@ Show expanded performer management details without breaking MVP roster view.
 #### Panels / Sections
 - **Panel Name:** Performer Roles & Status
   - Reads from gameState: `roster.performers`, `roster.performerRoles`
-  - Displays: role labels, availability/contract status (TBD fields)
+  - Displays: role labels (Lead/Specialist/Support), availability, contract days remaining
   - Actions (buttons/controls):
-    - TBD (if role/contract changes are allowed later)
+    - None (read-only in Act 2)
   - Empty/edge states: “No performers available.”
 
 - **Panel Name:** Retention/Availability Overview
   - Reads from gameState: `performerManagement`
-  - Displays: retention/availability metrics (TBD fields)
+  - Displays: loyalty value, warning state, and consecutive booking count
   - Actions (buttons/controls):
-    - TBD (read-only unless management actions are explicitly defined)
+    - None (read-only in Act 2)
   - Empty/edge states: “No management data.”
 
 #### Notes
@@ -176,9 +176,9 @@ Introduce platform emphasis/strategy controls while preserving MVP posting flow.
 #### Panels / Sections
 - **Panel Name:** Platform Strategy Controls
   - Reads from gameState: `social.strategy`
-  - Displays: selected platform emphasis and audience composition summary (TBD fields)
+  - Displays: active strategy name, Instagram/X multipliers, conversion modifier
   - Actions (buttons/controls):
-    - Label: “Apply Strategy” (TBD)
+    - Label: “Apply Strategy”
     - Enabled/disabled rule: disabled if strategy selection invalid
     - On click: calls `social.setSocialStrategy(...)`
     - Result handling: toast/message from result.message
@@ -186,7 +186,7 @@ Introduce platform emphasis/strategy controls while preserving MVP posting flow.
 
 - **Panel Name:** Strategy Impact Summary
   - Reads from gameState: `social.strategy`, `social.posts`
-  - Displays: last post impact with strategy applied (TBD fields)
+  - Displays: last post followers/subscribers gained with strategy applied
   - Actions (buttons/controls):
     - None (read-only)
   - Empty/edge states: “No posts yet.”
@@ -209,7 +209,7 @@ Extend the Shop with additional location tiers and equipment upgrades.
 #### Panels / Sections
 - **Panel Name:** Location Tier Unlocks
   - Reads from gameState: `unlocks.locationTiers`, `player.cash`
-  - Displays: tier cards with cost and lock status (TBD tier structure)
+  - Displays: tier cards with cost, reputation requirement, and lock status
   - Actions (buttons/controls):
     - Label: “Unlock Tier” (per tier)
     - Enabled/disabled rule: disabled if already unlocked or cash < cost
@@ -219,7 +219,7 @@ Extend the Shop with additional location tiers and equipment upgrades.
 
 - **Panel Name:** Equipment Upgrades
   - Reads from gameState: `equipment`, `player.cash`
-  - Displays: upgrade cards with level/cost/effect (TBD fields)
+  - Displays: upgrade cards with level, next cost, and multipliers
   - Actions (buttons/controls):
     - Label: “Buy Upgrade” (per upgrade)
     - Enabled/disabled rule: disabled if maxed or cash < cost

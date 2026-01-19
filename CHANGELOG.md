@@ -37,6 +37,15 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Finalized Act 2/Act 3 scopes, systems, state extensions, UI blueprints, and endgame loop specifics.
+- Why: Provide complete, non-ambiguous full-game planning for Codex implementation.
+- Files touched: docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_STATE_EXTENSIONS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/VISION/ACT3_SCOPE.md, docs/VISION/ACT3_SYSTEMS.md, docs/VISION/ACT3_STATE_EXTENSIONS.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/VISION/ACT3_ENDGAME_LOOPS.md, docs/VISION/VISION_OVERVIEW.md, docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
+- What: Replaced Act 2/Act 3 placeholder catalogs and UI copy with concrete data, schedules, and labels.
+- Why: Ensure full-game data tables and copy are ready without guesswork.
+- Files touched: docs/DATA_PERFORMERS.md, docs/DATA_THEMES.md, docs/DATA_LOCATIONS.md, docs/DATA_STORY_EVENTS.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
+- What: Added Act 3 balancing config guidance and extended configuration sources to include Act 2/Act 3 tunables.
+- Why: Make future implementation config-driven and aligned with finalized Vision specs.
+- Files touched: docs/VISION/ACT3_BALANCING_CONFIG.md, docs/README.md, config.toml, src/config.js, CHANGELOG.md.
 - What: Aligned repo layout references to `/src` and `/styles.css` across docs and the agent rules.
 - Why: Match the confirmed Option B file structure and prevent future path confusion.
 - Files touched: AGENTS.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/README.md, README.md, docs/VISION/ACT2_BALANCING_CONFIG.md, docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/VISION/ACT3_SCOPE.md, docs/VISION/ACT3_SYSTEMS.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/MVP/MVP_UI_BLUEPRINT.md, CHANGELOG.md.

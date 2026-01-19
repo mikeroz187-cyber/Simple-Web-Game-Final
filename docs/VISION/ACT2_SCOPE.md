@@ -3,6 +3,8 @@
 ## 1) Act 2 Goal Statement
 Act 2 delivers mid-game depth by expanding studio operations without changing the MVP core loop. Mid-game depth means the player faces more competing priorities (talent management, growth vs. stability, and longer-horizon planning) while still making the same clear book → results → analytics decisions. The loop remains simple and readable, but outcomes become more strategic through additive systems and clearer tradeoffs. Complexity increases through new systems that layer on top of MVP data and screens, not through new core loops or technical changes. MVP remains locked, and Act 2 only extends it where explicitly allowed by the Vision scope.
 
+**Act 2 timeline:** Days 91–180. Day 90 ends Act 1; Day 91 begins Act 2.
+
 ## 2) Hard Boundary: What Act 2 Is Not
 - No changes to MVP scope, screens, or rules beyond additive Act 2 extensions.
 - No Act 3 systems, endgame loops, prestige, or rival studios.
@@ -14,71 +16,72 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.1 — Expanded Performer Management
 - Summary (1–2 sentences)
-  - Add deeper performer management focused on contracts/retention pressures and availability. Details remain TBD until validated by source scope.
+  - Add contract lengths, retention checks, and availability rules that make roster planning a mid-game priority.
 - Player Value (why it matters)
   - Creates meaningful tradeoffs in talent usage and long-term stability.
 - MVP Dependencies (what must already exist)
   - MVP roster, fatigue/loyalty tracking, booking flow, save/load.
 - New State Needed (high level keys; no deep schema yet)
-  - `performerManagement` (TBD fields for contracts/retention/availability).
+  - `performerManagement` with `contracts`, `availability`, and `retentionFlags`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/roster.js` (expanded), `systems/booking.js` (availability checks).
 - UI Surfaces (which screens/panels)
   - Roster screen (new panels), Booking screen (availability indicators).
 - Config Additions (what new tunables are required)
-  - Contract/retention thresholds, availability recovery rules (TBD config categories).
+  - Contract lengths (core/freelance), renewal cost, loyalty thresholds, and max consecutive booking rules.
 - Save/Load Considerations (versioning/migration notes)
   - Save schema v2 adds performer-management fields with safe defaults.
 - Acceptance Criteria (specific + testable)
-  - Roster shows new performer management data without breaking MVP stats.
-  - Booking prevents selection when availability rules block a performer.
+  - Each performer shows contract days remaining and availability status.
+  - Booking prevents selection when fatigue is maxed or when max-consecutive usage is violated.
+  - When a contract expires, the performer becomes inactive until renewal.
   - Save/load migration preserves existing roster data and initializes new fields.
 - Out of Scope Notes (what this feature explicitly does not include)
   - No new performer currencies or negotiation minigames.
 
 ### A2.2 — Advanced Analytics
 - Summary (1–2 sentences)
-  - Add deeper analytics insights derived from existing content history. Specific metrics are TBD until validated by source scope.
+  - Add 7-day and 30-day rollups for revenue, followers, and subscribers plus promo/premium split summaries.
 - Player Value (why it matters)
   - Rewards informed choices and clarifies the impact of decisions over time.
 - MVP Dependencies (what must already exist)
   - MVP analytics outputs, content history, and content results data.
 - New State Needed (high level keys; no deep schema yet)
-  - `analyticsHistory` (TBD aggregates/summary records).
+  - `analyticsHistory` entries captured every 7 days.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/analytics.js` (expanded aggregation and summaries).
 - UI Surfaces (which screens/panels)
   - Analytics screen (new panels/sections).
 - Config Additions (what new tunables are required)
-  - Analytics rollups and time windows (TBD config categories).
+  - Rollup windows: `[7, 30]`, snapshot frequency: `7`, and metric keys list.
 - Save/Load Considerations (versioning/migration notes)
   - Migration initializes analytics aggregates from existing content history where possible.
 - Acceptance Criteria (specific + testable)
-  - Analytics screen displays new summary sections without altering MVP metrics.
-  - Aggregates update after each completed loop.
+  - Analytics screen displays 7-day and 30-day rollups.
+  - Aggregates update after each completed loop and snapshot every 7 days.
   - Save/load retains analytics history without errors.
 - Out of Scope Notes (what this feature explicitly does not include)
   - No charts or trend dashboards unless explicitly defined later.
 
 ### A2.3 — Additional Location Tiers
 - Summary (1–2 sentences)
-  - Add more unlockable location tiers with escalating costs/benefits. Specific tiers and effects are TBD.
+  - Add Tier 2 locations with higher costs and reputation-gated unlocks.
 - Player Value (why it matters)
   - Provides new progression goals and strategic spend decisions.
 - MVP Dependencies (what must already exist)
   - MVP location unlock flow, reputation gating, booking selection.
 - New State Needed (high level keys; no deep schema yet)
-  - `unlocks.locationTiers` (TBD structure for tier states).
+  - `unlocks.locationTiers` with tier IDs and unlocked flags.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js`, `systems/booking.js` (location availability), `systems/shop.js`.
 - UI Surfaces (which screens/panels)
   - Shop screen (new unlock cards), Booking screen (expanded location list).
 - Config Additions (what new tunables are required)
-  - Location tier costs, unlock requirements, and effects (TBD config categories).
+  - Tier 2 locations, unlock costs, and reputation requirements.
 - Save/Load Considerations (versioning/migration notes)
   - Migrate MVP’s tier-1 flag into the new tier structure safely.
 - Acceptance Criteria (specific + testable)
-  - New location tiers appear only after meeting unlock requirements.
+  - Tier 2 locations appear only after meeting reputation thresholds and paying unlock cost.
   - Booking uses the correct tier list based on unlocks.
   - Save migration preserves the MVP tier-1 unlock state.
 - Out of Scope Notes (what this feature explicitly does not include)
@@ -86,19 +89,19 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.4 — Equipment Upgrades
 - Summary (1–2 sentences)
-  - Add optional equipment upgrades that influence output quality. Specific upgrade types are TBD.
+  - Add Lighting, Camera, and Set Dressing upgrades (3 levels each) that apply deterministic multipliers.
 - Player Value (why it matters)
   - Introduces longer-term investment choices with visible benefits.
 - MVP Dependencies (what must already exist)
   - MVP economy, shop purchase flow, content output calculation.
 - New State Needed (high level keys; no deep schema yet)
-  - `equipment` (TBD upgrade levels/state).
+  - `equipment` with upgrade levels per category.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/shop.js`, `systems/booking.js` or `systems/content.js` (apply equipment effects).
 - UI Surfaces (which screens/panels)
   - Shop screen (equipment upgrade cards), Analytics screen (output notes).
 - Config Additions (what new tunables are required)
-  - Upgrade costs, effects, and caps (TBD config categories).
+  - Upgrade cost tables and per-level revenue/follower multipliers.
 - Save/Load Considerations (versioning/migration notes)
   - Initialize equipment state with baseline values on migration.
 - Acceptance Criteria (specific + testable)
@@ -109,7 +112,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.5 — Additional Content Themes
 - Summary (1–2 sentences)
-  - Expand the list of content themes to deepen planning options without changing the core loop. Specific themes are TBD.
+  - Add five Act 2 themes (Luxury Retreat, Editorial, Downtown Chic, Sunlit Getaway, After Hours).
 - Player Value (why it matters)
   - Adds variety and more strategic choices in bookings.
 - MVP Dependencies (what must already exist)
@@ -121,7 +124,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 - UI Surfaces (which screens/panels)
   - Booking screen (expanded theme list).
 - Config Additions (what new tunables are required)
-  - Theme definitions and any theme-specific modifiers (TBD config categories).
+  - Theme definitions and modifiers for the Act 2 theme pack.
 - Save/Load Considerations (versioning/migration notes)
   - Content history continues to store theme IDs; migration may add new theme catalog without altering existing entries.
 - Acceptance Criteria (specific + testable)
@@ -132,19 +135,19 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.6 — Long-Term Story Arcs (Act 2)
 - Summary (1–2 sentences)
-  - Add Act 2 narrative beats after the debt storyline. Specific story events are TBD.
+  - Add Act 2 narrative beats on Days 95, 120, 145, and 170.
 - Player Value (why it matters)
   - Provides narrative context and goals beyond the initial debt arc.
 - MVP Dependencies (what must already exist)
   - MVP Act 1 story system and day progression.
 - New State Needed (high level keys; no deep schema yet)
-  - `story.act2` (TBD flags/event tracking).
+  - `story.act2` with `eventsShown` array and `lastEventId`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/story.js` (new Act 2 event logic).
 - UI Surfaces (which screens/panels)
   - Hub or dedicated story panel within existing screens (no new screen required unless later validated).
 - Config Additions (what new tunables are required)
-  - Story event schedules and trigger conditions (TBD config categories).
+  - Story event schedule and trigger conditions (`onDayStart`).
 - Save/Load Considerations (versioning/migration notes)
   - Migrate story state with new act-2 flags defaulting to false.
 - Acceptance Criteria (specific + testable)
@@ -155,19 +158,19 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.7 — Expanded Roster Depth
 - Summary (1–2 sentences)
-  - Add more performers and clearer role differentiation. Specific counts and roles are TBD.
+  - Add four Act 2 performers and assign roles (Lead, Specialist, Support) with clear UI labels.
 - Player Value (why it matters)
   - Increases planning depth and roster variety.
 - MVP Dependencies (what must already exist)
   - MVP roster system, booking selection, and performer stats.
 - New State Needed (high level keys; no deep schema yet)
-  - `roster.performers` expands; optional `performerRoles` (TBD).
+  - `roster.performers` expands; `roster.performerRoles` maps performer IDs to roles.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/roster.js`, `systems/booking.js` (selection lists).
 - UI Surfaces (which screens/panels)
   - Roster screen (expanded list), Booking screen (more performers).
 - Config Additions (what new tunables are required)
-  - Performer definitions, role categories, and defaults (TBD config categories).
+  - Performer definitions, role categories, and role modifier values.
 - Save/Load Considerations (versioning/migration notes)
   - Migration preserves existing performers and appends new ones with defaults.
 - Acceptance Criteria (specific + testable)
@@ -177,19 +180,19 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.8 — Deeper Social Strategy
 - Summary (1–2 sentences)
-  - Add platform emphasis and audience composition choices. Specific mechanics are TBD.
+  - Add three social strategies (Balanced, Growth Focus, Revenue Focus) that modify platform reach and subscriber conversion.
 - Player Value (why it matters)
   - Encourages strategic platform use and planning for audience outcomes.
 - MVP Dependencies (what must already exist)
   - MVP social platforms (Instagram/X) and promo posting.
 - New State Needed (high level keys; no deep schema yet)
-  - `social.strategy` (TBD platform emphasis settings).
+  - `social.strategy` with `activeStrategyId`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/social.js` (expanded platform effects).
 - UI Surfaces (which screens/panels)
   - Social screen (strategy controls/summary).
 - Config Additions (what new tunables are required)
-  - Platform weighting, audience composition modifiers (TBD config categories).
+  - Strategy definitions with platform multipliers and conversion modifiers.
 - Save/Load Considerations (versioning/migration notes)
   - Migration initializes social strategy fields with defaults.
 - Acceptance Criteria (specific + testable)
@@ -200,19 +203,19 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.9 — Studio Milestones
 - Summary (1–2 sentences)
-  - Add visible achievements that mark progress. Specific milestones are TBD.
+  - Add milestones tied to revenue, followers, subscribers, and reputation thresholds.
 - Player Value (why it matters)
   - Provides clear long-term goals and feedback for progress.
 - MVP Dependencies (what must already exist)
   - MVP progression signals (reputation, unlocks).
 - New State Needed (high level keys; no deep schema yet)
-  - `milestones` (TBD milestone tracking list).
+  - `milestones` array with completion flags and timestamps.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js` or `systems/milestones.js` (new tracking system).
 - UI Surfaces (which screens/panels)
   - Hub screen (milestone summary), optional panel in Roster or Analytics.
 - Config Additions (what new tunables are required)
-  - Milestone definitions and thresholds (TBD config categories).
+  - Milestone definitions, thresholds, and reward text (no new currencies).
 - Save/Load Considerations (versioning/migration notes)
   - Migration initializes milestone list and completion flags.
 - Acceptance Criteria (specific + testable)
@@ -243,14 +246,14 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 - What stays stable from MVP economy: Promo vs Premium split, core booking loop, debt mechanics remain as implemented for Act 1.
 
 ## 6) Act 2 Data/Config Requirements
-- Expanded performer management tuning (contracts/retention/availability) — TBD.
-- Advanced analytics rollups and time windows — TBD.
-- Location tier definitions, costs, and unlock requirements — TBD.
-- Equipment upgrade definitions, costs, effects, caps — TBD.
-- Content theme catalog expansions — TBD.
-- Act 2 story event triggers and schedules — TBD.
-- Social strategy modifiers and audience composition tuning — TBD.
-- Milestone definitions and threshold rules — TBD.
+- Expanded performer management tuning (contracts/retention/availability) — fixed in `ACT2_BALANCING_CONFIG.md`.
+- Advanced analytics rollups and time windows — 7/30-day windows with 7-day snapshots.
+- Location tier definitions, costs, and unlock requirements — Tier 2 locations with reputation gates.
+- Equipment upgrade definitions, costs, effects, caps — Lighting/Camera/Set upgrades, max level 3.
+- Content theme catalog expansions — five Act 2 themes defined in `DATA_THEMES.md`.
+- Act 2 story event triggers and schedules — days 95/120/145/170 (on day start).
+- Social strategy modifiers and audience composition tuning — Balanced, Growth Focus, Revenue Focus strategies.
+- Milestone definitions and threshold rules — revenue/followers/subscribers/reputation thresholds in config.
 
 ## 7) Act 2 Completion Checklist (Definition of Done)
 - [ ] All A2 features listed above are implemented.
@@ -275,7 +278,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 | Too many config knobs | Increases tuning overhead and errors. | Group config categories and keep defaults conservative. |
 | Save breaking changes | Player progress loss is unacceptable. | Require v2 migration with defaults and validation. |
 | Performance issues from heavier renders | Impacts usability on desktop-only target. | Keep render logic simple and avoid large DOM rebuilds. |
-| Ambiguous performer systems | Confusing or inconsistent gameplay. | Mark details TBD and validate from source scope before build. |
+| Ambiguous performer systems | Confusing or inconsistent gameplay. | Use the fixed contract/retention rules from this doc and `ACT2_BALANCING_CONFIG.md`. |
 | Economy imbalance from new sinks | Can stall progression or trivialize difficulty. | Gate changes behind config and test with conservative values. |
 | Story/event logic conflicts | Can interrupt the core loop or Act 1 flow. | Keep Act 2 story after Act 1 and separate flags. |
 | Social strategy overcomplication | Makes core loop opaque. | Keep social choices limited and explain outcomes clearly. |

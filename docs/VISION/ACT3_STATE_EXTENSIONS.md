@@ -25,25 +25,68 @@
 List ONLY the new keys introduced by Act 3.
 
 ### New Top-Level Keys (v3)
-- metaProgression: object — endgame/meta progression bucket (TBD subkeys) — default: {}
-- rivals: object — rival studio metadata/standings (TBD) — default: {}
-- market: object — market shift flags/modifiers (TBD) — default: {}
-- automation: object — optional automation settings (TBD rules/flags) — default: {}
-- schedule: object — advanced scheduling/queue state (TBD) — default: {}
-- legacyMilestones: array — legacy milestone tracking list (TBD record shape) — default: []
-- reputation: object — Act 3 reputation branch tracking (TBD structure) — default: {}
+- metaProgression: object — endgame/meta progression bucket — default: `{ legacyScore: 0 }`
+- rivals: object — rival studio metadata/standings — default: `{ studios: [], lastCheckDay: 0 }`
+- market: object — market shift flags/modifiers — default: `{ activeShiftId: null, shiftHistory: [] }`
+- automation: object — optional automation settings — default: `{ enabled: false, autoBookEnabled: false, autoPostEnabled: false, minCashReserve: 1000, maxActionsPerDay: 1 }`
+- schedule: object — advanced scheduling/queue state — default: `{ enabled: false, maxQueueSize: 3, queue: [] }`
+- legacyMilestones: array — legacy milestone tracking list — default: `[]`
+- reputation: object — Act 3 reputation branch tracking — default: `{ branchId: null, branchProgress: 0 }`
 
 ### New Nested Keys Under Existing Branches (v3)
-- story.act3: object — Act 3 story/event flags (TBD) — default: {}
-- content.variance: object — content performance variance settings/logs (TBD) — default: {}
+- story.act3: object — Act 3 story/event flags — default: `{ eventsShown: [], lastEventId: null }`
+- content.variance: object — content performance variance settings/logs — default: `{ enabled: true, seed: null, rollLog: [] }`
 
 Notes:
 - `reputation` is a new top-level bucket for branch identity (e.g., `branchId`, `branchProgress`) without altering `player.reputation`.
-- Prestige/reset mechanics are **not confirmed**; if ever introduced, they must live under `metaProgression` as optional TBD subkeys with safe defaults.
+- Prestige/reset mechanics are not supported; `metaProgression` stores legacy score only.
 
 ## 5) Derived Values Are Not Stored (Hard Rule)
 - No cached totals/multipliers stored unless necessary.
 - Prefer recompute in systems from config + state.
+
+## 5.1) Act 3 Record Shapes (Concrete)
+
+### rivals.studios entry
+```json
+{
+  "id": "rival_night_slate",
+  "name": "Night Slate Media",
+  "reputationScore": 55,
+  "weeklyGrowthRate": 1.03
+}
+```
+
+### market.shiftHistory entry
+```json
+{
+  "shiftId": "shift_premium_boom",
+  "dayApplied": 225
+}
+```
+
+### schedule.queue entry
+```json
+{
+  "id": "scheduled_booking_001",
+  "dayQueued": 186,
+  "bookingPayload": {
+    "performerId": "core_lena_watts",
+    "locationId": "location_studio_loft",
+    "themeId": "theme_cinematic",
+    "contentType": "Premium"
+  }
+}
+```
+
+### legacyMilestones entry
+```json
+{
+  "id": "legacy_revenue_250k",
+  "completed": false,
+  "completedAt": null
+}
+```
 
 ## 6) Migration Plan: v2 → v3 (Deterministic)
 Algorithm:
