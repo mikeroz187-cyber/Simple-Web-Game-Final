@@ -20,9 +20,14 @@ This changelog is optimized for:
 - What: Added a full location catalog document covering MVP and Vision tiers.
 - Why: Provide a config-ready reference for all planned location data.
 - Files touched: docs/DATA_LOCATIONS.md, CHANGELOG.md.
+- What: Added an MVP formulas document defining the exact calculations for core gameplay results.
+- Why: Prevent formula guessing by codifying the MVP math in one place.
+- Files touched: docs/MVP/MVP_FORMULAS.md, CHANGELOG.md.
 
 ### Changed
-- N/A (no changes this run)
+- What: Added fatigue tuning values to the config for shoot cost and recovery math.
+- Why: Keep fatigue calculations fully config-driven and explicit for MVP.
+- Files touched: config.toml, CHANGELOG.md.
 
 ### Fixed
 - N/A (no changes this run)

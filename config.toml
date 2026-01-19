@@ -79,6 +79,8 @@ freelance_count = 5
 # Placeholder defaults for performer stats (if MVP docs specify, replace here).
 default_star_power = 1  # Placeholder
 max_fatigue = 100      # Placeholder
+fatigue_per_shoot = 10 # Placeholder
+fatigue_recovery_per_day = 5 # Placeholder
 starting_loyalty = 50  # Placeholder
 
 [content_types]
