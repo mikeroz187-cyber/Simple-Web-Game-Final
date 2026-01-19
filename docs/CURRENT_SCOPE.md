@@ -1,15 +1,15 @@
 # CURRENT SCOPE (Authoritative)
 
 ## Current Phase
-- **MVP** – Act 1 only (Days 1–90). (The game is currently in the MVP stage focusing solely on the first act of the story.)
+- **MVP** – Act 1 only (Days 1–90). (This phase defines the planned scope for the MVP.)
 
 ## In Scope Now (MVP)
-- **Core loop**: Book a shoot → View content → Analyze metrics → Adjust strategy → Repeat. (The fundamental gameplay cycle is fully implemented.)
-- **Act 1 “The Debt” storyline**: The player starts with a $5,000 loan and must repay $10,000 by Day 90. Basic story events for Act 1 (introduction, debt reminders) are included.
-- **Content types**: **Promo (SFW)** and **Premium (NSFW)** content shoots are available. (Promo increases followers; Premium generates revenue from subscribers.)
-- **Single-page app**: Desktop web only, using vanilla HTML/CSS/JS with no page reloads. (No mobile support in MVP.)
-- **Central game state**: All game data is managed in one authoritative `gameState` object in memory.
-- **Save/Load**: Local saving via `localStorage` is implemented, with options to export/import game state as JSON files.
+- **Core loop**: Book a shoot → View content → Analyze metrics → Adjust strategy → Repeat. (Planned/required for MVP.)
+- **Act 1 “The Debt” storyline**: The player starts with a $5,000 loan and must repay $10,000 by Day 90. Basic story events for Act 1 (introduction, debt reminders) are planned/required for MVP.
+- **Content types**: **Promo (SFW)** and **Premium (NSFW)** content shoots are planned/required for MVP. (Promo increases followers; Premium generates revenue from subscribers.)
+- **Single-page app**: Desktop web only, using vanilla HTML/CSS/JS with no page reloads. (No mobile support in MVP; planned/required.)
+- **Central game state**: All game data is managed in one authoritative `gameState` object in memory. (Planned/required for MVP.)
+- **Save/Load**: Local saving via `localStorage`, plus export/import of JSON save files, is planned/required for MVP.
 
 ## Explicitly Out of Scope (for MVP)
 - **Acts 2 & 3** – Later story arcs (beyond Day 90) are not included.
@@ -35,3 +35,4 @@ When building or reviewing features, **follow these documents in order**:
 ## How to Use This File
 - **Scope changes post-MVP**: When new features are approved after MVP, update *only* this `CURRENT_SCOPE.md` to expand scope. This file “unlocks” new features for development.
 - **Do not retroactively edit older Vision docs** for scope changes. The vision docs (01–14 series) remain as historical reference designs, even if the scope evolves. Always refer back here for the official current scope.
+- **Implementation status**: Progress tracking lives outside this file (use a separate progress/status document if needed).
