@@ -86,8 +86,8 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `id` | string | Required | Generated stable ID | Unique across content. |
 | `dayCreated` | integer | Required | `player.day` at creation | Must be `>= 1`. |
 | `performerId` | string | Required | Selected performer | Must exist in `roster.performers`. |
-| `locationId` | string | Required | Selected location ID | **TODO:** Location IDs must be defined in scope/config. See `docs/SCOPE_MVP.md` → “Booking system”. |
-| `themeId` | string | Required | Selected theme ID | **TODO:** Theme IDs must be defined in scope/config. See `docs/SCOPE_MVP.md` → “Booking system”. |
+| `locationId` | string | Required | Selected location ID | Location IDs are defined in CONFIG.locations in /js/config.js |
+| `themeId` | string | Required | Selected theme ID | Theme IDs are defined in CONFIG.themes in /js/config.js |
 | `contentType` | enum | Required | `Promo` or `Premium` | Must match config `[content_types].available`. |
 | `shootCost` | number | Required | Config-derived | Must be `>= 0`. |
 | `results` | object | Required | Calculated on completion | Immutable after creation (except if explicit corrections are needed). |
