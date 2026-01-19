@@ -100,7 +100,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 1. Title: “Booking”.
 2. Performer selection list (core + freelance performers from `roster.performers`).
 3. Location selection list (from config; Tier 1 options enabled only if `unlocks.locationTier1Unlocked`).
-4. Theme selection list (from config; **TODO**: define theme list in scope/config).
+4. Theme selection list (from config; themes are defined in `config.toml` and mirrored in `docs/DATA_THEMES.md`).
 5. Content type selection: Promo or Premium (from config).
 6. Shoot cost display (config-driven, based on selected location).
 7. Primary action row: Confirm Shoot, Back to Hub.
@@ -389,4 +389,4 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 ## FINAL CHECK
 - The screens list matches the MVP scope docs exactly.
 - No speculative screens or actions are included.
-- Location IDs and theme IDs are defined in CONFIG within /js/config.js
+- Location IDs and theme IDs are defined in CONFIG within /src/config.js

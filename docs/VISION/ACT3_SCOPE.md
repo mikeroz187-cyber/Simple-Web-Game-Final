@@ -23,7 +23,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP economy, reputation, and progression; Act 2 expanded analytics and progression signals.
 - New State Needed (high level keys; no deep schema yet)
   - `rivals` (TBD metadata, standings), `market` (TBD shift flags or modifiers).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/competition.js` (new, TBD) or `systems/progression.js` (extended).
 - UI Surfaces (which screens/panels)
   - Hub (rival status summary), Analytics (impact notes) — exact panels TBD.
@@ -47,7 +47,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP story/event framework and day progression; Act 2 story expansions.
 - New State Needed (high level keys; no deep schema yet)
   - `events.act3` or `story.act3` (TBD event flags/log).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/story.js` (extended) or `systems/events.js` (new, TBD).
 - UI Surfaces (which screens/panels)
   - Hub or a dedicated event panel within existing screens (no new screens by default).
@@ -71,7 +71,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP reputation stat and unlock gating; Act 2 progression and milestone systems.
 - New State Needed (high level keys; no deep schema yet)
   - `reputation.branchId`, `reputation.branchProgress` (TBD structure).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js` (extended) for branch selection/progression.
 - UI Surfaces (which screens/panels)
   - Hub (identity summary), Roster or Analytics (branch effects summary) — exact panels TBD.
@@ -95,7 +95,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP Act 1 story system and Act 2 story extensions.
 - New State Needed (high level keys; no deep schema yet)
   - `story.act3` (TBD flags/sequence).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/story.js` (extended).
 - UI Surfaces (which screens/panels)
   - Hub or existing story panel (no new screens by default).
@@ -118,7 +118,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP booking loop and action flow; Act 2 expanded systems for context.
 - New State Needed (high level keys; no deep schema yet)
   - `automation` (TBD flags, rules, and enabled actions).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/automation.js` (new, TBD) or updates to existing booking/economy systems.
 - UI Surfaces (which screens/panels)
   - Hub or Booking screen (automation toggles/summary, TBD).
@@ -141,7 +141,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP content result generation and analytics; Act 2 advanced analytics.
 - New State Needed (high level keys; no deep schema yet)
   - `content.variance` (TBD settings/logs) or `analyticsHistory` extensions.
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/content.js` and/or `systems/analytics.js` (extended).
 - UI Surfaces (which screens/panels)
   - Analytics (variance notes/rollups), Content (result summary).
@@ -164,7 +164,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP booking flow and day progression; Act 2 expanded roster availability.
 - New State Needed (high level keys; no deep schema yet)
   - `schedule` or `bookingQueue` (TBD queue/plan fields).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/booking.js` (extended) and possibly `systems/time.js` (if present).
 - UI Surfaces (which screens/panels)
   - Booking screen (schedule panel), Hub (schedule summary).
@@ -187,7 +187,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - MVP progression metrics; Act 2 milestone tracking (if implemented).
 - New State Needed (high level keys; no deep schema yet)
   - `legacyMilestones` (TBD milestone list and completion flags).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/milestones.js` or `systems/progression.js` (extended, TBD).
 - UI Surfaces (which screens/panels)
   - Hub (legacy milestone panel), Analytics (optional summary).

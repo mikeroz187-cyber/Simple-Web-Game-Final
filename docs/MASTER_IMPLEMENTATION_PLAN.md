@@ -23,7 +23,7 @@
 
 ## 2) Repo Structure Lock (Must Exist Before Any Code)
 Authoritative source: `/docs/MVP/MVP_FILE_STRUCTURE.md`.
-Repo layout is locked to `/js` for scripts and `/css/style.css` for styles (no `/src` or root `styles.css`).
+Repo layout is locked to `/src` for scripts and `/styles.css` for styles (no `/js` or `/styles.css`).
 
 **Required folders/files (must exist before implementation begins):**
 ```
@@ -33,9 +33,8 @@ Repo layout is locked to `/js` for scripts and `/css/style.css` for styles (no `
   config.toml
   CHANGELOG.md
   /docs
-  /css
-    style.css
-  /js
+  styles.css
+  /src
     main.js
     config.js
     state.js
@@ -74,13 +73,13 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 
 **Files touched:**
 - `index.html`
-- `css/style.css`
-- `js/main.js`
-- `js/config.js`
-- `js/state.js`
-- `js/ui/router.js`
-- `js/ui/render.js`
-- `js/ui/events.js`
+- `styles.css`
+- `src/main.js`
+- `src/config.js`
+- `src/state.js`
+- `src/ui/router.js`
+- `src/ui/render.js`
+- `src/ui/events.js`
 
 **Steps:**
 1. Build screen containers for MVP screens only: Hub, Booking, Content, Analytics, Social, Gallery, Roster, Shop.
@@ -102,9 +101,9 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Create `gameState` factory and safe persistence.
 
 **Files touched:**
-- `js/state.js`
-- `js/save.js`
-- `js/main.js`
+- `src/state.js`
+- `src/save.js`
+- `src/main.js`
 
 **Steps:**
 1. Implement `newGameState()` exactly per `/docs/MVP/MVP_STATE_MODEL.md`.
@@ -127,8 +126,8 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 
 **Files touched:**
 - `index.html`
-- `js/ui/render.js`
-- `js/ui/events.js`
+- `src/ui/render.js`
+- `src/ui/events.js`
 
 **Steps:**
 1. Implement render functions for Hub, Booking, Content, Analytics, Social, Gallery, Roster, Shop.
@@ -149,14 +148,14 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement the MVP loop and systems exactly as scoped.
 
 **Files touched:**
-- `js/systems/booking.js`
-- `js/systems/economy.js`
-- `js/systems/performers.js`
-- `js/systems/social.js`
-- `js/systems/progression.js`
-- `js/systems/story.js`
-- `js/ui/events.js`
-- `js/ui/render.js`
+- `src/systems/booking.js`
+- `src/systems/economy.js`
+- `src/systems/performers.js`
+- `src/systems/social.js`
+- `src/systems/progression.js`
+- `src/systems/story.js`
+- `src/ui/events.js`
+- `src/ui/render.js`
 
 **Steps:**
 1. Booking system: select performer, location, theme, content type; confirm booking.
@@ -182,7 +181,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Eliminate magic numbers and verify scope compliance.
 
 **Files touched:**
-- `js/config.js`
+- `src/config.js`
 - Any systems using tunables
 
 **Steps:**
@@ -219,8 +218,8 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Introduce v2 save schema with safe migration.
 
 **Files touched:**
-- `js/save.js`
-- `js/state.js`
+- `src/save.js`
+- `src/state.js`
 
 **Steps:**
 1. Add `detectVersion(saveObj)`, `migrateV1ToV2(saveObj)`, `validateV2(saveObj)`.
@@ -239,7 +238,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Add Act 2 state keys only as defined.
 
 **Files touched:**
-- `js/state.js`
+- `src/state.js`
 
 **Steps:**
 1. Add new Act 2 keys with defaults: performerManagement, analyticsHistory, equipment, milestones, unlocks.locationTiers, story.act2, social.strategy, roster.performerRoles.
@@ -257,9 +256,9 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement Act 2 systems per `/docs/VISION/ACT2_SYSTEMS.md`.
 
 **Files touched:**
-- `js/systems/*.js` (expand existing)
-- `js/systems/analytics.js` (new, if required)
-- `js/systems/shop.js` (new, if required)
+- `src/systems/*.js` (expand existing)
+- `src/systems/analytics.js` (new, if required)
+- `src/systems/shop.js` (new, if required)
 
 **Steps:**
 1. Extend existing systems (economy, performers, booking, social, progression, story).
@@ -278,9 +277,9 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement Act 2 UI additions per `/docs/VISION/ACT2_UI_BLUEPRINT.md`.
 
 **Files touched:**
-- `js/ui/render.js`
-- `js/ui/events.js`
-- `js/ui/components.js`
+- `src/ui/render.js`
+- `src/ui/events.js`
+- `src/ui/components.js`
 
 **Steps:**
 1. Add Act 2 panels to Hub, Booking, Analytics, Roster, Social, Shop.
@@ -309,8 +308,8 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Introduce v3 schema with safe migration.
 
 **Files touched:**
-- `js/save.js`
-- `js/state.js`
+- `src/save.js`
+- `src/state.js`
 
 **Steps:**
 1. Add `migrateV2ToV3(saveObj)` and `validateV3(saveObj)`.
@@ -329,7 +328,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Add Act 3 state keys only as defined.
 
 **Files touched:**
-- `js/state.js`
+- `src/state.js`
 
 **Steps:**
 1. Add Act 3 keys: metaProgression, rivals, market, automation, schedule, legacyMilestones, reputation, story.act3, content.variance.
@@ -347,11 +346,11 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement Act 3 systems per `/docs/VISION/ACT3_SYSTEMS.md`.
 
 **Files touched:**
-- `js/systems/*.js` (extend existing)
-- `js/systems/competition.js` (new, if required)
-- `js/systems/automation.js` (new, if required)
-- `js/systems/content.js` (new, if required)
-- `js/systems/milestones.js` (new, if required)
+- `src/systems/*.js` (extend existing)
+- `src/systems/competition.js` (new, if required)
+- `src/systems/automation.js` (new, if required)
+- `src/systems/content.js` (new, if required)
+- `src/systems/milestones.js` (new, if required)
 
 **Steps:**
 1. Implement rivalry/market pressure (if configured).
@@ -371,9 +370,9 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement Act 3 UI panels per `/docs/VISION/ACT3_UI_BLUEPRINT.md`.
 
 **Files touched:**
-- `js/ui/render.js`
-- `js/ui/events.js`
-- `js/ui/components.js`
+- `src/ui/render.js`
+- `src/ui/events.js`
+- `src/ui/components.js`
 
 **Steps:**
 1. Add Act 3 panels to Hub, Booking, Content, Analytics, Roster (and Social only if scope expands it).
@@ -392,8 +391,8 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 **Goal:** Implement Act 3 endgame loop per `/docs/VISION/ACT3_ENDGAME_LOOPS.md`.
 
 **Files touched:**
-- `js/systems/*.js` (as needed)
-- `js/ui/render.js`
+- `src/systems/*.js` (as needed)
+- `src/ui/render.js`
 
 **Steps:**
 1. Implement milestone progression and reward claims (TBD specifics from config).

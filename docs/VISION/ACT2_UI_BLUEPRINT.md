@@ -231,7 +231,7 @@ Extend the Shop with additional location tiers and equipment upgrades.
 - Out of scope: non-location items, cosmetics, or currencies.
 
 ## 5) UI Components Needed (Reusable)
-Potential additions/updates in `/js/ui/components.js`:
+Potential additions/updates in `/src/ui/components.js`:
 - `StatusBadge(label, status)` — for availability/locked/unlocked labels.
 - `TierCard(title, cost, status, action)` — location tier unlock display.
 - `UpgradeCard(title, level, cost, effect, action)` — equipment upgrades.

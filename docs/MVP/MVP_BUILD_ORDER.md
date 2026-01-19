@@ -68,13 +68,13 @@ A step is “done” only when:
 
 **Files created/edited (minimum):**
 - `index.html`
-- `css/style.css` (or `style.css` if repo already standardizes it)
-- `js/main.js`
-- `js/state.js`
-- `js/ui/router.js`
-- `js/ui/render.js`
-- `js/save.js`
-- `js/config.js`
+- `styles.css`
+- `src/main.js`
+- `src/state.js`
+- `src/ui/router.js`
+- `src/ui/render.js`
+- `src/save.js`
+- `src/config.js`
 - Placeholder `assets/` folders (only if required by existing docs)
 
 **Implementation checklist:**
@@ -95,20 +95,19 @@ A step is “done” only when:
 
 ---
 
-### Phase 2 — gameState Contract + New Game + Reset
+### Phase 2 — gameState Contract + New Game
 **Goal:** Lock the state model early so everything plugs into it.
 
 **Files touched:**
-- `js/state.js`
-- `js/main.js`
+- `src/state.js`
+- `src/main.js`
 
 **Implementation checklist:**
 - Implement `newGameState()` factory.
 - Add only MVP fields required (no Act 2/3, no rival system).
-- Add “Reset Game” action.
 
 **Verification steps:**
-- Reset produces stable defaults and re-renders correctly.
+- New game state produces stable defaults and re-renders correctly.
 
 **Exit criteria:** `gameState` exists, is authoritative, and drives rendering.
 
@@ -123,7 +122,7 @@ A step is “done” only when:
 **Goal:** Ensure progress can’t be lost during dev.
 
 **Files touched:**
-- `js/save.js` + small UI hooks
+- `src/save.js` + small UI hooks
 
 **Implementation checklist:**
 - `saveGame()` and `loadGame()` for localStorage.
@@ -147,7 +146,7 @@ A step is “done” only when:
 **Goal:** Centralize tunables.
 
 **Files touched:**
-- `js/config.js` (+ reference `config.toml` as the source-of-truth table)
+- `src/config.js` (+ reference `config.toml` as the source-of-truth table)
 
 **Implementation checklist:**
 - All tunables referenced via `CONFIG`.
@@ -169,8 +168,8 @@ A step is “done” only when:
 
 **Files touched:**
 - `index.html`
-- `js/ui/render.js`
-- `js/systems/booking.js` (if `systems/` folder exists)
+- `src/ui/render.js`
+- `src/systems/booking.js` (if `systems/` folder exists)
 
 **Implementation checklist:**
 - Performer/location/theme/content-type selectors populate from config data.
@@ -195,7 +194,7 @@ A step is “done” only when:
 - Booking system + gallery/content viewer stubs
 
 **Implementation checklist:**
-- “Book Shoot” creates a content item record in `gameState.contentLibrary`.
+- “Book Shoot” creates a content entry record in `gameState.content.entries`.
 - Deduct cost, advance day per the Day Advancement Rules in `docs/MVP/MVP_OVERVIEW.md`, apply basic fatigue increment.
 - Content Viewer shows placeholder image + summary text.
 
@@ -255,7 +254,7 @@ A step is “done” only when:
 **Goal:** Let player review history.
 
 **Implementation checklist:**
-- Gallery lists `contentLibrary`.
+- Gallery lists `gameState.content.entries`.
 - Click item → open viewer.
 
 **Verification steps:**

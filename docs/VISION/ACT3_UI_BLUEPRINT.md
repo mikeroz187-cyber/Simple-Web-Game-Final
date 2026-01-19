@@ -241,14 +241,14 @@ Act 3 includes **Legacy / Recognition Milestones**:
 TBD (optional Act 3 mechanic) — do not implement until confirmed.
 
 ## 7) UI Components Needed (Act 3)
-Potential additions to `/js/ui/components.js` (minimal):
+Potential additions to `/src/ui/components.js` (minimal):
 - `MilestoneCard(name, status, action)` — legacy milestone display.
 - `ProgressBar(label, value, max)` — simple div-based progress bar.
 - `StatusList(items)` — compact list for rivals/market/event summaries.
 - `ActionRow(buttons)` — standard action row for Act 3 panels.
 
 ## 8) Event Wiring (Act 3)
-Rules for `/js/ui/events.js`:
+Rules for `/src/ui/events.js`:
 - use `data-action` for all actions
 - include `data-id` for branch, milestone, event IDs
 - map each action to one system call

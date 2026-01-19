@@ -14,8 +14,8 @@ license = "UNLICENSED"
 # This project runs locally by opening index.html (no build step).
 runtime = "static"
 entry_html = "index.html"
-main_js = "js/main.js"
-stylesheet = "css/style.css"
+main_js = "src/main.js"
+stylesheet = "styles.css"
 
 [app]
 # Non-negotiable constraints

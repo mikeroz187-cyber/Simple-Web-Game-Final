@@ -11,18 +11,18 @@
 
 System | File | Reads | Writes | Depends On (MVP) | New in Act 2?
 --- | --- | --- | --- | --- | ---
-Economy adjustments (Act 2 sinks/outputs) | `/js/systems/economy.js` | `player`, `content`, `equipment` | `player.cash`, `player.lifetimeRevenue` (if used) | MVP economy + content results | No (extended)
-Performer management (contracts/availability/retention) | `/js/systems/performers.js` | `roster`, `performerManagement` | `roster.performers[*]`, `performerManagement` | MVP roster + fatigue/loyalty | No (extended)
-Booking + theme expansion | `/js/systems/booking.js` | `roster`, `unlocks`, `equipment`, `config` | `content.entries`, `content.lastContentId`, `player.cash`, `player.day` | MVP booking flow | No (extended)
-Social strategy | `/js/systems/social.js` | `social`, `content`, `player` | `social.posts`, `social.strategy`, `player.followers`, `player.subscribers` | MVP social posting | No (extended)
-Progression + location tiers + milestones | `/js/systems/progression.js` | `player`, `unlocks`, `milestones` | `unlocks.locationTiers`, `player.reputation`, `milestones` | MVP progression + Tier 1 unlock | No (extended)
-Story (Act 2 arcs) | `/js/systems/story.js` | `story`, `player` | `story.act2` | MVP Act 1 story system | No (extended)
-Advanced analytics aggregation | `/js/systems/analytics.js` (new) | `content`, `social`, `player` | `analyticsHistory` | MVP analytics outputs + content history | Yes
-Shop purchases (equipment + location tiers) | `/js/systems/shop.js` (new) | `player`, `unlocks`, `equipment` | `player.cash`, `unlocks.locationTiers`, `equipment` | MVP shop flow | Yes
+Economy adjustments (Act 2 sinks/outputs) | `/src/systems/economy.js` | `player`, `content`, `equipment` | `player.cash`, `player.lifetimeRevenue` (if used) | MVP economy + content results | No (extended)
+Performer management (contracts/availability/retention) | `/src/systems/performers.js` | `roster`, `performerManagement` | `roster.performers[*]`, `performerManagement` | MVP roster + fatigue/loyalty | No (extended)
+Booking + theme expansion | `/src/systems/booking.js` | `roster`, `unlocks`, `equipment`, `config` | `content.entries`, `content.lastContentId`, `player.cash`, `player.day` | MVP booking flow | No (extended)
+Social strategy | `/src/systems/social.js` | `social`, `content`, `player` | `social.posts`, `social.strategy`, `player.followers`, `player.subscribers` | MVP social posting | No (extended)
+Progression + location tiers + milestones | `/src/systems/progression.js` | `player`, `unlocks`, `milestones` | `unlocks.locationTiers`, `player.reputation`, `milestones` | MVP progression + Tier 1 unlock | No (extended)
+Story (Act 2 arcs) | `/src/systems/story.js` | `story`, `player` | `story.act2` | MVP Act 1 story system | No (extended)
+Advanced analytics aggregation | `/src/systems/analytics.js` (new) | `content`, `social`, `player` | `analyticsHistory` | MVP analytics outputs + content history | Yes
+Shop purchases (equipment + location tiers) | `/src/systems/shop.js` (new) | `player`, `unlocks`, `equipment` | `player.cash`, `unlocks.locationTiers`, `equipment` | MVP shop flow | Yes
 
 Notes:
 - New files (`analytics.js`, `shop.js`) are added because Act 2 scope explicitly introduces advanced analytics and equipment/expanded shop purchases. These should remain small and focused, or be folded into existing systems if the MVP structure is finalized differently.
-- If MVP retains a single shop system under `progression.js`, then `/js/systems/shop.js` should be omitted and its API merged into `progression.js`.
+- If MVP retains a single shop system under `progression.js`, then `/src/systems/shop.js` should be omitted and its API merged into `progression.js`.
 
 ## 3) Required Result Object Shape (Standardized)
 All system actions return the same shape:
@@ -43,7 +43,7 @@ Hard rules:
 
 ## 4) System APIs (Per File)
 
-### /js/systems/economy.js
+### /src/systems/economy.js
 - Purpose
   - Apply Act 2 economic effects (costs, payouts, maintenance) without breaking MVP rules.
 - Public functions (names + parameters + returns)
@@ -62,7 +62,7 @@ Hard rules:
   - Economic adjustments are additive to MVP calculations.
   - No MVP values are overwritten; only Act 2 additions apply when enabled.
 
-### /js/systems/performers.js
+### /src/systems/performers.js
 - Purpose
   - Extend performer management with Act 2 retention/availability (details TBD).
 - Public functions (names + parameters + returns)
@@ -81,7 +81,7 @@ Hard rules:
   - Availability checks integrate with booking without blocking MVP-only flows.
   - Retention logic is additive and does not remove MVP performers without explicit scope approval.
 
-### /js/systems/booking.js
+### /src/systems/booking.js
 - Purpose
   - Expand booking to support new themes and location tiers while maintaining MVP loop.
 - Public functions (names + parameters + returns)
@@ -103,7 +103,7 @@ Hard rules:
   - MVP bookings still succeed with MVP locations/themes.
   - Act 2 options appear only when unlocked.
 
-### /js/systems/social.js
+### /src/systems/social.js
 - Purpose
   - Add platform emphasis/strategy while keeping MVP posting flow intact.
 - Public functions (names + parameters + returns)
@@ -122,7 +122,7 @@ Hard rules:
   - Strategy changes only modify results when Act 2 is enabled.
   - MVP posting remains deterministic and valid without strategy selections.
 
-### /js/systems/progression.js
+### /src/systems/progression.js
 - Purpose
   - Manage location tier unlocks, reputation gates, and milestones.
 - Public functions (names + parameters + returns)
@@ -141,7 +141,7 @@ Hard rules:
   - MVP Tier 1 unlock migrates into tier structure cleanly.
   - Milestones update without changing MVP screens or flow.
 
-### /js/systems/story.js
+### /src/systems/story.js
 - Purpose
   - Add Act 2 story beats after Act 1 while preserving Act 1 pacing.
 - Public functions (names + parameters + returns)
@@ -159,7 +159,7 @@ Hard rules:
   - Act 2 events do not trigger before Act 1 debt arc ends.
   - Story events return safe UI messages and do not mutate unrelated state.
 
-### /js/systems/analytics.js (new)
+### /src/systems/analytics.js (new)
 - Purpose
   - Aggregate advanced analytics from content/social history.
 - Public functions (names + parameters + returns)
@@ -177,7 +177,7 @@ Hard rules:
   - Aggregates derive from existing content history (no new data required).
   - MVP analytics values remain unchanged; Act 2 summary is additive only.
 
-### /js/systems/shop.js (new)
+### /src/systems/shop.js (new)
 - Purpose
   - Handle equipment upgrades and expanded location tier purchases.
 - Public functions (names + parameters + returns)

@@ -32,26 +32,24 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - Import Save: "Import Save"
 
 ### Hub
-- Advance Day: "Advance Day"
+- (No additional Hub-specific buttons beyond the MVP navigation and save/load actions.)
 
 ### Booking
 - Confirm Shoot: "Confirm Shoot"
 - Clear Selection: "Clear Selection"
 
 ### Content
-- Post Promo: "Post Promo"
-- Publish Premium: "Publish Premium"
+- (No Content-specific action buttons beyond "View Analytics" and navigation.)
 
 ### Analytics
-- View Details: "View Details"
+- (No Analytics-specific action buttons beyond booking/navigation.)
 
 ### Roster
-- Hire Performer: "Hire Performer"
-- Fire Performer: "Fire Performer"
+- (Roster is read-only in MVP.)
 
 ### Social
 - Post to Instagram: "Post to Instagram"
-- Post to Twitter: "Post to Twitter"
+- Post to X: "Post to X"
 
 ### Gallery
 - View Full: "View Full"
@@ -67,11 +65,8 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - "Shoot completed."
 - "Content created."
 - "Posted to Instagram. +{followers} followers."
-- "Posted to Twitter. +{followers} followers."
-- "Premium published. +${revenue} revenue."
+- "Posted to X. +{followers} followers."
 - "Upgrade purchased."
-- "Performer hired."
-- "Performer fired."
 - "Save complete."
 - "Export complete."
 - "Import complete."
@@ -135,4 +130,3 @@ Use these as short, one-line summaries for content results.
 ### Event Prompts
 - "Special event available."
 - "Limited-time offer available."
-

@@ -42,3 +42,8 @@ This folder contains all planning and design documentation for **Studio Empire**
 - **VISION/ACT3_ENDGAME_LOOPS.md** – **(Vision)** Endgame loop concepts for Act 3.
 
 Refer to `../README.md` in the repository root for a general introduction and setup instructions.
+
+## Implementation Layout (MVP)
+- JavaScript source lives in `/src`.
+- Main stylesheet is `/styles.css` in the repo root.
+- This layout is authoritative per `docs/MVP/MVP_FILE_STRUCTURE.md` and must not drift.
