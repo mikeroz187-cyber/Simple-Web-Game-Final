@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added a full story events catalog covering Act 1 MVP beats and Act 2/3 placeholders.
+- Why: Define narrative triggers and text consistently across MVP and Vision planning.
+- Files touched: docs/DATA_STORY_EVENTS.md, CHANGELOG.md.
 - What: Added MVP performer catalog documentation with core and freelance roster entries.
 - Why: Define the starting performer lineup for consistent MVP setup.
 - Files touched: docs/DATA_PERFORMERS.md, CHANGELOG.md.
