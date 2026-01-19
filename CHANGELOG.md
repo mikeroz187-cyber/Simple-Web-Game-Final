@@ -21,6 +21,14 @@ This changelog is optimized for:
 
 ---
 
+## [0.1.2] - 2026-01-19
+### Changed
+- What: Added mandatory changelog discipline rules to the agent contract.
+- Why: Enforce required changelog updates for every file change.
+- Files touched: AGENTS.md, CHANGELOG.md.
+
+---
+
 ## [0.1.1] - 2026-01-19
 ### Added
 - `CHANGELOG.md` created to track progress in a consistent, non-developer-friendly format.
