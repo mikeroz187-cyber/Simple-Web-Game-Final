@@ -389,4 +389,4 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 ## FINAL CHECK
 - The screens list matches the MVP scope docs exactly.
 - No speculative screens or actions are included.
-- **TODO:** Define location IDs and theme IDs in scope/config before implementation (see `docs/MVP/MVP_STATE_MODEL.md` → ContentEntry fields).
+- Location IDs and theme IDs are defined in CONFIG within /js/config.js
