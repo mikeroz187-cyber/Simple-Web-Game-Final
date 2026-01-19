@@ -196,7 +196,7 @@ A step is “done” only when:
 
 **Implementation checklist:**
 - “Book Shoot” creates a content item record in `gameState.contentLibrary`.
-- Deduct cost, advance day, apply basic fatigue increment.
+- Deduct cost, advance day per the Day Advancement Rules in `docs/MVP/MVP_OVERVIEW.md`, apply basic fatigue increment.
 - Content Viewer shows placeholder image + summary text.
 
 **Verification steps:**

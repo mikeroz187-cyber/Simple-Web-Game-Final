@@ -20,7 +20,16 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 4) Player Controls (What the player can actually do)
+## 4) Day Advancement Rules
+- **Exact trigger:** The day advances immediately after the player confirms a booking (the shoot is locked in). The day does **not** advance from viewing content, browsing the gallery, or viewing analytics.
+- **One shoot per day:** Each confirmed booking equals one day. Multiple shoots in a single day are not allowed in the MVP.
+- **Day boundary effects:** Fatigue recovery occurs at the start of each new day before any actions. Other day-start effects (like debt reminders) trigger at day start if defined.
+- **What blocks day advancement:** The player must complete the full loop state to reach the booking confirmation. Day advancement is blocked until a valid booking is confirmed (affordability and availability checks must pass).
+- **No complex time system:** There are no partial days, hours, or time slots in the MVP.
+
+---
+
+## 5) Player Controls (What the player can actually do)
 - Book Shoot — choose performer, location, theme, content type — Booking screen.
 - Confirm Shoot — commit the booking and advance the loop — Booking screen.
 - View Analytics — move from content result to metrics — Content screen.
@@ -35,7 +44,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 5) MVP Resources & Stats
+## 6) MVP Resources & Stats
 - Cash — available money for costs and debt — increases from Premium revenue — decreases from shoot location costs and debt payments — player cares because cash gates actions and debt payoff.
 - Debt Remaining — amount owed toward the $10,000 deadline — decreases when paid from cash — increases only at start as the $10,000 total obligation — player cares because paying it off by Day 90 is the win condition.
 - Day — current in-game day (1–90) — increases after each completed loop — cannot decrease — player cares because Day 90 is the deadline.
@@ -48,7 +57,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 6) MVP Screens (UI Map)
+## 7) MVP Screens (UI Map)
 - Hub — central navigation and status — displays day, cash, debt remaining, followers/subscribers, reputation, next action — buttons for Booking, Analytics, Social, Gallery, Roster, Shop, Save, Load, Export, Import.
 - Booking — plan a shoot — displays performers, locations, themes, content type, shoot cost — buttons for Confirm Shoot, Back to Hub.
 - Content — view the generated content result — displays content placeholder and shoot summary — buttons for View Analytics, Back to Hub.
@@ -60,7 +69,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 7) MVP Save System Requirements
+## 8) MVP Save System Requirements
 - Autosave to localStorage at safe intervals (e.g., after completing a loop or key actions).
 - Manual Save Now button on the Hub that writes the full gameState to localStorage.
 - Export save downloads the full gameState as a JSON file.
@@ -70,7 +79,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 8) MVP Non-Goals (Explicit Exclusions)
+## 9) MVP Non-Goals (Explicit Exclusions)
 - ❌ Not in MVP: Acts 2 & 3 — Act 1 only, Days 1–90.
 - ❌ Not in MVP: Rival studios/competition — no AI competitors or leaderboards.
 - ❌ Not in MVP: POV special scenes — only Promo and Premium content types.
@@ -83,7 +92,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 9) MVP Definition of Done (Ship Checklist)
+## 10) MVP Definition of Done (Ship Checklist)
 - [ ] New game starts at Day 1 with $5,000 cash and $10,000 debt due by Day 90.
 - [ ] Core loop (book → content → analytics → next decision) works at least twice in a row.
 - [ ] Promo content increases followers and affects reach via platform choice.
@@ -104,7 +113,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ---
 
-## 10) MVP Implementation Principles (How to build safely)
+## 11) MVP Implementation Principles (How to build safely)
 - One authoritative `gameState` object drives all gameplay.
 - UI renders deterministically from `gameState` with no hidden DOM state.
 - All tuning values are config-driven (no magic numbers).
