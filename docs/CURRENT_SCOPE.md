@@ -20,14 +20,15 @@
 - **Any framework or build tooling** – The project does not use frameworks (React, etc.) or bundlers; it’s purely static files.
 
 ## Authority Order (Documentation to Follow)
+Repo layout is authoritative here to prevent drift across MVP docs.
 When building or reviewing features, **follow these documents in order**:
 1. **docs/CURRENT_SCOPE.md** (this file – latest scope definition)
-2. **docs/15-mvp-scope.md** (MVP feature list and plan)
-3. **docs/21-technical-implementation-guardrails.md**
-4. **docs/22-file-and-folder-map.md**
-5. **docs/23-mvp-build-order.md**
-6. **docs/24-ui-blueprint.md**
-7. **docs/25-mvp-state-and-flow.md**
+2. **docs/SCOPE_MVP.md** (MVP feature list and plan)
+3. **docs/MVP/MVP_TECH_GUARDRAILS.md**
+4. **docs/MVP/MVP_FILE_STRUCTURE.md**
+5. **docs/MVP/MVP_BUILD_ORDER.md**
+6. **docs/MVP/MVP_UI_BLUEPRINT.md**
+7. **docs/MVP/MVP_STATE_MODEL.md**
 
 *(If any discrepancy arises, the CURRENT_SCOPE.md has the final say.)*
 
