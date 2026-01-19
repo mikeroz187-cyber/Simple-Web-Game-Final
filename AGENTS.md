@@ -123,6 +123,21 @@ If docs are missing something, STOP and ask a question.
 
 ---
 
+## Changelog Discipline (Mandatory)
+- Any time you CREATE, EDIT, MOVE, or DELETE any repo file, you MUST also update /CHANGELOG.md in the same Codex run.
+- CHANGELOG entries must be appended under the newest date section at the top (reverse chronological).
+- Each entry must include:
+  - What changed (1 line)
+  - Why it changed (1 line)
+  - Files touched (explicit list)
+- Changelog entries must stay small (3–8 bullets max per run).
+- If a change is a revert or fix, explicitly label it as FIX.
+- If no files were changed, do NOT touch CHANGELOG.md.
+
+Failure to update CHANGELOG.md is considered an incomplete task.
+
+---
+
 ## Asking Questions Policy
 If you encounter ambiguity:
 - STOP
