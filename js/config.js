@@ -256,6 +256,9 @@ const CONFIG = {
   },
   story: {
     act1: {
+      act1_intro_day: 1,
+      act1_debt_reminder_days: [30, 60, 80],
+      act1_end_day: 90,
       intro: {
         id: "act1_intro_day1",
         triggerDay: 1
