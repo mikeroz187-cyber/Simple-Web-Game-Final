@@ -9,3 +9,4 @@ All notable changes documented here. Format based on Keep a Changelog.
 - Documentation framework with mvp and vision folders
 - Codex configuration
 - AI contributor guidelines
+- Authoritative MVP scope document for current build requirements
