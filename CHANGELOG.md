@@ -11,13 +11,15 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
-- (placeholder)
+- What: Added MVP performer catalog documentation with core and freelance roster entries.
+- Why: Define the starting performer lineup for consistent MVP setup.
+- Files touched: docs/DATA_PERFORMERS.md, CHANGELOG.md.
 
 ### Changed
-- (placeholder)
+- N/A (no changes this run)
 
 ### Fixed
-- (placeholder)
+- N/A (no changes this run)
 
 ---
 
