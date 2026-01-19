@@ -34,7 +34,17 @@ Repo layout is authoritative here: JS lives in `/js`, and CSS lives in `/css/sty
       MVP_TECH_GUARDRAILS.md
       MVP_FILE_STRUCTURE.md
     /VISION
-      (empty or placeholder; do not add Act 2/3 docs yet)
+      VISION_OVERVIEW.md (read-only inspiration; not in MVP)
+      ACT2_SCOPE.md (read-only inspiration; not in MVP)
+      ACT2_STATE_EXTENSIONS.md (read-only inspiration; not in MVP)
+      ACT2_SYSTEMS.md (read-only inspiration; not in MVP)
+      ACT2_UI_BLUEPRINT.md (read-only inspiration; not in MVP)
+      ACT2_BALANCING_CONFIG.md (read-only inspiration; not in MVP)
+      ACT3_SCOPE.md (read-only inspiration; not in MVP)
+      ACT3_STATE_EXTENSIONS.md (read-only inspiration; not in MVP)
+      ACT3_SYSTEMS.md (read-only inspiration; not in MVP)
+      ACT3_UI_BLUEPRINT.md (read-only inspiration; not in MVP)
+      ACT3_ENDGAME_LOOPS.md (read-only inspiration; not in MVP)
   /css
     style.css
   /js

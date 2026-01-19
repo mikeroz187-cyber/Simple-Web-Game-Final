@@ -37,6 +37,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Updated MVP file structure docs to list current Vision files as read-only inspiration.
+- Why: Keep MVP documentation aligned with the actual Vision directory contents and scope status.
+- Files touched: docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
 - What: Aligned repo layout references to the /js + /css/style.css structure.
 - Why: Resolve documentation and config conflicts about the authoritative project layout.
 - Files touched: AGENTS.md, config.toml, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
