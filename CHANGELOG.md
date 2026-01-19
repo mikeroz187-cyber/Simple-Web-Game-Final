@@ -37,6 +37,15 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Aligned repo layout references to `/src` and `/styles.css` across docs and the agent rules.
+- Why: Match the confirmed Option B file structure and prevent future path confusion.
+- Files touched: AGENTS.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/README.md, README.md, docs/VISION/ACT2_BALANCING_CONFIG.md, docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/VISION/ACT3_SCOPE.md, docs/VISION/ACT3_SYSTEMS.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/MVP/MVP_UI_BLUEPRINT.md, CHANGELOG.md.
+- What: Corrected MVP build order and state references and removed out-of-scope UI copy entries.
+- Why: Keep MVP guidance consistent with the authoritative state model and UI blueprint.
+- Files touched: docs/MVP/MVP_BUILD_ORDER.md, docs/MVP/MVP_STATE_MODEL.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
+- What: Updated build config paths and relocated the runtime config to the /src directory.
+- Why: Ensure config and file layout match the agreed Option B structure.
+- Files touched: config.toml, src/config.js, CHANGELOG.md.
 - What: Declared config.toml as the single source of truth for MVP numeric values and added a balancing note for intentional placeholders.
 - Why: Remove ambiguity about where tuning values live while keeping data tables in sync.
 - Files touched: docs/MVP/MVP_FORMULAS.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.

@@ -70,17 +70,16 @@ No hidden state inside DOM or random globals.
 Project must contain:
 
 /docs/                   (documentation)
-/js/                     (JS source)
-/js/game/                (game logic modules)
-/js/ui/                  (UI rendering + interaction)
-/js/systems/             (save/load, time, economy, etc.)
-/js/config/              (config-driven constants)
+/src/                    (JS source)
+/src/ui/                 (UI rendering + interaction)
+/src/systems/            (save/load, time, economy, etc.)
+/src/utils/              (small helpers)
 /assets/                 (images, fonts if needed)
 
 /index.html              (single entry)
-/css/style.css           (main stylesheet)
-/js/main.js              (bootstraps game)
-/js/state.js             (gameState model + init)
+/styles.css              (main stylesheet)
+/src/main.js             (bootstraps game)
+/src/state.js            (gameState model + init)
 
 You may add files if needed, but keep structure clean.
 

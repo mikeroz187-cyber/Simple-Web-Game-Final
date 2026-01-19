@@ -59,6 +59,8 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `reputation` | integer | Required | `config.progression.starting_reputation` | Must be `>= 0` (if negatives are not defined in scope). |
 | `lifetimeRevenue` | number | Optional | `0` | Only include if MVP UI displays cumulative revenue. Must be `>= 0`. |
 
+**Day limit alignment rule:** If `config.game.action_day_max` exists, it must match `config.game.debt_due_day`. `player.debtDueDay` is the authoritative cap for MVP day progression.
+
 ### 6.2 `roster`
 | Field | Type | Required | Default | Invariants |
 | --- | --- | --- | --- | --- |
@@ -86,8 +88,8 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `id` | string | Required | Generated stable ID | Unique across content. |
 | `dayCreated` | integer | Required | `player.day` at creation | Must be `>= 1`. |
 | `performerId` | string | Required | Selected performer | Must exist in `roster.performers`. |
-| `locationId` | string | Required | Selected location ID | Location IDs are defined in CONFIG.locations in /js/config.js |
-| `themeId` | string | Required | Selected theme ID | Theme IDs are defined in CONFIG.themes in /js/config.js |
+| `locationId` | string | Required | Selected location ID | Location IDs are defined in CONFIG.locations in /src/config.js |
+| `themeId` | string | Required | Selected theme ID | Theme IDs are defined in CONFIG.themes in /src/config.js |
 | `contentType` | enum | Required | `Promo` or `Premium` | Must match config `[content_types].available`. |
 | `shootCost` | number | Required | Config-derived | Must be `>= 0`. |
 | `results` | object | Required | Calculated on completion | Immutable after creation (except if explicit corrections are needed). |

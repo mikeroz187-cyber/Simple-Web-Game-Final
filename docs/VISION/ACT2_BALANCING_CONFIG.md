@@ -18,8 +18,8 @@
 - Purpose
   - Act 2 performer contracts/retention/availability tuning (details remain TBD).
 - Used by
-  - `/js/systems/performers.js` (`updatePerformerAvailability`, `applyRetentionCheck`)
-  - `/js/systems/booking.js` (availability validation)
+  - `/src/systems/performers.js` (`updatePerformerAvailability`, `applyRetentionCheck`)
+  - `/src/systems/booking.js` (availability validation)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -32,7 +32,7 @@
 - Purpose
   - Act 2 advanced analytics rollups and summary windows (TBD).
 - Used by
-  - `/js/systems/analytics.js` (`recordAnalyticsSnapshot`, `getAnalyticsSummary`)
+  - `/src/systems/analytics.js` (`recordAnalyticsSnapshot`, `getAnalyticsSummary`)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -45,9 +45,9 @@
 - Purpose
   - Additional location tiers with costs/benefits and unlock requirements.
 - Used by
-  - `/js/systems/progression.js` (tier unlock checks)
-  - `/js/systems/booking.js` (tier availability)
-  - `/js/systems/shop.js` (tier purchases)
+  - `/src/systems/progression.js` (tier unlock checks)
+  - `/src/systems/booking.js` (tier availability)
+  - `/src/systems/shop.js` (tier purchases)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -60,8 +60,8 @@
 - Purpose
   - Equipment upgrades that affect output quality (details TBD).
 - Used by
-  - `/js/systems/shop.js` (purchase upgrades)
-  - `/js/systems/economy.js` and/or `/js/systems/booking.js` (apply modifiers)
+  - `/src/systems/shop.js` (purchase upgrades)
+  - `/src/systems/economy.js` and/or `/src/systems/booking.js` (apply modifiers)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -73,8 +73,8 @@
 - Purpose
   - Additional Act 2 content themes and modifiers (TBD).
 - Used by
-  - `/js/systems/booking.js` (theme selection)
-  - `/js/systems/booking.js` or `/js/systems/content.js` (theme modifiers)
+  - `/src/systems/booking.js` (theme selection)
+  - `/src/systems/booking.js` or `/src/systems/content.js` (theme modifiers)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -87,7 +87,7 @@
 - Purpose
   - Act 2 story events and triggers (TBD).
 - Used by
-  - `/js/systems/story.js` (`checkAct2StoryEvents`, `applyStoryEvent`)
+  - `/src/systems/story.js` (`checkAct2StoryEvents`, `applyStoryEvent`)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -100,7 +100,7 @@
 - Purpose
   - Platform emphasis and audience composition tuning (TBD).
 - Used by
-  - `/js/systems/social.js` (`setSocialStrategy`, `postPromoContent`)
+  - `/src/systems/social.js` (`setSocialStrategy`, `postPromoContent`)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -112,7 +112,7 @@
 - Purpose
   - Studio milestones and threshold rules (TBD).
 - Used by
-  - `/js/systems/progression.js` or `/js/systems/milestones.js` (`checkMilestones`)
+  - `/src/systems/progression.js` or `/src/systems/milestones.js` (`checkMilestones`)
 - Values
 
 | key | type | meaning | default placeholder |
@@ -124,8 +124,8 @@
 - Purpose
   - Expanded roster depth (new performers + role definitions) for Act 2 (TBD).
 - Used by
-  - `/js/systems/performers.js` (roster management)
-  - `/js/systems/booking.js` (selection list)
+  - `/src/systems/performers.js` (roster management)
+  - `/src/systems/booking.js` (selection list)
 - Values
 
 | key | type | meaning | default placeholder |

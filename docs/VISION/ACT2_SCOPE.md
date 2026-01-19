@@ -21,7 +21,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP roster, fatigue/loyalty tracking, booking flow, save/load.
 - New State Needed (high level keys; no deep schema yet)
   - `performerManagement` (TBD fields for contracts/retention/availability).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/roster.js` (expanded), `systems/booking.js` (availability checks).
 - UI Surfaces (which screens/panels)
   - Roster screen (new panels), Booking screen (availability indicators).
@@ -45,7 +45,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP analytics outputs, content history, and content results data.
 - New State Needed (high level keys; no deep schema yet)
   - `analyticsHistory` (TBD aggregates/summary records).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/analytics.js` (expanded aggregation and summaries).
 - UI Surfaces (which screens/panels)
   - Analytics screen (new panels/sections).
@@ -69,7 +69,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP location unlock flow, reputation gating, booking selection.
 - New State Needed (high level keys; no deep schema yet)
   - `unlocks.locationTiers` (TBD structure for tier states).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js`, `systems/booking.js` (location availability), `systems/shop.js`.
 - UI Surfaces (which screens/panels)
   - Shop screen (new unlock cards), Booking screen (expanded location list).
@@ -93,7 +93,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP economy, shop purchase flow, content output calculation.
 - New State Needed (high level keys; no deep schema yet)
   - `equipment` (TBD upgrade levels/state).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/shop.js`, `systems/booking.js` or `systems/content.js` (apply equipment effects).
 - UI Surfaces (which screens/panels)
   - Shop screen (equipment upgrade cards), Analytics screen (output notes).
@@ -116,7 +116,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP booking flow and content history.
 - New State Needed (high level keys; no deep schema yet)
   - No new state required beyond config-driven theme catalogs (unless future validation requires it).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/booking.js`, `systems/content.js` (theme selection/impact).
 - UI Surfaces (which screens/panels)
   - Booking screen (expanded theme list).
@@ -139,7 +139,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP Act 1 story system and day progression.
 - New State Needed (high level keys; no deep schema yet)
   - `story.act2` (TBD flags/event tracking).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/story.js` (new Act 2 event logic).
 - UI Surfaces (which screens/panels)
   - Hub or dedicated story panel within existing screens (no new screen required unless later validated).
@@ -162,7 +162,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP roster system, booking selection, and performer stats.
 - New State Needed (high level keys; no deep schema yet)
   - `roster.performers` expands; optional `performerRoles` (TBD).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/roster.js`, `systems/booking.js` (selection lists).
 - UI Surfaces (which screens/panels)
   - Roster screen (expanded list), Booking screen (more performers).
@@ -184,7 +184,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP social platforms (Instagram/X) and promo posting.
 - New State Needed (high level keys; no deep schema yet)
   - `social.strategy` (TBD platform emphasis settings).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/social.js` (expanded platform effects).
 - UI Surfaces (which screens/panels)
   - Social screen (strategy controls/summary).
@@ -207,7 +207,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
   - MVP progression signals (reputation, unlocks).
 - New State Needed (high level keys; no deep schema yet)
   - `milestones` (TBD milestone tracking list).
-- New/Updated Systems (which /js/systems/* it affects)
+- New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js` or `systems/milestones.js` (new tracking system).
 - UI Surfaces (which screens/panels)
   - Hub screen (milestone summary), optional panel in Roster or Analytics.
