@@ -22,23 +22,23 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
 
 ## NOT IN MVP — Act 2 only (Tier 2)
 
-### Tier 2 (Vision Placeholder)
+### Tier 2 (Act 2)
 
 | id | name | tier | cost | unlockCost | unlockRequirements | description |
 | --- | --- | --- | --- | --- | --- | --- |
-| location_downtown_penthouse | Downtown Penthouse | 2 | 1800 | 4000 | None | A sleek high-rise space that signals serious growth. |
-| location_suburban_house | Suburban House | 2 | 2200 | 5000 | None | A full home set that unlocks richer lifestyle shoots. |
-| location_private_studio | Private Studio | 2 | 2600 | 6000 | None | A dedicated studio with controlled lighting and props. |
+| location_downtown_penthouse | Downtown Penthouse | 2 | 1800 | 4000 | Reputation ≥ 20 | A sleek high-rise space that signals serious growth. |
+| location_suburban_house | Suburban House | 2 | 2200 | 5000 | Reputation ≥ 25 | A full home set that unlocks richer lifestyle shoots. |
+| location_private_studio | Private Studio | 2 | 2600 | 6000 | Reputation ≥ 30 | A dedicated studio with controlled lighting and props. |
 
 ## NOT IN MVP — Act 3 only (Tier 3)
 
-### Tier 3 (Vision Placeholder)
+### Tier 3 (Act 3)
 
 | id | name | tier | cost | unlockCost | unlockRequirements | description |
 | --- | --- | --- | --- | --- | --- | --- |
-| location_luxury_penthouse | Luxury Penthouse | 3 | 5200 | 12000 | None | A premium skyline suite built for top-tier showcases. |
-| location_beachfront_villa | Beachfront Villa | 3 | 6500 | 15000 | None | An exclusive coastal property for aspirational content. |
-| location_private_mansion | Private Mansion | 3 | 8200 | 20000 | None | A sprawling estate that defines elite production value. |
+| location_luxury_penthouse | Luxury Penthouse | 3 | 5200 | 12000 | Reputation ≥ 50 | A premium skyline suite built for top-tier showcases. |
+| location_beachfront_villa | Beachfront Villa | 3 | 6500 | 15000 | Reputation ≥ 60 | An exclusive coastal property for aspirational content. |
+| location_private_mansion | Private Mansion | 3 | 8200 | 20000 | Reputation ≥ 70 | A sprawling estate that defines elite production value. |
 
 ## JSON Example (Config Mapping)
 

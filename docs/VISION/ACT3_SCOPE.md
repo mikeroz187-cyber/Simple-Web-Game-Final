@@ -3,32 +3,34 @@
 ## 1) Act 3 Goal Statement
 Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions that emphasize mastery, scale, and legacy outcomes. Late-game depth means the player manages macro-level studio stewardship, long-term optimization of talent, brand identity, and revenue streams, and adapts to high-impact events without changing the MVP core loop. Act 3 provides longer arcs and endgame objectives through additive systems only, with no new app architecture or technical stack changes. The intended payoff versus Act 2 is sustained mastery: larger strategic choices, higher stakes, and legacy milestones that reflect the studio’s long-term identity. The game remains a single-page, local-only, config-driven web app with a single authoritative `gameState`.
 
+**Act 3 timeline:** Days 181–270. Day 180 ends Act 2; Day 181 begins Act 3.
+
 ## 2) Hard Boundary: What Act 3 Is Not
 - No changes to MVP scope, rules, or screens beyond additive Act 3 extensions.
 - No Act 2 rewrites or removals; Act 2 remains intact and required as a dependency.
 - No online features, accounts, payments, backend, or database.
 - No frameworks, build tools, or routing migrations; still vanilla HTML/CSS/JS.
 - No multiplayer, live events, or marketplace systems.
-- No prestige/reset mechanics unless explicitly confirmed in `docs/SCOPE_VISION.md` (otherwise TBD).
+- No prestige/reset mechanics (explicitly excluded for Act 3).
 - Nothing outside `docs/SCOPE_VISION.md` is permitted in Act 3.
 
 ## 3) Act 3 Feature List (Additive Only)
 
 ### A3.1 — Rival Studios / Competitive Pressure
 - Summary (1–2 sentences)
-  - Add competitive pressure and market positioning challenges via rival studios or market shifts (details TBD). This system introduces external pressure without changing the MVP loop.
+  - Add two rival studios with deterministic weekly standings checks and market shift modifiers that impact revenue and follower growth.
 - Player Value (why it matters late-game)
   - Creates high-stakes decisions and forces the player to adapt strategy to remain competitive.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP economy, reputation, and progression; Act 2 expanded analytics and progression signals.
 - New State Needed (high level keys; no deep schema yet)
-  - `rivals` (TBD metadata, standings), `market` (TBD shift flags or modifiers).
+  - `rivals` with `studios` array and `lastCheckDay`, `market` with `activeShiftId`.
 - New/Updated Systems (which /src/systems/* it affects)
-  - `systems/competition.js` (new, TBD) or `systems/progression.js` (extended).
+  - `systems/competition.js` (new) for rival standings and market shifts.
 - UI Surfaces (which screens/panels)
-  - Hub (rival status summary), Analytics (impact notes) — exact panels TBD.
+  - Hub (rival status summary), Analytics (impact notes).
 - Config Additions (new tunables required)
-  - Rival definitions, market shift triggers, impact modifiers (TBD config categories).
+  - Rival definitions, weekly check cadence, and market shift schedule with multipliers.
 - Save/Load Considerations (versioning/migration notes)
   - Add v3 defaults for rivals/market state; migration must not alter existing progression.
 - Acceptance Criteria (specific + testable)
@@ -40,19 +42,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.2 — Structured High-Impact Events (Act 3)
 - Summary (1–2 sentences)
-  - Add high-impact events that test preparedness and flexibility (details TBD). Events are scheduled or triggered via config, not random unless explicitly approved.
+  - Add deterministic Act 3 events on Days 200/225/245/270 with fixed outcomes and messaging.
 - Player Value (why it matters late-game)
   - Introduces spikes of risk/reward and strategic pacing decisions.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP story/event framework and day progression; Act 2 story expansions.
 - New State Needed (high level keys; no deep schema yet)
-  - `events.act3` or `story.act3` (TBD event flags/log).
+  - `story.act3` with `eventsShown` array and `lastEventId`.
 - New/Updated Systems (which /src/systems/* it affects)
-  - `systems/story.js` (extended) or `systems/events.js` (new, TBD).
+  - `systems/story.js` (extended) for Act 3 events (no separate events.js).
 - UI Surfaces (which screens/panels)
   - Hub or a dedicated event panel within existing screens (no new screens by default).
 - Config Additions (new tunables required)
-  - Event schedule, triggers, outcomes (TBD config categories).
+  - Event schedule, trigger conditions (`onDayStart`), and outcome modifiers.
 - Save/Load Considerations (versioning/migration notes)
   - Add event flags with safe defaults during v3 migration.
 - Acceptance Criteria (specific + testable)
@@ -64,19 +66,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.3 — Reputation Branches (Studio Identity Paths)
 - Summary (1–2 sentences)
-  - Add distinct reputation paths that represent studio identity specializations (details TBD). Branches provide late-game specialization without changing the core loop.
+  - Add three reputation branches (Prestige, Volume, Boutique) with fixed modifiers and unlock requirements.
 - Player Value (why it matters late-game)
   - Enables long-term identity choices and strategic differentiation.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP reputation stat and unlock gating; Act 2 progression and milestone systems.
 - New State Needed (high level keys; no deep schema yet)
-  - `reputation.branchId`, `reputation.branchProgress` (TBD structure).
+  - `reputation` object with `branchId` and `branchProgress`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/progression.js` (extended) for branch selection/progression.
 - UI Surfaces (which screens/panels)
-  - Hub (identity summary), Roster or Analytics (branch effects summary) — exact panels TBD.
+  - Hub (identity summary), Roster or Analytics (branch effects summary).
 - Config Additions (new tunables required)
-  - Branch definitions, requirements, and modifiers (TBD config categories).
+  - Branch requirements (reputation thresholds) and modifier tables.
 - Save/Load Considerations (versioning/migration notes)
   - Initialize branch fields with neutral defaults in v3 migration.
 - Acceptance Criteria (specific + testable)
@@ -88,19 +90,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.4 — Act 3 Story Arc (Post-Act 2)
 - Summary (1–2 sentences)
-  - Add Act 3 narrative beats after Act 2 concludes (details TBD). Story content remains additive and uses the existing story system.
+  - Add Act 3 narrative beats on Days 200/225/245/270 with deterministic outcomes.
 - Player Value (why it matters late-game)
   - Provides narrative closure and long-term goals beyond Act 2.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP Act 1 story system and Act 2 story extensions.
 - New State Needed (high level keys; no deep schema yet)
-  - `story.act3` (TBD flags/sequence).
+  - `story.act3` with `eventsShown` array and `lastEventId`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/story.js` (extended).
 - UI Surfaces (which screens/panels)
   - Hub or existing story panel (no new screens by default).
 - Config Additions (new tunables required)
-  - Act 3 story event schedule and triggers (TBD config categories).
+  - Act 3 story event schedule and trigger conditions.
 - Save/Load Considerations (versioning/migration notes)
   - v3 migration adds Act 3 story flags with safe defaults.
 - Acceptance Criteria (specific + testable)
@@ -111,19 +113,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.5 — Optional Automation (Late-Game QoL)
 - Summary (1–2 sentences)
-  - Add optional automation tools that reduce repetitive actions late-game (details TBD). Automation must be opt-in and transparent.
+  - Add opt-in automation for booking and social posting, capped to one automated action per day.
 - Player Value (why it matters late-game)
   - Reduces micromanagement while preserving strategic control.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP booking loop and action flow; Act 2 expanded systems for context.
 - New State Needed (high level keys; no deep schema yet)
-  - `automation` (TBD flags, rules, and enabled actions).
+  - `automation` with `enabled`, `autoBookEnabled`, `autoPostEnabled`, and `safetyCaps`.
 - New/Updated Systems (which /src/systems/* it affects)
-  - `systems/automation.js` (new, TBD) or updates to existing booking/economy systems.
+  - `systems/automation.js` (new) plus light hooks in booking/economy systems.
 - UI Surfaces (which screens/panels)
-  - Hub or Booking screen (automation toggles/summary, TBD).
+  - Hub or Booking screen (automation toggles/summary).
 - Config Additions (new tunables required)
-  - Automation rules, limits, and safety caps (TBD config categories).
+  - Automation rules and safety caps (max actions/day, min cash reserve).
 - Save/Load Considerations (versioning/migration notes)
   - v3 migration initializes automation settings to disabled.
 - Acceptance Criteria (specific + testable)
@@ -134,19 +136,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.6 — Content Performance Variance
 - Summary (1–2 sentences)
-  - Add greater variance to content outcomes to increase risk/reward (details TBD). Variance must be config-driven and bounded.
+  - Add bounded ±15% variance applied to Promo followers or Premium revenue, using deterministic seed rolls.
 - Player Value (why it matters late-game)
   - Adds strategic risk management and reinforces long-term planning.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP content result generation and analytics; Act 2 advanced analytics.
 - New State Needed (high level keys; no deep schema yet)
-  - `content.variance` (TBD settings/logs) or `analyticsHistory` extensions.
+  - `content.variance` with `seed`, `rollLog`, and `enabled`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/content.js` and/or `systems/analytics.js` (extended).
 - UI Surfaces (which screens/panels)
   - Analytics (variance notes/rollups), Content (result summary).
 - Config Additions (new tunables required)
-  - Variance ranges, caps, and rules per content type (TBD config categories).
+  - Variance ranges and caps per content type plus seed policy.
 - Save/Load Considerations (versioning/migration notes)
   - v3 migration adds variance settings/flags with defaults.
 - Acceptance Criteria (specific + testable)
@@ -157,19 +159,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.7 — Advanced Scheduling
 - Summary (1–2 sentences)
-  - Add scheduling depth to balance multiple shoots or parallel planning (details TBD). Scheduling remains within the single-page UI and existing loop.
+  - Add a booking queue (max 3 entries) resolved one per day on day advance.
 - Player Value (why it matters late-game)
   - Enables long-horizon planning and improved resource utilization.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP booking flow and day progression; Act 2 expanded roster availability.
 - New State Needed (high level keys; no deep schema yet)
-  - `schedule` or `bookingQueue` (TBD queue/plan fields).
+  - `schedule` with `queue`, `maxQueueSize`, and `enabled`.
 - New/Updated Systems (which /src/systems/* it affects)
   - `systems/booking.js` (extended) and possibly `systems/time.js` (if present).
 - UI Surfaces (which screens/panels)
   - Booking screen (schedule panel), Hub (schedule summary).
 - Config Additions (new tunables required)
-  - Scheduling limits, queue size, and timing rules (TBD config categories).
+  - Scheduling limits, queue size, and resolution rules.
 - Save/Load Considerations (versioning/migration notes)
   - v3 migration initializes schedule state as empty.
 - Acceptance Criteria (specific + testable)
@@ -180,19 +182,19 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.8 — Legacy / Recognition Milestones
 - Summary (1–2 sentences)
-  - Add legacy recognition milestones that reflect long-term studio achievements (details TBD). These milestones provide endgame objectives without changing the core loop.
+  - Add legacy milestones tied to high-end thresholds (revenue, reputation, subscribers, and story completion).
 - Player Value (why it matters late-game)
   - Creates long-term goals and a sense of prestige for sustained play.
 - Dependencies (MVP + Act 2 prerequisites)
   - MVP progression metrics; Act 2 milestone tracking (if implemented).
 - New State Needed (high level keys; no deep schema yet)
-  - `legacyMilestones` (TBD milestone list and completion flags).
+  - `legacyMilestones` array with completion flags and timestamps.
 - New/Updated Systems (which /src/systems/* it affects)
-  - `systems/milestones.js` or `systems/progression.js` (extended, TBD).
+  - `systems/milestones.js` (new) or `systems/progression.js` (extended).
 - UI Surfaces (which screens/panels)
   - Hub (legacy milestone panel), Analytics (optional summary).
 - Config Additions (new tunables required)
-  - Legacy milestone definitions and thresholds (TBD config categories).
+  - Legacy milestone definitions, thresholds, and reward text (no new currencies).
 - Save/Load Considerations (versioning/migration notes)
   - v3 migration initializes legacy milestones with safe defaults.
 - Acceptance Criteria (specific + testable)
@@ -202,36 +204,36 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
   - No prestige reset or rebirth mechanics unless explicitly confirmed by scope.
 
 ## 4) Endgame Loop Definition (Act 3 Only)
-Act 3’s endgame loop is the repeated cycle of planning high-stakes bookings and strategy, responding to competitive pressure and structured events, then reviewing analytics to refine long-term identity and legacy goals. Persistent meta progression is limited to configured legacy milestones and reputation branches (if implemented), while run-level progression remains the standard day-by-day booking loop. The player “wins” Act 3 by completing all configured legacy milestones and Act 3 story beats, as defined by config. If prestige/reset mechanics are not explicitly confirmed by the Vision scope, they remain **TBD (optional)** and are not implemented.
+Act 3’s endgame loop is the repeated cycle of planning high-stakes bookings and strategy, responding to competitive pressure and structured events, then reviewing analytics to refine long-term identity and legacy goals. Persistent meta progression is limited to configured legacy milestones and reputation branches, while run-level progression remains the standard day-by-day booking loop. The player “wins” Act 3 by completing all configured legacy milestones and Act 3 story beats, as defined by config. Prestige/reset mechanics are not part of Act 3.
 
 ## 5) Act 3 Screen Additions / UI Changes (High Level)
 - New Screens (if any)
   - None by default; Act 3 additions must be embedded in existing screens unless scope explicitly adds a new screen.
 - Updated Screens
-  - Hub: rivalry/market status, legacy milestones, Act 3 story status (TBD panels).
-  - Booking: advanced scheduling panel (TBD), availability/queue indicators.
-  - Analytics: variance summaries and event impacts (TBD panels).
-  - Roster: reputation branch effects or high-value talent indicators (TBD).
+  - Hub: rivalry/market status, legacy milestones, Act 3 story status.
+  - Booking: advanced scheduling panel and queue indicators.
+  - Analytics: variance summaries and event impacts.
+  - Roster: reputation branch effects and high-value talent indicators.
 - UI Rules (Act 3)
   - No routing frameworks or sub-apps.
   - All additions must fit into existing screen containers.
   - Avoid new UI complexity unless explicitly documented in scope.
 
 ## 6) Act 3 Economy & Scaling Strategy (High Level)
-- All scaling and soft caps must be config-driven placeholders with conservative defaults.
-- Any new high-tier sinks or costs introduced by Act 3 systems must be explicitly defined in config (TBD), with no new currencies.
+- All scaling and soft caps must be config-driven with conservative defaults.
+- Any new high-tier sinks or costs introduced by Act 3 systems must be explicitly defined in config, with no new currencies.
 - Progression gates (if any) must use existing metrics (cash, reputation, milestones) and be fully config-driven.
-- If diminishing returns are used, they must be bounded and documented in config; otherwise leave as TBD.
+- Diminishing returns are limited to variance caps and market shift multipliers.
 
 ## 7) Act 3 Data/Config Requirements
-- Rival studios / market shift definitions (TBD).
-- Structured event schedules, triggers, and outcomes (TBD).
-- Reputation branches definitions, requirements, and modifiers (TBD).
-- Act 3 story arc event list and triggers (TBD).
-- Automation rules, limits, and safety caps (TBD).
-- Content performance variance ranges and caps (TBD).
-- Advanced scheduling limits and rules (TBD).
-- Legacy milestone definitions and thresholds (TBD).
+- Rival studios / market shift definitions (see ACT3_SYSTEMS.md).
+- Structured event schedules, triggers, and outcomes (see DATA_STORY_EVENTS.md).
+- Reputation branches definitions, requirements, and modifiers (see ACT3_SYSTEMS.md).
+- Act 3 story arc event list and triggers (Days 200/225/245/270).
+- Automation rules, limits, and safety caps (max 1 action/day; min cash reserve).
+- Content performance variance ranges and caps (±15%).
+- Advanced scheduling limits and rules (queue size 3, resolve 1/day).
+- Legacy milestone definitions and thresholds (see ACT3_SYSTEMS.md).
 
 ## 8) Act 3 Completion Checklist (Definition of Done)
 - [ ] All A3 features listed above are implemented.

@@ -58,68 +58,68 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 
 ---
 
-## NOT IN MVP — Act 2 Only (Vision Placeholder Events)
+## NOT IN MVP — Act 2 Only (Vision Definitions)
 
-> These events are **NOT IN MVP** and exist only as placeholders for Act 2 expansion.
+> These events are **NOT IN MVP** and are introduced during Act 2 (Days 91–180).
 
-- **id:** `act2_expansion_plan_tbd`
+- **id:** `act2_expansion_plan_day95`
 - **act:** 2
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 95
+- **triggerCondition:** `onDayStart`
 - **title:** Expansion Plan Drafted
-- **message:** With the debt cleared, the studio can scale beyond survival. You outline a formal expansion plan focused on steady revenue and brand reliability. Execution details will be defined in Act 2.
+- **message:** With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table.
 
-- **id:** `act2_staffing_push_tbd`
+- **id:** `act2_staffing_push_day120`
 - **act:** 2
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 120
+- **triggerCondition:** `onDayStart`
 - **title:** Staffing Push
-- **message:** Demand is rising, and capacity is a bottleneck. You consider structured hiring or contracting to keep bookings consistent. Staffing targets and timing will be finalized in Act 2.
+- **message:** Demand is rising, and capacity is tight. You greenlight a staffing push to stabilize booking consistency.
 
-- **id:** `act2_studio_upgrade_tbd`
+- **id:** `act2_studio_upgrade_day145`
 - **act:** 2
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 145
+- **triggerCondition:** `onDayStart`
 - **title:** Studio Upgrade Decision
-- **message:** Equipment and space limitations start to affect output quality. You review upgrade options and cost trade-offs. The exact upgrade path is still to be confirmed.
+- **message:** Production quality is plateauing. You decide to invest in equipment upgrades to keep premium output competitive.
 
-- **id:** `act2_partnership_offer_tbd`
+- **id:** `act2_partnership_offer_day170`
 - **act:** 2
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 170
+- **triggerCondition:** `onDayStart`
 - **title:** Partnership Offer
-- **message:** A potential partner offers cross-promotion and access to new clients. The proposal could accelerate growth, but requires clear deliverables. Partner terms will be defined in Act 2.
+- **message:** A platform partner offers cross-promotion in exchange for consistent premium releases. You accept and lock in a long-term collaboration.
 
 ---
 
-## NOT IN MVP — Act 3 Only (Vision Placeholder Events)
+## NOT IN MVP — Act 3 Only (Vision Definitions)
 
-> These events are **NOT IN MVP** and exist only as placeholders for Act 3 late-game arc.
+> These events are **NOT IN MVP** and are introduced during Act 3 (Days 181–270).
 
-- **id:** `act3_brand_legacy_tbd`
+- **id:** `act3_brand_legacy_day200`
 - **act:** 3
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 200
+- **triggerCondition:** `onDayStart`
 - **title:** Brand Legacy Review
-- **message:** The studio has a long track record and a recognizable brand. You evaluate what legacy means for the business and its long-term direction. Final outcomes will be defined in Act 3.
+- **message:** Your studio is now a recognizable brand. You commit to a legacy plan that prioritizes long-term reputation and stability.
 
-- **id:** `act3_market_shift_tbd`
+- **id:** `act3_market_shift_day225`
 - **act:** 3
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 225
+- **triggerCondition:** `onDayStart`
 - **title:** Market Shift
-- **message:** Industry expectations shift, changing what clients prioritize. You assess whether to adapt the studio strategy or double down on what already works. The exact market event is still TBD.
+- **message:** Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention.
 
-- **id:** `act3_mentorship_tbd`
+- **id:** `act3_mentorship_day245`
 - **act:** 3
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 245
+- **triggerCondition:** `onDayStart`
 - **title:** Mentorship and Succession
-- **message:** You consider how to pass on the studio’s standards and operations. Mentoring others could protect the brand beyond your direct involvement. Succession details will be defined in Act 3.
+- **message:** You begin mentoring a successor team to preserve studio standards while scaling output.
 
-- **id:** `act3_exit_strategy_tbd`
+- **id:** `act3_exit_strategy_day270`
 - **act:** 3
-- **triggerDay:** TBD
-- **triggerCondition:** `TBD`
+- **triggerDay:** 270
+- **triggerCondition:** `onDayStart`
 - **title:** Exit Strategy
-- **message:** A clear exit plan becomes a strategic priority. You outline options for continuing, selling, or restructuring the studio. Final triggers and outcomes are TBD.
+- **message:** You formalize a long-term exit strategy focused on stability and legacy recognition.

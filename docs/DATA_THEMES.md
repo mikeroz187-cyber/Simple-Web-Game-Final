@@ -18,17 +18,29 @@ This document defines the **content themes catalog** used by the booking system.
 
 ---
 
-## NOT IN MVP — Act 2/Act 3 Only (Vision Placeholder Themes)
+## NOT IN MVP — Act 2 Only (Vision Definitions)
 
-> These themes are **NOT IN MVP** and exist only as placeholders for Act 2/Act 3 expansion.
+> These themes are **NOT IN MVP** and are introduced during Act 2.
 
-| id | name | description (one line) | modifiers (placeholder) |
+| id | name | description (one line) | modifiers |
 | --- | --- | --- | --- |
 | `theme_luxury_retreat` | Luxury Retreat | Resort-grade spaces with a relaxed, high-end atmosphere. | `followersMult: 0.95`, `revenueMult: 1.20` |
 | `theme_editorial` | Editorial | Magazine-style staging with bold angles and fashion emphasis. | `followersMult: 1.05`, `revenueMult: 1.05` |
 | `theme_downtown_chic` | Downtown Chic | Urban interiors with a sleek, modern aesthetic. | `followersMult: 1.00`, `revenueMult: 1.10` |
 | `theme_sunlit_getaway` | Sunlit Getaway | Bright, airy sets with soft daylight and beachy calm. | `followersMult: 1.10`, `revenueMult: 0.95` |
 | `theme_afterhours` | After Hours | Late-night ambience with moody shadows and intimate lighting. | `followersMult: 0.90`, `revenueMult: 1.20` |
+
+## NOT IN MVP — Act 3 Only (Vision Definitions)
+
+> These themes are **NOT IN MVP** and are introduced during Act 3.
+
+| id | name | description (one line) | modifiers |
+| --- | --- | --- | --- |
+| `theme_legacy_gala` | Legacy Gala | Formal, prestige-forward sets with ceremonial flair. | `followersMult: 0.95`, `revenueMult: 1.30` |
+| `theme_power_play` | Power Play | Bold, high-stakes visuals with confident framing. | `followersMult: 1.00`, `revenueMult: 1.20` |
+| `theme_afterglow` | Afterglow | Soft, intimate styling that sustains loyal subscribers. | `followersMult: 0.90`, `revenueMult: 1.15` |
+| `theme_urban_luxe` | Urban Luxe | Sleek modern interiors emphasizing sophistication. | `followersMult: 1.05`, `revenueMult: 1.10` |
+| `theme_cinematic` | Cinematic | Dramatic lighting and framing built for standout showcases. | `followersMult: 1.00`, `revenueMult: 1.25` |
 
 ---
 

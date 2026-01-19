@@ -27,22 +27,22 @@ Additions:
 
 System | File | Reads | Writes | Depends On | New or Expanded?
 --- | --- | --- | --- | --- | ---
-Rival studios / competitive pressure | `/src/systems/competition.js` (new, TBD) or `/src/systems/progression.js` (extended) | `rivals`, `market`, `player`, `reputation` | `rivals`, `market`, `player.reputation` (if modified) | `CONFIG.rivals.*`, `CONFIG.market.*` | TBD (scope allows new system)
-Structured high-impact events (Act 3) | `/src/systems/story.js` (extended) or `/src/systems/events.js` (new, TBD) | `story.act3`, `player`, `events` (if present) | `story.act3`, `events` (if present) | `CONFIG.story.act3.*`, `CONFIG.events.act3.*` | Expanded (story) or TBD (new events system)
-Reputation branches (studio identity paths) | `/src/systems/progression.js` (extended) | `reputation`, `player.reputation`, `milestones` | `reputation`, `milestones` (if used) | `CONFIG.reputation.branches.*`, `CONFIG.milestones.*` | Expanded
-Act 3 story arc progression | `/src/systems/story.js` (extended) | `story.act3`, `player.day`, `milestones` (if gating) | `story.act3` | `CONFIG.story.act3.*` | Expanded
-Optional automation (late-game QoL) | `/src/systems/automation.js` (new, TBD) | `automation`, `schedule`, `player`, `roster` | `automation`, `schedule` | `CONFIG.automation.*` | TBD (new)
-Content performance variance | `/src/systems/content.js` (new, TBD) and/or `/src/systems/analytics.js` (extended) | `content.entries`, `content.variance`, `analyticsHistory` | `content.entries`, `content.variance`, `analyticsHistory` | `CONFIG.content.variance.*`, `CONFIG.analytics.*` | TBD (new/extended)
-Advanced scheduling | `/src/systems/booking.js` (extended) and/or `/src/systems/time.js` (new, TBD) | `schedule`, `roster`, `player` | `schedule`, `player.day` (if queued resolution) | `CONFIG.schedule.*`, `CONFIG.booking.*` | Expanded or TBD (new)
-Legacy / recognition milestones | `/src/systems/progression.js` (extended) or `/src/systems/milestones.js` (new, TBD) | `legacyMilestones`, `player`, `milestones` | `legacyMilestones` | `CONFIG.legacyMilestones.*` | Expanded or TBD (new)
+Rival studios / competitive pressure | `/src/systems/competition.js` (new) | `rivals`, `market`, `player.reputation` | `rivals`, `market` | `CONFIG.rivals.*`, `CONFIG.market.*` | New
+Structured high-impact events (Act 3) | `/src/systems/story.js` (extended) | `story.act3`, `player.day` | `story.act3` | `CONFIG.story.act3.*` | Expanded
+Reputation branches (studio identity paths) | `/src/systems/progression.js` (extended) | `reputation`, `player.reputation`, `legacyMilestones` | `reputation`, `legacyMilestones` | `CONFIG.reputation.branches.*`, `CONFIG.legacyMilestones.*` | Expanded
+Act 3 story arc progression | `/src/systems/story.js` (extended) | `story.act3`, `player.day` | `story.act3` | `CONFIG.story.act3.*` | Expanded
+Optional automation (late-game QoL) | `/src/systems/automation.js` (new) | `automation`, `schedule`, `player`, `roster` | `automation`, `schedule` | `CONFIG.automation.*` | New
+Content performance variance | `/src/systems/content.js` (new) + `/src/systems/analytics.js` (extended) | `content.entries`, `content.variance`, `analyticsHistory` | `content.entries`, `content.variance`, `analyticsHistory` | `CONFIG.content.variance.*`, `CONFIG.analytics.*` | New/Expanded
+Advanced scheduling | `/src/systems/booking.js` (extended) | `schedule`, `roster`, `player` | `schedule`, `player.day` | `CONFIG.schedule.*` | Expanded
+Legacy / recognition milestones | `/src/systems/milestones.js` (new) | `legacyMilestones`, `player`, `milestones` | `legacyMilestones` | `CONFIG.legacyMilestones.*` | New
 
 Notes:
-- Only systems listed in Act 3 scope are included. When specific mechanics are not defined, mark as TBD and avoid inventing details.
+- Only systems listed in Act 3 scope are included.
 - Prefer extending existing systems unless scope explicitly requires a new file.
 
 ## 4) System APIs (Per File)
 
-### /src/systems/competition.js (Act 3 additions, TBD if new)
+### /src/systems/competition.js (Act 3 additions)
 - Purpose (Act 3)
   - Track rival studio pressure and market shifts that affect late-game strategy without changing the core loop.
 - New or expanded public functions (names + params + returns)
@@ -102,7 +102,7 @@ Notes:
   - MVP reputation remains intact when no branch is selected.
   - Legacy milestones are additive and do not replace Act 2 milestones.
 
-### /src/systems/automation.js (Act 3 additions, TBD if new)
+### /src/systems/automation.js (Act 3 additions)
 - Purpose (Act 3)
   - Provide opt-in automation for repetitive late-game actions without idle/AFK progression.
 - New or expanded public functions (names + params + returns)
@@ -139,7 +139,7 @@ Notes:
   - Variance rollups are additive to existing analytics.
   - No changes to MVP analytics output when variance is disabled.
 
-### /src/systems/content.js (Act 3 additions, TBD if new)
+### /src/systems/content.js (Act 3 additions)
 - Purpose (Act 3)
   - Apply bounded, config-driven variance to content results.
 - New or expanded public functions (names + params + returns)
@@ -175,7 +175,7 @@ Notes:
   - Scheduling is optional and only active when enabled in config.
   - Day progression remains deterministic and player-driven.
 
-### /src/systems/milestones.js (Act 3 additions, TBD if new)
+### /src/systems/milestones.js (Act 3 additions)
 - Purpose (Act 3)
   - Track legacy milestone definitions if not already housed in progression.js.
 - New or expanded public functions (names + params + returns)
@@ -198,11 +198,11 @@ Based on Act 3 scope:
 - Repeatable actions: high-stakes booking decisions, strategy adjustments, and event responses.
 - Resets vs persists: no resets by default; all progression persists unless prestige/reset is explicitly confirmed.
 - Milestones evaluation: legacy milestones and reputation branch progression are checked after key actions (booking completion, event resolution, or day advance) using config-defined thresholds.
-- Prestige/reset: TBD (requires validation from source repo). If unconfirmed, do not implement.
+- Prestige/reset: not supported in Act 3.
 
-## 6) Scaling Controls / Soft Caps (If Applicable)
-- If Act 3 includes scaling control, use bounded, config-defined soft caps/diminishing returns in `economy.js` or `progression.js` (TBD).
-- If scaling controls are not confirmed in scope, mark as TBD and do not implement.
+## 6) Scaling Controls / Soft Caps
+- Market shift multipliers are capped between `0.85` and `1.15`.
+- Variance multipliers are capped at ±15%.
 
 ## 7) Guardrails (No Online, No Frameworks)
 Explicitly forbid:

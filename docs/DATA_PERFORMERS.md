@@ -29,17 +29,26 @@ These are available as short-term hires, not part of the core team.
 
 ---
 
-## NOT IN MVP — Act 2/Act 3 only (Vision Placeholders)
+## NOT IN MVP — Act 2 Only (Vision Definitions)
 
-These slots are placeholders only and should not appear in MVP builds.
+These performers are introduced during Act 2 (post-Day 90). They must not appear in MVP builds.
 
 | id | name | type | starPower | description |
 | --- | --- | --- | --- | --- |
-| act2_placeholder_01 | Act 2 Performer Slot A | core | TBD | Placeholder for a major Act 2 roster addition. |
-| act2_placeholder_02 | Act 2 Performer Slot B | freelance | TBD | Placeholder for a notable Act 2 hire option. |
-| act3_placeholder_01 | Act 3 Performer Slot A | core | TBD | Placeholder for a late-game team anchor. |
-| act3_placeholder_02 | Act 3 Performer Slot B | freelance | TBD | Placeholder for a late-game specialist hire. |
-| act3_placeholder_03 | Act 3 Performer Slot C | freelance | TBD | Placeholder for a late-game wildcard. |
+| act2_aria_vale | Aria Vale | core | 3 | Brand-focused lead with consistent high-end delivery. |
+| act2_jonah_kade | Jonah Kade | core | 2 | Versatile performer who adapts quickly to new themes. |
+| act2_sky_moreno | Sky Moreno | freelance | 3 | High-demand freelancer known for premium polish. |
+| act2_pax_hollow | Pax Hollow | freelance | 2 | Experimental stylist who boosts niche engagement. |
+
+## NOT IN MVP — Act 3 Only (Vision Definitions)
+
+These performers are introduced during Act 3 (late game). They must not appear in MVP or Act 2 builds.
+
+| id | name | type | starPower | description |
+| --- | --- | --- | --- | --- |
+| act3_naomi_ward | Naomi Ward | core | 4 | Flagship talent with prestige-level draw and stability. |
+| act3_ryker_lane | Ryker Lane | freelance | 3 | Elite specialist who excels in high-risk concepts. |
+| act3_liv_solace | Liv Solace | freelance | 3 | Late-game wildcard with strong premium conversion. |
 
 ---
 

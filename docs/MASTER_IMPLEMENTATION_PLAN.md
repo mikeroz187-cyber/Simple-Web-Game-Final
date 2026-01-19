@@ -6,7 +6,7 @@
 - Prefer stability and correctness over features or polish.
 - If any step fails, **fix it before moving on**.
 - Do **not** implement Act 2/Act 3 work inside MVP tasks.
-- If scope is unclear, mark it **TBD** and defer to the authoritative scope docs.
+- If scope is unclear, stop and confirm with the project owner before proceeding.
 - For detailed MVP phase execution, follow **docs/MVP/MVP_BUILD_ORDER.md** as the step-by-step guide. This Master Plan provides the high-level sequence across all acts.
 
 ## 1) Global Non-Negotiables (Applies to All Acts)
@@ -165,7 +165,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 5. Roster: fatigue changes + availability rules.
 6. Social: posting Promo content to Instagram/X only.
 7. Progression: Tier 1 location unlock only.
-8. Story: Act 1 intro + 2–3 debt reminders (days TBD per scope/config).
+8. Story: Act 1 intro + debt reminders on Days 30/60/80 (per config).
 
 **Done when…**
 - Booking → Content → Analytics → Book Next loop works repeatedly.
@@ -395,9 +395,9 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 - `src/ui/render.js`
 
 **Steps:**
-1. Implement milestone progression and reward claims (TBD specifics from config).
+1. Implement milestone progression and reward claims using `CONFIG.milestones` and `CONFIG.legacyMilestones`.
 2. Ensure rivalry/market/event effects integrate cleanly with analytics.
-3. Add anti-runaway scaling controls via config (TBD if required).
+3. Add anti-runaway scaling controls via config (market shift caps 0.85–1.15 and variance caps ±15%).
 
 **Done when…**
 - Endgame loop is playable and matches scope without new currencies.

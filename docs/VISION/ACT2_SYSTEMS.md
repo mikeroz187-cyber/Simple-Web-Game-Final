@@ -53,8 +53,8 @@ Hard rules:
   - Reads: `content.entries`, `equipment` (if it modifies output), `player`.
   - Writes: `player.cash`, `player.lifetimeRevenue` (if used in MVP).
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.economy.*` (TBD: Act 2 modifiers and cost entries).
-  - `CONFIG.equipment.*` (TBD: if equipment affects revenue).
+  - `CONFIG.economy.*` (base MVP values + Act 2 equipment multipliers).
+  - `CONFIG.equipment.*` (upgrade multipliers and costs).
 - Edge cases / failure modes
   - Content not found → `{ ok:false, code:"content_not_found" }`.
   - Negative or NaN revenue → clamp or reject with `{ ok:false, code:"invalid_revenue" }`.
@@ -64,7 +64,7 @@ Hard rules:
 
 ### /src/systems/performers.js
 - Purpose
-  - Extend performer management with Act 2 retention/availability (details TBD).
+  - Extend performer management with Act 2 retention/availability rules.
 - Public functions (names + parameters + returns)
   - updatePerformerAvailability(gameState, performerId, context) -> Result
   - applyRetentionCheck(gameState, performerId, context) -> Result
@@ -73,7 +73,7 @@ Hard rules:
   - Writes: `roster.performers[*]`, `performerManagement`.
 - Config dependencies (explicit CONFIG paths)
   - `CONFIG.performers.*` (existing MVP fields).
-  - `CONFIG.performerManagement.*` (TBD: contract/retention rules).
+  - `CONFIG.performerManagement.*` (contract lengths, renewal costs, loyalty thresholds, max consecutive bookings).
 - Edge cases / failure modes
   - Performer not found → `{ ok:false, code:"performer_not_found" }`.
   - Availability rule conflict → `{ ok:false, code:"performer_unavailable" }`.
@@ -92,9 +92,9 @@ Hard rules:
   - Reads: `roster.performers`, `unlocks.locationTiers`, `equipment`, `player`.
   - Writes: `content.entries`, `content.lastContentId`, `player.cash`, `player.day`.
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.locations.*` (TBD tiers and costs).
-  - `CONFIG.themes.*` (TBD theme catalog + modifiers).
-  - `CONFIG.booking.*` (TBD booking rules).
+  - `CONFIG.locations.*` (tier definitions and unlock requirements).
+  - `CONFIG.themes.*` (MVP + Act 2 theme catalogs).
+  - `CONFIG.performerManagement.availabilityRules` (max consecutive bookings).
 - Edge cases / failure modes
   - Location locked → `{ ok:false, code:"location_locked" }`.
   - Theme unknown → `{ ok:false, code:"invalid_theme" }`.
@@ -114,7 +114,7 @@ Hard rules:
   - Writes: `social.posts`, `social.strategy`, `player.followers`, `player.subscribers`.
 - Config dependencies (explicit CONFIG paths)
   - `CONFIG.social_platforms.*` (MVP platforms).
-  - `CONFIG.social.strategy.*` (TBD platform emphasis modifiers).
+  - `CONFIG.social.strategy.*` (platform emphasis modifiers).
 - Edge cases / failure modes
   - Non-promo content selected → `{ ok:false, code:"promo_required" }`.
   - Strategy payload invalid → `{ ok:false, code:"invalid_strategy" }`.
@@ -132,8 +132,8 @@ Hard rules:
   - Reads: `player.reputation`, `unlocks.locationTiers`, `milestones`.
   - Writes: `unlocks.locationTiers`, `player.reputation` (if affected), `milestones`.
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.locations.tiers.*` (TBD tier definitions).
-  - `CONFIG.milestones.*` (TBD milestone list + thresholds).
+  - `CONFIG.locations.tiers.*` (tier definitions + reputation gates).
+  - `CONFIG.milestones.*` (milestone list + thresholds).
 - Edge cases / failure modes
   - Tier already unlocked → `{ ok:false, code:"tier_already_unlocked" }`.
   - Reputation too low → `{ ok:false, code:"insufficient_reputation" }`.
@@ -151,7 +151,7 @@ Hard rules:
   - Reads: `story`, `player.day`.
   - Writes: `story.act2`.
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.story.act2.*` (TBD event schedule + triggers).
+  - `CONFIG.story.act2.*` (event schedule + `onDayStart` triggers).
 - Edge cases / failure modes
   - Event already completed → `{ ok:false, code:"event_already_completed" }`.
   - Event not eligible → `{ ok:false, code:"event_not_eligible" }`.
@@ -169,7 +169,7 @@ Hard rules:
   - Reads: `content.entries`, `social.posts`, `player`.
   - Writes: `analyticsHistory`.
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.analytics.*` (TBD rollup windows and metrics).
+  - `CONFIG.analytics.*` (rollup windows and metrics).
 - Edge cases / failure modes
   - No content history → `{ ok:false, code:"no_content_history" }`.
   - Invalid window config → `{ ok:false, code:"invalid_window" }`.
@@ -187,8 +187,8 @@ Hard rules:
   - Reads: `player.cash`, `unlocks.locationTiers`, `equipment`.
   - Writes: `player.cash`, `unlocks.locationTiers`, `equipment`.
 - Config dependencies (explicit CONFIG paths)
-  - `CONFIG.equipment.upgrades.*` (TBD upgrade definitions, costs, effects).
-  - `CONFIG.locations.tiers.*` (TBD tier costs and requirements).
+  - `CONFIG.equipment.upgrades.*` (upgrade definitions, costs, effects).
+  - `CONFIG.locations.tiers.*` (tier costs and requirements).
 - Edge cases / failure modes
   - Insufficient funds → `{ ok:false, code:"insufficient_funds" }`.
   - Upgrade not found → `{ ok:false, code:"upgrade_not_found" }`.
@@ -198,21 +198,21 @@ Hard rules:
 
 ## 5) Tick / Turn / Time Model (Act 2)
 - MVP model remains: day advances after each completed shoot loop.
-- Act 2 additions: TBD (requires validation from source repo).
-  - If any cooldowns or recovery timers are introduced, they must be config-driven and must not add passive/AFK time.
+- Act 2 additions:
+  - Contract day counters decrement at day start.
+  - Availability rest days decrement at day start.
+  - No passive/AFK time; all changes are tied to day advancement.
 
-## 6) Upgrade / Modifier Rules (If Applicable)
-TBD — optional Act 2 extension (only if equipment upgrades are confirmed in source scope).
+## 6) Upgrade / Modifier Rules (Equipment)
 - Storage: `equipment` branch in `gameState` with upgrade levels mapped by ID.
-- Influence: apply modifiers through `economy.js` and/or `booking.js` using config-defined multipliers.
-- Stacking: define additive vs multiplicative rules per upgrade in config (TBD).
+- Influence: apply modifiers through `economy.js` by multiplying base results using config-defined per-level multipliers.
+- Stacking: additive per-upgrade multipliers, applied once after base result calculation.
 - All values must be config-driven; no hard-coded multipliers.
 
-## 7) Event System Rules (If Applicable)
-TBD — Act 2 story events only if defined in scope.
-- Selection: scheduled by day thresholds and flags in `story.act2` (TBD).
-- Cooldowns: config-driven; no random events unless explicitly allowed.
-- History: stored in `story.act2` flags or event log (TBD).
+## 7) Event System Rules (Act 2 Story)
+- Selection: scheduled by day thresholds from `CONFIG.story.act2.eventOrder` and `triggerDay`.
+- Cooldowns: no random events; each event triggers once.
+- History: stored in `story.act2.eventsShown` with `lastEventId`.
 
 ## 8) Guardrails (No Scope Drift Into Act 3)
 Explicitly forbid:

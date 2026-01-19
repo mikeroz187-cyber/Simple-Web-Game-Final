@@ -11,6 +11,9 @@ const CONFIG = {
     author: "Repo Owner",
     license: "UNLICENSED"
   },
+  meta: {
+    configVersion: 3
+  },
   build: {
     runtime: "static",
     entry_html: "index.html",
@@ -51,6 +54,26 @@ const CONFIG = {
     premium_base_revenue: 250,
     subscriber_conversion_rate: 0.01,
     base_shoot_cost: 100
+  },
+  performerManagement: {
+    availabilityRules: { maxConsecutiveBookings: 2, restDaysAfterMax: 1 },
+    retentionRules: {
+      loyaltyWarningThreshold: 40,
+      loyaltyLeaveThreshold: 25,
+      loyaltyGainPerBooking: 1,
+      loyaltyDecayPerWeekIdle: 2
+    },
+    contractRules: {
+      coreLengthDays: 90,
+      freelanceLengthDays: 30,
+      coreRenewalCost: 500,
+      freelanceRenewalCost: 250
+    }
+  },
+  analytics: {
+    rollupWindowsDays: [7, 30],
+    metricKeys: ["revenue", "followers", "subscribers", "promoCount", "premiumCount"],
+    snapshotFrequencyDays: 7
   },
   performers: {
     core_count: 3,
@@ -128,6 +151,69 @@ const CONFIG = {
         type: "freelance",
         starPower: 1,
         description: "Budget-friendly helper with earnest charm and limited reach."
+      },
+      act2_aria_vale: {
+        id: "act2_aria_vale",
+        name: "Aria Vale",
+        type: "core",
+        starPower: 3,
+        description: "Brand-focused lead with consistent high-end delivery."
+      },
+      act2_jonah_kade: {
+        id: "act2_jonah_kade",
+        name: "Jonah Kade",
+        type: "core",
+        starPower: 2,
+        description: "Versatile performer who adapts quickly to new themes."
+      },
+      act2_sky_moreno: {
+        id: "act2_sky_moreno",
+        name: "Sky Moreno",
+        type: "freelance",
+        starPower: 3,
+        description: "High-demand freelancer known for premium polish."
+      },
+      act2_pax_hollow: {
+        id: "act2_pax_hollow",
+        name: "Pax Hollow",
+        type: "freelance",
+        starPower: 2,
+        description: "Experimental stylist who boosts niche engagement."
+      },
+      act3_naomi_ward: {
+        id: "act3_naomi_ward",
+        name: "Naomi Ward",
+        type: "core",
+        starPower: 4,
+        description: "Flagship talent with prestige-level draw and stability."
+      },
+      act3_ryker_lane: {
+        id: "act3_ryker_lane",
+        name: "Ryker Lane",
+        type: "freelance",
+        starPower: 3,
+        description: "Elite specialist who excels in high-risk concepts."
+      },
+      act3_liv_solace: {
+        id: "act3_liv_solace",
+        name: "Liv Solace",
+        type: "freelance",
+        starPower: 3,
+        description: "Late-game wildcard with strong premium conversion."
+      }
+    },
+    act2Roster: {
+      performerIds: [
+        "act2_aria_vale",
+        "act2_jonah_kade",
+        "act2_sky_moreno",
+        "act2_pax_hollow"
+      ],
+      roleIds: ["lead", "specialist", "support"],
+      roles: {
+        lead: { label: "Lead", followersMult: 1.05, revenueMult: 1.05 },
+        specialist: { label: "Specialist", followersMult: 1.10, revenueMult: 1.00 },
+        support: { label: "Support", followersMult: 0.95, revenueMult: 1.00 }
       }
     }
   },
@@ -139,9 +225,102 @@ const CONFIG = {
     instagram_reach_multiplier: 1.0,
     x_reach_multiplier: 1.0
   },
+  social: {
+    strategy: {
+      defaultStrategyId: "balanced",
+      strategies: {
+        balanced: { instagramReachMult: 1.0, xReachMult: 1.0, subscriberConversionMult: 1.0 },
+        growth_focus: { instagramReachMult: 1.2, xReachMult: 0.9, subscriberConversionMult: 0.9 },
+        revenue_focus: { instagramReachMult: 0.9, xReachMult: 1.2, subscriberConversionMult: 1.1 }
+      }
+    }
+  },
   progression: {
     starting_reputation: 0,
     location_tier_1_unlock_cost: 2000
+  },
+  milestones: {
+    milestoneOrder: [
+      "ms_followers_1000",
+      "ms_subscribers_250",
+      "ms_revenue_50000",
+      "ms_reputation_25",
+      "ms_reputation_50"
+    ],
+    milestones: {
+      ms_followers_1000: { label: "First 1,000 Followers", type: "followers", threshold: 1000 },
+      ms_subscribers_250: { label: "First 250 Subscribers", type: "subscribers", threshold: 250 },
+      ms_revenue_50000: { label: "$50k Lifetime Revenue", type: "lifetimeRevenue", threshold: 50000 },
+      ms_reputation_25: { label: "Reputation 25", type: "reputation", threshold: 25 },
+      ms_reputation_50: { label: "Reputation 50", type: "reputation", threshold: 50 }
+    }
+  },
+  equipment: {
+    upgradeOrder: ["lighting", "camera", "set_dressing"],
+    upgrades: {
+      lighting: { maxLevel: 3, levelCosts: [600, 900, 1200], followersMultPerLevel: 0.05, revenueMultPerLevel: 0.00 },
+      camera: { maxLevel: 3, levelCosts: [800, 1200, 1600], followersMultPerLevel: 0.00, revenueMultPerLevel: 0.05 },
+      set_dressing: { maxLevel: 3, levelCosts: [500, 800, 1100], followersMultPerLevel: 0.03, revenueMultPerLevel: 0.03 }
+    }
+  },
+  rivals: {
+    evaluationCadenceDays: 7,
+    studios: [
+      { id: "rival_night_slate", name: "Night Slate Media", baseScore: 55, weeklyGrowthRate: 1.03 },
+      { id: "rival_rose_quartz", name: "Rose Quartz Studio", baseScore: 48, weeklyGrowthRate: 1.02 }
+    ]
+  },
+  market: {
+    multiplierFloor: 0.85,
+    multiplierCeiling: 1.15,
+    shiftSchedule: [
+      { id: "shift_premium_boom", day: 225 },
+      { id: "shift_promo_fatigue", day: 245 }
+    ],
+    shifts: {
+      shift_premium_boom: { revenueMult: 1.15, followersMult: 0.95 },
+      shift_promo_fatigue: { revenueMult: 0.95, followersMult: 0.85 }
+    }
+  },
+  reputation: {
+    branches: {
+      branches: [
+        { id: "prestige", label: "Prestige", requiredReputation: 60, revenueMult: 1.10, followersMult: 0.95 },
+        { id: "volume", label: "Volume", requiredReputation: 60, revenueMult: 0.95, followersMult: 1.10 },
+        { id: "boutique", label: "Boutique", requiredReputation: 60, revenueMult: 1.05, followersMult: 1.05 }
+      ]
+    }
+  },
+  legacyMilestones: {
+    milestoneOrder: [
+      "legacy_revenue_250k",
+      "legacy_subscribers_1500",
+      "legacy_reputation_80",
+      "legacy_story_complete"
+    ],
+    milestones: {
+      legacy_revenue_250k: { label: "$250k Lifetime Revenue", type: "lifetimeRevenue", threshold: 250000, rewardCash: 5000 },
+      legacy_subscribers_1500: { label: "1,500 Subscribers", type: "subscribers", threshold: 1500, rewardCash: 4000 },
+      legacy_reputation_80: { label: "Reputation 80", type: "reputation", threshold: 80, rewardCash: 6000 },
+      legacy_story_complete: { label: "Complete Act 3 Story", type: "storyComplete", threshold: 1, rewardCash: 8000 }
+    }
+  },
+  automation: {
+    enabled: false,
+    maxActionsPerDay: 1,
+    minCashReserve: 1000
+  },
+  schedule: {
+    enabled: false,
+    maxQueueSize: 3,
+    resolvePerDay: 1
+  },
+  content: {
+    variance: {
+      enabled: true,
+      maxVariancePct: 0.15,
+      seedPolicy: "stored"
+    }
   },
   locations: {
     tier0_ids: [
@@ -154,6 +333,16 @@ const CONFIG = {
       "location_city_apartment",
       "location_small_warehouse"
     ],
+    tiers: {
+      tierOrder: ["tier0", "tier1", "tier2", "tier3"],
+      defaultTierId: "tier0",
+      tiers: {
+        tier0: { unlockCost: 0, requiredReputation: 0 },
+        tier1: { unlockCost: 2000, requiredReputation: 10 },
+        tier2: { unlockCost: 4000, requiredReputation: 20 },
+        tier3: { unlockCost: 12000, requiredReputation: 50 }
+      }
+    },
     catalog: {
       location_basic_bedroom: {
         id: "location_basic_bedroom",
@@ -208,6 +397,60 @@ const CONFIG = {
         unlockCost: 1500,
         unlockRequirements: [],
         description: "A larger, flexible space suited for varied set dressing."
+      },
+      location_downtown_penthouse: {
+        id: "location_downtown_penthouse",
+        name: "Downtown Penthouse",
+        tier: 2,
+        cost: 1800,
+        unlockCost: 4000,
+        unlockRequirements: ["reputation>=20"],
+        description: "A sleek high-rise space that signals serious growth."
+      },
+      location_suburban_house: {
+        id: "location_suburban_house",
+        name: "Suburban House",
+        tier: 2,
+        cost: 2200,
+        unlockCost: 5000,
+        unlockRequirements: ["reputation>=25"],
+        description: "A full home set that unlocks richer lifestyle shoots."
+      },
+      location_private_studio: {
+        id: "location_private_studio",
+        name: "Private Studio",
+        tier: 2,
+        cost: 2600,
+        unlockCost: 6000,
+        unlockRequirements: ["reputation>=30"],
+        description: "A dedicated studio with controlled lighting and props."
+      },
+      location_luxury_penthouse: {
+        id: "location_luxury_penthouse",
+        name: "Luxury Penthouse",
+        tier: 3,
+        cost: 5200,
+        unlockCost: 12000,
+        unlockRequirements: ["reputation>=50"],
+        description: "A premium skyline suite built for top-tier showcases."
+      },
+      location_beachfront_villa: {
+        id: "location_beachfront_villa",
+        name: "Beachfront Villa",
+        tier: 3,
+        cost: 6500,
+        unlockCost: 15000,
+        unlockRequirements: ["reputation>=60"],
+        description: "An exclusive coastal property for aspirational content."
+      },
+      location_private_mansion: {
+        id: "location_private_mansion",
+        name: "Private Mansion",
+        tier: 3,
+        cost: 8200,
+        unlockCost: 20000,
+        unlockRequirements: ["reputation>=70"],
+        description: "A sprawling estate that defines elite production value."
       }
     }
   },
@@ -252,6 +495,88 @@ const CONFIG = {
           modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         }
       }
+    },
+    act2: {
+      theme_ids: [
+        "theme_luxury_retreat",
+        "theme_editorial",
+        "theme_downtown_chic",
+        "theme_sunlit_getaway",
+        "theme_afterhours"
+      ],
+      themes: {
+        theme_luxury_retreat: {
+          id: "theme_luxury_retreat",
+          name: "Luxury Retreat",
+          description: "Resort-grade spaces with a relaxed, high-end atmosphere.",
+          modifiers: { followersMult: 0.95, revenueMult: 1.20 }
+        },
+        theme_editorial: {
+          id: "theme_editorial",
+          name: "Editorial",
+          description: "Magazine-style staging with bold angles and fashion emphasis.",
+          modifiers: { followersMult: 1.05, revenueMult: 1.05 }
+        },
+        theme_downtown_chic: {
+          id: "theme_downtown_chic",
+          name: "Downtown Chic",
+          description: "Urban interiors with a sleek, modern aesthetic.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.10 }
+        },
+        theme_sunlit_getaway: {
+          id: "theme_sunlit_getaway",
+          name: "Sunlit Getaway",
+          description: "Bright, airy sets with soft daylight and beachy calm.",
+          modifiers: { followersMult: 1.10, revenueMult: 0.95 }
+        },
+        theme_afterhours: {
+          id: "theme_afterhours",
+          name: "After Hours",
+          description: "Late-night ambience with moody shadows and intimate lighting.",
+          modifiers: { followersMult: 0.90, revenueMult: 1.20 }
+        }
+      }
+    },
+    act3: {
+      theme_ids: [
+        "theme_legacy_gala",
+        "theme_power_play",
+        "theme_afterglow",
+        "theme_urban_luxe",
+        "theme_cinematic"
+      ],
+      themes: {
+        theme_legacy_gala: {
+          id: "theme_legacy_gala",
+          name: "Legacy Gala",
+          description: "Formal, prestige-forward sets with ceremonial flair.",
+          modifiers: { followersMult: 0.95, revenueMult: 1.30 }
+        },
+        theme_power_play: {
+          id: "theme_power_play",
+          name: "Power Play",
+          description: "Bold, high-stakes visuals with confident framing.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.20 }
+        },
+        theme_afterglow: {
+          id: "theme_afterglow",
+          name: "Afterglow",
+          description: "Soft, intimate styling that sustains loyal subscribers.",
+          modifiers: { followersMult: 0.90, revenueMult: 1.15 }
+        },
+        theme_urban_luxe: {
+          id: "theme_urban_luxe",
+          name: "Urban Luxe",
+          description: "Sleek modern interiors emphasizing sophistication.",
+          modifiers: { followersMult: 1.05, revenueMult: 1.10 }
+        },
+        theme_cinematic: {
+          id: "theme_cinematic",
+          name: "Cinematic",
+          description: "Dramatic lighting and framing built for standout showcases.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.25 }
+        }
+      }
     }
   },
   story: {
@@ -272,6 +597,24 @@ const CONFIG = {
         win: { id: "act1_end_win_day90", triggerDay: 90 },
         loss: { id: "act1_end_loss_day90", triggerDay: 90 }
       }
+    },
+    act2: {
+      startDay: 91,
+      eventOrder: [
+        "act2_expansion_plan_day95",
+        "act2_staffing_push_day120",
+        "act2_studio_upgrade_day145",
+        "act2_partnership_offer_day170"
+      ]
+    },
+    act3: {
+      startDay: 181,
+      eventOrder: [
+        "act3_brand_legacy_day200",
+        "act3_market_shift_day225",
+        "act3_mentorship_day245",
+        "act3_exit_strategy_day270"
+      ]
     }
   }
 };

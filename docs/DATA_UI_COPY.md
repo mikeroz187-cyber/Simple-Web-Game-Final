@@ -50,6 +50,7 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 ### Social
 - Post to Instagram: "Post to Instagram"
 - Post to X: "Post to X"
+- Apply Strategy: "Apply Strategy"
 
 ### Gallery
 - View Full: "View Full"
@@ -57,6 +58,19 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 
 ### Shop
 - Buy Upgrade: "Buy Upgrade"
+
+## Button Labels (Act 3)
+
+### Hub
+- Evaluate Rivals: "Evaluate Rivals"
+- Resolve Event: "Resolve Event"
+- Select Branch: "Select Branch"
+- Claim Reward: "Claim Reward"
+- Configure Automation: "Configure Automation"
+- Resolve Schedule: "Resolve Schedule"
+
+### Booking
+- Queue Booking: "Queue Booking"
 
 ---
 
