@@ -10,3 +10,4 @@ All notable changes documented here. Format based on Keep a Changelog.
 - Codex configuration
 - AI contributor guidelines
 - Authoritative MVP scope document for current build requirements
+- MVP technical guardrails document defining the allowed tech stack
