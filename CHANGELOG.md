@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added js/config.js with a global CONFIG that mirrors config.toml and includes MVP data catalogs.
+- Why: Provide a single config source for gameplay formulas and data lookup in the vanilla JS runtime.
+- Files touched: js/config.js, CHANGELOG.md.
 - What: Added MVP test scenarios document with manual verification cases for core gameplay loops.
 - Why: Provide clear, config-driven checks for validating MVP behavior without guessing.
 - Files touched: docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
