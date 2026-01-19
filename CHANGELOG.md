@@ -37,6 +37,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Updated MVP file structure docs to list current Vision files as read-only inspiration.
+- Why: Keep MVP documentation aligned with the actual Vision directory contents and scope status.
+- Files touched: docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
 - What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
