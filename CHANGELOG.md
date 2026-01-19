@@ -52,6 +52,9 @@ This changelog is optimized for:
 - What: Clarified MVP day advancement rules and referenced them in the build order.
 - Why: Remove ambiguity around when days advance and how fatigue recovery aligns with day boundaries.
 - Files touched: docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
+- What: Updated documentation references to the current MVP and Vision doc sets.
+- Why: Align scope guidance with the actual files present in docs/SCOPE_MVP.md and docs/MVP/.
+- Files touched: docs/CURRENT_SCOPE.md, docs/README.md, README.md, CHANGELOG.md.
 
 ### Fixed
 - N/A (no changes this run)
