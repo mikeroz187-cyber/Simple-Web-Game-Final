@@ -26,6 +26,9 @@ This changelog is optimized for:
 - What: Added an MVP formulas document defining the exact calculations for core gameplay results.
 - Why: Prevent formula guessing by codifying the MVP math in one place.
 - Files touched: docs/MVP/MVP_FORMULAS.md, CHANGELOG.md.
+- What: Added a UI copy reference covering screen titles, labels, and messages.
+- Why: Keep MVP copy consistent across the game UI.
+- Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
 - What: Added fatigue tuning values to the config for shoot cost and recovery math.
