@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added a new theme catalog doc covering MVP and Vision placeholders with config mapping.
+- Why: Define theme IDs, descriptions, and modifiers for booking/content planning without new systems.
+- Files touched: docs/DATA_THEMES.md, CHANGELOG.md.
 - What: Added a full location catalog document covering MVP and Vision tiers.
 - Why: Provide a config-ready reference for all planned location data.
 - Files touched: docs/DATA_LOCATIONS.md, CHANGELOG.md.
