@@ -14,6 +14,12 @@ This changelog is optimized for:
 - What: Added MVP performer catalog documentation with core and freelance roster entries.
 - Why: Define the starting performer lineup for consistent MVP setup.
 - Files touched: docs/DATA_PERFORMERS.md, CHANGELOG.md.
+- What: Added a new theme catalog doc covering MVP and Vision placeholders with config mapping.
+- Why: Define theme IDs, descriptions, and modifiers for booking/content planning without new systems.
+- Files touched: docs/DATA_THEMES.md, CHANGELOG.md.
+- What: Added a full location catalog document covering MVP and Vision tiers.
+- Why: Provide a config-ready reference for all planned location data.
+- Files touched: docs/DATA_LOCATIONS.md, CHANGELOG.md.
 
 ### Changed
 - N/A (no changes this run)
