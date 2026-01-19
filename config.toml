@@ -1,0 +1,101 @@
+# Studio Empire Configuration
+# This file is the "single source of truth" for tunable values.
+# Do not hardcode gameplay numbers in JS when they belong here.
+
+[project]
+name = "Studio Empire"
+repo_slug = "studio-empire"
+version = "0.1.0"
+stage = "MVP"
+author = "Repo Owner"
+license = "UNLICENSED"
+
+[build]
+# This project runs locally by opening index.html (no build step).
+runtime = "static"
+entry_html = "index.html"
+main_js = "src/main.js"
+stylesheet = "styles.css"
+
+[app]
+# Non-negotiable constraints
+
+desktop_only = true
+single_page_app = true
+no_backend = true
+no_database = true
+no_frameworks = true
+
+[save]
+# Save system rules
+localstorage_key = "studio_empire_save"
+autosave_enabled = true
+autosave_interval_seconds = 10 # Placeholder: adjust if MVP docs specify a safe cadence.
+save_schema_version = 1
+
+# Export/import settings
+export_file_prefix = "studio-empire-save"
+export_file_extension = "json"
+
+[ui]
+# Global UI layout rules (desktop-only)
+default_font_family = "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif"
+base_font_size_px = 14 # Placeholder: replace if MVP UI docs specify a standard size.
+panel_gap_px = 12      # Placeholder: replace if MVP UI docs specify spacing.
+main_padding_px = 16   # Placeholder: replace if MVP UI docs specify padding.
+
+[game]
+# Act 1 parameters (Day 1–90)
+starting_day = 1
+action_day_max = 90
+
+# Debt framing for Act 1 (The Debt)
+starting_cash = 5000
+loan_principal = 5000
+loan_total_due = 10000
+debt_due_day = 90
+
+[economy]
+# Only include values needed for the MVP loop.
+# Placeholder values: replace if MVP docs specify exact numbers.
+
+# Followers gained from a Promo shoot.
+promo_followers_gain = 100 # Placeholder
+
+# Revenue earned from a Premium shoot (before subscriber effects).
+premium_base_revenue = 250 # Placeholder
+
+# Fixed conversion rate from followers to subscribers.
+subscriber_conversion_rate = 0.01 # Placeholder (1%)
+
+# Base shoot costs (location-specific costs can override this).
+base_shoot_cost = 100 # Placeholder
+
+[performers]
+# MVP roster sizing
+core_count = 3
+freelance_count = 5
+
+# Placeholder defaults for performer stats (if MVP docs specify, replace here).
+default_star_power = 1  # Placeholder
+max_fatigue = 100      # Placeholder
+starting_loyalty = 50  # Placeholder
+
+[content_types]
+# MVP content types
+available = ["Promo", "Premium"]
+
+[social_platforms]
+# MVP platforms: Instagram and X
+platforms = ["Instagram", "X"]
+
+# Placeholder reach multipliers per platform (Promo-only in MVP).
+instagram_reach_multiplier = 1.0 # Placeholder
+x_reach_multiplier = 1.0         # Placeholder
+
+[progression]
+# Reputation starts visible in MVP.
+starting_reputation = 0 # Placeholder
+
+# Tier 1 location unlock
+location_tier_1_unlock_cost = 2000 # Placeholder
