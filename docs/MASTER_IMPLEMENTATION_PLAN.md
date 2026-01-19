@@ -23,6 +23,7 @@
 
 ## 2) Repo Structure Lock (Must Exist Before Any Code)
 Authoritative source: `/docs/MVP/MVP_FILE_STRUCTURE.md`.
+Repo layout is locked to `/js` for scripts and `/css/style.css` for styles (no `/src` or root `styles.css`).
 
 **Required folders/files (must exist before implementation begins):**
 ```

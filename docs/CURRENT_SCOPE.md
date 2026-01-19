@@ -20,6 +20,7 @@
 - **Any framework or build tooling** – The project does not use frameworks (React, etc.) or bundlers; it’s purely static files.
 
 ## Authority Order (Documentation to Follow)
+Repo layout is authoritative here to prevent drift across MVP docs.
 When building or reviewing features, **follow these documents in order**:
 1. **docs/CURRENT_SCOPE.md** (this file – latest scope definition)
 2. **docs/SCOPE_MVP.md** (MVP feature list and plan)

@@ -37,6 +37,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Aligned repo layout references to the /js + /css/style.css structure.
+- Why: Resolve documentation and config conflicts about the authoritative project layout.
+- Files touched: AGENTS.md, config.toml, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/MVP/MVP_FILE_STRUCTURE.md, CHANGELOG.md.
+- What: Noted that repo layout authority lives in CURRENT_SCOPE.
+- Why: Prevent future drift across MVP documents.
+- Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Clarified that MVP build order details live in the MVP build order document and the master plan is high-level.
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
