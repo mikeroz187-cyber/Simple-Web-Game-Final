@@ -14,6 +14,34 @@ function resetBookingSelection() {
 }
 
 function setupEventHandlers() {
+  function showModalMessage(status, title, message, details) {
+    const modalRoot = qs("#modal-root");
+    if (!modalRoot) {
+      return;
+    }
+
+    const detailHtml = details && details.length
+      ? "<ul class=\"modal-details\">" + details.map(function (detail) {
+        return "<li>" + detail + "</li>";
+      }).join("") + "</ul>"
+      : "";
+
+    modalRoot.innerHTML =
+      "<div class=\"modal-message modal-" + status + "\">" +
+      "<strong>" + title + "</strong>" +
+      "<p>" + message + "</p>" +
+      detailHtml +
+      "</div>";
+  }
+
+  function showSaveResult(result, successTitle, errorTitle) {
+    if (result.ok) {
+      showModalMessage("success", successTitle, result.message || "Success.");
+    } else {
+      showModalMessage("error", errorTitle, result.message || "Something went wrong.", result.details);
+    }
+  }
+
   document.body.addEventListener("click", function (event) {
     const target = event.target.closest("[data-action]");
     const action = target && target.dataset ? target.dataset.action : null;
@@ -188,6 +216,37 @@ function setupEventHandlers() {
         }
         setUiMessage(result.message || "");
         renderApp(window.gameState);
+      });
+      return;
+    }
+
+    if (action === "save-now") {
+      const result = saveGame();
+      showSaveResult(result, "Save Complete", "Save Failed");
+      return;
+    }
+
+    if (action === "load-save") {
+      const result = loadGame();
+      if (result.ok) {
+        renderApp(window.gameState);
+      }
+      showSaveResult(result, "Load Complete", "Load Failed");
+      return;
+    }
+
+    if (action === "export-save") {
+      const result = exportSaveToFile();
+      showSaveResult(result, "Export Complete", "Export Failed");
+      return;
+    }
+
+    if (action === "import-save") {
+      importSaveFromFile().then(function (result) {
+        if (result.ok) {
+          renderApp(window.gameState);
+        }
+        showSaveResult(result, "Import Complete", "Import Failed");
       });
       return;
     }
