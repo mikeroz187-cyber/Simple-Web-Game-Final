@@ -17,6 +17,43 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 - **title:** Loan Due, Day 90
 - **message:** You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady revenue early.
 
+### Act 1+ Content Pack 01 Events (Post-MVP)
+
+- **id:** `act1_pack01_client_referral_day15`
+- **act:** 1
+- **triggerDay:** 15
+- **triggerCondition:** `onDayStart`
+- **title:** Client Referral Pipeline
+- **message:** A satisfied client passes your name along. The booking inbox feels lighter, and your schedule steadies.
+
+- **id:** `act1_pack01_premium_editing_day25`
+- **act:** 1
+- **triggerDay:** 25
+- **triggerCondition:** `onDayStart`
+- **title:** Premium Editing Standards
+- **message:** You tighten post-production standards. The studio’s output feels more deliberate and confident.
+
+- **id:** `act1_pack01_vendor_discount_day45`
+- **act:** 1
+- **triggerDay:** 45
+- **triggerCondition:** `onDayStart`
+- **title:** Vendor Discount Window
+- **message:** A reliable vendor offers a short discount window. You plan the next shoots with less friction.
+
+- **id:** `act1_pack01_repeat_commissions_day70`
+- **act:** 1
+- **triggerDay:** 70
+- **triggerCondition:** `onDayStart`
+- **title:** Repeat Commissions Roll In
+- **message:** Repeat clients begin to return on schedule. The studio’s rhythm starts to feel dependable.
+
+- **id:** `act1_pack01_final_stretch_day85`
+- **act:** 1
+- **triggerDay:** 85
+- **triggerCondition:** `onDayStart`
+- **title:** Final Stretch Focus
+- **message:** With the deadline near, you lock in on steady work. Consistency becomes the only priority.
+
 ### Debt Reminders
 
 - **id:** `act1_debt_reminder_day30`

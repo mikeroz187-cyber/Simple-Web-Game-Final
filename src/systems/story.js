@@ -36,6 +36,26 @@ const STORY_EVENT_COPY = {
     title: "Loan Due, Day 90",
     message: "You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady revenue early."
   },
+  act1_pack01_client_referral_day15: {
+    title: "Client Referral Pipeline",
+    message: "A satisfied client passes your name along. The booking inbox feels lighter, and your schedule steadies."
+  },
+  act1_pack01_premium_editing_day25: {
+    title: "Premium Editing Standards",
+    message: "You tighten post-production standards. The studio’s output feels more deliberate and confident."
+  },
+  act1_pack01_vendor_discount_day45: {
+    title: "Vendor Discount Window",
+    message: "A reliable vendor offers a short discount window. You plan the next shoots with less friction."
+  },
+  act1_pack01_repeat_commissions_day70: {
+    title: "Repeat Commissions Roll In",
+    message: "Repeat clients begin to return on schedule. The studio’s rhythm starts to feel dependable."
+  },
+  act1_pack01_final_stretch_day85: {
+    title: "Final Stretch Focus",
+    message: "With the deadline near, you lock in on steady work. Consistency becomes the only priority."
+  },
   act1_debt_reminder_day30: {
     title: "Debt Check — Day 30",
     message: "Thirty days in, the $10,000 debt clock is already ticking. You still have 60 days to close the gap. Keep shoots consistent and avoid unnecessary costs."
