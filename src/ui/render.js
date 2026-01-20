@@ -295,10 +295,23 @@ function renderSocial(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No Promo content available to post.</p>";
 
+  const selectedEntry = uiState.social.selectedContentId
+    ? promoEntries.find(function (entry) {
+      return entry.id === uiState.social.selectedContentId;
+    })
+    : null;
+
+  const postedStatus = selectedEntry
+    ? "<p><strong>Posted:</strong> " + CONFIG.social_platforms.platforms.map(function (platform) {
+      return platform + " " + (hasPosted(gameState, selectedEntry.id, platform) ? "✅" : "❌");
+    }).join(" / ") + "</p>"
+    : "<p class=\"helper-text\">Select a Promo content entry to see posted status.</p>";
+
   const canPost = promoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
 
   const body = "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
+    "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Post to Instagram", "post-instagram", "primary", !canPost) +
@@ -403,4 +416,13 @@ function getNextActionLabel(gameState) {
     return "Book your first shoot.";
   }
   return "Review the latest content and analytics, then book again.";
+}
+
+function hasPosted(gameState, contentId, platform) {
+  if (!contentId || !platform || !gameState || !gameState.social || !Array.isArray(gameState.social.posts)) {
+    return false;
+  }
+  return gameState.social.posts.some(function (post) {
+    return post.contentId === contentId && post.platform === platform;
+  });
 }
