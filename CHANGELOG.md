@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Act 1 Content Expansion Pack 01 documentation with new opportunities, unlocks, and event definitions.
+  - Why: Define post-MVP additive content using the existing data structures without introducing new systems.
+  - Files touched: docs/ACT1_CONTENT_PACK_01.md, CHANGELOG.md.
 - What: Added Act 2 and Act 3 formula specifications to define deterministic math for post-MVP systems.
   - Why: Prevent guessing on calculations while keeping config.toml as the numeric source of truth.
   - Files touched: docs/VISION/ACT2_FORMULAS.md, docs/VISION/ACT3_FORMULAS.md, CHANGELOG.md.
