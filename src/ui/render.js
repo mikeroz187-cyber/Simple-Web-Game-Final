@@ -45,14 +45,18 @@ function renderHub(gameState) {
   const hasPromo = gameState.content.entries.some(function (entry) {
     return entry.contentType === "Promo";
   });
+  const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
+  const nextAction = getNextActionLabel(gameState);
 
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
+    "<p><strong>Days Left:</strong> " + daysLeft + "</p>",
     "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
     "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
     "<p><strong>Followers:</strong> " + gameState.player.followers + "</p>",
     "<p><strong>Subscribers:</strong> " + gameState.player.subscribers + "</p>",
-    "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>"
+    "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",
+    "<p><strong>Next Action:</strong> " + nextAction + "</p>"
   ].join("");
 
   const navButtons = [
@@ -366,4 +370,11 @@ function getLocationName(locationId) {
 function getThemeName(themeId) {
   const theme = CONFIG.themes.mvp.themes[themeId];
   return theme ? theme.name : "Unknown";
+}
+
+function getNextActionLabel(gameState) {
+  if (!gameState.content.lastContentId) {
+    return "Book your first shoot.";
+  }
+  return "Review the latest content and analytics, then book again.";
 }
