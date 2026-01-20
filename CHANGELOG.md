@@ -165,6 +165,9 @@ This changelog is optimized for:
 - Files touched: docs/CURRENT_SCOPE.md, docs/README.md, README.md, CHANGELOG.md.
 
 ### Fixed
+- FIX: Blocked duplicate posting of the same Promo content to the same platform and disabled already-used post buttons.
+  - Why: Prevent duplicate follower/subscriber gains and clarify when a platform has already been used.
+  - Files touched: src/systems/social.js, src/ui/render.js, CHANGELOG.md.
 - FIX: Added save slot selection and slot-based localStorage handling (including an Autosave slot).
   - Why: Enable multiple save slots and prevent manual saves from being overwritten.
   - Files touched: src/save.js, src/ui/render.js, src/ui/events.js, src/main.js, src/config.js, config.toml, docs/CURRENT_SCOPE.md, docs/SCOPE_MVP.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
