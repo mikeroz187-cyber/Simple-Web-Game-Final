@@ -5,11 +5,13 @@
 
 ## In Scope Now (MVP)
 - **Core loop**: Book a shoot → View content → Analyze metrics → Adjust strategy → Repeat. (Planned/required for MVP.)
+- **Day pacing**: A day advances only after completing 5 shoots. (Approved MVP adjustment.)
 - **Act 1 “The Debt” storyline**: The player starts with a $5,000 loan and must repay $10,000 by Day 90. Basic story events for Act 1 (introduction, debt reminders) are planned/required for MVP.
+- **Debt payoff action**: A dedicated Pay Debt button allows clearing the full remaining debt once enough cash is available. (Approved MVP adjustment.)
 - **Content types**: **Promo (SFW)** and **Premium (NSFW)** content shoots are planned/required for MVP. (Promo increases followers; Premium generates revenue from subscribers.)
 - **Single-page app**: Desktop web only, using vanilla HTML/CSS/JS with no page reloads. (No mobile support in MVP; planned/required.)
 - **Central game state**: All game data is managed in one authoritative `gameState` object in memory. (Planned/required for MVP.)
-- **Save/Load**: Local saving via `localStorage`, plus export/import of JSON save files, is planned/required for MVP.
+- **Save/Load**: Local saving via `localStorage` (multiple slots), plus export/import of JSON save files, is planned/required for MVP.
 
 ## Explicitly Out of Scope (for MVP)
 - **Acts 2 & 3** – Later story arcs (beyond Day 90) are not included.

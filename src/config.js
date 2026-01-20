@@ -32,6 +32,14 @@ const CONFIG = {
     autosave_enabled: true,
     autosave_interval_seconds: 10,
     save_schema_version: 1,
+    default_slot_id: "slot_1",
+    autosave_slot_id: "autosave",
+    slots: [
+      { id: "slot_1", label: "Slot 1" },
+      { id: "slot_2", label: "Slot 2" },
+      { id: "slot_3", label: "Slot 3" },
+      { id: "autosave", label: "Autosave" }
+    ],
     export_file_prefix: "studio-empire-save",
     export_file_extension: "json"
   },
@@ -47,7 +55,8 @@ const CONFIG = {
     starting_cash: 5000,
     loan_principal: 5000,
     loan_total_due: 10000,
-    debt_due_day: 90
+    debt_due_day: 90,
+    shoots_per_day: 5
   },
   economy: {
     promo_followers_gain: 100,

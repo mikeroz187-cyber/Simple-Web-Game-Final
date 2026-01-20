@@ -54,6 +54,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `cash` | number | Required | `config.game.starting_cash` | Must be finite and `>= 0`. |
 | `debtRemaining` | number | Required | `config.game.loan_total_due` | Must be finite and `>= 0`. |
 | `debtDueDay` | integer | Required | `config.game.debt_due_day` | Constant in MVP (Day 90). |
+| `shootsToday` | integer | Required | `0` | Must be `>= 0` and `<= config.game.shoots_per_day`. |
 | `followers` | integer | Required | `0` | Must be `>= 0`. |
 | `subscribers` | integer | Required | `0` | Must be `>= 0`. |
 | `reputation` | integer | Required | `config.progression.starting_reputation` | Must be `>= 0` (if negatives are not defined in scope). |
@@ -150,7 +151,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 
 ## 8) Derived Values vs Stored Values
 **Stored in `gameState`:**
-- Player metrics (`day`, `cash`, `debtRemaining`, `followers`, `subscribers`, `reputation`).
+- Player metrics (`day`, `cash`, `debtRemaining`, `shootsToday`, `followers`, `subscribers`, `reputation`).
 - Roster performers and their stats.
 - Content entries (facts about each shoot and results).
 - Social posts and their impacts.
@@ -166,6 +167,7 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
 
 ## 9) Invariants (Must Always Be True)
 - `player.day` is an integer `>= 1` and `<= player.debtDueDay`.
+- `player.shootsToday` is an integer `>= 0` and `<= config.game.shoots_per_day`.
 - `player.cash`, `player.debtRemaining`, `player.followers`, `player.subscribers` are finite and `>= 0`.
 - `content.entries` and `social.posts` IDs are **unique** and append-only.
 - `content.lastContentId` is either `null` or references an existing content entry.
@@ -176,7 +178,7 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
 ## 10) State Mutation Rules (Who Can Write What)
 **Write-access matrix (MVP):**
 - **Booking system** may write:
-  - `content.entries` (append new content), `content.lastContentId`, `player.cash` (shoot cost), `player.day` (advance after loop).
+  - `content.entries` (append new content), `content.lastContentId`, `player.cash` (shoot cost), `player.shootsToday` (count toward day), `player.day` (advance after 5 shoots).
 - **Content/Analytics system** may write:
   - `content.entries[*].results`, `player.followers`, `player.subscribers`, `player.cash`, `player.lifetimeRevenue` (if tracked), `player.reputation` (if used).
 - **Roster system** may write:
@@ -206,6 +208,7 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
     "cash": 5000,
     "debtRemaining": 10000,
     "debtDueDay": 90,
+    "shootsToday": 0,
     "followers": 0,
     "subscribers": 0,
     "reputation": 0

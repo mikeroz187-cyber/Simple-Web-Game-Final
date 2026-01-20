@@ -45,6 +45,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 - `player.cash`
 - `player.debtRemaining`
 - `player.debtDueDay`
+- `player.shootsToday`
 - `player.followers`
 - `player.subscribers`
 - `player.reputation`
@@ -56,6 +57,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 - Gallery → `navigateTo('screen-gallery')`
 - Roster → `navigateTo('screen-roster')`
 - Shop → `navigateTo('screen-shop')`
+- Pay Debt → `payDebt()`
 - Save Now → `saveToLocalStorage()`
 - Load Save → `loadFromLocalStorage()`
 - Export Save → `exportSaveFile()`
@@ -63,9 +65,11 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 
 **Layout (top-to-bottom):**
 1. Title: “Hub”.
-2. Status summary panel: Day, Cash, Debt Remaining (with Debt Due Day), Followers, Subscribers, Reputation.
-3. Navigation buttons: Booking, Analytics, Social, Gallery, Roster, Shop.
-4. Save controls: Save Now, Load Save, Export Save, Import Save.
+2. Status summary panel: Day, Shoots Today, Cash, Debt Remaining (with Debt Due Day), Followers, Subscribers, Reputation.
+3. Debt action row: Pay Debt button (disabled until cash >= debt remaining).
+4. Navigation buttons: Booking, Analytics, Social, Gallery, Roster, Shop.
+5. Save slot selector (dropdown).
+6. Save controls: Save Now, Load Save, Export Save, Import Save.
 
 **Empty state rules:**
 - Not applicable (Hub always shows status; values can be zero).
@@ -80,7 +84,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 - If save/load/export/import fails validation, show a short error message without technical details.
 
 **Out of scope on this screen:**
-- No advanced settings, no multi-profile saves, no reset button.
+- No advanced settings, no reset button.
 
 ---
 
@@ -342,7 +346,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 
 ### Component: Status Summary Panel
 - **Where used:** Hub.
-- **What it shows:** Day, Cash, Debt Remaining (with Debt Due Day), Followers, Subscribers, Reputation.
+- **What it shows:** Day, Shoots Today, Cash, Debt Remaining (with Debt Due Day), Followers, Subscribers, Reputation.
 - **Actions:** None.
 
 ### Component: List/Card Item
@@ -361,8 +365,10 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 | POST_PROMO_INSTAGRAM | Social → Post to Instagram | `postPromoContent('Instagram')` | Yes | Requires Promo content entry. |
 | POST_PROMO_X | Social → Post to X | `postPromoContent('X')` | Yes | Requires Promo content entry. |
 | BUY_TIER1_LOCATION | Shop → Buy Unlock | `purchaseTier1Location()` | Yes | Requires enough cash; writes unlock state. |
-| SAVE_NOW | Hub → Save Now | `saveToLocalStorage()` | Yes | Writes full `gameState` to localStorage. |
-| LOAD_SAVE | Hub → Load Save | `loadFromLocalStorage()` | Yes | Replaces `gameState` after validation. |
+| PAY_DEBT | Hub → Pay Debt | `payDebt()` | Yes | Clears remaining debt when cash >= debt. |
+| SELECT_SAVE_SLOT | Hub → Save Slot dropdown | `setSaveSlot(slotId)` | No | Sets the slot used by Save/Load actions. |
+| SAVE_NOW | Hub → Save Now | `saveToLocalStorage()` | Yes | Writes full `gameState` to the selected slot. |
+| LOAD_SAVE | Hub → Load Save | `loadFromLocalStorage()` | Yes | Replaces `gameState` from the selected slot after validation. |
 | EXPORT_SAVE | Hub → Export Save | `exportSaveFile()` | No | Exports full `gameState` as JSON. |
 | IMPORT_SAVE | Hub → Import Save | `importSaveFile()` | Yes | Replaces `gameState` after validation. |
 | VIEW_GALLERY_ENTRY | Gallery → Open entry | `selectGalleryEntry(entryId)` | No | In-screen detail view only. |

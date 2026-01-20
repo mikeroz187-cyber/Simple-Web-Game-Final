@@ -35,6 +35,24 @@ localstorage_key = "studio_empire_save"
 autosave_enabled = true
 autosave_interval_seconds = 10 # Placeholder: adjust if MVP docs specify a safe cadence.
 save_schema_version = 1
+default_slot_id = "slot_1"
+autosave_slot_id = "autosave"
+
+[[save.slots]]
+id = "slot_1"
+label = "Slot 1"
+
+[[save.slots]]
+id = "slot_2"
+label = "Slot 2"
+
+[[save.slots]]
+id = "slot_3"
+label = "Slot 3"
+
+[[save.slots]]
+id = "autosave"
+label = "Autosave"
 
 # Export/import settings
 export_file_prefix = "studio-empire-save"
@@ -51,6 +69,7 @@ main_padding_px = 16   # Placeholder: replace if MVP UI docs specify padding.
 # Act 1 parameters (Day 1–90)
 starting_day = 1
 action_day_max = 90
+shoots_per_day = 5
 
 # Debt framing for Act 1 (The Debt)
 starting_cash = 5000

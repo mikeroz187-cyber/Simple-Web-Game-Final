@@ -13,6 +13,9 @@ function getUiState() {
       },
       gallery: {
         selectedContentId: null
+      },
+      save: {
+        selectedSlotId: CONFIG.save.default_slot_id
       }
     };
   }
@@ -51,6 +54,7 @@ function renderHub(gameState) {
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
     "<p><strong>Days Left:</strong> " + daysLeft + "</p>",
+    "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + " / " + CONFIG.game.shoots_per_day + "</p>",
     "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
     "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
     "<p><strong>Followers:</strong> " + gameState.player.followers + "</p>",
@@ -68,6 +72,23 @@ function renderHub(gameState) {
     createButton("Shop", "nav-shop")
   ].join("");
 
+  const uiState = getUiState();
+  const activeSlotId = uiState.save.selectedSlotId || CONFIG.save.default_slot_id;
+  const slotOptions = CONFIG.save.slots.map(function (slot) {
+    const selectedAttr = slot.id === activeSlotId ? " selected" : "";
+    return "<option value=\"" + slot.id + "\"" + selectedAttr + ">" + slot.label + "</option>";
+  }).join("");
+  const saveSlotControl = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Save Slot</h3>" +
+    "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"save-slot-select\">Active Slot</label>" +
+    "<select id=\"save-slot-select\" class=\"select-control\" data-action=\"select-save-slot\">" +
+    slotOptions +
+    "</select>" +
+    "</div>" +
+    "<p class=\"helper-text\">Save Now and Load Save use the selected slot. Autosave writes to the Autosave slot.</p>" +
+    "</div>";
+
   const saveButtons = [
     createButton("Save Now", "save-now"),
     createButton("Load Save", "load-save"),
@@ -75,10 +96,15 @@ function renderHub(gameState) {
     createButton("Import Save", "import-save")
   ].join("");
 
+  const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
+  const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
+
   hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
     "<div class=\"panel\">" + statusHtml + "</div>" +
+    debtButtonRow +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +
+    saveSlotControl +
     "<div class=\"button-row\">" + saveButtons + "</div>";
 }
 

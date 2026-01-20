@@ -84,15 +84,24 @@ function confirmBooking(gameState, selection) {
   gameState.content.lastContentId = entry.id;
 
   updatePerformerStats(gameState, performer.id);
-  gameState.player.day += 1;
-  recoverAllPerformers(gameState);
+  const shootsPerDay = CONFIG.game.shoots_per_day;
+  const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
+  const nextShoots = currentShoots + 1;
+  gameState.player.shootsToday = nextShoots;
 
-  const storyResult = checkStoryEvents(gameState);
+  let storyEvents = [];
+  if (nextShoots >= shootsPerDay) {
+    gameState.player.shootsToday = 0;
+    gameState.player.day += 1;
+    recoverAllPerformers(gameState);
+    const storyResult = checkStoryEvents(gameState);
+    storyEvents = storyResult.events || [];
+  }
 
   return {
     ok: true,
     contentId: entry.id,
     message: "Shoot booked. +" + followersGained + " followers, +" + formatCurrency(revenue) + ".",
-    storyEvents: storyResult.events || []
+    storyEvents: storyEvents
   };
 }

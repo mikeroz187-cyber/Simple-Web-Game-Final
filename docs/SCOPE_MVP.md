@@ -16,7 +16,7 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 3. View the content result.
 4. Review analytics (revenue, followers, subscribers, feedback).
 5. Adjust strategy (next booking choices and/or platform posts).
-6. Advance the day and repeat until Day 90.
+6. Advance the day after 5 shoots and repeat until Day 90.
 
 ## MVP Win / Loss / End Conditions
 - **Progress** is measured by day count, cash on hand, total followers/subscribers, and debt remaining.
@@ -32,11 +32,12 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 - [ ] **Performers (MVP size):** 3 core performers and 5 freelance performers are available; freelancers can be hired per shoot (verify roster list and selection options).
 - [ ] **Performer stats:** starPower, fatigue, and loyalty are displayed; fatigue increases after shoots and recovers over time (verify stat changes across days).
 - [ ] **Economy basics:** Starting cash is $5,000; each shoot has a location cost; Premium content produces revenue; Promo content grows followers that convert to subscribers at a fixed rate (verify cash changes and conversion behavior).
-- [ ] **Day counter:** Day advances after each completed shoot cycle; the game ends at Day 90 (verify day increments and end condition).
+- [ ] **Day counter:** Day advances after every 5 completed shoots; the game ends at Day 90 (verify day increments and end condition).
+- [ ] **Debt payoff:** A Pay Debt button is disabled until cash is at least the remaining debt; paying clears the full debt (verify button state and debt reaches 0).
 - [ ] **Social platforms (MVP):** Instagram and X are available; posting Promo content affects reach/conversion differently per platform (verify platform selection changes outcomes).
 - [ ] **Progression:** One unlockable location (Tier 1) and a visible reputation stat exist (verify unlock and stat display).
 - [ ] **Gallery:** Player can browse previously created content (verify content history persists in session).
-- [ ] **Save/Load:** Save and load through `localStorage`, plus export and import of the full game state as JSON files (verify data round-trips with no loss).
+- [ ] **Save/Load:** Save and load through `localStorage` with multiple slots, plus export and import of the full game state as JSON files (verify data round-trips with no loss).
 
 ## MVP Must-NOT-Have Features (Explicitly Out of Scope)
 - ❌ Not in MVP: Acts 2 & 3 story content — MVP is Act 1 only (Days 1–90).
@@ -54,7 +55,8 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 1. **Hub**
    - **Displays:** Current day, cash, debt remaining, followers/subscribers, reputation, and next required action.
    - **Actions:** Navigate to Booking, Analytics, Social, Gallery, Roster, Shop.
-   - **Buttons:** Booking, Analytics, Social, Gallery, Roster, Shop, Save, Load, Export, Import.
+   - **Buttons:** Booking, Analytics, Social, Gallery, Roster, Shop, Pay Debt, Save, Load, Export, Import.
+   - **Controls:** Save slot selector (dropdown) to choose which slot Save/Load uses.
 2. **Booking**
    - **Displays:** Performer list, location list, theme list, content type (Promo/Premium), shoot cost.
    - **Actions:** Select performer, location, theme, content type; confirm booking.

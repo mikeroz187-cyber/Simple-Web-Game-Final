@@ -138,6 +138,27 @@ body {
   margin-top: 12px;
 }
 
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.field-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.select-control {
+  padding: 6px 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 14px;
+  color: var(--ink);
+}
+
 .content-placeholder {
   border: 1px dashed var(--panel-border);
   padding: 24px;

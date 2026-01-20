@@ -37,3 +37,18 @@ function calculateSubscribersGained(followersGained) {
   );
   return Math.max(0, subscribersGained);
 }
+
+function payDebt(gameState) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "No game state available." };
+  }
+  if (gameState.player.debtRemaining <= 0) {
+    return { ok: false, message: "Debt already paid." };
+  }
+  if (gameState.player.cash < gameState.player.debtRemaining) {
+    return { ok: false, message: "Not enough cash to pay the debt." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - gameState.player.debtRemaining);
+  gameState.player.debtRemaining = 0;
+  return { ok: true, message: "Debt paid in full." };
+}
