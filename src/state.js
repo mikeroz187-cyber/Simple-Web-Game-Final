@@ -12,8 +12,7 @@ function newGameState() {
       debtDueDay: CONFIG.game.debt_due_day,
       followers: 0,
       subscribers: 0,
-      reputation: CONFIG.progression.starting_reputation,
-      lifetimeRevenue: 0
+      reputation: CONFIG.progression.starting_reputation
     },
     roster: {
       performers: CONFIG.performers.core_ids
@@ -41,10 +40,8 @@ function newGameState() {
       locationTier1Unlocked: false
     },
     story: {
-      act1: {
-        eventsShown: [],
-        lastEventId: null
-      }
+      introShown: false,
+      debtReminderDaysShown: []
     }
   };
 }
