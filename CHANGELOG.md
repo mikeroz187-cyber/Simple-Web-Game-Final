@@ -49,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Clarified that per-item social posted flags are represented by `social.posts` records referencing content and platform IDs.
+  - Why: Document the Phase 10 requirement without mutating content entries and keep the state model explicit.
+  - Files touched: docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
 - What: Updated day progression to advance after five shoots and track `shootsToday` in game state.
   - Why: Match the approved pacing adjustment for MVP days.
   - Files touched: src/systems/booking.js, src/state.js, src/save.js, src/config.js, config.toml, docs/CURRENT_SCOPE.md, docs/SCOPE_MVP.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.

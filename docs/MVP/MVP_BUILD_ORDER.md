@@ -274,7 +274,7 @@ A step is “done” only when:
 **Implementation checklist:**
 - Post promo content to allowed MVP platforms only (per scope docs).
 - Posting updates followers via `CONFIG`.
-- Store per-item posted flags.
+- Store per-item posted flags by appending `gameState.social.posts` records (`contentId`, `platformId`, `postedAtDay`), then derive “has this content been posted to platform X?” at render time (no content mutation).
 
 **Verification steps:**
 - Posting affects follower totals and persists.
