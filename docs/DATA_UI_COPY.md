@@ -62,6 +62,15 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 ### Shop
 - Buy Unlock: "Buy Unlock"
 
+## Button Labels (Act 2)
+
+### Social
+- Apply Strategy: "Apply Strategy"
+
+### Shop
+- Unlock Tier: "Unlock Tier"
+- Buy Upgrade: "Buy Upgrade"
+
 ## Button Labels (Act 3)
 
 ### Hub
