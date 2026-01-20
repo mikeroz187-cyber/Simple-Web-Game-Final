@@ -284,3 +284,358 @@ revenue_mult = 1.00
 act1_intro_day = 1
 act1_debt_reminder_days = [30, 60, 80]
 act1_end_day = 90
+
+
+# --- Act 2 Config (inactive until scope expands to Act 2) ---
+
+[performerManagement]
+availabilityRules = { maxConsecutiveBookings = 2, restDaysAfterMax = 1 }
+retentionRules = { loyaltyWarningThreshold = 40, loyaltyLeaveThreshold = 25, loyaltyGainPerBooking = 1, loyaltyDecayPerWeekIdle = 2 }
+contractRules = { coreLengthDays = 90, freelanceLengthDays = 30, coreRenewalCost = 500, freelanceRenewalCost = 250 }
+
+[analytics]
+rollupWindowsDays = [7, 30]
+metricKeys = ["revenue", "followers", "subscribers", "promoCount", "premiumCount"]
+snapshotFrequencyDays = 7
+
+[locations.tiers]
+tierOrder = ["tier0", "tier1", "tier2"]
+defaultTierId = "tier0"
+tiers = { tier0 = { unlockCost = 0, requiredReputation = 0 }, tier1 = { unlockCost = 2000, requiredReputation = 10 }, tier2 = { unlockCost = 4000, requiredReputation = 20 } }
+
+[equipment]
+upgradeOrder = ["lighting", "camera", "set_dressing"]
+
+[equipment.upgrades.lighting]
+maxLevel = 3
+levelCosts = [600, 900, 1200]
+followersMultPerLevel = 0.05
+revenueMultPerLevel = 0.00
+
+[equipment.upgrades.camera]
+maxLevel = 3
+levelCosts = [800, 1200, 1600]
+followersMultPerLevel = 0.00
+revenueMultPerLevel = 0.05
+
+[equipment.upgrades.set_dressing]
+maxLevel = 3
+levelCosts = [500, 800, 1100]
+followersMultPerLevel = 0.03
+revenueMultPerLevel = 0.03
+
+[themes.act2]
+theme_ids = [
+  "theme_luxury_retreat",
+  "theme_editorial",
+  "theme_downtown_chic",
+  "theme_sunlit_getaway",
+  "theme_afterhours"
+]
+
+[themes.act2.theme_luxury_retreat]
+id = "theme_luxury_retreat"
+name = "Luxury Retreat"
+description = "Resort-grade spaces with a relaxed, high-end atmosphere."
+followers_mult = 0.95
+revenue_mult = 1.20
+
+[themes.act2.theme_editorial]
+id = "theme_editorial"
+name = "Editorial"
+description = "Magazine-style staging with bold angles and fashion emphasis."
+followers_mult = 1.05
+revenue_mult = 1.05
+
+[themes.act2.theme_downtown_chic]
+id = "theme_downtown_chic"
+name = "Downtown Chic"
+description = "Urban interiors with a sleek, modern aesthetic."
+followers_mult = 1.00
+revenue_mult = 1.10
+
+[themes.act2.theme_sunlit_getaway]
+id = "theme_sunlit_getaway"
+name = "Sunlit Getaway"
+description = "Bright, airy sets with soft daylight and beachy calm."
+followers_mult = 1.10
+revenue_mult = 0.95
+
+[themes.act2.theme_afterhours]
+id = "theme_afterhours"
+name = "After Hours"
+description = "Late-night ambience with moody shadows and intimate lighting."
+followers_mult = 0.90
+revenue_mult = 1.20
+
+[story.act2]
+startDay = 91
+eventOrder = [
+  "act2_expansion_plan_day95",
+  "act2_staffing_push_day120",
+  "act2_studio_upgrade_day145",
+  "act2_partnership_offer_day170"
+]
+
+[story.act2.events.act2_expansion_plan_day95]
+id = "act2_expansion_plan_day95"
+act = 2
+triggerDay = 95
+triggerCondition = "onDayStart"
+title = "Expansion Plan Drafted"
+message = "With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table."
+
+[story.act2.events.act2_staffing_push_day120]
+id = "act2_staffing_push_day120"
+act = 2
+triggerDay = 120
+triggerCondition = "onDayStart"
+title = "Staffing Push"
+message = "Demand is rising, and capacity is tight. You greenlight a staffing push to stabilize booking consistency."
+
+[story.act2.events.act2_studio_upgrade_day145]
+id = "act2_studio_upgrade_day145"
+act = 2
+triggerDay = 145
+triggerCondition = "onDayStart"
+title = "Studio Upgrade Decision"
+message = "Production quality is plateauing. You decide to invest in equipment upgrades to keep premium output competitive."
+
+[story.act2.events.act2_partnership_offer_day170]
+id = "act2_partnership_offer_day170"
+act = 2
+triggerDay = 170
+triggerCondition = "onDayStart"
+title = "Partnership Offer"
+message = "A platform partner offers cross-promotion in exchange for consistent premium releases. You accept and lock in a long-term collaboration."
+
+[social.strategy]
+defaultStrategyId = "balanced"
+
+[social.strategy.strategies.balanced]
+instagramReachMult = 1.0
+xReachMult = 1.0
+subscriberConversionMult = 1.0
+
+[social.strategy.strategies.growth_focus]
+instagramReachMult = 1.2
+xReachMult = 0.9
+subscriberConversionMult = 0.9
+
+[social.strategy.strategies.revenue_focus]
+instagramReachMult = 0.9
+xReachMult = 1.2
+subscriberConversionMult = 1.1
+
+[milestones]
+milestoneOrder = [
+  "ms_followers_1000",
+  "ms_subscribers_250",
+  "ms_revenue_50000",
+  "ms_reputation_25",
+  "ms_reputation_50"
+]
+
+[milestones.milestones.ms_followers_1000]
+label = "First 1,000 Followers"
+type = "followers"
+threshold = 1000
+
+[milestones.milestones.ms_subscribers_250]
+label = "First 250 Subscribers"
+type = "subscribers"
+threshold = 250
+
+[milestones.milestones.ms_revenue_50000]
+label = "$50k Lifetime Revenue"
+type = "lifetimeRevenue"
+threshold = 50000
+
+[milestones.milestones.ms_reputation_25]
+label = "Reputation 25"
+type = "reputation"
+threshold = 25
+
+[milestones.milestones.ms_reputation_50]
+label = "Reputation 50"
+type = "reputation"
+threshold = 50
+
+[performers.act2Roster]
+performerIds = ["act2_aria_vale", "act2_jonah_kade", "act2_sky_moreno", "act2_pax_hollow"]
+roleIds = ["lead", "specialist", "support"]
+
+[performers.act2Roster.performers.act2_aria_vale]
+id = "act2_aria_vale"
+name = "Aria Vale"
+type = "core"
+star_power = 3
+description = "Brand-focused lead with consistent high-end delivery."
+
+[performers.act2Roster.performers.act2_jonah_kade]
+id = "act2_jonah_kade"
+name = "Jonah Kade"
+type = "core"
+star_power = 2
+description = "Versatile performer who adapts quickly to new themes."
+
+[performers.act2Roster.performers.act2_sky_moreno]
+id = "act2_sky_moreno"
+name = "Sky Moreno"
+type = "freelance"
+star_power = 3
+description = "High-demand freelancer known for premium polish."
+
+[performers.act2Roster.performers.act2_pax_hollow]
+id = "act2_pax_hollow"
+name = "Pax Hollow"
+type = "freelance"
+star_power = 2
+description = "Experimental stylist who boosts niche engagement."
+
+[performers.act2Roster.roles.lead]
+label = "Lead"
+followersMult = 1.05
+revenueMult = 1.05
+
+[performers.act2Roster.roles.specialist]
+label = "Specialist"
+followersMult = 1.10
+revenueMult = 1.00
+
+[performers.act2Roster.roles.support]
+label = "Support"
+followersMult = 0.95
+revenueMult = 1.00
+
+# --- Act 3 Config (inactive until scope expands to Act 3) ---
+
+[rivals]
+evaluationCadenceDays = 7
+
+[[rivals.studios]]
+id = "rival_night_slate"
+name = "Night Slate Media"
+baseScore = 55
+weeklyGrowthRate = 1.03
+
+[[rivals.studios]]
+id = "rival_rose_quartz"
+name = "Rose Quartz Studio"
+baseScore = 48
+weeklyGrowthRate = 1.02
+
+[market]
+multiplierFloor = 0.85
+multiplierCeiling = 1.15
+
+[[market.shiftSchedule]]
+id = "shift_premium_boom"
+day = 225
+
+[[market.shiftSchedule]]
+id = "shift_promo_fatigue"
+day = 245
+
+[market.shifts.shift_premium_boom]
+revenueMult = 1.15
+followersMult = 0.95
+
+[market.shifts.shift_promo_fatigue]
+revenueMult = 0.95
+followersMult = 0.85
+
+[reputation.branches]
+branches = [
+  { id = "prestige", label = "Prestige", requiredReputation = 60, revenueMult = 1.10, followersMult = 0.95 },
+  { id = "volume", label = "Volume", requiredReputation = 60, revenueMult = 0.95, followersMult = 1.10 },
+  { id = "boutique", label = "Boutique", requiredReputation = 60, revenueMult = 1.05, followersMult = 1.05 }
+]
+
+[legacyMilestones]
+milestoneOrder = [
+  "legacy_revenue_250k",
+  "legacy_subscribers_1500",
+  "legacy_reputation_80",
+  "legacy_story_complete"
+]
+
+[legacyMilestones.milestones.legacy_revenue_250k]
+label = "$250k Lifetime Revenue"
+type = "lifetimeRevenue"
+threshold = 250000
+rewardCash = 5000
+
+[legacyMilestones.milestones.legacy_subscribers_1500]
+label = "1,500 Subscribers"
+type = "subscribers"
+threshold = 1500
+rewardCash = 4000
+
+[legacyMilestones.milestones.legacy_reputation_80]
+label = "Reputation 80"
+type = "reputation"
+threshold = 80
+rewardCash = 6000
+
+[legacyMilestones.milestones.legacy_story_complete]
+label = "Complete Act 3 Story"
+type = "storyComplete"
+threshold = 1
+rewardCash = 8000
+
+[automation]
+enabled = false
+maxActionsPerDay = 1
+minCashReserve = 1000
+
+[schedule]
+enabled = false
+maxQueueSize = 3
+resolvePerDay = 1
+
+[content.variance]
+enabled = true
+maxVariancePct = 0.15
+seedPolicy = "stored"
+
+[story.act3]
+startDay = 181
+eventOrder = [
+  "act3_brand_legacy_day200",
+  "act3_market_shift_day225",
+  "act3_mentorship_day245",
+  "act3_exit_strategy_day270"
+]
+
+[story.act3.events.act3_brand_legacy_day200]
+id = "act3_brand_legacy_day200"
+act = 3
+triggerDay = 200
+triggerCondition = "onDayStart"
+title = "Brand Legacy Review"
+message = "Your studio is now a recognizable brand. You commit to a legacy plan that prioritizes long-term reputation and stability."
+
+[story.act3.events.act3_market_shift_day225]
+id = "act3_market_shift_day225"
+act = 3
+triggerDay = 225
+triggerCondition = "onDayStart"
+title = "Market Shift"
+message = "Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention."
+
+[story.act3.events.act3_mentorship_day245]
+id = "act3_mentorship_day245"
+act = 3
+triggerDay = 245
+triggerCondition = "onDayStart"
+title = "Mentorship and Succession"
+message = "You begin mentoring a successor team to preserve studio standards while scaling output."
+
+[story.act3.events.act3_exit_strategy_day270]
+id = "act3_exit_strategy_day270"
+act = 3
+triggerDay = 270
+triggerCondition = "onDayStart"
+title = "Exit Strategy"
+message = "You formalize a long-term exit strategy focused on stability and legacy recognition."
