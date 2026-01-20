@@ -28,21 +28,26 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - Back: "Back"
 - Back to Hub: "Back to Hub"
 - Save Now: "Save Now"
+- Load Save: "Load Save"
 - Export Save: "Export Save"
 - Import Save: "Import Save"
 
 ### Hub
-- (No additional Hub-specific buttons beyond the MVP navigation and save/load actions.)
+- Booking: "Booking"
+- Analytics: "Analytics"
+- Social: "Social"
+- Gallery: "Gallery"
+- Roster: "Roster"
+- Shop: "Shop"
 
 ### Booking
 - Confirm Shoot: "Confirm Shoot"
-- Clear Selection: "Clear Selection"
 
 ### Content
-- (No Content-specific action buttons beyond "View Analytics" and navigation.)
+- View Analytics: "View Analytics"
 
 ### Analytics
-- (No Analytics-specific action buttons beyond booking/navigation.)
+- Book Next Shoot: "Book Next Shoot"
 
 ### Roster
 - (Roster is read-only in MVP.)
@@ -50,14 +55,12 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 ### Social
 - Post to Instagram: "Post to Instagram"
 - Post to X: "Post to X"
-- Apply Strategy: "Apply Strategy"
 
 ### Gallery
-- View Full: "View Full"
-- Download: "Download"
+- (No Gallery-specific action buttons beyond navigation.)
 
 ### Shop
-- Buy Upgrade: "Buy Upgrade"
+- Buy Unlock: "Buy Unlock"
 
 ## Button Labels (Act 3)
 

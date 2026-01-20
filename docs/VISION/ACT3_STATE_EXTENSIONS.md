@@ -8,8 +8,7 @@
 - All state must serialize cleanly to JSON.
 
 ## 2) Versioning Contract (v1 → v2 → v3)
-- `gameState.meta.saveVersion` is the single source of truth for save versioning.
-- `gameState.version` remains as a backward-compatible mirror for v1/v2 saves and must match `meta.saveVersion` once v3 is established.
+- `gameState.version` is the single source of truth for save versioning.
 - Accepted versions: 1, 2, 3.
 - `save.js` required functions:
   - `detectVersion(saveObj)`
@@ -91,7 +90,7 @@ Notes:
 ## 6) Migration Plan: v2 → v3 (Deterministic)
 Algorithm:
 1) clone v2 safely
-2) set saveVersion = 3
+2) set version = 3
 3) add new Act 3 keys with defaults if missing
 4) do not overwrite existing values
 5) validate v3
@@ -101,8 +100,6 @@ Pseudocode (short):
 ```
 function migrateV2ToV3(v2):
   v3 = deepClone(v2)
-  if v3.meta is missing: v3.meta = {}
-  v3.meta.saveVersion = 3
   v3.version = 3
   if v3.metaProgression is missing: v3.metaProgression = {}
   if v3.rivals is missing: v3.rivals = {}

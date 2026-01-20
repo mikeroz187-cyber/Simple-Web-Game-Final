@@ -11,8 +11,8 @@ Studio Empire is an adult content production management simulator. It runs entir
 - **.codex/config.toml** – Codex AI configuration settings for this project.
 - **AGENTS.md** – guidelines for AI contributors (Codex/ChatGPT) on how to work within project scope.
 - **docs/** – contains all design documentation (both MVP-specific and future vision docs). `docs/README.md` contains an index of all docs.
-- **src/** (to be created) – will contain the game’s JavaScript source code as outlined in the technical docs (e.g. `docs/MVP/MVP_FILE_STRUCTURE.md`).
-- **styles.css** (to be created) – main stylesheet in the repo root per MVP file structure.
+- **src/** – contains the game’s JavaScript source code as outlined in the technical docs (e.g. `docs/MVP/MVP_FILE_STRUCTURE.md`).
+- **styles.css** – main stylesheet in the repo root per MVP file structure.
 
 ## Getting Started
 1. **Read the docs:** Start with `docs/README.md` for an index of all documentation and to understand project scope.
