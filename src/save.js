@@ -21,11 +21,15 @@ function loadGame() {
       return { ok: false, message: "No saved game found." };
     }
     const parsed = JSON.parse(saved);
-    const validation = validateGameState(parsed);
+    const migration = migrateGameState(parsed);
+    if (!migration.ok) {
+      return { ok: false, message: migration.message || "Save migration failed." };
+    }
+    const validation = validateGameState(migration.gameState);
     if (!validation.ok) {
       return { ok: false, message: validation.message || "Save data invalid." };
     }
-    return { ok: true, gameState: parsed, message: "Save loaded." };
+    return { ok: true, gameState: migration.gameState, message: "Save loaded." };
   } catch (error) {
     console.error("Load failed:", error);
     return { ok: false, message: "Load failed." };
@@ -75,12 +79,17 @@ function importSaveFromFile() {
       reader.onload = function () {
         try {
           const parsed = JSON.parse(reader.result);
-          const validation = validateGameState(parsed);
+          const migration = migrateGameState(parsed);
+          if (!migration.ok) {
+            resolve({ ok: false, message: migration.message || "Import migration failed." });
+            return;
+          }
+          const validation = validateGameState(migration.gameState);
           if (!validation.ok) {
             resolve({ ok: false, message: validation.message || "Import data invalid." });
             return;
           }
-          resolve({ ok: true, gameState: parsed, message: "Import complete." });
+          resolve({ ok: true, gameState: migration.gameState, message: "Import complete." });
         } catch (error) {
           console.error("Import failed:", error);
           resolve({ ok: false, message: "Import failed." });
@@ -93,6 +102,31 @@ function importSaveFromFile() {
     });
     input.click();
   });
+}
+
+function migrateGameState(candidate) {
+  if (!candidate || typeof candidate !== "object") {
+    return { ok: false, message: "Save data missing." };
+  }
+
+  const currentVersion = CONFIG.save.save_schema_version;
+  const candidateVersion = candidate.version;
+
+  if (!Number.isFinite(candidateVersion)) {
+    return { ok: false, message: "Save version missing." };
+  }
+
+  if (candidateVersion === currentVersion) {
+    // Version 1 -> 1 no-op migration. Keep explicit for future schema updates.
+    return { ok: true, gameState: candidate };
+  }
+
+  if (candidateVersion < currentVersion) {
+    // Guarded path: older versions require explicit migrations.
+    return { ok: false, message: "Save version too old to migrate." };
+  }
+
+  return { ok: false, message: "Save version not supported." };
 }
 
 function validateGameState(candidate) {
