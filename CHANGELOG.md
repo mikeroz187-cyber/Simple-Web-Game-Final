@@ -115,11 +115,14 @@ This changelog is optimized for:
 - Why: Make the build order document hierarchy explicit for MVP execution guidance.
 - Files touched: docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
 - What: Updated documentation index to reference the Act 2/Act 3 Vision files now present in docs/VISION.
-- Why: Keep the docs index aligned with the actual Vision planning source of truth.
-- Files touched: docs/README.md, CHANGELOG.md.
+  - Why: Keep the docs index aligned with the actual Vision planning source of truth.
+  - Files touched: docs/README.md, CHANGELOG.md.
 - What: Adjusted the root README to point to the Vision docs in docs/VISION instead of the legacy numbered list.
 - Why: Ensure contributors can find the correct full-game planning documents.
 - Files touched: README.md, CHANGELOG.md.
+- What: Updated story state defaults and Act 1 trigger checks to use the new story flags, plus added save-side normalization helpers.
+  - Why: Align story tracking with the MVP state model and prevent mismatched save data.
+  - Files touched: src/state.js, src/systems/story.js, src/save.js, CHANGELOG.md.
 - What: Added Act 1 story trigger days to config.toml and mirrored them in js/config.js.
 - Why: Keep story event timing fully config-driven and consistent across sources.
 - Files touched: config.toml, js/config.js, CHANGELOG.md.
