@@ -106,17 +106,19 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 ### 6.4 `social`
 | Field | Type | Required | Default | Invariants |
 | --- | --- | --- | --- | --- |
-| `posts` | array of `SocialPost` | Required | `[]` | IDs unique; append-only. |
+| `posts` | array of `SocialPost` | Required | `[]` | IDs unique; append-only. Per-item posted flags are derived from these records. |
 
 #### `SocialPost`
 | Field | Type | Required | Default | Invariants |
 | --- | --- | --- | --- | --- |
 | `id` | string | Required | Generated stable ID | Unique across posts. |
-| `dayPosted` | integer | Required | `player.day` at posting | Must be `>= 1`. |
-| `platform` | enum | Required | `Instagram` or `X` | Must match config `[social_platforms].platforms`. |
+| `postedAtDay` | integer | Required | `player.day` at posting | Must be `>= 1`. |
+| `platformId` | string | Required | Platform ID | Must match config `[social_platforms].platforms`. |
 | `contentId` | string | Required | Targeted content | Must exist in `content.entries`. Must be Promo content. |
 | `followersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
 | `subscribersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
+
+**Per-item posted flags rule:** To answer “has this content been posted to platform X?”, **search `social.posts`** for a record with matching `contentId` + `platformId`. Do **not** add posted flags to `content.entries` or mutate content metadata.
 
 ### 6.5 `unlocks`
 | Field | Type | Required | Default | Invariants |
@@ -144,7 +146,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 
 ## 7) Enumerations & Allowed Values
 - `contentType`: **`Promo`, `Premium`** (from `config.toml` → `[content_types].available`).
-- `platform`: **`Instagram`, `X`** (from `config.toml` → `[social_platforms].platforms`).
+- `platformId`: **`Instagram`, `X`** (from `config.toml` → `[social_platforms].platforms`).
 - `performer.type`: **`core`, `freelance`** (implied by MVP roster definitions in `docs/SCOPE_MVP.md`).
 
 **Rule:** Enum values in state **must not drift** from config definitions. Update config and this doc together.
@@ -162,6 +164,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 - Analytics screen values (derived from the **latest content entry** and `player` totals).
 - Gallery filters/sorting state.
 - Performer availability (derive from fatigue and config thresholds).
+- Per-item posted flags (derive by searching `social.posts` for `contentId` + `platformId`).
 
 If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in `player.lifetimeRevenue` and **do not duplicate** it elsewhere.
 
@@ -405,8 +408,8 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
     "posts": [
       {
         "id": "post_1",
-        "dayPosted": 1,
-        "platform": "Instagram",
+        "postedAtDay": 1,
+        "platformId": "Instagram",
         "contentId": "content_1",
         "followersGained": 20,
         "subscribersGained": 1
