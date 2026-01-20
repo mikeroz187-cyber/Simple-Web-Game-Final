@@ -88,6 +88,11 @@ body {
   border-color: var(--accent);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .helper-text {
   color: var(--muted);
   font-size: 13px;
@@ -96,4 +101,49 @@ body {
 .screen-title {
   margin: 0 0 12px 0;
   font-size: 18px;
+}
+
+.panel-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.list-item + .list-item {
+  margin-top: 8px;
+}
+
+.select-button {
+  border: 1px solid var(--panel-border);
+  background: #f8f9fd;
+  color: var(--ink);
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.select-button.is-selected {
+  border-color: var(--accent);
+  background: rgba(58, 91, 217, 0.12);
+}
+
+.select-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.status-message {
+  margin-top: 12px;
+}
+
+.content-placeholder {
+  border: 1px dashed var(--panel-border);
+  padding: 24px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  text-align: center;
+  color: var(--muted);
+  background: #fbfcff;
 }

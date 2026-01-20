@@ -1,3 +1,18 @@
+function setUiMessage(message) {
+  const uiState = getUiState();
+  uiState.message = message || "";
+}
+
+function resetBookingSelection() {
+  const uiState = getUiState();
+  uiState.booking = {
+    performerId: null,
+    locationId: null,
+    themeId: null,
+    contentType: null
+  };
+}
+
 function setupEventHandlers() {
   function showModalMessage(status, title, message, details) {
     const modalRoot = qs("#modal-root");
@@ -28,48 +43,180 @@ function setupEventHandlers() {
   }
 
   document.body.addEventListener("click", function (event) {
-    const action = event.target && event.target.dataset ? event.target.dataset.action : null;
+    const target = event.target.closest("[data-action]");
+    const action = target && target.dataset ? target.dataset.action : null;
     if (!action) {
       return;
     }
 
+    const uiState = getUiState();
+
     if (action === "nav-hub") {
       showScreen("screen-hub");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-booking") {
       showScreen("screen-booking");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-content") {
       showScreen("screen-content");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-analytics") {
       showScreen("screen-analytics");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-roster") {
       showScreen("screen-roster");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-social") {
       showScreen("screen-social");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-gallery") {
       showScreen("screen-gallery");
+      renderApp(window.gameState);
       return;
     }
 
     if (action === "nav-shop") {
       showScreen("screen-shop");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-performer") {
+      uiState.booking.performerId = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-location") {
+      uiState.booking.locationId = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-theme") {
+      uiState.booking.themeId = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-content-type") {
+      uiState.booking.contentType = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "confirm-shoot") {
+      const result = confirmBooking(window.gameState, uiState.booking);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        resetBookingSelection();
+        const saveResult = saveGame(window.gameState);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+        renderApp(window.gameState);
+        showScreen("screen-content");
+        return;
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-social-content") {
+      uiState.social.selectedContentId = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "post-instagram" || action === "post-x") {
+      const platform = action === "post-instagram" ? "Instagram" : "X";
+      const result = postPromoContent(window.gameState, platform, uiState.social.selectedContentId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-gallery-entry") {
+      uiState.gallery.selectedContentId = target.dataset.id;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "buy-tier1-location") {
+      const result = purchaseTier1Location(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "save-now") {
+      const result = saveGame(window.gameState);
+      setUiMessage(result.message || "");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "load-save") {
+      const result = loadGame();
+      if (result.ok) {
+        window.gameState = result.gameState;
+      }
+      setUiMessage(result.message || "");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "export-save") {
+      const result = exportSaveToFile(window.gameState);
+      setUiMessage(result.message || "");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "import-save") {
+      importSaveFromFile().then(function (result) {
+        if (result.ok) {
+          window.gameState = result.gameState;
+        }
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+      });
       return;
     }
 

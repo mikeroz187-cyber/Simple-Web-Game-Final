@@ -1,28 +1,32 @@
 function checkStoryEvents(gameState) {
-  if (!gameState || !gameState.player || !gameState.story) {
-    return { ok: false, code: "invalid_state", message: "Missing game state data." };
+  if (!gameState || !gameState.story || !gameState.player) {
+    return { ok: false, events: [] };
   }
 
-  const act1Config = CONFIG.story.act1;
+  const events = [];
   const currentDay = gameState.player.day;
 
-  if (!gameState.story.introShown && currentDay >= act1Config.intro.triggerDay) {
-    return { ok: true, eventId: act1Config.intro.id, type: "intro" };
+  if (!gameState.story.introShown && currentDay === CONFIG.story.act1.act1_intro_day) {
+    gameState.story.introShown = true;
+    events.push({ id: CONFIG.story.act1.intro.id, day: currentDay });
   }
 
-  const reminder = act1Config.debtReminders.find(function (entry) {
-    const alreadyShown = gameState.story.debtReminderDaysShown.includes(entry.triggerDay);
-    return currentDay >= entry.triggerDay && !alreadyShown;
+  CONFIG.story.act1.act1_debt_reminder_days.forEach(function (day) {
+    if (day === currentDay && gameState.story.debtReminderDaysShown.indexOf(day) === -1) {
+      gameState.story.debtReminderDaysShown.push(day);
+      const reminder = CONFIG.story.act1.debtReminders.find(function (entry) {
+        return entry.triggerDay === day;
+      });
+      events.push({ id: reminder ? reminder.id : "debt_reminder_" + day, day: day });
+    }
   });
 
-  if (reminder) {
-    return {
-      ok: true,
-      eventId: reminder.id,
-      type: "debt_reminder",
-      triggerDay: reminder.triggerDay
-    };
+  if (currentDay === gameState.player.debtDueDay) {
+    const endEvent = gameState.player.debtRemaining <= 0
+      ? CONFIG.story.act1.endEvents.win
+      : CONFIG.story.act1.endEvents.loss;
+    events.push({ id: endEvent.id, day: currentDay });
   }
 
-  return { ok: false, code: "no_event", message: "No story event triggered." };
+  return { ok: true, events: events };
 }
