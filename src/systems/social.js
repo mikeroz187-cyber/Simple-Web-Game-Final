@@ -19,6 +19,14 @@ function postPromoContent(gameState, platform, contentId) {
     return { ok: false, message: "Promo content required for posting." };
   }
 
+  const alreadyPosted = gameState.social.posts.some(function (post) {
+    return post.contentId === entry.id && post.platform === platform;
+  });
+
+  if (alreadyPosted) {
+    return { ok: false, message: "Already posted to " + platform + "." };
+  }
+
   const platformMultiplier = platform === "Instagram"
     ? CONFIG.social_platforms.instagram_reach_multiplier
     : CONFIG.social_platforms.x_reach_multiplier;

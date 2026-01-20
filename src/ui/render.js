@@ -308,14 +308,16 @@ function renderSocial(gameState) {
     : "<p class=\"helper-text\">Select a Promo content entry to see posted status.</p>";
 
   const canPost = promoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
+  const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
+  const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
 
   const body = "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
-    createButton("Post to Instagram", "post-instagram", "primary", !canPost) +
-    createButton("Post to X", "post-x", "", !canPost) +
+    createButton("Post to Instagram", "post-instagram", "primary", !canPost || hasPostedInstagram) +
+    createButton("Post to X", "post-x", "", !canPost || hasPostedX) +
     createButton("Back to Hub", "nav-hub") +
     "</div>";
   screen.innerHTML = createPanel("Social", body, "screen-social-title");
