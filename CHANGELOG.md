@@ -49,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Added autosave interval setup during app initialization when enabled in config.
+  - Why: Ensure the game persists progress automatically without manual action.
+  - Files touched: src/main.js, CHANGELOG.md.
 - What: Replaced MVP UI placeholders with full screen layouts, system-driven actions, and save/load wiring.
   - Why: Implement the MVP gameplay loop screens and core systems per the UI blueprint and technical guardrails.
   - Files touched: styles.css, src/state.js, src/save.js, src/ui/components.js, src/ui/render.js, src/ui/events.js, src/systems/booking.js, src/systems/economy.js, src/systems/performers.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, CHANGELOG.md.
