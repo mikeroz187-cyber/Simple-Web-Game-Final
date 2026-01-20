@@ -39,6 +39,7 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - Gallery: "Gallery"
 - Roster: "Roster"
 - Shop: "Shop"
+- Pay Debt: "Pay Debt"
 
 ### Booking
 - Confirm Shoot: "Confirm Shoot"
@@ -96,6 +97,7 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - "Save complete."
 - "Export complete."
 - "Import complete."
+- "Debt paid in full."
 
 ---
 
@@ -110,6 +112,8 @@ This document defines **standard UI text, messages, and labels** for Studio Empi
 - "Invalid save file."
 - "Save failed."
 - "Import failed."
+- "Debt already paid."
+- "Not enough cash to pay the debt."
 
 ---
 

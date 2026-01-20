@@ -141,7 +141,7 @@ function setupEventHandlers() {
       setUiMessage(result.message || "");
       if (result.ok) {
         resetBookingSelection();
-        const saveResult = saveGame(window.gameState);
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
@@ -168,7 +168,7 @@ function setupEventHandlers() {
       const result = postPromoContent(window.gameState, platform, uiState.social.selectedContentId);
       setUiMessage(result.message || "");
       if (result.ok) {
-        const saveResult = saveGame(window.gameState);
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
@@ -188,7 +188,7 @@ function setupEventHandlers() {
       const result = purchaseTier1Location(window.gameState);
       setUiMessage(result.message || "");
       if (result.ok) {
-        const saveResult = saveGame(window.gameState);
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
@@ -198,19 +198,19 @@ function setupEventHandlers() {
     }
 
     if (action === "save-now") {
-      const result = saveGame(window.gameState);
+      const result = saveGame(window.gameState, uiState.save.selectedSlotId);
       setUiMessage(result.message || "");
       renderApp(window.gameState);
       return;
     }
 
     if (action === "load-save") {
-      const result = loadGame();
+      const result = loadGame(uiState.save.selectedSlotId);
       if (result.ok) {
         window.gameState = result.gameState;
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
-          const saveResult = saveGame(window.gameState);
+          const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
           if (!saveResult.ok) {
             setUiMessage(saveResult.message || "");
           }
@@ -235,7 +235,7 @@ function setupEventHandlers() {
           window.gameState = result.gameState;
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
-            const saveResult = saveGame(window.gameState);
+            const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
             if (!saveResult.ok) {
               setUiMessage(saveResult.message || "");
             }
@@ -248,6 +248,31 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "pay-debt") {
+      const result = payDebt(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     console.warn("Action not wired yet:", action);
+  });
+
+  document.body.addEventListener("change", function (event) {
+    const target = event.target;
+    const action = target && target.dataset ? target.dataset.action : null;
+    if (action !== "select-save-slot") {
+      return;
+    }
+    const uiState = getUiState();
+    uiState.save.selectedSlotId = target.value;
+    setUiMessage("");
+    renderApp(window.gameState);
   });
 }

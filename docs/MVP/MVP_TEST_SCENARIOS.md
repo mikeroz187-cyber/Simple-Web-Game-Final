@@ -61,8 +61,8 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 
 ## 6) Day Advance Scenario
 
-**Given** the player confirms a booking and ends the day on `day = 1`.  
-**Expect** the day increments to `day = 2`.
+**Given** the player confirms 5 bookings on `day = 1`.  
+**Expect** the day increments to `day = 2` and `shootsToday` resets to `0`.
 
 ---
 
@@ -84,3 +84,10 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 
 **Given** the player saves the game, refreshes the browser, and then loads the save.  
 **Expect** all state values (day, cash, debt, followers, roster fatigue, locations, etc.) are preserved exactly.
+
+---
+
+## 10) Pay Debt Scenario
+
+**Given** `cash >= debtRemaining` on the Hub.  
+**Expect** the Pay Debt button is enabled and paying clears `debtRemaining` to `0`.

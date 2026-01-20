@@ -5,7 +5,7 @@
     if (CONFIG.save.autosave_enabled) {
       const intervalMs = CONFIG.save.autosave_interval_seconds * 1000;
       setInterval(function () {
-        const result = saveGame(window.gameState);
+        const result = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!result.ok) {
           setUiMessage(result.message || "Autosave failed.");
           renderApp(window.gameState);
@@ -15,7 +15,7 @@
     showScreen("screen-hub");
     renderApp(window.gameState);
     if (storyResult.ok && storyResult.events.length) {
-      const saveResult = saveGame(window.gameState);
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
         renderApp(window.gameState);

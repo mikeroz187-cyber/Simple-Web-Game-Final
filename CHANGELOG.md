@@ -49,6 +49,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Updated day progression to advance after five shoots and track `shootsToday` in game state.
+  - Why: Match the approved pacing adjustment for MVP days.
+  - Files touched: src/systems/booking.js, src/state.js, src/save.js, src/config.js, config.toml, docs/CURRENT_SCOPE.md, docs/SCOPE_MVP.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
+- What: Added a Pay Debt hub action that stays disabled until cash covers the remaining debt.
+  - Why: Provide an explicit, player-controlled debt payoff step.
+  - Files touched: src/systems/economy.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CURRENT_SCOPE.md, docs/SCOPE_MVP.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/DATA_UI_COPY.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
 - What: Added modal story event messaging and updated Hub status to include days left and next action guidance.
   - Why: Surface Act 1 narrative beats and key loop cues directly in the MVP UI.
   - Files touched: src/systems/story.js, src/ui/events.js, src/ui/render.js, src/main.js, styles.css, CHANGELOG.md.
@@ -152,7 +158,9 @@ This changelog is optimized for:
 - Files touched: docs/CURRENT_SCOPE.md, docs/README.md, README.md, CHANGELOG.md.
 
 ### Fixed
-- N/A (no changes this run)
+- FIX: Added save slot selection and slot-based localStorage handling (including an Autosave slot).
+  - Why: Enable multiple save slots and prevent manual saves from being overwritten.
+  - Files touched: src/save.js, src/ui/render.js, src/ui/events.js, src/main.js, src/config.js, config.toml, docs/CURRENT_SCOPE.md, docs/SCOPE_MVP.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ---
 

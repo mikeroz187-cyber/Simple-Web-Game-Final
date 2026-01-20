@@ -16,13 +16,13 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 3. View content summary.
 4. Review analytics (followers, subscribers, revenue, feedback).
 5. Adjust strategy (next booking and/or platform choice).
-6. Advance the day and repeat until Day 90.
+6. Advance the day after 5 shoots and repeat until Day 90.
 
 ---
 
 ## 4) Day Advancement Rules
-- **Exact trigger:** The day advances immediately after the player confirms a booking (the shoot is locked in). The day does **not** advance from viewing content, browsing the gallery, or viewing analytics.
-- **One shoot per day:** Each confirmed booking equals one day. Multiple shoots in a single day are not allowed in the MVP.
+- **Exact trigger:** The day advances immediately after every 5th confirmed booking (the shoot is locked in). The day does **not** advance from viewing content, browsing the gallery, or viewing analytics.
+- **Shoots per day:** Up to 5 shoots can be completed before the day advances.
 - **Day boundary effects:** Fatigue recovery occurs at the start of each new day before any actions. Other day-start effects (like debt reminders) trigger at day start if defined.
 - **What blocks day advancement:** The player must complete the full loop state to reach the booking confirmation. Day advancement is blocked until a valid booking is confirmed (affordability and availability checks must pass).
 - **No complex time system:** There are no partial days, hours, or time slots in the MVP.
@@ -36,6 +36,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - Post Promo Content — choose Instagram or X to affect reach — Social screen.
 - Browse Content — view past content entries — Gallery screen.
 - Buy Tier 1 Location Unlock — unlock the next location tier if affordable — Shop screen.
+- Pay Debt — clear the remaining debt once enough cash is available — Hub screen.
 - Save Now — manual save to localStorage — Hub screen.
 - Load Save — load from localStorage — Hub screen.
 - Export Save — download JSON save file — Hub screen.
@@ -47,7 +48,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 ## 6) MVP Resources & Stats
 - Cash — available money for costs and debt — increases from Premium revenue — decreases from shoot location costs and debt payments — player cares because cash gates actions and debt payoff.
 - Debt Remaining — amount owed toward the $10,000 deadline — decreases when paid from cash — increases only at start as the $10,000 total obligation — player cares because paying it off by Day 90 is the win condition.
-- Day — current in-game day (1–90) — increases after each completed loop — cannot decrease — player cares because Day 90 is the deadline.
+- Day — current in-game day (1–90) — increases after every 5 completed shoots — cannot decrease — player cares because Day 90 is the deadline.
 - Followers — audience size from Promo content — increases via Promo results and platform reach — may stagnate if no Promo — player cares because followers convert to subscribers at a fixed rate.
 - Subscribers — paying audience base — increases via conversion from followers and Premium performance — decreases only if explicitly modeled (not required in MVP) — player cares because subscribers drive Premium revenue.
 - Reputation — studio reputation — increases through successful content and progress — decreases only if explicitly modeled (not required in MVP) — player cares because it gates unlocks like Tier 1 location.
@@ -58,7 +59,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 ---
 
 ## 7) MVP Screens (UI Map)
-- Hub — central navigation and status — displays day, cash, debt remaining, followers/subscribers, reputation, next action — buttons for Booking, Analytics, Social, Gallery, Roster, Shop, Save, Load, Export, Import.
+- Hub — central navigation and status — displays day, cash, debt remaining, followers/subscribers, reputation, next action, shoots today — buttons for Booking, Analytics, Social, Gallery, Roster, Shop, Pay Debt, Save, Load, Export, Import, plus a save slot selector.
 - Booking — plan a shoot — displays performers, locations, themes, content type, shoot cost — buttons for Confirm Shoot, Back to Hub.
 - Content — view the generated content result — displays content placeholder and shoot summary — buttons for View Analytics, Back to Hub.
 - Analytics — review outcomes — displays revenue gained, followers gained, subscribers gained, feedback summary — buttons for Book Next Shoot, Back to Hub.
@@ -70,8 +71,9 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 ---
 
 ## 8) MVP Save System Requirements
-- Autosave to localStorage at safe intervals (e.g., after completing a loop or key actions).
-- Manual Save Now button on the Hub that writes the full gameState to localStorage.
+- Autosave to localStorage at safe intervals (e.g., after completing a loop or key actions) using a dedicated Autosave slot.
+- Manual Save Now button on the Hub that writes the full gameState to the selected save slot.
+- Load Save reads from the selected save slot.
 - Export save downloads the full gameState as a JSON file.
 - Import save loads a JSON file and replaces the current gameState after validation.
 - Persist all MVP data: day, debt remaining, cash, followers/subscribers, reputation, roster stats, content history, unlocks, and any tracked analytics totals.
@@ -99,7 +101,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - [ ] Premium content generates revenue and affects subscriber metrics.
 - [ ] Performers show star power, fatigue, and loyalty, with fatigue changing over time.
 - [ ] Booking requires performer, location, theme, and content type selection.
-- [ ] Day advances only after a completed loop.
+- [ ] Day advances only after every 5 completed shoots.
 - [ ] Debt reminders appear during Act 1 and Day 90 end condition triggers.
 - [ ] Tier 1 location unlock can be purchased and is reflected in UI.
 - [ ] Content history persists in-session and is visible in the Gallery.

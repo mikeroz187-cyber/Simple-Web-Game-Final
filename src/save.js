@@ -1,4 +1,23 @@
-function saveGame(gameState) {
+function resolveSaveSlotId(slotId) {
+  const slots = Array.isArray(CONFIG.save.slots) ? CONFIG.save.slots : [];
+  const validIds = slots.map(function (slot) {
+    return slot.id;
+  });
+  if (slotId && validIds.indexOf(slotId) !== -1) {
+    return slotId;
+  }
+  return CONFIG.save.default_slot_id;
+}
+
+function getSaveSlotKey(slotId) {
+  const resolvedSlotId = resolveSaveSlotId(slotId);
+  if (resolvedSlotId === CONFIG.save.default_slot_id) {
+    return CONFIG.save.localstorage_key;
+  }
+  return CONFIG.save.localstorage_key + "_" + resolvedSlotId;
+}
+
+function saveGame(gameState, slotId) {
   if (!gameState) {
     return { ok: false, message: "No game state to save." };
   }
@@ -6,7 +25,7 @@ function saveGame(gameState) {
   gameState.updatedAt = now;
   try {
     const payload = JSON.stringify(gameState);
-    localStorage.setItem(CONFIG.save.localstorage_key, payload);
+    localStorage.setItem(getSaveSlotKey(slotId), payload);
     return { ok: true, message: "Save complete." };
   } catch (error) {
     console.error("Save failed:", error);
@@ -14,9 +33,9 @@ function saveGame(gameState) {
   }
 }
 
-function loadGame() {
+function loadGame(slotId) {
   try {
-    const saved = localStorage.getItem(CONFIG.save.localstorage_key);
+    const saved = localStorage.getItem(getSaveSlotKey(slotId));
     if (!saved) {
       return { ok: false, message: "No saved game found." };
     }
@@ -36,9 +55,9 @@ function loadGame() {
   }
 }
 
-function resetSave() {
+function resetSave(slotId) {
   try {
-    localStorage.removeItem(CONFIG.save.localstorage_key);
+    localStorage.removeItem(getSaveSlotKey(slotId));
     return { ok: true, message: "Save cleared." };
   } catch (error) {
     console.error("Reset failed:", error);
@@ -118,6 +137,9 @@ function migrateGameState(candidate) {
 
   if (candidateVersion === currentVersion) {
     // Version 1 -> 1 no-op migration. Keep explicit for future schema updates.
+    if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
+      candidate.player.shootsToday = 0;
+    }
     return { ok: true, gameState: candidate };
   }
 
@@ -156,7 +178,7 @@ function validateGameState(candidate) {
     return { ok: false, message: "Player data missing." };
   }
 
-  const requiredNumbers = ["day", "cash", "debtRemaining", "debtDueDay", "followers", "subscribers", "reputation"];
+  const requiredNumbers = ["day", "cash", "debtRemaining", "debtDueDay", "shootsToday", "followers", "subscribers", "reputation"];
   for (let index = 0; index < requiredNumbers.length; index += 1) {
     const key = requiredNumbers[index];
     if (!Number.isFinite(player[key]) || player[key] < 0) {
@@ -166,6 +188,10 @@ function validateGameState(candidate) {
 
   if (player.day < 1 || player.day > player.debtDueDay) {
     return { ok: false, message: "Player day out of range." };
+  }
+
+  if (player.shootsToday > CONFIG.game.shoots_per_day) {
+    return { ok: false, message: "Player shoots per day out of range." };
   }
 
   const roster = candidate.roster;
