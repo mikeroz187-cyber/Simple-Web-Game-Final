@@ -3,7 +3,7 @@
 ## Role
 You are an AI software engineer working on **Studio Empire**, a desktop-only, single-page, vanilla web game.
 
-Your goal is to **ship the MVP exactly as defined**, with clean structure and safe iteration.
+Your goal is to **ship the MVP baseline exactly as defined**, then apply **Post-MVP (Act 1+) content-only expansion** strictly as allowed by `docs/CURRENT_SCOPE.md`, with clean structure and safe iteration.
 
 You must assume:
 - The project owner is NOT a developer.
@@ -20,7 +20,7 @@ When deciding what to build or change, follow this authority order:
 3) Everything inside `docs/MVP/`  
 4) Everything inside `docs/VISION/` (read-only inspiration)
 
-If anything conflicts, `docs/CURRENT_SCOPE.md` wins.
+If anything conflicts, `docs/CURRENT_SCOPE.md` wins. MVP is complete and frozen; the current phase is Post-MVP (Act 1+) content expansion only unless `docs/CURRENT_SCOPE.md` states otherwise.
 
 ---
 
@@ -45,7 +45,7 @@ Everything must run by opening `index.html` locally.
 
 ## Implementation Discipline Rules
 ### 1) Do not overbuild
-If a feature is not explicitly listed in MVP docs, do NOT add it.
+If a feature is not explicitly listed in `docs/CURRENT_SCOPE.md` (or the frozen MVP docs for baseline behavior), do NOT add it.
 
 ### 2) Never invent systems
 Do not create new currencies, progression systems, or UI screens unless documented.
@@ -148,7 +148,7 @@ Do NOT guess.
 
 ## Definition of Done
 A change is "done" only when:
-- It matches MVP scope
+- It matches `docs/CURRENT_SCOPE.md` (MVP baseline is frozen; Post-MVP changes are content-only unless explicitly expanded)
 - It runs locally via `index.html`
 - It produces no console errors
 - It does not break save/load

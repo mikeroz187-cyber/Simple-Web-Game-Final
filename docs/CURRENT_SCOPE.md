@@ -1,23 +1,18 @@
 # CURRENT SCOPE (Authoritative)
 
 ## Current Phase
-- **MVP** – Act 1 only (Days 1–90). (This phase defines the planned scope for the MVP.)
+- **Post-MVP (Act 1+)** – MVP is complete and frozen. Current work is **content expansion only** using existing systems (opportunities, unlocks, events, images). No new systems or refactors.
 
-## In Scope Now (MVP)
-- **Core loop**: Book a shoot → View content → Analyze metrics → Adjust strategy → Repeat. (Planned/required for MVP.)
-- **Day pacing**: A day advances only after completing 5 shoots. (Approved MVP adjustment.)
-- **Act 1 “The Debt” storyline**: The player starts with a $5,000 loan and must repay $10,000 by Day 90. Basic story events for Act 1 (introduction, debt reminders) are planned/required for MVP.
-- **Debt payoff action**: A dedicated Pay Debt button allows clearing the full remaining debt once enough cash is available. (Approved MVP adjustment.)
-- **Content types**: **Promo (SFW)** and **Premium (NSFW)** content shoots are planned/required for MVP. (Promo increases followers; Premium generates revenue from subscribers.)
-- **Single-page app**: Desktop web only, using vanilla HTML/CSS/JS with no page reloads. (No mobile support in MVP; planned/required.)
-- **Central game state**: All game data is managed in one authoritative `gameState` object in memory. (Planned/required for MVP.)
-- **Save/Load**: Local saving via `localStorage` (multiple slots), plus export/import of JSON save files, is planned/required for MVP.
+## In Scope Now (Post-MVP / Act 1+)
+- **Additive content only**: New opportunities, unlocks, events, and optional images that use existing schemas and systems.
+- **Act 1+ tuning via data**: New or expanded catalogs/copy that plug into the current data-driven structures without changing logic.
+- **No new systems**: All gameplay remains driven by the existing MVP loop and `gameState` structure.
 
-## Explicitly Out of Scope (for MVP)
-- **Acts 2 & 3** – Later story arcs (beyond Day 90) are not included.
-- **Rival studios or competition** – No AI competitors or rival interactions yet.
-- **POV special scenes** – Private POV content scenes are omitted unless scope is expanded later.
-- **Mobile/Responsive support** – The UI is not optimized for mobile devices in MVP.
+## Explicitly Out of Scope (Post-MVP / Act 1+)
+- **New systems or mechanics** – No new currencies, progression systems, screens, or refactors.
+- **State model changes** – No schema changes beyond what existing MVP saves already support.
+- **Acts 2 & 3 systems** – Later story arcs/mechanics (beyond Day 90) remain out of scope.
+- **Mobile/Responsive support** – Desktop-only layout remains.
 - **Online features** – No backend server, database, user account system, or payment processing in-game.
 - **Any framework or build tooling** – The project does not use frameworks (React, etc.) or bundlers; it’s purely static files.
 
@@ -25,12 +20,12 @@
 Repo layout is authoritative here to prevent drift across MVP docs.
 When building or reviewing features, **follow these documents in order**:
 1. **docs/CURRENT_SCOPE.md** (this file – latest scope definition)
-2. **docs/SCOPE_MVP.md** (MVP feature list and plan)
-3. **docs/MVP/MVP_TECH_GUARDRAILS.md**
-4. **docs/MVP/MVP_FILE_STRUCTURE.md**
-5. **docs/MVP/MVP_BUILD_ORDER.md**
-6. **docs/MVP/MVP_UI_BLUEPRINT.md**
-7. **docs/MVP/MVP_STATE_MODEL.md**
+2. **docs/SCOPE_MVP.md** (historical MVP feature list and plan)
+3. **docs/MVP/MVP_TECH_GUARDRAILS.md** (historical MVP guardrails)
+4. **docs/MVP/MVP_FILE_STRUCTURE.md** (historical MVP file map)
+5. **docs/MVP/MVP_BUILD_ORDER.md** (historical MVP build order)
+6. **docs/MVP/MVP_UI_BLUEPRINT.md** (historical MVP UI blueprint)
+7. **docs/MVP/MVP_STATE_MODEL.md** (historical MVP state model)
 
 *(If any discrepancy arises, the CURRENT_SCOPE.md has the final say.)*
 
