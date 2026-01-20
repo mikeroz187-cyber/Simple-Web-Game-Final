@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Act 2 and Act 3 formula specifications to define deterministic math for post-MVP systems.
+  - Why: Prevent guessing on calculations while keeping config.toml as the numeric source of truth.
+  - Files touched: docs/VISION/ACT2_FORMULAS.md, docs/VISION/ACT3_FORMULAS.md, CHANGELOG.md.
+- What: Added data catalogs for Act 2 and Act 3 systems (equipment, milestones, strategies, rivals, market shifts, branches, automation, scheduling, variance, legacy milestones).
+  - Why: Provide readable tables that mirror config values for non-developer review and later Codex work.
+  - Files touched: docs/DATA_EQUIPMENT.md, docs/DATA_MILESTONES.md, docs/DATA_SOCIAL_STRATEGIES.md, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/DATA_REPUTATION_BRANCHES.md, docs/DATA_AUTOMATION.md, docs/DATA_SCHEDULING.md, docs/DATA_VARIANCE.md, docs/DATA_LEGACY_MILESTONES.md, CHANGELOG.md.
 - What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
 - Why: Establish the required file structure and runnable shell before implementing gameplay.
 - Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
@@ -43,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Expanded documentation references and UI copy to include the new Act 2/Act 3 specs and labels.
+  - Why: Keep documentation indexes and UI copy consistent with the added formula/data catalogs.
+  - Files touched: docs/README.md, docs/VISION/VISION_OVERVIEW.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
 - What: Added Act 2/Act 3 config sections and catalogs to config.toml for full-game planning.
   - Why: Ensure the source-of-truth config includes all Vision tunables without guessing later.
   - Files touched: config.toml, CHANGELOG.md.

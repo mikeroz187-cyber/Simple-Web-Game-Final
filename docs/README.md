@@ -42,6 +42,23 @@ This folder contains all planning and design documentation for **Studio Empire**
 - **VISION/ACT3_ENDGAME_LOOPS.md** – **(Vision)** Endgame loop concepts for Act 3.
 - **VISION/ACT3_BALANCING_CONFIG.md** – **(Vision)** Act 3 balancing notes and config guidance.
 
+**Data Catalogs (Config Mirrors):**
+- **DATA_PERFORMERS.md** – Performer roster catalog (MVP + Vision placeholders).
+- **DATA_LOCATIONS.md** – Location catalog (MVP + Vision placeholders).
+- **DATA_THEMES.md** – Theme catalog (MVP + Vision placeholders).
+- **DATA_STORY_EVENTS.md** – Story event catalog (MVP + Vision placeholders).
+- **DATA_UI_COPY.md** – UI copy reference (MVP + Act 2/3 labels).
+- **DATA_EQUIPMENT.md** – Act 2 equipment catalog.
+- **DATA_MILESTONES.md** – Act 2 milestone catalog.
+- **DATA_SOCIAL_STRATEGIES.md** – Act 2 social strategy catalog.
+- **DATA_RIVALS.md** – Act 3 rival studio catalog.
+- **DATA_MARKET_SHIFTS.md** – Act 3 market shift catalog.
+- **DATA_REPUTATION_BRANCHES.md** – Act 3 reputation branch catalog.
+- **DATA_AUTOMATION.md** – Act 3 automation rules catalog.
+- **DATA_SCHEDULING.md** – Act 3 scheduling rules catalog.
+- **DATA_VARIANCE.md** – Act 3 content variance catalog.
+- **DATA_LEGACY_MILESTONES.md** – Act 3 legacy milestone catalog.
+
 Refer to `../README.md` in the repository root for a general introduction and setup instructions.
 
 ## Implementation Layout (MVP)

@@ -128,12 +128,14 @@ Based strictly on `docs/SCOPE_VISION.md`:
   ACT2_SYSTEMS.md
   ACT2_UI_BLUEPRINT.md
   ACT2_BALANCING_CONFIG.md
+  ACT2_FORMULAS.md
 
   ACT3_SCOPE.md
   ACT3_STATE_EXTENSIONS.md
   ACT3_SYSTEMS.md
   ACT3_UI_BLUEPRINT.md
   ACT3_ENDGAME_LOOPS.md
+  ACT3_FORMULAS.md
 ```
 
 **ACT2_SCOPE.md**
@@ -161,6 +163,11 @@ Based strictly on `docs/SCOPE_VISION.md`:
 - Progression curves tied to config values.
 - Any new caps/thresholds and how they map to config.
 
+**ACT2_FORMULAS.md**
+- Exact Act 2 calculation rules.
+- Equipment, analytics, strategy, and retention math.
+- Deterministic rules for availability and contracts.
+
 **ACT3_SCOPE.md**
 - Act 3 goals and player-facing outcomes.
 - Explicit in-scope and out-of-scope feature list for Act 3.
@@ -185,6 +192,11 @@ Based strictly on `docs/SCOPE_VISION.md`:
 - Endgame loop definitions and player goals.
 - Act 3 progression arcs and end conditions.
 - How endgame loops integrate with existing systems.
+
+**ACT3_FORMULAS.md**
+- Exact Act 3 calculation rules.
+- Rival standings, market shifts, variance, and automation math.
+- Deterministic scheduling and milestone evaluation.
 
 ## 7) Vision State Strategy (How gameState Evolves)
 - MVP state schema stays backward compatible.
