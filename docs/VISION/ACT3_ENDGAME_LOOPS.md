@@ -24,21 +24,22 @@ Act 3 goals are represented by **tiered, config-driven milestones** that do not 
 **Milestone record shape:**
 ```
 {
-  id: "milestone-id",
-  name: "Milestone Name",
-  tier: 1,
+  id: "legacy_revenue_250k",
+  label: "$250k Lifetime Revenue",
+  type: "lifetimeRevenue",
+  threshold: 250000,
+  rewardCash: 5000,
   status: "locked" | "in_progress" | "complete" | "claimed",
-  requirements: [{ key: "revenue", threshold: 250000 }],
-  rewards: [{ type: "cash_bonus", amount: 5000 }]
+  completedAt: "2026-01-01T00:00:00.000Z"
 }
 ```
 
 ## 4) Reward Model (What You Get for Completing Milestones)
 Rewards are **config-driven** and limited to what Act 3 scope allows. Allowed reward types:
+- **One-time bonus payouts** (fixed by `rewardCash` in config).
 - **Unlock next milestone tiers** (tier gating via config).
-- **One-time bonus payouts** (fixed by config).
-- **Permanent modifiers** are not used in Act 3.
 - **Cosmetic/log flavor** (optional, non-mechanical).
+- **Permanent modifiers** are not used in Act 3.
 
 No new currencies, monetization, or narrative systems are introduced beyond what Act 3 scope permits.
 

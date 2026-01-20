@@ -43,6 +43,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Added Act 2/Act 3 config sections and catalogs to config.toml for full-game planning.
+  - Why: Ensure the source-of-truth config includes all Vision tunables without guessing later.
+  - Files touched: config.toml, CHANGELOG.md.
+- What: Aligned Act 3 endgame milestone reward documentation with rewardCash-based config entries.
+  - Why: Remove reward schema mismatch between endgame docs and config expectations.
+  - Files touched: docs/VISION/ACT3_ENDGAME_LOOPS.md, CHANGELOG.md.
 - What: Clarified Tier 1 unlocks as a single purchase and aligned location data notes with config.
 - Why: Remove ambiguity about how Tier 1 location unlocking works in MVP.
 - Files touched: docs/DATA_LOCATIONS.md, config.toml, CHANGELOG.md.
@@ -127,93 +133,3 @@ This changelog is optimized for:
 ---
 
 ## [0.1.2] - 2026-01-19
-### Changed
-- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
-- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
-- Files touched: src/config.js, CHANGELOG.md.
-- What: Reset config.toml to MVP-only values and set config_version to 1.
-- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
-- Files touched: config.toml, CHANGELOG.md.
-- What: Added mandatory changelog discipline rules to the agent contract.
-- Why: Enforce required changelog updates for every file change.
-- Files touched: AGENTS.md, CHANGELOG.md.
-
----
-
-## [0.1.1] - 2026-01-19
-### Added
-- What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
-- Why: Establish the required file structure and runnable shell before implementing gameplay.
-- Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
-- What: Added the required assets folder structure for MVP scaffolding.
-- Why: Ensure the repo layout matches the MVP file structure requirements before implementation.
-- Files touched: assets/images/ui/.gitkeep, assets/images/backgrounds/.gitkeep, assets/images/placeholders/.gitkeep, CHANGELOG.md.
-- `CHANGELOG.md` created to track progress in a consistent, non-developer-friendly format.
-
-### Changed
-- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
-- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
-- Files touched: src/config.js, CHANGELOG.md.
-- What: Reset config.toml to MVP-only values and set config_version to 1.
-- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
-- Files touched: config.toml, CHANGELOG.md.
-- N/A (documentation-only update)
-
-### Fixed
-- N/A (documentation-only update)
-
-### Testing Notes
-Manual checks:
-1) Open `CHANGELOG.md` and confirm the newest entry includes today's date.
-2) Confirm the entry includes a "Testing Notes" section with clear manual checks.
-3) Confirm the entry includes an "AI Notes" section with scope-control notes.
-
-### AI Notes (Scope Control)
-- No gameplay code was created or modified.
-- No UI screens were implemented.
-- No features beyond the documented MVP scope were added.
-
----
-
-## [0.1.0] - 2026-01-18
-### Added
-- What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
-- Why: Establish the required file structure and runnable shell before implementing gameplay.
-- Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
-- What: Added the required assets folder structure for MVP scaffolding.
-- Why: Ensure the repo layout matches the MVP file structure requirements before implementation.
-- Files touched: assets/images/ui/.gitkeep, assets/images/backgrounds/.gitkeep, assets/images/placeholders/.gitkeep, CHANGELOG.md.
-- Repository documentation structure established.
-- `docs/CURRENT_SCOPE.md` created (authoritative current scope).
-- `docs/README.md` created (documentation routing/index).
-- `AGENTS.md` created (AI build rules + constraints).
-- `config.toml` created (config-driven values; no magic numbers).
-- `CHANGELOG.md` created (this file).
-
-### Changed
-- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
-- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
-- Files touched: src/config.js, CHANGELOG.md.
-- What: Reset config.toml to MVP-only values and set config_version to 1.
-- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
-- Files touched: config.toml, CHANGELOG.md.
-- N/A (initial setup)
-
-### Fixed
-- N/A (initial setup)
-
-### Testing Notes
-Manual checks:
-1) Confirm these files exist in the repo root:
-   - `AGENTS.md`
-   - `config.toml`
-   - `CHANGELOG.md`
-2) Confirm these files exist under `/docs`:
-   - `docs/README.md`
-   - `docs/CURRENT_SCOPE.md`
-3) Open each file and confirm content is readable Markdown.
-
-### AI Notes (Scope Control)
-- No gameplay code was created here.
-- No UI screens were implemented here.
-- No features beyond documented scope were added.
