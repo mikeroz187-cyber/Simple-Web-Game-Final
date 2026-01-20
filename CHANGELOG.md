@@ -49,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Added a save migration helper and wired it into load/import flows before validation.
+  - Why: Prepare for schema evolution while keeping current save handling safe and explicit.
+  - Files touched: src/save.js, CHANGELOG.md.
 - What: Added autosave interval setup during app initialization when enabled in config.
   - Why: Ensure the game persists progress automatically without manual action.
   - Files touched: src/main.js, CHANGELOG.md.
