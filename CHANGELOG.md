@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
+- Why: Establish the required file structure and runnable shell before implementing gameplay.
+- Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Added the required assets folder structure for MVP scaffolding.
+- Why: Ensure the repo layout matches the MVP file structure requirements before implementation.
+- Files touched: assets/images/ui/.gitkeep, assets/images/backgrounds/.gitkeep, assets/images/placeholders/.gitkeep, CHANGELOG.md.
 - What: Added js/config.js with a global CONFIG that mirrors config.toml and includes MVP data catalogs.
 - Why: Provide a single config source for gameplay formulas and data lookup in the vanilla JS runtime.
 - Files touched: js/config.js, CHANGELOG.md.
@@ -37,6 +43,12 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
+- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
+- Files touched: src/config.js, CHANGELOG.md.
+- What: Reset config.toml to MVP-only values and set config_version to 1.
+- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
+- Files touched: config.toml, CHANGELOG.md.
 - What: Finalized Act 2/Act 3 scopes, systems, state extensions, UI blueprints, and endgame loop specifics.
 - Why: Provide complete, non-ambiguous full-game planning for Codex implementation.
 - Files touched: docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_STATE_EXTENSIONS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/VISION/ACT3_SCOPE.md, docs/VISION/ACT3_SYSTEMS.md, docs/VISION/ACT3_STATE_EXTENSIONS.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/VISION/ACT3_ENDGAME_LOOPS.md, docs/VISION/VISION_OVERVIEW.md, docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
@@ -104,6 +116,12 @@ This changelog is optimized for:
 
 ## [0.1.2] - 2026-01-19
 ### Changed
+- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
+- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
+- Files touched: src/config.js, CHANGELOG.md.
+- What: Reset config.toml to MVP-only values and set config_version to 1.
+- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
+- Files touched: config.toml, CHANGELOG.md.
 - What: Added mandatory changelog discipline rules to the agent contract.
 - Why: Enforce required changelog updates for every file change.
 - Files touched: AGENTS.md, CHANGELOG.md.
@@ -112,9 +130,21 @@ This changelog is optimized for:
 
 ## [0.1.1] - 2026-01-19
 ### Added
+- What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
+- Why: Establish the required file structure and runnable shell before implementing gameplay.
+- Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Added the required assets folder structure for MVP scaffolding.
+- Why: Ensure the repo layout matches the MVP file structure requirements before implementation.
+- Files touched: assets/images/ui/.gitkeep, assets/images/backgrounds/.gitkeep, assets/images/placeholders/.gitkeep, CHANGELOG.md.
 - `CHANGELOG.md` created to track progress in a consistent, non-developer-friendly format.
 
 ### Changed
+- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
+- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
+- Files touched: src/config.js, CHANGELOG.md.
+- What: Reset config.toml to MVP-only values and set config_version to 1.
+- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
+- Files touched: config.toml, CHANGELOG.md.
 - N/A (documentation-only update)
 
 ### Fixed
@@ -135,6 +165,12 @@ Manual checks:
 
 ## [0.1.0] - 2026-01-18
 ### Added
+- What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
+- Why: Establish the required file structure and runnable shell before implementing gameplay.
+- Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Added the required assets folder structure for MVP scaffolding.
+- Why: Ensure the repo layout matches the MVP file structure requirements before implementation.
+- Files touched: assets/images/ui/.gitkeep, assets/images/backgrounds/.gitkeep, assets/images/placeholders/.gitkeep, CHANGELOG.md.
 - Repository documentation structure established.
 - `docs/CURRENT_SCOPE.md` created (authoritative current scope).
 - `docs/README.md` created (documentation routing/index).
@@ -143,6 +179,12 @@ Manual checks:
 - `CHANGELOG.md` created (this file).
 
 ### Changed
+- What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
+- Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
+- Files touched: src/config.js, CHANGELOG.md.
+- What: Reset config.toml to MVP-only values and set config_version to 1.
+- Why: Keep configuration aligned with the agreed MVP-first scope before Act 2/3 unlocks.
+- Files touched: config.toml, CHANGELOG.md.
 - N/A (initial setup)
 
 ### Fixed

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Studio Empire</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="app-header">
+        <h1 class="app-title">Studio Empire</h1>
+      </header>
+      <main class="app-main">
+        <section id="screen-hub" class="screen is-active" aria-labelledby="screen-hub-title"></section>
+        <section id="screen-booking" class="screen" aria-labelledby="screen-booking-title"></section>
+        <section id="screen-content" class="screen" aria-labelledby="screen-content-title"></section>
+        <section id="screen-analytics" class="screen" aria-labelledby="screen-analytics-title"></section>
+        <section id="screen-roster" class="screen" aria-labelledby="screen-roster-title"></section>
+        <section id="screen-social" class="screen" aria-labelledby="screen-social-title"></section>
+        <section id="screen-gallery" class="screen" aria-labelledby="screen-gallery-title"></section>
+        <section id="screen-shop" class="screen" aria-labelledby="screen-shop-title"></section>
+      </main>
+      <div id="modal-root" class="modal-root" aria-live="polite"></div>
+    </div>
+
+    <script src="src/config.js" defer></script>
+    <script src="src/state.js" defer></script>
+    <script src="src/save.js" defer></script>
+    <script src="src/utils/dom.js" defer></script>
+    <script src="src/utils/format.js" defer></script>
+    <script src="src/utils/rng.js" defer></script>
+    <script src="src/systems/economy.js" defer></script>
+    <script src="src/systems/performers.js" defer></script>
+    <script src="src/systems/booking.js" defer></script>
+    <script src="src/systems/social.js" defer></script>
+    <script src="src/systems/progression.js" defer></script>
+    <script src="src/systems/story.js" defer></script>
+    <script src="src/ui/components.js" defer></script>
+    <script src="src/ui/router.js" defer></script>
+    <script src="src/ui/render.js" defer></script>
+    <script src="src/ui/events.js" defer></script>
+    <script src="src/main.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+:root {
+  color-scheme: light;
+  --panel-gap: 12px;
+  --main-padding: 16px;
+  --panel-border: #d5d9e0;
+  --panel-bg: #ffffff;
+  --ink: #1d2433;
+  --muted: #5a6478;
+  --accent: #3a5bd9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+  background: #f6f7fb;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: var(--main-padding);
+  border-bottom: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.app-main {
+  flex: 1;
+  padding: var(--main-padding);
+}
+
+.screen {
+  display: none;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: var(--main-padding);
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.panel {
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+}
+
+.panel + .panel {
+  margin-top: var(--panel-gap);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.button {
+  border: 1px solid var(--panel-border);
+  background: #f0f2f7;
+  color: var(--ink);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.helper-text {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.screen-title {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+}
