@@ -41,10 +41,8 @@ function newGameState() {
       locationTier1Unlocked: false
     },
     story: {
-      act1: {
-        eventsShown: [],
-        lastEventId: null
-      }
+      introShown: false,
+      debtReminderDaysShown: []
     }
   };
 }

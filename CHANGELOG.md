@@ -49,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Implemented save/load/export/import flows with MVP state validation, updated story state shape, and wired UI save actions with modal feedback.
+- Why: Enforce the authoritative state model and provide reliable save/import handling with clear user messaging.
+- Files touched: src/save.js, src/state.js, src/ui/events.js, CHANGELOG.md.
 - What: Expanded documentation references and UI copy to include the new Act 2/Act 3 specs and labels.
   - Why: Keep documentation indexes and UI copy consistent with the added formula/data catalogs.
   - Files touched: docs/README.md, docs/VISION/VISION_OVERVIEW.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
