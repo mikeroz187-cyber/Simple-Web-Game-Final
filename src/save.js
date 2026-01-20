@@ -140,6 +140,12 @@ function migrateGameState(candidate) {
     if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
       candidate.player.shootsToday = 0;
     }
+    if (!candidate.social || typeof candidate.social !== "object") {
+      candidate.social = { posts: [] };
+    }
+    if (!Array.isArray(candidate.social.posts)) {
+      candidate.social.posts = [];
+    }
     return { ok: true, gameState: candidate };
   }
 
@@ -277,9 +283,13 @@ function validateGameState(candidate) {
     }
   }
 
-  const social = candidate.social;
-  if (!social || !Array.isArray(social.posts)) {
-    return { ok: false, message: "Social data invalid." };
+  let social = candidate.social;
+  if (!social || typeof social !== "object") {
+    social = { posts: [] };
+    candidate.social = social;
+  }
+  if (!Array.isArray(social.posts)) {
+    social.posts = [];
   }
 
   for (let index = 0; index < social.posts.length; index += 1) {

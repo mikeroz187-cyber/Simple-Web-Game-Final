@@ -7,6 +7,10 @@ function postPromoContent(gameState, platform, contentId) {
     return { ok: false, message: "Invalid platform selection." };
   }
 
+  if (!gameState.social || !Array.isArray(gameState.social.posts)) {
+    gameState.social = { posts: [] };
+  }
+
   const entry = gameState.content.entries.find(function (item) {
     return item.id === contentId;
   });

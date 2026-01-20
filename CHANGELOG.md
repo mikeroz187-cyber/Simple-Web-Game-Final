@@ -36,8 +36,12 @@ This changelog is optimized for:
 - Why: Define the starting performer lineup for consistent MVP setup.
 - Files touched: docs/DATA_PERFORMERS.md, CHANGELOG.md.
 - What: Added a new theme catalog doc covering MVP and Vision placeholders with config mapping.
-- Why: Define theme IDs, descriptions, and modifiers for booking/content planning without new systems.
-- Files touched: docs/DATA_THEMES.md, CHANGELOG.md.
+  - Why: Define theme IDs, descriptions, and modifiers for booking/content planning without new systems.
+  - Files touched: docs/DATA_THEMES.md, CHANGELOG.md.
+### Changed
+- What: Derived social posted status from saved social post records and displayed per-platform indicators in the Social screen.
+  - Why: Match MVP Phase 10 requirements for per-item posted flags without mutating content entries.
+  - Files touched: src/systems/social.js, src/save.js, src/ui/render.js, CHANGELOG.md.
 - What: Added a full location catalog document covering MVP and Vision tiers.
 - Why: Provide a config-ready reference for all planned location data.
 - Files touched: docs/DATA_LOCATIONS.md, CHANGELOG.md.
