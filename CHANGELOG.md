@@ -21,6 +21,9 @@ This changelog is optimized for:
   - Why: Provide readable tables that mirror config values for non-developer review and later Codex work.
   - Files touched: docs/DATA_EQUIPMENT.md, docs/DATA_MILESTONES.md, docs/DATA_SOCIAL_STRATEGIES.md, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/DATA_REPUTATION_BRANCHES.md, docs/DATA_AUTOMATION.md, docs/DATA_SCHEDULING.md, docs/DATA_VARIANCE.md, docs/DATA_LEGACY_MILESTONES.md, CHANGELOG.md.
 ### Changed
+- What: Reframed Act 1 Content Expansion Pack 01 as story-event-only content with new Act 1 event entries.
+  - Why: Align the pack with the existing story event system and the post-MVP content-only scope.
+  - Files touched: docs/ACT1_CONTENT_PACK_01.md, CHANGELOG.md.
 - What: Labeled MVP docs as historical and aligned scope documentation to the Post-MVP (Act 1+) content-only phase.
   - Why: Keep current guidance accurate while preserving MVP references as frozen baselines.
   - Files touched: AGENTS.md, README.md, docs/CURRENT_SCOPE.md, docs/README.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/SCOPE_MVP.md, docs/MVP/MVP_FORMULAS.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
