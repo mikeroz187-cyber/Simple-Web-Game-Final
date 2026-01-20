@@ -49,6 +49,9 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Added modal story event messaging and updated Hub status to include days left and next action guidance.
+  - Why: Surface Act 1 narrative beats and key loop cues directly in the MVP UI.
+  - Files touched: src/systems/story.js, src/ui/events.js, src/ui/render.js, src/main.js, styles.css, CHANGELOG.md.
 - What: Added a save migration helper and wired it into load/import flows before validation.
   - Why: Prepare for schema evolution while keeping current save handling safe and explicit.
   - Files touched: src/save.js, CHANGELOG.md.
