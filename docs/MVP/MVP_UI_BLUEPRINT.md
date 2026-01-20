@@ -1,3 +1,5 @@
+STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+
 # MVP UI Blueprint (Screens, Layouts, and Actions)
 
 ## 1) Purpose

@@ -1,3 +1,5 @@
+STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+
 # MVP Test Scenarios
 
 This document lists simple **Given X, expect Y** checks to verify MVP gameplay behavior. All numeric values are sourced from `config.toml` and mirrored into `docs/DATA_*.md` and `docs/MVP/MVP_FORMULAS.md` for reference.

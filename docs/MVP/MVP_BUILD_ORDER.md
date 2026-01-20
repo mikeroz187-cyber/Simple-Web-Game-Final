@@ -1,3 +1,5 @@
+STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+
 # MVP Build Order (Codex Execution Plan)
 
 ## 1) Purpose

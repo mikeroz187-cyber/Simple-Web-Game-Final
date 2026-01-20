@@ -20,6 +20,10 @@ This changelog is optimized for:
 - What: Added data catalogs for Act 2 and Act 3 systems (equipment, milestones, strategies, rivals, market shifts, branches, automation, scheduling, variance, legacy milestones).
   - Why: Provide readable tables that mirror config values for non-developer review and later Codex work.
   - Files touched: docs/DATA_EQUIPMENT.md, docs/DATA_MILESTONES.md, docs/DATA_SOCIAL_STRATEGIES.md, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/DATA_REPUTATION_BRANCHES.md, docs/DATA_AUTOMATION.md, docs/DATA_SCHEDULING.md, docs/DATA_VARIANCE.md, docs/DATA_LEGACY_MILESTONES.md, CHANGELOG.md.
+### Changed
+- What: Labeled MVP docs as historical and aligned scope documentation to the Post-MVP (Act 1+) content-only phase.
+  - Why: Keep current guidance accurate while preserving MVP references as frozen baselines.
+  - Files touched: AGENTS.md, README.md, docs/CURRENT_SCOPE.md, docs/README.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/SCOPE_MVP.md, docs/MVP/MVP_FORMULAS.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/MVP/MVP_FILE_STRUCTURE.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
 - What: Added the MVP scaffold files for the single-page shell, UI placeholders, and system stubs.
 - Why: Establish the required file structure and runnable shell before implementing gameplay.
 - Files touched: index.html, styles.css, src/main.js, src/state.js, src/save.js, src/utils/dom.js, src/utils/format.js, src/utils/rng.js, src/systems/economy.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/progression.js, src/systems/story.js, src/ui/components.js, src/ui/router.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.

@@ -1,3 +1,5 @@
+STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+
 # MVP Gameplay Formulas
 
 This document defines the **exact MVP formulas** used for gameplay calculations. It is the source of truth so no one has to guess.

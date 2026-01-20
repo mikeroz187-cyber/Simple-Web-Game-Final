@@ -1,3 +1,5 @@
+STATUS: Historical planning reference. MVP is complete and frozen. Current scope is Post-MVP (Act 1+) content-only; see `docs/CURRENT_SCOPE.md`.
+
 # Master Implementation Plan (MVP → Act 2 → Act 3)
 
 ## 0) How to Use This Plan (Operator Instructions)

@@ -1,3 +1,5 @@
+STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+
 # MVP File Structure (Studio Empire)
 
 ## Non-Negotiables (MVP)
