@@ -166,7 +166,7 @@ x_reach_multiplier = 1.0         # Placeholder
 # Reputation starts visible in MVP.
 starting_reputation = 0 # Placeholder
 
-# Tier 1 location unlock
+# Tier 1 location unlock (single purchase unlocks all Tier 1 locations in MVP)
 location_tier_1_unlock_cost = 2000 # Placeholder
 
 [locations]
@@ -213,7 +213,7 @@ id = "location_studio_loft"
 name = "Studio Loft"
 tier = 1
 cost = 300
-unlock_cost = 750
+unlock_cost = 0
 unlock_requirements = []
 description = "A compact loft with improved lighting and a cleaner backdrop."
 
@@ -222,7 +222,7 @@ id = "location_city_apartment"
 name = "City Apartment"
 tier = 1
 cost = 450
-unlock_cost = 1100
+unlock_cost = 0
 unlock_requirements = []
 description = "A tidy urban space that feels more professional and polished."
 
@@ -231,7 +231,7 @@ id = "location_small_warehouse"
 name = "Small Warehouse"
 tier = 1
 cost = 600
-unlock_cost = 1500
+unlock_cost = 0
 unlock_requirements = []
 description = "A larger, flexible space suited for varied set dressing."
 

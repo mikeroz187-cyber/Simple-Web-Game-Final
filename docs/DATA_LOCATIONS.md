@@ -16,9 +16,9 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
 
 | id | name | tier | cost | unlockCost | unlockRequirements | description |
 | --- | --- | --- | --- | --- | --- | --- |
-| location_studio_loft | Studio Loft | 1 | 300 | 750 | None | A compact loft with improved lighting and a cleaner backdrop. |
-| location_city_apartment | City Apartment | 1 | 450 | 1100 | None | A tidy urban space that feels more professional and polished. |
-| location_small_warehouse | Small Warehouse | 1 | 600 | 1500 | None | A larger, flexible space suited for varied set dressing. |
+| location_studio_loft | Studio Loft | 1 | 300 | See `config.toml` | None | A compact loft with improved lighting and a cleaner backdrop. |
+| location_city_apartment | City Apartment | 1 | 450 | See `config.toml` | None | A tidy urban space that feels more professional and polished. |
+| location_small_warehouse | Small Warehouse | 1 | 600 | See `config.toml` | None | A larger, flexible space suited for varied set dressing. |
 
 ## NOT IN MVP — Act 2 only (Tier 2)
 
@@ -59,7 +59,7 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
       "name": "Studio Loft",
       "tier": 1,
       "cost": 300,
-      "unlockCost": 750,
+      "unlockCost": "See config.toml",
       "unlockRequirements": [],
       "description": "A compact loft with improved lighting and a cleaner backdrop."
     }
@@ -69,5 +69,5 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
 
 Notes:
 - `cost` is the per-shoot cost to use the location.
-- `unlockCost` applies to Tier 1+ locations only; Tier 0 uses `0`.
+- `unlockCost` applies to Tier 1+ locations only. In MVP, Tier 1 unlock is a single purchase defined in `config.toml`.
 - `unlockRequirements` is an array for future gating rules; keep it empty for MVP.

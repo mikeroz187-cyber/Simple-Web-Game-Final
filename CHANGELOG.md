@@ -43,6 +43,18 @@ This changelog is optimized for:
 - Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
 
 ### Changed
+- What: Clarified Tier 1 unlocks as a single purchase and aligned location data notes with config.
+- Why: Remove ambiguity about how Tier 1 location unlocking works in MVP.
+- Files touched: docs/DATA_LOCATIONS.md, config.toml, CHANGELOG.md.
+- What: Aligned MVP UI copy entries with the UI blueprint and removed non-MVP labels.
+- Why: Ensure Codex uses only MVP-approved button text and actions.
+- Files touched: docs/DATA_UI_COPY.md, CHANGELOG.md.
+- What: Standardized save versioning authority on `gameState.version` across Act 2/Act 3 docs.
+- Why: Prevent conflicting migration guidance in future phases.
+- Files touched: docs/VISION/ACT3_STATE_EXTENSIONS.md, CHANGELOG.md.
+- What: Updated README structure notes to reflect existing MVP file layout.
+- Why: Keep onboarding documentation accurate for non-developers.
+- Files touched: README.md, CHANGELOG.md.
 - What: Trimmed src/config.js to MVP-only values to mirror the updated config.toml.
 - Why: Keep runtime configuration aligned with MVP scope until Act 2/3 unlocks.
 - Files touched: src/config.js, CHANGELOG.md.
