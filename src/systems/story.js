@@ -56,6 +56,38 @@ const STORY_EVENT_COPY = {
     title: "Final Stretch Focus",
     message: "With the deadline near, you lock in on steady work. Consistency becomes the only priority."
   },
+  act1_pack02_sponsor_ping_day22: {
+    title: "Sponsor Ping, No String Attached",
+    message: "A sponsor slides into your inbox with a winking subject line and a tidy contract. No demands, just a reminder that attention has a price tag—and yours is climbing."
+  },
+  act1_pack02_backroom_buzz_day29: {
+    title: "Backroom Buzz",
+    message: "A private forum thread starts dissecting your numbers with the reverence of conspiracy theorists and stock traders. The consensus is clear: you’re not a secret anymore."
+  },
+  act1_pack02_rumor_polish_day37: {
+    title: "Rumor, Polished",
+    message: "Someone packages your latest rumors into a glossy “origin story.” It’s flattering, overproduced, and a little filthy-minded, which makes it travel even faster."
+  },
+  act1_pack02_midnight_metrics_day46: {
+    title: "Midnight Metrics",
+    message: "You wake up to see the dashboard still climbing. The numbers are doing that thing where they don’t stop, and you don’t feel like sleeping anymore."
+  },
+  act1_pack02_press_quote_day55: {
+    title: "Press Quote, Carefully Spicy",
+    message: "A journalist asks for a single line to sum you up. You give them something tasteful with a bite, and it gets repeated like a mantra."
+  },
+  act1_pack02_whisper_network_day63: {
+    title: "Whisper Network",
+    message: "A quiet network starts routing work your way, the kind that pays more for discretion than effort. It feels like the city just nudged you toward the velvet rope."
+  },
+  act1_pack02_fanmail_stack_day72: {
+    title: "Fanmail Stack",
+    message: "The inbox is now a queue of confessions, proposals, and dubious ideas. It’s messy, flattering, and very good for the ego—and the myth."
+  },
+  act1_pack02_late_act1_fever_day83: {
+    title: "Late Act 1 Fever",
+    message: "There’s a heat in the room even when no one is there. You can feel the next step looking at you, counting the days like you do."
+  },
   act1_debt_reminder_day30: {
     title: "Debt Check — Day 30",
     message: "Thirty days in, the $10,000 debt clock is already ticking. You still have 60 days to close the gap. Keep shoots consistent and avoid unnecessary costs."
