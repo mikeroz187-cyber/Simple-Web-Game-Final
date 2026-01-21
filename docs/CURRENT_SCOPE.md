@@ -1,42 +1,32 @@
 # CURRENT SCOPE (Authoritative)
 
 ## Current Phase
-- **Post-MVP (Act 1+)** – MVP is complete and frozen. Current work is **content expansion only** using existing systems (opportunities, unlocks, events, images). No new systems or refactors.
+- **Act 2 Phase 1 — Save Version v2 (New Games Only)** – Post-MVP work is focused on a v2 save schema and reset-on-incompatible-save behavior. No new gameplay systems or UI expansions are allowed unless explicitly listed below.
 
-## In Scope Now (Post-MVP / Act 1+)
-- **Additive content only**: New opportunities, unlocks, events, and optional images that use existing schemas and systems.
-- **Act 1+ tuning via data**: New or expanded catalogs/copy that plug into the current data-driven structures without changing logic.
-- **No new systems**: All gameplay remains driven by the existing MVP loop and `gameState` structure.
-- **UI-only addition**: A manual **Advance Day** button in the global controls area that triggers the existing day-advance flow (single click = single day), without changing mechanics or save behavior.
+## Completed (Confirmed)
+- Advance Day button complete.
+- Act 1 Content Pack 01 + 02 story events complete (if present).
 
-## Explicitly Out of Scope (Post-MVP / Act 1+)
-- **New systems or mechanics** – No new currencies, progression systems, screens, or refactors.
-- **State model changes** – No schema changes beyond what existing MVP saves already support.
-- **Acts 2 & 3 systems** – Later story arcs/mechanics (beyond Day 90) remain out of scope.
-- **Mobile/Responsive support** – Desktop-only layout remains.
-- **Online features** – No backend server, database, user account system, or payment processing in-game.
-- **Any framework or build tooling** – The project does not use frameworks (React, etc.) or bundlers; it’s purely static files.
+## In Scope Now (Act 2 Phase 1 — Save v2, New Games Only)
+- **Bump save version to v2** using `gameState.meta.version`.
+- **Add v2 defaults** per the Act 2 state extensions document(s) referenced in the plan (additive-only fields).
+- **Reset on incompatible save:** If a loaded or imported save is not v2, the game resets to a fresh v2 save and clearly notifies the player (no silent failures).
+- **Export/import behavior stays consistent** with the “new games only” decision: exports represent v2 saves; imports of non-v2 saves trigger reset + message.
 
-## POST-MVP MILESTONE 2 — Act 1 Content Pack 02 (Story Events Only)
-- **MVP baseline is frozen**; this milestone is a content-only expansion using existing systems.
-- **In Scope**
-  - Add new story events only (Act 1 days 1–90).
-  - Events use the existing story/event system and existing day-start pipeline.
-  - Content is data-only additions (new event entries), no new mechanics.
-- **Out of Scope / Hard Exclusions**
-  - No new systems.
-  - No `gameState` schema changes.
-  - No save/load changes.
-  - No new UI screens.
-  - No branching choices, no new triggers beyond “fire on configured day”.
-  - No refactors.
-- **Definition of Done (Milestone 2)**
-  - [ ] New events fire on their configured days.
-  - [ ] Events display in the existing Events/Messages panel.
-  - [ ] If events include images, they reference existing asset patterns (no new asset pipeline).
-  - [ ] Save persists after refresh (no regressions).
-  - [ ] No console errors.
-  - [ ] CHANGELOG.md updated to record the doc change.
+## Explicitly Out of Scope (Act 2 Phase 1)
+- **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
+- **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior.
+- **New UI screens/panels** or navigation changes.
+- **Refactors or new systems** unrelated to the v2 schema bump and reset behavior.
+- **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
+
+## Definition of Done (Act 2 Phase 1)
+- [ ] `gameState.meta.version` is set to v2 for new saves.
+- [ ] v2 defaults match the Act 2 extensions docs referenced in the Master Implementation Plan.
+- [ ] Loading or importing a non-v2 save resets to a new v2 save and displays a clear player message.
+- [ ] Export/import continues to work for v2 saves without silent failures.
+- [ ] No new systems, screens, or refactors were introduced.
+- [ ] CHANGELOG.md updated to record the doc change.
 
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.
@@ -53,5 +43,5 @@ When building or reviewing features, **follow these documents in order**:
 
 ## How to Use This File
 - **Scope changes post-MVP**: When new features are approved after MVP, update *only* this `CURRENT_SCOPE.md` to expand scope. This file “unlocks” new features for development.
-- **Do not retroactively edit older Vision docs** for scope changes. The vision docs (01–14 series) remain as historical reference designs, even if the scope evolves. Always refer back here for the official current scope.
+- **Do not retroactively edit older Vision docs** for scope changes. The vision docs remain as historical reference designs, even if the scope evolves. Always refer back here for the official current scope.
 - **Implementation status**: Progress tracking lives outside this file (use a separate progress/status document if needed).
