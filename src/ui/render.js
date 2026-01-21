@@ -408,7 +408,8 @@ function renderShop(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No equipment upgrades available.</p>";
 
-  const body = "<div class=\"panel\">" +
+  const body = renderStatusMessage() +
+    "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Tier 1 Location Unlock</h3>" +
     "<p><strong>Cost:</strong> " + formatCurrency(cost) + "</p>" +
     "<p><strong>Status:</strong> " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
@@ -417,7 +418,6 @@ function renderShop(gameState) {
     "<h3 class=\"panel-title\">Equipment Upgrades</h3>" +
     equipmentRows +
     "</div>" +
-    renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Buy Unlock", "buy-tier1-location", "primary", !canBuy) +
     createButton("Back to Hub", "nav-hub") +
