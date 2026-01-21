@@ -192,6 +192,20 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "unlock-location-tier") {
+      const tierId = target.dataset.tier;
+      const result = unlockLocationTier(window.gameState, tierId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "buy-tier1-location") {
       const result = purchaseTier1Location(window.gameState);
       setUiMessage(result.message || "");

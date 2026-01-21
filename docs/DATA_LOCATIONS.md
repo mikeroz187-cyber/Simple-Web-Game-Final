@@ -69,5 +69,5 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
 
 Notes:
 - `cost` is the per-shoot cost to use the location.
-- `unlockCost` applies to Tier 1+ locations only. In MVP, Tier 1 unlock is a single purchase defined in `config.toml`.
+- `unlockCost` applies to Tier 1+ locations only. In MVP, Tier 1 unlock is a single purchase defined in `config.toml` (`[locations].tier1UnlockCost`, name in `[locations].tier1Name`).
 - `unlockRequirements` is an array for future gating rules; keep it empty for MVP.

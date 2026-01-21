@@ -3,6 +3,7 @@
 ## Current Phase
 - **Act 2 Phase 1 — Save Version v2 (New Games Only)** – Post-MVP work is focused on a v2 save schema and reset-on-incompatible-save behavior.
 - **Act 2 Option A (Slice 1) — Equipment Upgrades + Multipliers** – Add Shop equipment upgrade purchases and apply equipment multipliers to follower/subscriber and revenue gains, as explicitly listed below.
+- **Act 2 Option A (Slice 2) — Location Tiers (Tier 1 Unlock + Premium Gate)** – Add Shop unlock for Location Tier 1 and gate Premium shoots until Tier 1 is unlocked.
 
 ## Completed (Confirmed)
 - Advance Day button complete.
@@ -19,9 +20,15 @@
 - **Upgrade purchase UI** in the Shop screen (levels, costs, upgrade button states).
 - **Equipment multipliers** applied after base deltas for followers/subscribers and revenue using config-driven multipliers.
 
+## In Scope Now (Act 2 Option A — Location Tiers Slice 2)
+- **Location Tier 1 unlock** as a single Shop purchase using config-driven cost and name.
+- **Shop UI section** listing Location Tiers (Tier 0 default unlocked, Tier 1 purchasable).
+- **Premium shoot gate**: Premium bookings require Location Tier 1 unlocked (clear message if blocked).
+- **Unlock persistence**: `gameState.unlocks.locationTiers.tier1` is authoritative; keep `locationTier1Unlocked` in sync for backward compatibility.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
-- **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades slice.
+- **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.
 - **New UI screens/panels** or navigation changes.
 - **Refactors or new systems** unrelated to the v2 schema bump and reset behavior.
 - **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
@@ -32,6 +39,7 @@
 - [ ] Loading or importing a non-v2 save resets to a new v2 save and displays a clear player message.
 - [ ] Export/import continues to work for v2 saves without silent failures.
 - [ ] Equipment upgrades are implemented only as defined in scope (Shop purchases + multipliers).
+- [ ] Location Tier 1 unlock is purchasable in Shop and Premium shoots are gated until unlocked.
 - [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
 

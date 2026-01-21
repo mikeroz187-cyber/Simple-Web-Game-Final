@@ -34,6 +34,9 @@ This changelog is optimized for:
 - What: Added Playwright smoke testing in GitHub Actions to validate Advance Day and persistence behavior.
   - Why: Catch console errors or broken day progression with a simple automated browser check.
   - Files touched: package.json, package-lock.json, tests/e2e/smoke.spec.js, .github/workflows/e2e.yml, CHANGELOG.md.
+- What: Added Location Tier 1 unlock UI in the Shop and gated Premium shoots until Tier 1 is unlocked.
+  - Why: Deliver Act 2 Option A Slice 2 location tier progression while keeping Premium bookings gated by unlock state.
+  - Files touched: config.toml, src/config.js, src/systems/progression.js, src/systems/booking.js, src/ui/components.js, src/ui/events.js, src/ui/render.js, src/save.js, docs/CURRENT_SCOPE.md, docs/DATA_LOCATIONS.md, CHANGELOG.md.
 - What: Added equipment upgrades to the Shop screen and applied equipment multipliers to follower/subscriber and revenue gains.
   - Why: Deliver Act 2 Option A Slice 1 with config-driven upgrade purchases and payout scaling.
   - Files touched: index.html, src/config.js, src/systems/booking.js, src/systems/economy.js, src/systems/social.js, src/systems/shop.js, src/ui/events.js, src/ui/render.js, CHANGELOG.md.

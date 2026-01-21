@@ -199,6 +199,8 @@ tier1_ids = [
   "location_city_apartment",
   "location_small_warehouse"
 ]
+tier1UnlockCost = 2000 # Placeholder
+tier1Name = "Tier 1 — Downtown Studio"
 
 [locations.catalog.location_basic_bedroom]
 id = "location_basic_bedroom"

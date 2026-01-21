@@ -1,7 +1,8 @@
-function createButton(label, action, extraClass, isDisabled) {
+function createButton(label, action, extraClass, isDisabled, extraAttributes) {
   const classes = ["button"].concat(extraClass ? [extraClass] : []).join(" ");
   const disabledAttr = isDisabled ? " disabled" : "";
-  return "<button class=\"" + classes + "\" data-action=\"" + action + "\"" + disabledAttr + ">" + label + "</button>";
+  const extraAttr = extraAttributes ? " " + extraAttributes : "";
+  return "<button class=\"" + classes + "\" data-action=\"" + action + "\"" + disabledAttr + extraAttr + ">" + label + "</button>";
 }
 
 function createPanel(title, bodyHtml, titleId) {
