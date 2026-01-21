@@ -10,6 +10,10 @@ This changelog is optimized for:
 ---
 
 ## [Unreleased]
+### Fixed
+- FIX: Added Act 1+ day-start story events to the existing day-trigger list so manual Advance Day fires them.
+  - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
+  - Files touched: src/config.js, CHANGELOG.md.
 ### Added
 - What: Added manual "Advance Day" UI button (no mechanics changes).
   - Why: Allow manual triggering of the existing day-advance flow from the global controls area.

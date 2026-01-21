@@ -269,16 +269,21 @@ const CONFIG = {
   story: {
     act1: {
       act1_intro_day: 1,
-      act1_debt_reminder_days: [30, 60, 80],
+      act1_debt_reminder_days: [15, 25, 30, 45, 60, 70, 80, 85],
       act1_end_day: 90,
       intro: {
         id: "act1_intro_day1",
         triggerDay: 1
       },
       debtReminders: [
+        { id: "act1_pack01_client_referral_day15", triggerDay: 15 },
+        { id: "act1_pack01_premium_editing_day25", triggerDay: 25 },
         { id: "act1_debt_reminder_day30", triggerDay: 30 },
+        { id: "act1_pack01_vendor_discount_day45", triggerDay: 45 },
         { id: "act1_debt_reminder_day60", triggerDay: 60 },
-        { id: "act1_debt_reminder_day80", triggerDay: 80 }
+        { id: "act1_pack01_repeat_commissions_day70", triggerDay: 70 },
+        { id: "act1_debt_reminder_day80", triggerDay: 80 },
+        { id: "act1_pack01_final_stretch_day85", triggerDay: 85 }
       ],
       endEvents: {
         win: { id: "act1_end_win_day90", triggerDay: 90 },
