@@ -88,6 +88,22 @@ const STORY_EVENT_COPY = {
     title: "Late Act 1 Fever",
     message: "There’s a heat in the room even when no one is there. You can feel the next step looking at you, counting the days like you do."
   },
+  act1_pack03_debt_spiral_day18: {
+    title: "The Clock Starts Talking Back",
+    message: "You wake up and swear the calendar is louder today. Every dollar feels like it has a due date. The good news? Panic is a fantastic productivity tool. The bad news? It charges interest."
+  },
+  act1_pack03_power_trip_day36: {
+    title: "You’re Not ‘Trying’ Anymore",
+    message: "Somewhere between the fourth spreadsheet and the fifth ‘quick shoot,’ it clicks: you’re not surviving — you’re directing traffic. People are waiting on your calls now. It’s… addictive."
+  },
+  act1_pack03_debt_pressure_day63: {
+    title: "Friendly Reminder (Not Friendly)",
+    message: "A message comes in with no greeting and no punctuation. Just numbers. Dates. A polite suggestion that you keep things ‘smooth.’ Your studio feels bigger than it used to… but so does the shadow behind it."
+  },
+  act1_pack03_empire_swagger_day84: {
+    title: "Empire Mode: Enabled",
+    message: "You catch your own reflection and don’t recognize the rookie anymore. This place runs on your decisions. The debt is still there, sure — but now it feels less like a threat and more like an opponent you plan to embarrass."
+  },
   act1_debt_reminder_day30: {
     title: "Debt Check — Day 30",
     message: "Thirty days in, the $10,000 debt clock is already ticking. You still have 60 days to close the gap. Keep shoots consistent and avoid unnecessary costs."
