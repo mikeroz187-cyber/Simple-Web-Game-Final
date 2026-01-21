@@ -197,6 +197,19 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "advance-day") {
+      const storyEvents = advanceDay(window.gameState);
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message || "");
+      }
+      if (storyEvents && storyEvents.length) {
+        showStoryEvents(storyEvents);
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "save-now") {
       const result = saveGame(window.gameState, uiState.save.selectedSlotId);
       setUiMessage(result.message || "");

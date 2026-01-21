@@ -89,11 +89,13 @@ function renderHub(gameState) {
     "<p class=\"helper-text\">Save Now and Load Save use the selected slot. Autosave writes to the Autosave slot.</p>" +
     "</div>";
 
+  const advanceDayButton = "<button class=\"button\" data-action=\"advance-day\" title=\"Manually advance to the next day.\">Advance Day</button>";
   const saveButtons = [
     createButton("Save Now", "save-now"),
     createButton("Load Save", "load-save"),
     createButton("Export Save", "export-save"),
-    createButton("Import Save", "import-save")
+    createButton("Import Save", "import-save"),
+    advanceDayButton
   ].join("");
 
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
