@@ -17,6 +17,27 @@
 - **Online features** – No backend server, database, user account system, or payment processing in-game.
 - **Any framework or build tooling** – The project does not use frameworks (React, etc.) or bundlers; it’s purely static files.
 
+## POST-MVP MILESTONE 2 — Act 1 Content Pack 02 (Story Events Only)
+- **MVP baseline is frozen**; this milestone is a content-only expansion using existing systems.
+- **In Scope**
+  - Add new story events only (Act 1 days 1–90).
+  - Events use the existing story/event system and existing day-start pipeline.
+  - Content is data-only additions (new event entries), no new mechanics.
+- **Out of Scope / Hard Exclusions**
+  - No new systems.
+  - No `gameState` schema changes.
+  - No save/load changes.
+  - No new UI screens.
+  - No branching choices, no new triggers beyond “fire on configured day”.
+  - No refactors.
+- **Definition of Done (Milestone 2)**
+  - [ ] New events fire on their configured days.
+  - [ ] Events display in the existing Events/Messages panel.
+  - [ ] If events include images, they reference existing asset patterns (no new asset pipeline).
+  - [ ] Save persists after refresh (no regressions).
+  - [ ] No console errors.
+  - [ ] CHANGELOG.md updated to record the doc change.
+
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.
 When building or reviewing features, **follow these documents in order**:
