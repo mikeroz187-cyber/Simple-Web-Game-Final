@@ -14,6 +14,16 @@ This folder contains all planning and design documentation for **Studio Empire**
   - **MVP/MVP_STATE_MODEL.md** – Authoritative definition of game state and flow for the MVP baseline.
 - If something is described in older vision docs but not in `CURRENT_SCOPE.md`, treat it as **out of scope** for now.
 
+## Post-MVP UI Additions (Current)
+MVP UI docs remain **historical references**; current UI additions are documented here when approved by `CURRENT_SCOPE.md`.
+
+### Manual Advance Day Button
+- **Location**: Place in the existing top bar / header area where global controls live. If the UI lists global actions in a single row (Save/Export/Import/etc.), add **Advance Day** in that same row.
+- **Behavior**: One click triggers the **existing day-advance flow**. One click = one day advance. The action follows existing save rules (state persists exactly as other actions do).
+- **Guardrails**: No new mechanics. No new `gameState` keys. No changes to posting rules, per-item posted flags, or social logic. Do not change or disable existing timers/auto-advance behavior.
+- **Label**: **Advance Day**
+- **Tooltip/Help Text**: “Manually advance to the next day.”
+
 ## Documentation Index
 
 **MVP / Implementation Docs (Historical Reference):**

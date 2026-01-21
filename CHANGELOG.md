@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Provide readable tables that mirror config values for non-developer review and later Codex work.
   - Files touched: docs/DATA_EQUIPMENT.md, docs/DATA_MILESTONES.md, docs/DATA_SOCIAL_STRATEGIES.md, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/DATA_REPUTATION_BRANCHES.md, docs/DATA_AUTOMATION.md, docs/DATA_SCHEDULING.md, docs/DATA_VARIANCE.md, docs/DATA_LEGACY_MILESTONES.md, CHANGELOG.md.
 ### Changed
+- What: Documented the manual Advance Day UI control (docs-only).
+  - Why: Authorize the approved UI addition and define its placement and behavior without changing mechanics.
+  - Files touched: docs/CURRENT_SCOPE.md, docs/README.md, CHANGELOG.md.
 - What: Reframed Act 1 Content Expansion Pack 01 as story-event-only content with new Act 1 event entries.
   - Why: Align the pack with the existing story event system and the post-MVP content-only scope.
   - Files touched: docs/ACT1_CONTENT_PACK_01.md, CHANGELOG.md.
