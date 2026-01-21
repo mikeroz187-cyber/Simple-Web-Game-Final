@@ -1,7 +1,8 @@
 # CURRENT SCOPE (Authoritative)
 
 ## Current Phase
-- **Act 2 Phase 1 — Save Version v2 (New Games Only)** – Post-MVP work is focused on a v2 save schema and reset-on-incompatible-save behavior. No new gameplay systems or UI expansions are allowed unless explicitly listed below.
+- **Act 2 Phase 1 — Save Version v2 (New Games Only)** – Post-MVP work is focused on a v2 save schema and reset-on-incompatible-save behavior.
+- **Act 2 Option A (Slice 1) — Equipment Upgrades + Multipliers** – Add Shop equipment upgrade purchases and apply equipment multipliers to follower/subscriber and revenue gains, as explicitly listed below.
 
 ## Completed (Confirmed)
 - Advance Day button complete.
@@ -13,9 +14,14 @@
 - **Reset on incompatible save:** If a loaded or imported save is not v2, the game resets to a fresh v2 save and clearly notifies the player (no silent failures).
 - **Export/import behavior stays consistent** with the “new games only” decision: exports represent v2 saves; imports of non-v2 saves trigger reset + message.
 
+## In Scope Now (Act 2 Option A — Equipment Upgrades + Multipliers)
+- **Shop equipment upgrades** for lighting, camera, and set dressing using `CONFIG.equipment.*` costs/levels, stored in `gameState.equipment.*`.
+- **Upgrade purchase UI** in the Shop screen (levels, costs, upgrade button states).
+- **Equipment multipliers** applied after base deltas for followers/subscribers and revenue using config-driven multipliers.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
-- **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior.
+- **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades slice.
 - **New UI screens/panels** or navigation changes.
 - **Refactors or new systems** unrelated to the v2 schema bump and reset behavior.
 - **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
@@ -25,7 +31,8 @@
 - [ ] v2 defaults match the Act 2 extensions docs referenced in the Master Implementation Plan.
 - [ ] Loading or importing a non-v2 save resets to a new v2 save and displays a clear player message.
 - [ ] Export/import continues to work for v2 saves without silent failures.
-- [ ] No new systems, screens, or refactors were introduced.
+- [ ] Equipment upgrades are implemented only as defined in scope (Shop purchases + multipliers).
+- [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
 
 ## Authority Order (Documentation to Follow)
