@@ -1,3 +1,11 @@
+function advanceDay(gameState) {
+  gameState.player.shootsToday = 0;
+  gameState.player.day += 1;
+  recoverAllPerformers(gameState);
+  const storyResult = checkStoryEvents(gameState);
+  return storyResult.events || [];
+}
+
 function confirmBooking(gameState, selection) {
   if (!gameState || !selection) {
     return { ok: false, message: "Select all fields before confirming." };
@@ -91,11 +99,7 @@ function confirmBooking(gameState, selection) {
 
   let storyEvents = [];
   if (nextShoots >= shootsPerDay) {
-    gameState.player.shootsToday = 0;
-    gameState.player.day += 1;
-    recoverAllPerformers(gameState);
-    const storyResult = checkStoryEvents(gameState);
-    storyEvents = storyResult.events || [];
+    storyEvents = advanceDay(gameState);
   }
 
   return {
