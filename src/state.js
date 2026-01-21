@@ -28,21 +28,31 @@ function newGameState() {
             fatigue: 0,
             loyalty: CONFIG.performers.starting_loyalty
           };
-        })
+        }),
+      performerRoles: {}
     },
     content: {
       lastContentId: null,
       entries: []
     },
     social: {
-      posts: []
+      posts: [],
+      strategy: {
+        activeStrategyId: CONFIG.social.strategy.defaultStrategyId
+      }
     },
     unlocks: {
-      locationTier1Unlocked: false
+      locationTier1Unlocked: false,
+      locationTiers: { tier0: true, tier1: false, tier2: false }
     },
     story: {
       introShown: false,
-      debtReminderDaysShown: []
-    }
+      debtReminderDaysShown: [],
+      act2: { eventsShown: [], lastEventId: null }
+    },
+    performerManagement: { contracts: {}, availability: {}, retentionFlags: {} },
+    analyticsHistory: [],
+    equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
+    milestones: []
   };
 }

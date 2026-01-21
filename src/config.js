@@ -31,7 +31,7 @@ const CONFIG = {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,
     autosave_interval_seconds: 10,
-    save_schema_version: 1,
+    save_schema_version: 2,
     default_slot_id: "slot_1",
     autosave_slot_id: "autosave",
     slots: [
@@ -150,6 +150,11 @@ const CONFIG = {
     platforms: ["Instagram", "X"],
     instagram_reach_multiplier: 1.0,
     x_reach_multiplier: 1.0
+  },
+  social: {
+    strategy: {
+      defaultStrategyId: "balanced"
+    }
   },
   progression: {
     starting_reputation: 0,

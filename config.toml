@@ -34,7 +34,7 @@ no_frameworks = true
 localstorage_key = "studio_empire_save"
 autosave_enabled = true
 autosave_interval_seconds = 10 # Placeholder: adjust if MVP docs specify a safe cadence.
-save_schema_version = 1
+save_schema_version = 2
 default_slot_id = "slot_1"
 autosave_slot_id = "autosave"
 

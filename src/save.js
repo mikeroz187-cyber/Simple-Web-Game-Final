@@ -48,6 +48,13 @@ function loadGame(slotId) {
     if (!validation.ok) {
       return { ok: false, message: validation.message || "Save data invalid." };
     }
+    if (migration.didReset) {
+      const saveResult = saveGame(migration.gameState, slotId);
+      if (!saveResult.ok) {
+        return { ok: false, message: saveResult.message || "Save failed." };
+      }
+      return { ok: true, gameState: migration.gameState, message: migration.message };
+    }
     return { ok: true, gameState: migration.gameState, message: "Save loaded." };
   } catch (error) {
     console.error("Load failed:", error);
@@ -108,6 +115,10 @@ function importSaveFromFile() {
             resolve({ ok: false, message: validation.message || "Import data invalid." });
             return;
           }
+          if (migration.didReset) {
+            resolve({ ok: true, gameState: migration.gameState, message: migration.message });
+            return;
+          }
           resolve({ ok: true, gameState: migration.gameState, message: "Import complete." });
         } catch (error) {
           console.error("Import failed:", error);
@@ -131,30 +142,26 @@ function migrateGameState(candidate) {
   const currentVersion = CONFIG.save.save_schema_version;
   const candidateVersion = candidate.version;
 
-  if (!Number.isFinite(candidateVersion)) {
-    return { ok: false, message: "Save version missing." };
+  if (!Number.isFinite(candidateVersion) || candidateVersion !== currentVersion) {
+    return {
+      ok: true,
+      gameState: newGameState(),
+      didReset: true,
+      message: "Incompatible save detected. Starting a new game (v2)."
+    };
   }
 
-  if (candidateVersion === currentVersion) {
-    // Version 1 -> 1 no-op migration. Keep explicit for future schema updates.
-    if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
-      candidate.player.shootsToday = 0;
-    }
-    if (!candidate.social || typeof candidate.social !== "object") {
-      candidate.social = { posts: [] };
-    }
-    if (!Array.isArray(candidate.social.posts)) {
-      candidate.social.posts = [];
-    }
-    return { ok: true, gameState: candidate };
+  // Version 2 -> 2 no-op migration. Keep explicit for future schema updates.
+  if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
+    candidate.player.shootsToday = 0;
   }
-
-  if (candidateVersion < currentVersion) {
-    // Guarded path: older versions require explicit migrations.
-    return { ok: false, message: "Save version too old to migrate." };
+  if (!candidate.social || typeof candidate.social !== "object") {
+    candidate.social = { posts: [] };
   }
-
-  return { ok: false, message: "Save version not supported." };
+  if (!Array.isArray(candidate.social.posts)) {
+    candidate.social.posts = [];
+  }
+  return { ok: true, gameState: candidate, didReset: false };
 }
 
 function validateGameState(candidate) {
@@ -162,7 +169,22 @@ function validateGameState(candidate) {
     return { ok: false, message: "Save data missing." };
   }
 
-  const allowedTopLevel = ["version", "createdAt", "updatedAt", "player", "roster", "content", "social", "unlocks", "story", "rng"];
+  const allowedTopLevel = [
+    "version",
+    "createdAt",
+    "updatedAt",
+    "player",
+    "roster",
+    "content",
+    "social",
+    "unlocks",
+    "story",
+    "rng",
+    "performerManagement",
+    "analyticsHistory",
+    "equipment",
+    "milestones"
+  ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
     return allowedTopLevel.indexOf(key) === -1;
@@ -203,6 +225,9 @@ function validateGameState(candidate) {
   const roster = candidate.roster;
   if (!roster || !Array.isArray(roster.performers)) {
     return { ok: false, message: "Roster data invalid." };
+  }
+  if (roster.performerRoles !== undefined && (typeof roster.performerRoles !== "object" || roster.performerRoles === null || Array.isArray(roster.performerRoles))) {
+    return { ok: false, message: "Roster roles invalid." };
   }
 
   const performerIds = roster.performers.map(function (entry) {
@@ -291,6 +316,9 @@ function validateGameState(candidate) {
   if (!Array.isArray(social.posts)) {
     social.posts = [];
   }
+  if (social.strategy !== undefined && (typeof social.strategy !== "object" || social.strategy === null || Array.isArray(social.strategy))) {
+    return { ok: false, message: "Social strategy invalid." };
+  }
 
   for (let index = 0; index < social.posts.length; index += 1) {
     const post = social.posts[index];
@@ -323,15 +351,46 @@ function validateGameState(candidate) {
   if (!candidate.unlocks || typeof candidate.unlocks.locationTier1Unlocked !== "boolean") {
     return { ok: false, message: "Unlock data invalid." };
   }
+  if (candidate.unlocks.locationTiers !== undefined && (typeof candidate.unlocks.locationTiers !== "object" || candidate.unlocks.locationTiers === null || Array.isArray(candidate.unlocks.locationTiers))) {
+    return { ok: false, message: "Unlock tier data invalid." };
+  }
 
   if (!candidate.story || typeof candidate.story.introShown !== "boolean" || !Array.isArray(candidate.story.debtReminderDaysShown)) {
     return { ok: false, message: "Story data invalid." };
+  }
+  if (candidate.story.act2 !== undefined && (typeof candidate.story.act2 !== "object" || candidate.story.act2 === null || Array.isArray(candidate.story.act2))) {
+    return { ok: false, message: "Story act 2 data invalid." };
   }
   for (let index = 0; index < candidate.story.debtReminderDaysShown.length; index += 1) {
     const day = candidate.story.debtReminderDaysShown[index];
     if (!Number.isFinite(day) || day < 1 || day >= player.debtDueDay) {
       return { ok: false, message: "Story reminder data invalid." };
     }
+  }
+
+  if (candidate.performerManagement !== undefined && (typeof candidate.performerManagement !== "object" || candidate.performerManagement === null || Array.isArray(candidate.performerManagement))) {
+    return { ok: false, message: "Performer management data invalid." };
+  }
+
+  if (candidate.analyticsHistory !== undefined && !Array.isArray(candidate.analyticsHistory)) {
+    return { ok: false, message: "Analytics history invalid." };
+  }
+
+  if (candidate.equipment !== undefined) {
+    if (typeof candidate.equipment !== "object" || candidate.equipment === null || Array.isArray(candidate.equipment)) {
+      return { ok: false, message: "Equipment data invalid." };
+    }
+    const equipmentLevels = ["lightingLevel", "cameraLevel", "setDressingLevel"];
+    for (let index = 0; index < equipmentLevels.length; index += 1) {
+      const key = equipmentLevels[index];
+      if (candidate.equipment[key] !== undefined && !Number.isFinite(candidate.equipment[key])) {
+        return { ok: false, message: "Equipment levels invalid." };
+      }
+    }
+  }
+
+  if (candidate.milestones !== undefined && !Array.isArray(candidate.milestones)) {
+    return { ok: false, message: "Milestones data invalid." };
   }
 
   return { ok: true };
