@@ -7,6 +7,7 @@
 - **Additive content only**: New opportunities, unlocks, events, and optional images that use existing schemas and systems.
 - **Act 1+ tuning via data**: New or expanded catalogs/copy that plug into the current data-driven structures without changing logic.
 - **No new systems**: All gameplay remains driven by the existing MVP loop and `gameState` structure.
+- **UI-only addition**: A manual **Advance Day** button in the global controls area that triggers the existing day-advance flow (single click = single day), without changing mechanics or save behavior.
 
 ## Explicitly Out of Scope (Post-MVP / Act 1+)
 - **New systems or mechanics** – No new currencies, progression systems, screens, or refactors.
