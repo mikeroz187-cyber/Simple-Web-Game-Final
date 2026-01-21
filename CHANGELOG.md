@@ -15,6 +15,9 @@ This changelog is optimized for:
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
 ### Added
+- What: Implemented Act 1 Content Pack 02 story events in the runtime story data.
+  - Why: Add the approved day-triggered Act 1+ events without changing systems or save schemas.
+  - Files touched: src/config.js, src/systems/story.js, CHANGELOG.md.
 - What: Added manual "Advance Day" UI button (no mechanics changes).
   - Why: Allow manual triggering of the existing day-advance flow from the global controls area.
   - Files touched: src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
