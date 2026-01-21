@@ -5,6 +5,7 @@ Studio Empire is an adult content production management simulator. It runs entir
 ## Current Status (Post-MVP / Act 1+)
 - The **MVP is complete and frozen** as the Act 1 baseline (Days 1–90).
 - Current work is **content expansion only** (opportunities, unlocks, events, images) using existing systems. No new systems or refactors are allowed unless `docs/CURRENT_SCOPE.md` changes.
+- Current scope: **Act 2 Phase 1 — Save v2 (new games only; incompatible saves reset)**.
 
 ## Repository Structure
 - **config.toml** – central game configuration (starting cash, debt, tuning parameters).

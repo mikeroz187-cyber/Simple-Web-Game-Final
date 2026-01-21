@@ -216,23 +216,24 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 ## 4) Act 2 Build Plan (Additive Only)
 **Act 2 begins only after the MVP release checklist passes.**
 
-### Act 2 Phase 1 — Save Versioning + Migration (v1 → v2)
-**Goal:** Introduce v2 save schema with safe migration.
+### Act 2 Phase 1 — Save Version v2 (New Games Only)
+**Goal:** Introduce v2 save schema with reset-on-incompatible-save behavior (no migration).
 
 **Files touched:**
 - `src/save.js`
 - `src/state.js`
 
 **Steps:**
-1. Add `detectVersion(saveObj)`, `migrateV1ToV2(saveObj)`, `validateV2(saveObj)`.
+1. Bump `gameState.meta.version` to v2 for new saves.
 2. Add v2 defaults per `/docs/VISION/ACT2_STATE_EXTENSIONS.md`.
-3. Ensure v1 saves migrate deterministically.
+3. On load/import of non-v2 saves, reset to a fresh v2 save and show a clear player message.
 
 **Done when…**
-- v1 saves load and migrate to v2 with defaults.
+- New v2 saves load with the v2 defaults applied.
+- Non-v2 saves reset to a fresh v2 save with a clear player message.
 
 **Do not do…**
-- No Act 3 migrations or fields.
+- No migration helpers or Act 3 fields.
 
 ---
 
