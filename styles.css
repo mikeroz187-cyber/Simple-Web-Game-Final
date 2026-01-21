@@ -93,6 +93,11 @@ body {
   opacity: 0.6;
 }
 
+.button.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .helper-text {
   color: var(--muted);
   font-size: 13px;

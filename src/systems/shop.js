@@ -24,6 +24,37 @@ function getEquipmentUpgradeLabel(upgradeId) {
   return "Unknown";
 }
 
+function formatEquipmentPercent(value) {
+  const safeValue = Number.isFinite(value) ? value : 0;
+  return Math.round(safeValue * 100);
+}
+
+function buildEquipmentBonusMessage(upgrade, level) {
+  if (!upgrade || !Number.isFinite(level) || level <= 0) {
+    return "";
+  }
+
+  const followerPerLevel = Number.isFinite(upgrade.followersMultPerLevel) ? upgrade.followersMultPerLevel : 0;
+  const revenuePerLevel = Number.isFinite(upgrade.revenueMultPerLevel) ? upgrade.revenueMultPerLevel : 0;
+  const parts = [];
+
+  if (followerPerLevel > 0) {
+    parts.push(
+      "Follower bonus: +" + formatEquipmentPercent(followerPerLevel) +
+      "% per level (you're now at +" + formatEquipmentPercent(followerPerLevel * level) + "%)."
+    );
+  }
+
+  if (revenuePerLevel > 0) {
+    parts.push(
+      "Revenue bonus: +" + formatEquipmentPercent(revenuePerLevel) +
+      "% per level (you're now at +" + formatEquipmentPercent(revenuePerLevel * level) + "%)."
+    );
+  }
+
+  return parts.join(" ");
+}
+
 function purchaseEquipmentUpgrade(gameState, upgradeId) {
   if (!gameState || !gameState.player || !gameState.equipment) {
     return { ok: false, code: "state_missing", message: "Game state missing." };
@@ -44,7 +75,12 @@ function purchaseEquipmentUpgrade(gameState, upgradeId) {
   const maxLevel = Number.isFinite(upgrade.maxLevel) ? upgrade.maxLevel : 0;
 
   if (currentLevel >= maxLevel) {
-    return { ok: false, code: "upgrade_maxed", message: getEquipmentUpgradeLabel(upgradeId) + " already maxed." };
+    return {
+      ok: false,
+      code: "upgrade_maxed",
+      message: getEquipmentUpgradeLabel(upgradeId) + " is MAXED (Level " + currentLevel + "/" + maxLevel + "). " +
+        "You can't squeeze more quality out of this setup."
+    };
   }
 
   const cost = upgrade.levelCosts[currentLevel];
@@ -53,15 +89,32 @@ function purchaseEquipmentUpgrade(gameState, upgradeId) {
   }
 
   if (gameState.player.cash < cost) {
-    return { ok: false, code: "insufficient_funds", message: "Not enough cash for this upgrade." };
+    const needed = Math.max(0, cost - gameState.player.cash);
+    return {
+      ok: false,
+      code: "insufficient_funds",
+      message: "Not enough cash for " + getEquipmentUpgradeLabel(upgradeId) + " Level " + (currentLevel + 1) + ". " +
+        "Need " + formatCurrency(needed) + " more. Go book a shoot."
+    };
   }
 
   gameState.player.cash = Math.max(0, gameState.player.cash - cost);
   const nextLevel = currentLevel + 1;
   gameState.equipment[levelKey] = nextLevel;
 
+  const bonusMessage = buildEquipmentBonusMessage(upgrade, nextLevel);
+  const upcomingCost = nextLevel < maxLevel ? upgrade.levelCosts[nextLevel] : null;
+  const nextCostMessage = Number.isFinite(upcomingCost)
+    ? "Next upgrade costs " + formatCurrency(upcomingCost) + "."
+    : getEquipmentUpgradeLabel(upgradeId) + " is MAXED (Level " + nextLevel + "/" + maxLevel + ").";
+  const messageParts = [
+    "🔥 Upgraded " + getEquipmentUpgradeLabel(upgradeId) + " to Level " + nextLevel + "/" + maxLevel + ".",
+    bonusMessage,
+    nextCostMessage
+  ].filter(Boolean);
+
   return {
     ok: true,
-    message: "Upgraded " + getEquipmentUpgradeLabel(upgradeId) + " to Level " + nextLevel + "."
+    message: messageParts.join(" ")
   };
 }
