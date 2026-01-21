@@ -14,6 +14,9 @@ This changelog is optimized for:
 - FIX: Added Act 1+ day-start story events to the existing day-trigger list so manual Advance Day fires them.
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
+- FIX: Moved the Shop status message to the top so equipment upgrade results are immediately visible.
+  - Why: Ensure Shop upgrade purchases always show the result message using the existing UI status system.
+  - Files touched: src/ui/render.js, CHANGELOG.md.
 ### Changed
 - What: Authorized Act 2 Option A (Equipment Upgrades + Multipliers) alongside the save v2 scope.
   - Why: Allow the next approved post-MVP slice while keeping scope constraints explicit.
