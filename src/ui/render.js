@@ -14,6 +14,9 @@ function getUiState() {
       gallery: {
         selectedContentId: null
       },
+      shop: {
+        equipmentMessage: ""
+      },
       save: {
         selectedSlotId: CONFIG.save.default_slot_id
       }
@@ -40,6 +43,14 @@ function renderStatusMessage() {
     return "";
   }
   return "<p class=\"helper-text status-message\">" + uiState.message + "</p>";
+}
+
+function renderEquipmentMessage() {
+  const uiState = getUiState();
+  if (!uiState.shop || !uiState.shop.equipmentMessage) {
+    return "";
+  }
+  return "<p class=\"helper-text status-message equipment-message\">" + uiState.shop.equipmentMessage + "</p>";
 }
 
 function renderHub(gameState) {
@@ -395,13 +406,17 @@ function renderShop(gameState) {
       const nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
       const costLabel = isMaxed ? "MAX" : formatCurrency(nextCost);
 
+      const buttonClass = "button primary" + (isMaxed ? " is-disabled" : "");
+      const buttonLabel = isMaxed ? "Maxed" : "Upgrade";
+      const buttonAttributes = isMaxed ? " aria-disabled=\"true\" data-disabled=\"true\"" : "";
+
       return "<div class=\"list-item\">" +
         "<p><strong>" + getEquipmentUpgradeLabel(upgradeId) + "</strong></p>" +
         "<p class=\"helper-text\">Level " + currentLevel + " / " + maxLevel + "</p>" +
         "<p><strong>Next Cost:</strong> " + costLabel + "</p>" +
         "<div class=\"button-row\">" +
-        "<button class=\"button primary\" data-action=\"upgrade-equipment\" data-id=\"" + upgradeId + "\"" +
-        (isMaxed ? " disabled" : "") + ">Upgrade</button>" +
+        "<button class=\"" + buttonClass + "\" data-action=\"upgrade-equipment\" data-id=\"" + upgradeId + "\"" +
+        buttonAttributes + ">" + buttonLabel + "</button>" +
         "</div>" +
         "</div>";
     }).join("")
@@ -415,6 +430,7 @@ function renderShop(gameState) {
     "</div>" +
     "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Equipment Upgrades</h3>" +
+    renderEquipmentMessage() +
     equipmentRows +
     "</div>" +
     "<div class=\"button-row\">" +

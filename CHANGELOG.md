@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- FIX: Added dedicated Equipment Upgrades feedback messaging with detailed success/failure copy directly under the Shop panel.
+  - Why: Ensure upgrade attempts always display clear outcomes in the Equipment Upgrades section as requested.
+  - Files touched: src/systems/shop.js, src/ui/events.js, src/ui/render.js, styles.css, CHANGELOG.md.
 - FIX: Allow equipment upgrade clicks to surface status messages even when cash is insufficient.
   - Why: Ensure Shop upgrade attempts always show confirmation/error messages using the existing UI message system.
   - Files touched: src/ui/render.js, CHANGELOG.md.

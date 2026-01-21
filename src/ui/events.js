@@ -3,6 +3,14 @@ function setUiMessage(message) {
   uiState.message = message || "";
 }
 
+function setEquipmentMessage(message) {
+  const uiState = getUiState();
+  if (!uiState.shop) {
+    uiState.shop = { equipmentMessage: "" };
+  }
+  uiState.shop.equipmentMessage = message || "";
+}
+
 function resetBookingSelection() {
   const uiState = getUiState();
   uiState.booking = {
@@ -200,7 +208,8 @@ function setupEventHandlers() {
     if (action === "upgrade-equipment") {
       const upgradeId = target.dataset.id;
       const result = purchaseEquipmentUpgrade(window.gameState, upgradeId);
-      setUiMessage(result.message || "");
+      setEquipmentMessage(result.message || "");
+      setUiMessage("");
       if (result.ok) {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
