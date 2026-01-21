@@ -18,6 +18,9 @@ This changelog is optimized for:
 - What: Added manual "Advance Day" UI button (no mechanics changes).
   - Why: Allow manual triggering of the existing day-advance flow from the global controls area.
   - Files touched: src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Added Act 1 Content Pack 02 documentation (story events only) for Post-MVP Milestone 2.
+  - Why: Provide the approved additive story event pack without new systems or schema changes.
+  - Files touched: docs/ACT1_CONTENT_PACK_02.md, CHANGELOG.md.
 - What: Implemented Act 1 Content Pack 01 (story events only).
   - Why: Add the approved Act 1+ story event entries using the existing event catalog and copy.
   - Files touched: docs/DATA_STORY_EVENTS.md, src/systems/story.js, CHANGELOG.md.
