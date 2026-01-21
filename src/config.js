@@ -194,6 +194,8 @@ const CONFIG = {
       "location_city_apartment",
       "location_small_warehouse"
     ],
+    tier1UnlockCost: 2000,
+    tier1Name: "Tier 1 — Downtown Studio",
     catalog: {
       location_basic_bedroom: {
         id: "location_basic_bedroom",

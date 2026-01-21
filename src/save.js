@@ -351,7 +351,18 @@ function validateGameState(candidate) {
   if (!candidate.unlocks || typeof candidate.unlocks.locationTier1Unlocked !== "boolean") {
     return { ok: false, message: "Unlock data invalid." };
   }
-  if (candidate.unlocks.locationTiers !== undefined && (typeof candidate.unlocks.locationTiers !== "object" || candidate.unlocks.locationTiers === null || Array.isArray(candidate.unlocks.locationTiers))) {
+  const locationTiers = candidate.unlocks.locationTiers;
+  if (!locationTiers || typeof locationTiers !== "object" || Array.isArray(locationTiers)) {
+    return { ok: false, message: "Unlock tier data invalid." };
+  }
+  const requiredTierFlags = ["tier0", "tier1"];
+  for (let index = 0; index < requiredTierFlags.length; index += 1) {
+    const key = requiredTierFlags[index];
+    if (typeof locationTiers[key] !== "boolean") {
+      return { ok: false, message: "Unlock tier data invalid." };
+    }
+  }
+  if (locationTiers.tier2 !== undefined && typeof locationTiers.tier2 !== "boolean") {
     return { ok: false, message: "Unlock tier data invalid." };
   }
 

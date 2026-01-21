@@ -144,7 +144,7 @@ function renderBooking(gameState) {
   const locationRows = locations.map(function (locationId) {
     const location = CONFIG.locations.catalog[locationId];
     const isSelected = location.id === uiState.booking.locationId;
-    const isLocked = location.tier === 1 && !gameState.unlocks.locationTier1Unlocked;
+    const isLocked = location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
     const label = location.name + " (Tier " + location.tier + ")";
     const detail = "Cost: " + formatCurrency(location.cost) + (isLocked ? " — Locked" : "");
     return "<div class=\"list-item\">" +
@@ -383,9 +383,12 @@ function renderGallery(gameState) {
 
 function renderShop(gameState) {
   const screen = qs("#screen-shop");
-  const cost = CONFIG.progression.location_tier_1_unlock_cost;
-  const unlocked = gameState.unlocks.locationTier1Unlocked;
+  const cost = Number.isFinite(CONFIG.locations.tier1UnlockCost)
+    ? CONFIG.locations.tier1UnlockCost
+    : CONFIG.progression.location_tier_1_unlock_cost;
+  const unlocked = isLocationTierUnlocked(gameState, "tier1");
   const canBuy = !unlocked && gameState.player.cash >= cost;
+  const tier1Name = CONFIG.locations.tier1Name || "Location Tier 1";
 
   const equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
     ? CONFIG.equipment.upgradeOrder
@@ -424,9 +427,18 @@ function renderShop(gameState) {
 
   const body = renderStatusMessage() +
     "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Tier 1 Location Unlock</h3>" +
-    "<p><strong>Cost:</strong> " + formatCurrency(cost) + "</p>" +
-    "<p><strong>Status:</strong> " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
+    "<h3 class=\"panel-title\">Location Tiers</h3>" +
+    "<div class=\"list-item\">" +
+    "<p><strong>Tier 0 — Starter Locations</strong></p>" +
+    "<p class=\"helper-text\">Status: Unlocked</p>" +
+    "</div>" +
+    "<div class=\"list-item\">" +
+    "<p><strong>" + tier1Name + "</strong></p>" +
+    "<p class=\"helper-text\">Cost: " + formatCurrency(cost) + " | Status: " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
+    "<div class=\"button-row\">" +
+    createButton("Unlock", "unlock-location-tier", "primary", !canBuy, "data-tier=\"tier1\"") +
+    "</div>" +
+    "</div>" +
     "</div>" +
     "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Equipment Upgrades</h3>" +
@@ -434,7 +446,6 @@ function renderShop(gameState) {
     equipmentRows +
     "</div>" +
     "<div class=\"button-row\">" +
-    createButton("Buy Unlock", "buy-tier1-location", "primary", !canBuy) +
     createButton("Back to Hub", "nav-hub") +
     "</div>";
   screen.innerHTML = createPanel("Shop", body, "screen-shop-title");

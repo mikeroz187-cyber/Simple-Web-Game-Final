@@ -29,7 +29,7 @@ function confirmBooking(gameState, selection) {
   if (!location) {
     return { ok: false, message: "Select a location." };
   }
-  if (location.tier === 1 && !gameState.unlocks.locationTier1Unlocked) {
+  if (location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1")) {
     return { ok: false, message: "Tier 1 locations are locked." };
   }
 
@@ -40,6 +40,9 @@ function confirmBooking(gameState, selection) {
 
   if (CONFIG.content_types.available.indexOf(selection.contentType) === -1) {
     return { ok: false, message: "Select a content type." };
+  }
+  if (selection.contentType === "Premium" && !isLocationTierUnlocked(gameState, "tier1")) {
+    return { ok: false, message: "Premium shoots require Location Tier 1. Unlock it in Shop \u2192 Location Tiers." };
   }
 
   const shootCostResult = calculateShootCost(location);
