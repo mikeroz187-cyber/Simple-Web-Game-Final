@@ -14,6 +14,10 @@ This changelog is optimized for:
 - FIX: Added Act 1+ day-start story events to the existing day-trigger list so manual Advance Day fires them.
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
+### Changed
+- What: Save schema v2 + reset-only on incompatible saves (no migration), with new Act 2 state defaults.
+  - Why: Align Act 2 Phase 1 behavior to start fresh on non-v2 saves while keeping new-game defaults explicit.
+  - Files touched: config.toml, src/config.js, src/state.js, src/save.js, CHANGELOG.md.
 ### Added
 - What: Added Act 1 Content Pack 03 story triggers and copy for days 18/36/63/84.
   - Why: Ship the approved Act 1+ content-only story beats using the existing day-start schedule with no system or schema changes.
