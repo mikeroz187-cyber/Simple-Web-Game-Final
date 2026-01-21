@@ -393,7 +393,6 @@ function renderShop(gameState) {
       const maxLevel = Number.isFinite(upgrade.maxLevel) ? upgrade.maxLevel : 0;
       const isMaxed = currentLevel >= maxLevel;
       const nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
-      const canUpgrade = !isMaxed && Number.isFinite(nextCost) && gameState.player.cash >= nextCost;
       const costLabel = isMaxed ? "MAX" : formatCurrency(nextCost);
 
       return "<div class=\"list-item\">" +
@@ -402,7 +401,7 @@ function renderShop(gameState) {
         "<p><strong>Next Cost:</strong> " + costLabel + "</p>" +
         "<div class=\"button-row\">" +
         "<button class=\"button primary\" data-action=\"upgrade-equipment\" data-id=\"" + upgradeId + "\"" +
-        (canUpgrade ? "" : " disabled") + ">Upgrade</button>" +
+        (isMaxed ? " disabled" : "") + ">Upgrade</button>" +
         "</div>" +
         "</div>";
     }).join("")
