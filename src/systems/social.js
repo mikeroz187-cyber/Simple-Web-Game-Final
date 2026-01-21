@@ -31,9 +31,10 @@ function postPromoContent(gameState, platform, contentId) {
     ? CONFIG.social_platforms.instagram_reach_multiplier
     : CONFIG.social_platforms.x_reach_multiplier;
 
-  const followersGained = Math.round(
+  const baseFollowers = Math.round(
     CONFIG.economy.promo_followers_gain * platformMultiplier
   );
+  const followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
   const subscribersGained = calculateSubscribersGained(followersGained);
 
   const postId = "post_" + (gameState.social.posts.length + 1);

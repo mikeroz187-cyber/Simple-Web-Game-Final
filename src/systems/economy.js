@@ -6,6 +6,40 @@ function calculateShootCost(location) {
   return { ok: true, value: Math.max(0, Math.round(cost)) };
 }
 
+function getEquipmentLevel(gameState, levelKey) {
+  if (!gameState || !gameState.equipment) {
+    return 0;
+  }
+  const level = Number.isFinite(gameState.equipment[levelKey]) ? gameState.equipment[levelKey] : 0;
+  return Math.max(0, level);
+}
+
+function getEquipmentFollowersMultiplier(gameState) {
+  const lightingLevel = getEquipmentLevel(gameState, "lightingLevel");
+  const setDressingLevel = getEquipmentLevel(gameState, "setDressingLevel");
+  return (lightingLevel * CONFIG.equipment.upgrades.lighting.followersMultPerLevel) +
+    (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.followersMultPerLevel);
+}
+
+function getEquipmentRevenueMultiplier(gameState) {
+  const cameraLevel = getEquipmentLevel(gameState, "cameraLevel");
+  const setDressingLevel = getEquipmentLevel(gameState, "setDressingLevel");
+  return (cameraLevel * CONFIG.equipment.upgrades.camera.revenueMultPerLevel) +
+    (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.revenueMultPerLevel);
+}
+
+function applyEquipmentFollowersMultiplier(baseFollowers, gameState) {
+  const safeFollowers = Number.isFinite(baseFollowers) ? baseFollowers : 0;
+  const multiplier = getEquipmentFollowersMultiplier(gameState);
+  return Math.round(safeFollowers * (1 + multiplier));
+}
+
+function applyEquipmentRevenueMultiplier(baseRevenue, gameState) {
+  const safeRevenue = Number.isFinite(baseRevenue) ? baseRevenue : 0;
+  const multiplier = getEquipmentRevenueMultiplier(gameState);
+  return Math.round(safeRevenue * (1 + multiplier));
+}
+
 function calculatePromoFollowers(performer, theme) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };

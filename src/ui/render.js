@@ -376,10 +376,46 @@ function renderShop(gameState) {
   const unlocked = gameState.unlocks.locationTier1Unlocked;
   const canBuy = !unlocked && gameState.player.cash >= cost;
 
+  const equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
+    ? CONFIG.equipment.upgradeOrder
+    : [];
+
+  const equipmentRows = equipmentOrder.length
+    ? equipmentOrder.map(function (upgradeId) {
+      const upgrade = CONFIG.equipment.upgrades[upgradeId];
+      if (!upgrade) {
+        return "";
+      }
+      const levelKey = getEquipmentLevelKey(upgradeId);
+      const currentLevel = levelKey && gameState.equipment && Number.isFinite(gameState.equipment[levelKey])
+        ? gameState.equipment[levelKey]
+        : 0;
+      const maxLevel = Number.isFinite(upgrade.maxLevel) ? upgrade.maxLevel : 0;
+      const isMaxed = currentLevel >= maxLevel;
+      const nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
+      const canUpgrade = !isMaxed && Number.isFinite(nextCost) && gameState.player.cash >= nextCost;
+      const costLabel = isMaxed ? "MAX" : formatCurrency(nextCost);
+
+      return "<div class=\"list-item\">" +
+        "<p><strong>" + getEquipmentUpgradeLabel(upgradeId) + "</strong></p>" +
+        "<p class=\"helper-text\">Level " + currentLevel + " / " + maxLevel + "</p>" +
+        "<p><strong>Next Cost:</strong> " + costLabel + "</p>" +
+        "<div class=\"button-row\">" +
+        "<button class=\"button primary\" data-action=\"upgrade-equipment\" data-id=\"" + upgradeId + "\"" +
+        (canUpgrade ? "" : " disabled") + ">Upgrade</button>" +
+        "</div>" +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No equipment upgrades available.</p>";
+
   const body = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Tier 1 Location Unlock</h3>" +
     "<p><strong>Cost:</strong> " + formatCurrency(cost) + "</p>" +
     "<p><strong>Status:</strong> " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
+    "</div>" +
+    "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Equipment Upgrades</h3>" +
+    equipmentRows +
     "</div>" +
     renderStatusMessage() +
     "<div class=\"button-row\">" +

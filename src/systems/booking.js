@@ -56,10 +56,12 @@ function confirmBooking(gameState, selection) {
   let revenue = 0;
   if (selection.contentType === "Promo") {
     const promoResult = calculatePromoFollowers(performer, theme);
-    followersGained = promoResult.ok ? promoResult.value : 0;
+    const baseFollowers = promoResult.ok ? promoResult.value : 0;
+    followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
   } else {
     const premiumResult = calculatePremiumRevenue(performer, theme);
-    revenue = premiumResult.ok ? premiumResult.value : 0;
+    const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
+    revenue = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
   }
 
   const subscribersGained = calculateSubscribersGained(followersGained);

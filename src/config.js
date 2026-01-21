@@ -160,6 +160,29 @@ const CONFIG = {
     starting_reputation: 0,
     location_tier_1_unlock_cost: 2000
   },
+  equipment: {
+    upgradeOrder: ["lighting", "camera", "set_dressing"],
+    upgrades: {
+      lighting: {
+        maxLevel: 3,
+        levelCosts: [600, 900, 1200],
+        followersMultPerLevel: 0.05,
+        revenueMultPerLevel: 0.00
+      },
+      camera: {
+        maxLevel: 3,
+        levelCosts: [800, 1200, 1600],
+        followersMultPerLevel: 0.00,
+        revenueMultPerLevel: 0.05
+      },
+      set_dressing: {
+        maxLevel: 3,
+        levelCosts: [500, 800, 1100],
+        followersMultPerLevel: 0.03,
+        revenueMultPerLevel: 0.03
+      }
+    }
+  },
   locations: {
     tier0_ids: [
       "location_basic_bedroom",
