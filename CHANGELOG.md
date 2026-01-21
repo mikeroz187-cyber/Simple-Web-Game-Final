@@ -15,6 +15,9 @@ This changelog is optimized for:
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
 ### Added
+- What: Added Act 1 Content Pack 03 story triggers and copy for days 18/36/63/84.
+  - Why: Ship the approved Act 1+ content-only story beats using the existing day-start schedule with no system or schema changes.
+  - Files touched: src/config.js, src/systems/story.js, CHANGELOG.md.
 - What: Implemented Act 1 Content Pack 02 story events in the runtime story data.
   - Why: Add the approved day-triggered Act 1+ events without changing systems or save schemas.
   - Files touched: src/config.js, src/systems/story.js, CHANGELOG.md.
