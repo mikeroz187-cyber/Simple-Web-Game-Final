@@ -15,6 +15,9 @@ This changelog is optimized for:
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
 ### Changed
+- What: Authorized Act 2 Option A (Equipment Upgrades + Multipliers) alongside the save v2 scope.
+  - Why: Allow the next approved post-MVP slice while keeping scope constraints explicit.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Save schema v2 + reset-only on incompatible saves (no migration), with new Act 2 state defaults.
   - Why: Align Act 2 Phase 1 behavior to start fresh on non-v2 saves while keeping new-game defaults explicit.
   - Files touched: config.toml, src/config.js, src/state.js, src/save.js, CHANGELOG.md.
