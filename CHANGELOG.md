@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- FIX: Allow equipment upgrade clicks to surface status messages even when cash is insufficient.
+  - Why: Ensure Shop upgrade attempts always show confirmation/error messages using the existing UI message system.
+  - Files touched: src/ui/render.js, CHANGELOG.md.
 - FIX: Added Act 1+ day-start story events to the existing day-trigger list so manual Advance Day fires them.
   - Why: Ensure onDayStart events at days 15/25/etc. trigger through the current story pipeline without new systems.
   - Files touched: src/config.js, CHANGELOG.md.
