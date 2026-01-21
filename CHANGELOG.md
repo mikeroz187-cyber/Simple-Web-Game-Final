@@ -22,6 +22,9 @@ This changelog is optimized for:
   - Why: Align Act 2 Phase 1 behavior to start fresh on non-v2 saves while keeping new-game defaults explicit.
   - Files touched: config.toml, src/config.js, src/state.js, src/save.js, CHANGELOG.md.
 ### Added
+- What: Added equipment upgrades to the Shop screen and applied equipment multipliers to follower/subscriber and revenue gains.
+  - Why: Deliver Act 2 Option A Slice 1 with config-driven upgrade purchases and payout scaling.
+  - Files touched: index.html, src/config.js, src/systems/booking.js, src/systems/economy.js, src/systems/social.js, src/systems/shop.js, src/ui/events.js, src/ui/render.js, CHANGELOG.md.
 - What: Added Act 1 Content Pack 03 story triggers and copy for days 18/36/63/84.
   - Why: Ship the approved Act 1+ content-only story beats using the existing day-start schedule with no system or schema changes.
   - Files touched: src/config.js, src/systems/story.js, CHANGELOG.md.

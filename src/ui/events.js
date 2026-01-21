@@ -197,6 +197,20 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "upgrade-equipment") {
+      const upgradeId = target.dataset.id;
+      const result = purchaseEquipmentUpgrade(window.gameState, upgradeId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "advance-day") {
       const storyEvents = advanceDay(window.gameState);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
