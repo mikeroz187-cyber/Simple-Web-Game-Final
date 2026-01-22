@@ -172,6 +172,11 @@ const CONFIG = {
       defaultStrategyId: "balanced"
     }
   },
+  analytics: {
+    rollupWindowsDays: [7, 30],
+    metricKeys: ["revenue", "followers", "subscribers", "promoCount", "premiumCount"],
+    snapshotFrequencyDays: 7
+  },
   progression: {
     starting_reputation: 0,
     location_tier_1_unlock_cost: 2000

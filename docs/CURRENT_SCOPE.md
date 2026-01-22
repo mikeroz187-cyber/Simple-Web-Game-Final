@@ -60,6 +60,11 @@
 - **Gallery screen cards** render placeholder thumbnails with minimal metadata (day, tier, performers, revenue/followers).
 - **Placeholder-only visuals**: no gallery viewer, no new screens or navigation, no explicit assets.
 
+## In Scope Now (Act 2 UI Enhancement — Advanced Analytics Rollups)
+- **Advanced Analytics Rollups**: read-only 7/30 day rollup summaries on the existing Analytics screen (no new navigation or screens).
+- **Periodic analytics snapshots** recorded at a config-driven cadence for display in the Analytics screen history list.
+- **No new authoring controls or refactors**: data-only enhancement using the existing save/export/import paths.
+
 ## In Scope Now (Act 1 UI Integration — Story Log)
 - **Story Log screen** added to the main navigation as a read-only history of triggered story events.
 - **Event history list** shows newest-first entries with day label, title, and short preview.
@@ -87,6 +92,7 @@
 - [ ] CHANGELOG.md updated to record the doc change.
 - [ ] Roster and Booking screens render performer portrait placeholders with a safe fallback.
 - [ ] Story Log screen lists triggered story events newest-first and opens the existing modal for full text.
+- [ ] Analytics screen shows config-driven rollups and recent snapshots without changing pacing or navigation.
 
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.
