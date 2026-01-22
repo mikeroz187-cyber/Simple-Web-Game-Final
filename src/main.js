@@ -1,6 +1,17 @@
 (function () {
   function initApp() {
-    window.gameState = newGameState();
+    const loadResult = loadGame(CONFIG.save.autosave_slot_id);
+    if (loadResult.ok && loadResult.gameState) {
+      window.gameState = loadResult.gameState;
+      if (loadResult.message && loadResult.message !== "Save loaded.") {
+        setUiMessage(loadResult.message);
+      }
+    } else {
+      window.gameState = newGameState();
+    }
+    ensureAutomationState(window.gameState);
+    ensureShootOutputsState(window.gameState);
+    ensureStoryLogState(window.gameState);
     const storyResult = checkStoryEvents(window.gameState);
     if (CONFIG.save.autosave_enabled) {
       const intervalMs = CONFIG.save.autosave_interval_seconds * 1000;

@@ -51,6 +51,9 @@ This changelog is optimized for:
   - Why: Deliver the approved milestone trigger slice with one-time completion and clear player messaging.
   - Files touched: src/config.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/events.js, src/save.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 ### Fixed
+- FIX: Load autosave on boot so story log and day progress persist after refresh.
+  - Why: Ensure Story Log history and day advancement survive reloads as required by the persistence tests.
+  - Files touched: src/main.js, CHANGELOG.md.
 - FIX: Added dedicated Equipment Upgrades feedback messaging with detailed success/failure copy directly under the Shop panel.
   - Why: Ensure upgrade attempts always display clear outcomes in the Equipment Upgrades section as requested.
   - Files touched: src/systems/shop.js, src/ui/events.js, src/ui/render.js, styles.css, CHANGELOG.md.
