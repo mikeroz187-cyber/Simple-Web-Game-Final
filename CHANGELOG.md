@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Ensure Shop upgrade purchases always show the result message using the existing UI status system.
   - Files touched: src/ui/render.js, CHANGELOG.md.
 ### Changed
+- What: Removed the Premium booking gate from the Tier 1 unlock scope so Premium shoots are allowed without Tier 1 while Tier 1 locations stay locked.
+  - Why: Align Tier 1 unlock behavior with the updated mechanic that only controls Tier 1 location access.
+  - Files touched: src/systems/booking.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Authorized Act 2 Option A (Equipment Upgrades + Multipliers) alongside the save v2 scope.
   - Why: Allow the next approved post-MVP slice while keeping scope constraints explicit.
   - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
