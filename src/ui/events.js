@@ -81,6 +81,17 @@ function showStoryEvents(events) {
   showEventCards(buildStoryEventCards(events));
 }
 
+function showStoryLogEntry(entry) {
+  if (!entry) {
+    return;
+  }
+  const dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber + " — " : "";
+  showEventCards([{
+    title: dayLabel + entry.title,
+    message: entry.body
+  }]);
+}
+
 function ensureAutomationValidation() {
   if (typeof validateGameState !== "function") {
     return;
@@ -176,6 +187,12 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "nav-story-log") {
+      showScreen("screen-story-log");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "nav-shop") {
       showScreen("screen-shop");
       renderApp(window.gameState);
@@ -215,6 +232,7 @@ function setupEventHandlers() {
       setUiMessage(result.message || "");
       if (result.ok) {
         resetBookingSelection();
+        appendStoryLogEntries(window.gameState, result.storyEvents);
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
@@ -346,6 +364,7 @@ function setupEventHandlers() {
           }
         }
       }
+      appendStoryLogEntries(window.gameState, storyEvents);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
@@ -371,8 +390,10 @@ function setupEventHandlers() {
         window.gameState = result.gameState;
         ensureAutomationState(window.gameState);
         ensureShootOutputsState(window.gameState);
+        ensureStoryLogState(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
+          appendStoryLogEntries(window.gameState, storyResult.events);
           const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
           if (!saveResult.ok) {
             setUiMessage(saveResult.message || "");
@@ -398,8 +419,10 @@ function setupEventHandlers() {
           window.gameState = result.gameState;
           ensureAutomationState(window.gameState);
           ensureShootOutputsState(window.gameState);
+          ensureStoryLogState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
+            appendStoryLogEntries(window.gameState, storyResult.events);
             const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
             if (!saveResult.ok) {
               setUiMessage(saveResult.message || "");
@@ -423,6 +446,17 @@ function setupEventHandlers() {
         }
       }
       renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "view-story-log-entry") {
+      const entryId = target.dataset.id;
+      const entry = Array.isArray(window.gameState.storyLog)
+        ? window.gameState.storyLog.find(function (logEntry) {
+          return logEntry.id === entryId;
+        })
+        : null;
+      showStoryLogEntry(entry);
       return;
     }
 

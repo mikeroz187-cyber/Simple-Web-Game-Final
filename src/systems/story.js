@@ -132,3 +132,36 @@ function getStoryEventCopy(eventId) {
   }
   return STORY_EVENT_COPY[eventId];
 }
+
+function appendStoryLogEntries(gameState, events) {
+  if (!gameState || !Array.isArray(events) || events.length === 0) {
+    return [];
+  }
+  ensureStoryLogState(gameState);
+  const logged = [];
+  events.forEach(function (event) {
+    if (!event || typeof event.id !== "string") {
+      return;
+    }
+    const exists = gameState.storyLog.some(function (entry) {
+      return entry.id === event.id;
+    });
+    if (exists) {
+      return;
+    }
+    const copy = getStoryEventCopy(event.id);
+    const dayNumber = Number.isFinite(event.day)
+      ? event.day
+      : (gameState.player && Number.isFinite(gameState.player.day) ? gameState.player.day : 0);
+    const entry = {
+      id: event.id,
+      dayNumber: dayNumber,
+      title: copy.title,
+      body: copy.message,
+      timestamp: new Date().toISOString()
+    };
+    gameState.storyLog.push(entry);
+    logged.push(entry);
+  });
+  return logged;
+}

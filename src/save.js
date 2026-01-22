@@ -164,6 +164,9 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.milestones)) {
     candidate.milestones = [];
   }
+  if (!Array.isArray(candidate.storyLog)) {
+    candidate.storyLog = [];
+  }
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -182,6 +185,7 @@ function validateGameState(candidate) {
     "social",
     "unlocks",
     "story",
+    "storyLog",
     "rng",
     "performerManagement",
     "analyticsHistory",
@@ -379,6 +383,32 @@ function validateGameState(candidate) {
     const day = candidate.story.debtReminderDaysShown[index];
     if (!Number.isFinite(day) || day < 1 || day >= player.debtDueDay) {
       return { ok: false, message: "Story reminder data invalid." };
+    }
+  }
+
+  if (!Array.isArray(candidate.storyLog)) {
+    return { ok: false, message: "Story log data invalid." };
+  }
+  const storyLogIds = candidate.storyLog.map(function (entry) {
+    return entry.id;
+  });
+  const uniqueStoryLogIds = new Set(storyLogIds);
+  if (uniqueStoryLogIds.size !== storyLogIds.length) {
+    return { ok: false, message: "Story log IDs must be unique." };
+  }
+  for (let index = 0; index < candidate.storyLog.length; index += 1) {
+    const entry = candidate.storyLog[index];
+    if (!entry || typeof entry.id !== "string") {
+      return { ok: false, message: "Story log entry invalid." };
+    }
+    if (!Number.isFinite(entry.dayNumber) || entry.dayNumber < 1) {
+      return { ok: false, message: "Story log day invalid." };
+    }
+    if (typeof entry.title !== "string" || typeof entry.body !== "string") {
+      return { ok: false, message: "Story log text invalid." };
+    }
+    if (entry.timestamp !== undefined && typeof entry.timestamp !== "string") {
+      return { ok: false, message: "Story log timestamp invalid." };
     }
   }
 

@@ -62,7 +62,8 @@ const CONFIG = {
     default_font_family: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
     base_font_size_px: 14,
     panel_gap_px: 12,
-    main_padding_px: 16
+    main_padding_px: 16,
+    story_log_preview_length: 120
   },
   game: {
     starting_day: 1,

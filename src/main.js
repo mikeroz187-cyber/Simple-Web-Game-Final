@@ -15,6 +15,7 @@
     showScreen("screen-hub");
     renderApp(window.gameState);
     if (storyResult.ok && storyResult.events.length) {
+      appendStoryLogEntries(window.gameState, storyResult.events);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
