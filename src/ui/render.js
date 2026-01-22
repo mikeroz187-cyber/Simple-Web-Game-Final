@@ -145,6 +145,10 @@ function renderBooking(gameState) {
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
+  const locationThumbSize = getLocationThumbnailSizePx();
+  const locationThumbRadius = getLocationThumbnailRadiusPx();
+  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   const performerRows = hasPerformers
     ? performers.map(function (performer) {
@@ -171,9 +175,15 @@ function renderBooking(gameState) {
     const isLocked = location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
     const label = location.name + " (Tier " + location.tier + ")";
     const detail = "Cost: " + formatCurrency(location.cost) + (isLocked ? " — Locked" : "");
-    return "<div class=\"list-item\">" +
+    const thumbPath = getLocationThumbnailPath(location);
+    const fallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+    const thumbAlt = "Thumbnail of " + location.name;
+    return "<div class=\"list-item\" style=\"" + locationRowStyle + "\">" +
+      "<img src=\"" + thumbPath + "\" alt=\"" + thumbAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />" +
+      "<div>" +
       "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-location\" data-id=\"" + location.id + "\"" + (isLocked ? " disabled" : "") + ">" + label + "</button>" +
       "<p class=\"helper-text\">" + detail + "</p>" +
+      "</div>" +
       "</div>";
   }).join("");
 
@@ -224,6 +234,10 @@ function renderBooking(gameState) {
 function renderContent(gameState) {
   const screen = qs("#screen-content");
   const entry = getLatestContentEntry(gameState);
+  const locationThumbSize = getLocationThumbnailSizePx();
+  const locationThumbRadius = getLocationThumbnailRadiusPx();
+  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   let contentBody = "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
   if (!entry && gameState.content.lastContentId) {
@@ -232,11 +246,18 @@ function renderContent(gameState) {
   if (entry) {
     const performer = getPerformerName(gameState, entry.performerId);
     const location = getLocationName(entry.locationId);
+    const locationData = CONFIG.locations.catalog[entry.locationId];
+    const locationThumbPath = getLocationThumbnailPath(locationData);
+    const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+    const locationAlt = "Thumbnail of " + location;
     const theme = getThemeName(entry.themeId);
     contentBody = "<div class=\"content-placeholder\">Content preview placeholder</div>" +
       "<div class=\"panel\">" +
       "<p><strong>Performer:</strong> " + performer + "</p>" +
+      "<div style=\"" + locationRowStyle + "\">" +
+      "<img src=\"" + locationThumbPath + "\" alt=\"" + locationAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + locationFallbackPath + "';\" />" +
       "<p><strong>Location:</strong> " + location + "</p>" +
+      "</div>" +
       "<p><strong>Theme:</strong> " + theme + "</p>" +
       "<p><strong>Content Type:</strong> " + entry.contentType + "</p>" +
       "<p><strong>Day Created:</strong> " + entry.dayCreated + "</p>" +
@@ -404,6 +425,10 @@ function renderGallery(gameState) {
   const outputThumbStyle = "width:" + outputThumbSize + "px;height:" + outputThumbSize + "px;object-fit:cover;border-radius:" + outputThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const outputCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:flex-start;";
   const outputMetaStyle = "display:flex;flex-direction:column;gap:" + Math.max(1, Math.round(CONFIG.ui.panel_gap_px / 2)) + "px;";
+  const locationThumbSize = getLocationThumbnailSizePx();
+  const locationThumbRadius = getLocationThumbnailRadiusPx();
+  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   const entryList = entries.length
     ? entries.map(function (entry) {
@@ -411,10 +436,17 @@ function renderGallery(gameState) {
       const performer = getPerformerName(gameState, entry.performerId);
       const location = getLocationName(entry.locationId);
       const theme = getThemeName(entry.themeId);
+      const locationData = CONFIG.locations.catalog[entry.locationId];
+      const locationThumbPath = getLocationThumbnailPath(locationData);
+      const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+      const locationAlt = "Thumbnail of " + location;
       return "<div class=\"list-item\">" +
+        "<div style=\"" + locationRowStyle + "\">" +
+        "<img src=\"" + locationThumbPath + "\" alt=\"" + locationAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + locationFallbackPath + "';\" />" +
         "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-gallery-entry\" data-id=\"" + entry.id + "\">" +
         "Day " + entry.dayCreated + " — " + performer + " — " + location + " — " + theme + " — " + entry.contentType +
         "</button>" +
+        "</div>" +
         "</div>";
     }).join("")
     : "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
@@ -429,7 +461,10 @@ function renderGallery(gameState) {
     ? "<div class=\"panel\"><h3 class=\"panel-title\">Entry Details</h3>" +
       "<p><strong>Day:</strong> " + selectedEntry.dayCreated + "</p>" +
       "<p><strong>Performer:</strong> " + getPerformerName(gameState, selectedEntry.performerId) + "</p>" +
+      "<div style=\"" + locationRowStyle + "\">" +
+      "<img src=\"" + getLocationThumbnailPath(CONFIG.locations.catalog[selectedEntry.locationId]) + "\" alt=\"Thumbnail of " + getLocationName(selectedEntry.locationId) + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH + "';\" />" +
       "<p><strong>Location:</strong> " + getLocationName(selectedEntry.locationId) + "</p>" +
+      "</div>" +
       "<p><strong>Theme:</strong> " + getThemeName(selectedEntry.themeId) + "</p>" +
       "<p><strong>Type:</strong> " + selectedEntry.contentType + "</p>" +
       "<p><strong>Shoot Cost:</strong> " + formatCurrency(selectedEntry.shootCost) + "</p>" +

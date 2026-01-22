@@ -2,6 +2,10 @@
 
 This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). Each location lists the required data fields used for configuration.
 
+## Thumbnail Fields
+- `thumbnailPath` is a string path to the location thumbnail image used in the UI.
+- If `thumbnailPath` is missing or invalid, the UI falls back to the placeholder at `assets/images/placeholders/location_placeholder.svg`.
+
 ## MVP — Act 1 (Tier 0–1)
 
 ### Tier 0 (Available at Start)
@@ -52,6 +56,7 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
       "cost": 50,
       "unlockCost": 0,
       "unlockRequirements": [],
+      "thumbnailPath": "assets/images/placeholders/location_placeholder.svg",
       "description": "A simple, familiar space for low-stakes starter shoots."
     },
     {
@@ -61,6 +66,7 @@ This document defines all locations across MVP (Act 1) and Vision (Acts 2–3). 
       "cost": 300,
       "unlockCost": "See config.toml",
       "unlockRequirements": [],
+      "thumbnailPath": "assets/images/placeholders/location_placeholder.svg",
       "description": "A compact loft with improved lighting and a cleaner backdrop."
     }
   ]
