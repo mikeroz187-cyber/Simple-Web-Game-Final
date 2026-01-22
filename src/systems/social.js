@@ -125,7 +125,14 @@ function hasAppliedManualSocialStrategyToday(gameState) {
   }
   const today = gameState.player.day;
   const lastAppliedDay = gameState.social.manualStrategy.lastAppliedDay;
-  return Number.isFinite(lastAppliedDay) && lastAppliedDay === today;
+  if (!Number.isFinite(today) || !Number.isFinite(lastAppliedDay) || lastAppliedDay !== today) {
+    return false;
+  }
+  const storyLog = Array.isArray(gameState.storyLog) ? gameState.storyLog : [];
+  const expectedId = "manual_strategy_day_" + today;
+  return storyLog.some(function (entry) {
+    return entry && entry.id === expectedId;
+  });
 }
 
 function calculateManualSocialStrategyImpact(gameState, budget, allocations) {

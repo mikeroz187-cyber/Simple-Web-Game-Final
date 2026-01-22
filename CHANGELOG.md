@@ -10,6 +10,10 @@ This changelog is optimized for:
 ---
 
 ## [Unreleased]
+### Fixed
+- What: FIX: Prevented manual social strategy from reporting an already-applied day unless a matching strategy log entry exists.
+  - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
+  - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
 - What: Added Manual Social Strategy with daily budget allocation and once-per-day apply on the Social screen.
   - Why: Deliver the approved deterministic, manual social spend mechanic with immediate feedback and save persistence.
