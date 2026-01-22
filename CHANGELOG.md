@@ -75,6 +75,9 @@ This changelog is optimized for:
   - Why: Deliver the approved milestone trigger slice with one-time completion and clear player messaging.
   - Files touched: src/config.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/events.js, src/save.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 ### Fixed
+- FIX: Fixed Manual Social Strategy applied-today gating mismatch between UI and system; Apply now blocks correctly and status line reflects actual state.
+  - Why: Ensure the applied-today message only appears after a successful apply and prevent duplicate spends on the same day.
+  - Files touched: src/systems/social.js, src/ui/render.js, CHANGELOG.md.
 - FIX: Corrected Manual Social Strategy status messaging so “already applied today” only appears after applying.
   - Why: Prevent confusing UI feedback that appeared before a manual strategy was applied on the current day.
   - Files touched: src/systems/social.js, src/ui/render.js, CHANGELOG.md.
