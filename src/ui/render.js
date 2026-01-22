@@ -100,6 +100,20 @@ function renderHub(gameState) {
     "<p class=\"helper-text\">Save Now and Load Save use the selected slot. Autosave writes to the Autosave slot.</p>" +
     "</div>";
 
+  const autoBookCount = CONFIG.AUTOMATION_AUTO_BOOK_PER_DAY;
+  const autoBookEnabled = Boolean(gameState.automation && gameState.automation.autoBookEnabled);
+  const autoBookChecked = autoBookEnabled ? " checked" : "";
+  const autoBookLabel = "Automation: Auto-Book (" + autoBookCount + "/day)";
+  const autoBookUnit = autoBookCount === 1 ? "shoot" : "shoots";
+  const automationPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Automation</h3>" +
+    "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"auto-book-toggle\">" + autoBookLabel + "</label>" +
+    "<input id=\"auto-book-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-book\"" + autoBookChecked + " />" +
+    "</div>" +
+    "<p class=\"helper-text\">When enabled, the studio tries to book " + autoBookCount + " " + autoBookUnit + " automatically each day (only when you click Advance Day).</p>" +
+    "</div>";
+
   const advanceDayButton = "<button class=\"button\" data-action=\"advance-day\" title=\"Manually advance to the next day.\">Advance Day</button>";
   const saveButtons = [
     createButton("Save Now", "save-now"),
@@ -117,6 +131,7 @@ function renderHub(gameState) {
     debtButtonRow +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +
+    automationPanel +
     saveSlotControl +
     "<div class=\"button-row\">" + saveButtons + "</div>";
 }

@@ -81,7 +81,44 @@ function showStoryEvents(events) {
   showEventCards(buildStoryEventCards(events));
 }
 
+function ensureAutomationValidation() {
+  if (typeof validateGameState !== "function") {
+    return;
+  }
+  if (validateGameState._automationPatched) {
+    return;
+  }
+
+  const baseValidate = validateGameState;
+  validateGameState = function (candidate) {
+    if (!candidate || typeof candidate !== "object") {
+      return baseValidate(candidate);
+    }
+    const stripped = Object.assign({}, candidate);
+    delete stripped.automation;
+    const result = baseValidate(stripped);
+    if (!result || !result.ok) {
+      return result;
+    }
+    return { ok: true, message: result.message };
+  };
+  validateGameState._automationPatched = true;
+}
+
+function normalizeAutomationReason(reason) {
+  if (!reason) {
+    return "Unknown issue";
+  }
+  const trimmed = String(reason).trim();
+  if (!trimmed) {
+    return "Unknown issue";
+  }
+  return trimmed.endsWith(".") ? trimmed.slice(0, -1) : trimmed;
+}
+
 function setupEventHandlers() {
+  ensureAutomationValidation();
+
   document.body.addEventListener("click", function (event) {
     const target = event.target.closest("[data-action]");
     const action = target && target.dataset ? target.dataset.action : null;
@@ -288,13 +325,33 @@ function setupEventHandlers() {
     }
 
     if (action === "advance-day") {
+      ensureAutomationState(window.gameState);
       const storyEvents = advanceDay(window.gameState);
+      const automationCards = [];
+      if (window.gameState.automation.autoBookEnabled) {
+        const maxPerDay = CONFIG.AUTOMATION_AUTO_BOOK_PER_DAY;
+        for (let i = 0; i < maxPerDay; i += 1) {
+          const result = tryAutoBookOne(window.gameState);
+          if (result.success) {
+            automationCards.push({
+              title: "Automation",
+              message: "Automation booked 1 shoot."
+            });
+          } else {
+            automationCards.push({
+              title: "Automation",
+              message: "Automation couldn’t book a shoot: " + normalizeAutomationReason(result.reason) + "."
+            });
+          }
+        }
+      }
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
       }
-      if (storyEvents && storyEvents.length) {
-        showStoryEvents(storyEvents);
+      const eventCards = buildStoryEventCards(storyEvents).concat(automationCards);
+      if (eventCards.length) {
+        showEventCards(eventCards);
       }
       renderApp(window.gameState);
       return;
@@ -311,6 +368,7 @@ function setupEventHandlers() {
       const result = loadGame(uiState.save.selectedSlotId);
       if (result.ok) {
         window.gameState = result.gameState;
+        ensureAutomationState(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
           const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
@@ -336,6 +394,7 @@ function setupEventHandlers() {
       importSaveFromFile().then(function (result) {
         if (result.ok) {
           window.gameState = result.gameState;
+          ensureAutomationState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
@@ -370,12 +429,26 @@ function setupEventHandlers() {
   document.body.addEventListener("change", function (event) {
     const target = event.target;
     const action = target && target.dataset ? target.dataset.action : null;
-    if (action !== "select-save-slot") {
+    if (action === "select-save-slot") {
+      const uiState = getUiState();
+      uiState.save.selectedSlotId = target.value;
+      setUiMessage("");
+      renderApp(window.gameState);
       return;
     }
-    const uiState = getUiState();
-    uiState.save.selectedSlotId = target.value;
-    setUiMessage("");
-    renderApp(window.gameState);
+
+    if (action === "toggle-auto-book") {
+      ensureAutomationState(window.gameState);
+      window.gameState.automation.autoBookEnabled = Boolean(target.checked);
+      const message = window.gameState.automation.autoBookEnabled
+        ? "Automation enabled: Auto-Book (1/day)."
+        : "Automation disabled: Auto-Book.";
+      setUiMessage(message);
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message || "");
+      }
+      renderApp(window.gameState);
+    }
   });
 }
