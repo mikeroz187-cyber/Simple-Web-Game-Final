@@ -34,6 +34,7 @@ function renderApp(gameState) {
   renderRoster(gameState);
   renderSocial(gameState);
   renderGallery(gameState);
+  renderStoryLog(gameState);
   renderShop(gameState);
 }
 
@@ -51,6 +52,17 @@ function renderEquipmentMessage() {
     return "";
   }
   return "<p class=\"helper-text status-message equipment-message\">" + uiState.shop.equipmentMessage + "</p>";
+}
+
+function getStoryLogPreview(text) {
+  const limit = Number.isFinite(CONFIG.ui.story_log_preview_length)
+    ? CONFIG.ui.story_log_preview_length
+    : 120;
+  const normalized = String(text || "");
+  if (normalized.length <= limit) {
+    return normalized;
+  }
+  return normalized.slice(0, limit).trim() + "…";
 }
 
 function renderHub(gameState) {
@@ -79,6 +91,7 @@ function renderHub(gameState) {
     createButton("Analytics", "nav-analytics", "", !hasContent),
     createButton("Social", "nav-social", "", !hasPromo),
     createButton("Gallery", "nav-gallery"),
+    createButton("Story Log", "nav-story-log"),
     createButton("Roster", "nav-roster"),
     createButton("Shop", "nav-shop")
   ].join("");
@@ -500,6 +513,33 @@ function renderGallery(gameState) {
     createButton("Back to Hub", "nav-hub") +
     "</div>";
   screen.innerHTML = createPanel("Gallery", body, "screen-gallery-title");
+}
+
+function renderStoryLog(gameState) {
+  const screen = qs("#screen-story-log");
+  const entries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
+  const entryList = entries.length
+    ? entries.map(function (entry) {
+      const dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber + " — " : "";
+      const title = dayLabel + entry.title;
+      const preview = getStoryLogPreview(entry.body);
+      return "<div class=\"list-item\">" +
+        "<button class=\"select-button\" data-action=\"view-story-log-entry\" data-id=\"" + entry.id + "\">" + title + "</button>" +
+        "<p class=\"helper-text\">" + preview + "</p>" +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No story events logged yet.</p>";
+
+  const body = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Story Log</h3>" +
+    "<div class=\"story-log-list\">" + entryList + "</div>" +
+    "</div>" +
+    renderStatusMessage() +
+    "<div class=\"button-row\">" +
+    createButton("Back to Hub", "nav-hub") +
+    "</div>";
+
+  screen.innerHTML = createPanel("Story Log", body, "screen-story-log-title");
 }
 
 function renderShop(gameState) {

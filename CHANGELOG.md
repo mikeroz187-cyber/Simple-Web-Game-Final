@@ -11,6 +11,15 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added persistent Story Log state entries that record triggered story events with stable IDs.
+  - Why: Preserve a read-only history of story events across saves, exports, and reloads.
+  - Files touched: src/state.js, src/systems/story.js, src/save.js, src/ui/events.js, src/main.js, CHANGELOG.md.
+- What: Added a Story Log screen with a scrollable event list and modal viewer for full story text.
+  - Why: Let players re-read prior story events without changing pacing or content.
+  - Files touched: index.html, src/ui/render.js, src/ui/events.js, styles.css, src/config.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to authorize the Story Log UI feature in Act 1.
+  - Why: Keep the scope document aligned with the approved post-MVP content expansion.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added location thumbnail placeholders in booking/content/gallery views with data-driven thumbnail paths and fallback behavior.
   - Why: Provide consistent location visuals using safe placeholder assets with no new screens or systems.
   - Files touched: src/config.js, src/utils/format.js, src/ui/render.js, assets/images/placeholders/location_placeholder.svg, docs/DATA_LOCATIONS.md, CHANGELOG.md.

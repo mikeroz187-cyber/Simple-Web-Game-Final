@@ -50,6 +50,7 @@ function newGameState() {
       debtReminderDaysShown: [],
       act2: { eventsShown: [], lastEventId: null }
     },
+    storyLog: [],
     performerManagement: { contracts: {}, availability: {}, retentionFlags: {} },
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
@@ -67,6 +68,16 @@ function ensureShootOutputsState(gameState) {
 
   if (!Array.isArray(gameState.shootOutputs)) {
     gameState.shootOutputs = [];
+  }
+}
+
+function ensureStoryLogState(gameState) {
+  if (!gameState) {
+    return;
+  }
+
+  if (!Array.isArray(gameState.storyLog)) {
+    gameState.storyLog = [];
   }
 }
 

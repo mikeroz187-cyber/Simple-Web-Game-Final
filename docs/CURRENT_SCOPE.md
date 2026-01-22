@@ -60,10 +60,16 @@
 - **Gallery screen cards** render placeholder thumbnails with minimal metadata (day, tier, performers, revenue/followers).
 - **Placeholder-only visuals**: no gallery viewer, no new screens or navigation, no explicit assets.
 
+## In Scope Now (Act 1 UI Integration — Story Log)
+- **Story Log screen** added to the main navigation as a read-only history of triggered story events.
+- **Event history list** shows newest-first entries with day label, title, and short preview.
+- **Reuse the existing modal** to view full story event text when a log entry is selected.
+- **No new story systems**: no branching, no authoring tools, no new content beyond existing packs.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
 - **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.
-- **New UI screens/panels** or navigation changes.
+- **New UI screens/panels** or navigation changes beyond the approved Story Log screen.
 - **Refactors or new systems** unrelated to the v2 schema bump and reset behavior.
 - **Automated/background day progression** or passive time simulation.
 - **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
@@ -80,6 +86,7 @@
 - [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
 - [ ] Roster and Booking screens render performer portrait placeholders with a safe fallback.
+- [ ] Story Log screen lists triggered story events newest-first and opens the existing modal for full text.
 
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.
