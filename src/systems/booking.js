@@ -2,6 +2,7 @@ function advanceDay(gameState) {
   gameState.player.shootsToday = 0;
   gameState.player.day += 1;
   recoverAllPerformers(gameState);
+  recordAnalyticsSnapshot(gameState);
   const storyResult = checkStoryEvents(gameState);
   return storyResult.events || [];
 }

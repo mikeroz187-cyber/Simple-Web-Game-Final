@@ -304,7 +304,36 @@ function renderAnalytics(gameState) {
       "</div>";
   }
 
+  const rollupWindows = CONFIG.analytics && Array.isArray(CONFIG.analytics.rollupWindowsDays)
+    ? CONFIG.analytics.rollupWindowsDays
+    : [];
+  const rollupRows = rollupWindows.length
+    ? rollupWindows.map(function (windowDays) {
+      const summary = getWindowedSummary(gameState, windowDays);
+      return "<div class=\"list-item\"><p>Last " + summary.windowDays + " days: Revenue " + formatCurrency(summary.revenue) +
+        " | Followers +" + summary.followers + " | Subs +" + summary.subscribers +
+        " | Shoots: Promo " + summary.promoCount + " / Premium " + summary.premiumCount + "</p></div>";
+    }).join("")
+    : "<p class=\"helper-text\">No rollup windows configured.</p>";
+  const rollupsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Rollups</h3>" + rollupRows + "</div>";
+
+  const snapshots = Array.isArray(gameState.analyticsHistory) ? gameState.analyticsHistory.slice(-5).reverse() : [];
+  const snapshotRows = snapshots.length
+    ? snapshots.map(function (snapshot) {
+      const followers = Number.isFinite(snapshot.followers) ? snapshot.followers : 0;
+      const subscribers = Number.isFinite(snapshot.subscribers) ? snapshot.subscribers : 0;
+      const cash = Number.isFinite(snapshot.cash) ? snapshot.cash : 0;
+      const lifetimeRevenue = Number.isFinite(snapshot.lifetimeRevenue) ? snapshot.lifetimeRevenue : 0;
+      return "<div class=\"list-item\"><p>Day " + snapshot.dayNumber + " — Followers " + followers +
+        ", Subs " + subscribers + ", Cash " + formatCurrency(cash) +
+        ", Lifetime Revenue " + formatCurrency(lifetimeRevenue) + "</p></div>";
+    }).join("")
+    : "<p class=\"helper-text\">No snapshots yet.</p>";
+  const snapshotsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Snapshots</h3>" + snapshotRows + "</div>";
+
   const body = analyticsBody +
+    rollupsPanel +
+    snapshotsPanel +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Book Next Shoot", "nav-booking", "primary", !entry) +

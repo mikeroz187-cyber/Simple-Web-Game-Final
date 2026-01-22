@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Advanced Analytics rollups and snapshot history to the Analytics screen (read-only, config-driven).
+  - Why: Provide minimal Act 2-style analytics insights without changing pacing or adding new screens.
+  - Files touched: index.html, src/config.js, src/systems/analytics.js, src/systems/booking.js, src/ui/render.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to authorize Advanced Analytics rollups and periodic snapshot recording.
+  - Why: Keep scope documentation aligned with the approved analytics UI enhancement.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added persistent Story Log state entries that record triggered story events with stable IDs.
   - Why: Preserve a read-only history of story events across saves, exports, and reloads.
   - Files touched: src/state.js, src/systems/story.js, src/save.js, src/ui/events.js, src/main.js, CHANGELOG.md.
