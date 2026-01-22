@@ -36,6 +36,9 @@
 - **Tier 2 location access**: Tier 2 locations appear in Booking but are disabled until Tier 2 is purchased and reputation meets the requirement.
 - **Tier 2 only**: no Tier 3 unlocks, no new screens or systems.
 
+## In Scope Now (Act 2 Theme Pack A2.5)
+- **Act 2 Theme Pack (A2.5) — Additional Content Themes (5 themes)**.
+
 ## In Scope Now (Manual Social Strategy Selection — Single Active Strategy)
 - **Strategy list UI** on the existing Social screen showing all strategies from the social strategy data catalog.
 - **Single active selection** stored as `gameState.social.activeSocialStrategyId` with one strategy active at a time.

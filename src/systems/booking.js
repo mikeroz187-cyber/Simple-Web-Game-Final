@@ -70,6 +70,19 @@ function getAutoBookingSelection(gameState) {
   };
 }
 
+function getThemeById(themeId) {
+  if (!themeId) {
+    return null;
+  }
+  if (CONFIG.themes.mvp && CONFIG.themes.mvp.themes && CONFIG.themes.mvp.themes[themeId]) {
+    return CONFIG.themes.mvp.themes[themeId];
+  }
+  if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
+    return CONFIG.themes.act2.themes[themeId];
+  }
+  return null;
+}
+
 function tryAutoBookOne(gameState) {
   if (!gameState || !gameState.player) {
     return { success: false, reason: "Game state missing" };
@@ -139,7 +152,7 @@ function confirmBooking(gameState, selection) {
     }
   }
 
-  const theme = CONFIG.themes.mvp.themes[selection.themeId];
+  const theme = getThemeById(selection.themeId);
   if (!theme) {
     return { ok: false, message: "Select a theme." };
   }

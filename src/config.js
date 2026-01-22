@@ -395,6 +395,47 @@ const CONFIG = {
           modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         }
       }
+    },
+    act2: {
+      theme_ids: [
+        "theme_luxury_retreat",
+        "theme_editorial",
+        "theme_downtown_chic",
+        "theme_sunlit_getaway",
+        "theme_afterhours"
+      ],
+      themes: {
+        theme_luxury_retreat: {
+          id: "theme_luxury_retreat",
+          name: "Luxury Retreat",
+          description: "Resort-grade spaces with a relaxed, high-end atmosphere.",
+          modifiers: { followersMult: 0.95, revenueMult: 1.20 }
+        },
+        theme_editorial: {
+          id: "theme_editorial",
+          name: "Editorial",
+          description: "Magazine-style staging with bold angles and fashion emphasis.",
+          modifiers: { followersMult: 1.05, revenueMult: 1.05 }
+        },
+        theme_downtown_chic: {
+          id: "theme_downtown_chic",
+          name: "Downtown Chic",
+          description: "Urban interiors with a sleek, modern aesthetic.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.10 }
+        },
+        theme_sunlit_getaway: {
+          id: "theme_sunlit_getaway",
+          name: "Sunlit Getaway",
+          description: "Bright, airy sets with soft daylight and beachy calm.",
+          modifiers: { followersMult: 1.10, revenueMult: 0.95 }
+        },
+        theme_afterhours: {
+          id: "theme_afterhours",
+          name: "After Hours",
+          description: "Late-night ambience with moody shadows and intimate lighting.",
+          modifiers: { followersMult: 0.90, revenueMult: 1.20 }
+        }
+      }
     }
   },
   story: {
