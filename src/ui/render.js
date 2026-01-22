@@ -413,10 +413,7 @@ function renderSocial(gameState) {
   const lastAppliedDay = manualStrategy && Number.isFinite(manualStrategy.lastAppliedDay)
     ? manualStrategy.lastAppliedDay
     : null;
-  const appliedToday = Boolean(gameState && gameState.player) &&
-    Number.isFinite(lastAppliedDay) &&
-    lastAppliedDay > 0 &&
-    lastAppliedDay === gameState.player.day;
+  const appliedToday = hasAppliedManualSocialStrategyToday(gameState);
   const promoEntries = gameState.content.entries.filter(function (entry) {
     return entry.contentType === "Promo";
   });
@@ -474,6 +471,12 @@ function renderSocial(gameState) {
   const appliedStatusLine = appliedToday
     ? "<p class=\"helper-text\">Strategy already applied today.</p>"
     : "";
+  const appliedDayLabel = Number.isFinite(lastAppliedDay) ? lastAppliedDay : "Never";
+  const todayLabel = gameState && gameState.player && Number.isFinite(gameState.player.day)
+    ? gameState.player.day
+    : "?";
+  const appliedTransparencyLine = "<p class=\"helper-text\">Last applied day: " + appliedDayLabel +
+    " (Today: " + todayLabel + ")</p>";
   const canApplyManual = manualIssues.length === 0 && !appliedToday;
 
   const manualPanel = manualConfig
@@ -489,6 +492,7 @@ function renderSocial(gameState) {
       "<p class=\"helper-text\">" + allocationStatus + "</p>" +
       "<p class=\"helper-text\">" + previewLine + "</p>" +
       appliedStatusLine +
+      appliedTransparencyLine +
       issueLines +
       "<div class=\"button-row\">" +
       createButton("Auto-normalize", "normalize-manual-strategy") +

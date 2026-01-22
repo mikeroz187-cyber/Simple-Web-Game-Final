@@ -119,6 +119,15 @@ function getManualStrategyMaxSpend(gameState) {
   return gameState && gameState.player ? gameState.player.cash : 0;
 }
 
+function hasAppliedManualSocialStrategyToday(gameState) {
+  if (!gameState || !gameState.player || !gameState.social || !gameState.social.manualStrategy) {
+    return false;
+  }
+  const today = gameState.player.day;
+  const lastAppliedDay = gameState.social.manualStrategy.lastAppliedDay;
+  return Number.isFinite(lastAppliedDay) && lastAppliedDay === today;
+}
+
 function calculateManualSocialStrategyImpact(gameState, budget, allocations) {
   const config = getManualSocialStrategyConfig();
   if (!config) {
@@ -191,6 +200,9 @@ function applyManualSocialStrategy(gameState) {
   if (!config) {
     return { ok: false, message: "Manual strategy not available." };
   }
+  if (hasAppliedManualSocialStrategyToday(gameState)) {
+    return { ok: false, message: "Strategy already applied today." };
+  }
   const manualStrategy = getManualSocialStrategyState(gameState);
   const totalPct = getManualStrategyAllocationTotal(manualStrategy.allocations);
   if (totalPct !== 100) {
@@ -200,9 +212,6 @@ function applyManualSocialStrategy(gameState) {
   const budget = Number.isFinite(manualStrategy.dailyBudget)
     ? Math.max(minSpend, Math.round(manualStrategy.dailyBudget))
     : minSpend;
-  if (manualStrategy.lastAppliedDay === gameState.player.day) {
-    return { ok: false, message: "Manual strategy already applied today." };
-  }
   const maxSpend = getManualStrategyMaxSpend(gameState);
   if (budget > maxSpend) {
     return { ok: false, message: "Not enough cash for this budget." };
