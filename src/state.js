@@ -167,6 +167,16 @@ function ensureSocialManualStrategyState(gameState) {
   if (!Number.isFinite(manualStrategy.lastAppliedDay)) {
     manualStrategy.lastAppliedDay = null;
   }
+  if (Number.isFinite(manualStrategy.lastAppliedDay)) {
+    const logEntries = Array.isArray(gameState.storyLog) ? gameState.storyLog : [];
+    const expectedId = "manual_strategy_day_" + manualStrategy.lastAppliedDay;
+    const hasLogEntry = logEntries.some(function (entry) {
+      return entry && entry.id === expectedId;
+    });
+    if (!hasLogEntry) {
+      manualStrategy.lastAppliedDay = null;
+    }
+  }
 }
 
 function ensureAutomationState(gameState) {
