@@ -208,7 +208,7 @@ function applyManualSocialStrategy(gameState) {
     return { ok: false, message: "Manual strategy not available." };
   }
   if (hasAppliedManualSocialStrategyToday(gameState)) {
-    return { ok: false, message: "Strategy already applied today." };
+    return { ok: false, message: "Applied — come back tomorrow to change." };
   }
   const manualStrategy = getManualSocialStrategyState(gameState);
   const totalPct = getManualStrategyAllocationTotal(manualStrategy.allocations);
@@ -261,8 +261,7 @@ function applyManualSocialStrategy(gameState) {
     cost: budget,
     followersGained: followersGained,
     subscribersGained: subscribersGained,
-    message: "Strategy applied: -" + formatCurrency(budget) + ", +" + followersGained +
-      " followers, +" + subscribersGained + " subs.",
+    message: "Applied — come back tomorrow to change.",
     milestoneEvents: milestoneEvents
   };
 }

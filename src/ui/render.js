@@ -468,16 +468,15 @@ function renderSocial(gameState) {
   const issueLines = manualIssues.length
     ? "<p class=\"helper-text\">" + manualIssues.join(" ") + "</p>"
     : "";
-  const appliedStatusLine = appliedToday
-    ? "<p class=\"helper-text\">Strategy already applied today.</p>"
-    : "";
   const appliedDayLabel = Number.isFinite(lastAppliedDay) ? lastAppliedDay : "Never";
   const todayLabel = gameState && gameState.player && Number.isFinite(gameState.player.day)
     ? gameState.player.day
     : "?";
   const appliedTransparencyLine = "<p class=\"helper-text\">Last applied day: " + appliedDayLabel +
     " (Today: " + todayLabel + ")</p>";
-  const canApplyManual = manualIssues.length === 0 && !appliedToday;
+  const canApplyManual = manualIssues.length === 0;
+  const manualApplyLabel = appliedToday ? "Applied — come back tomorrow" : "Apply Strategy";
+  const disableManualApply = appliedToday || !canApplyManual;
 
   const manualPanel = manualConfig
     ? "<div class=\"panel\">" +
@@ -491,12 +490,11 @@ function renderSocial(gameState) {
       manualAllocationRows +
       "<p class=\"helper-text\">" + allocationStatus + "</p>" +
       "<p class=\"helper-text\">" + previewLine + "</p>" +
-      appliedStatusLine +
       appliedTransparencyLine +
       issueLines +
       "<div class=\"button-row\">" +
       createButton("Auto-normalize", "normalize-manual-strategy") +
-      createButton("Apply Strategy", "apply-manual-strategy", "primary", !canApplyManual) +
+      createButton(manualApplyLabel, "apply-manual-strategy", "primary", disableManualApply) +
       "</div>" +
       "</div>"
     : "";
