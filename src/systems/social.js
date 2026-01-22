@@ -62,6 +62,193 @@ function getActiveSocialStrategy(gameState) {
   return getSocialStrategyById(activeId);
 }
 
+function getManualSocialStrategyConfig() {
+  return getManualStrategyConfig();
+}
+
+function getManualSocialStrategyState(gameState) {
+  if (!gameState || !gameState.social) {
+    return null;
+  }
+  return gameState.social.manualStrategy || null;
+}
+
+function getManualStrategyChannels() {
+  const config = getManualSocialStrategyConfig();
+  return config && Array.isArray(config.channels) ? config.channels : [];
+}
+
+function getManualStrategyChannelLabel(channelId) {
+  const config = getManualSocialStrategyConfig();
+  if (config && config.channelLabels && config.channelLabels[channelId]) {
+    return config.channelLabels[channelId];
+  }
+  return channelId;
+}
+
+function getManualStrategyAllocationTotal(allocations) {
+  const channels = getManualStrategyChannels();
+  return channels.reduce(function (sum, channel) {
+    const value = allocations && Number.isFinite(allocations[channel]) ? allocations[channel] : 0;
+    return sum + value;
+  }, 0);
+}
+
+function getManualStrategyEffectiveSpend(spend, diminishingReturnsK) {
+  if (!Number.isFinite(spend) || spend <= 0) {
+    return 0;
+  }
+  const k = Number.isFinite(diminishingReturnsK) ? diminishingReturnsK : 0;
+  if (k <= 0) {
+    return spend;
+  }
+  return spend * (1 / (1 + k * spend));
+}
+
+function getManualStrategyMaxSpend(gameState) {
+  const config = getManualSocialStrategyConfig();
+  if (!config) {
+    return 0;
+  }
+  if (config.maxSpend === "playerCash" && gameState && gameState.player) {
+    return gameState.player.cash;
+  }
+  if (Number.isFinite(config.maxSpend)) {
+    return config.maxSpend;
+  }
+  return gameState && gameState.player ? gameState.player.cash : 0;
+}
+
+function calculateManualSocialStrategyImpact(gameState, budget, allocations) {
+  const config = getManualSocialStrategyConfig();
+  if (!config) {
+    return { followersGained: 0, subscribersGained: 0 };
+  }
+  const minSpend = Number.isFinite(config.minSpend) ? config.minSpend : 0;
+  const safeBudget = Number.isFinite(budget) ? Math.max(minSpend, Math.round(budget)) : minSpend;
+  const channels = getManualStrategyChannels();
+  const baseFollowers = channels.reduce(function (sum, channel) {
+    const pct = allocations && Number.isFinite(allocations[channel]) ? allocations[channel] : 0;
+    const spend = safeBudget * (pct / 100);
+    const effectiveSpend = getManualStrategyEffectiveSpend(spend, config.diminishingReturnsK);
+    const rate = config.followersPerDollar && Number.isFinite(config.followersPerDollar[channel])
+      ? config.followersPerDollar[channel]
+      : 0;
+    return sum + (effectiveSpend * rate);
+  }, 0);
+  const followersGained = applyEquipmentFollowersMultiplier(Math.round(baseFollowers), gameState);
+  const subsPerFollower = Number.isFinite(config.subsPerFollower) ? config.subsPerFollower : 0;
+  const subscribersGained = Math.max(0, Math.floor(followersGained * subsPerFollower));
+  return {
+    followersGained: followersGained,
+    subscribersGained: subscribersGained
+  };
+}
+
+function getManualSocialStrategyPreview(gameState) {
+  const manualStrategy = getManualSocialStrategyState(gameState);
+  const allocations = manualStrategy ? manualStrategy.allocations : null;
+  const totalPct = getManualStrategyAllocationTotal(allocations);
+  const budget = manualStrategy ? manualStrategy.dailyBudget : 0;
+  const impact = calculateManualSocialStrategyImpact(gameState, budget, allocations);
+  return {
+    totalPct: totalPct,
+    budget: budget,
+    followersGained: impact.followersGained,
+    subscribersGained: impact.subscribersGained
+  };
+}
+
+function getManualSocialStrategyIssues(gameState) {
+  const config = getManualSocialStrategyConfig();
+  const manualStrategy = getManualSocialStrategyState(gameState);
+  const issues = [];
+  if (!config || !manualStrategy || !gameState || !gameState.player) {
+    issues.push("Manual strategy unavailable.");
+    return issues;
+  }
+  const totalPct = getManualStrategyAllocationTotal(manualStrategy.allocations);
+  if (totalPct !== 100) {
+    issues.push("Allocation must total 100%.");
+  }
+  const minSpend = Number.isFinite(config.minSpend) ? config.minSpend : 0;
+  if (!Number.isFinite(manualStrategy.dailyBudget) || manualStrategy.dailyBudget < minSpend) {
+    issues.push("Budget is below the minimum.");
+  }
+  const maxSpend = getManualStrategyMaxSpend(gameState);
+  if (manualStrategy.dailyBudget > maxSpend) {
+    issues.push("Not enough cash for this budget.");
+  }
+  if (manualStrategy.lastAppliedDay === gameState.player.day) {
+    issues.push("Strategy already applied today.");
+  }
+  return issues;
+}
+
+function applyManualSocialStrategy(gameState) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "No game state available." };
+  }
+  ensureSocialManualStrategyState(gameState);
+  const config = getManualSocialStrategyConfig();
+  if (!config) {
+    return { ok: false, message: "Manual strategy not available." };
+  }
+  const manualStrategy = getManualSocialStrategyState(gameState);
+  const totalPct = getManualStrategyAllocationTotal(manualStrategy.allocations);
+  if (totalPct !== 100) {
+    return { ok: false, message: "Allocation must total 100%." };
+  }
+  const minSpend = Number.isFinite(config.minSpend) ? config.minSpend : 0;
+  const budget = Number.isFinite(manualStrategy.dailyBudget)
+    ? Math.max(minSpend, Math.round(manualStrategy.dailyBudget))
+    : minSpend;
+  if (manualStrategy.lastAppliedDay === gameState.player.day) {
+    return { ok: false, message: "Manual strategy already applied today." };
+  }
+  const maxSpend = getManualStrategyMaxSpend(gameState);
+  if (budget > maxSpend) {
+    return { ok: false, message: "Not enough cash for this budget." };
+  }
+
+  const impact = calculateManualSocialStrategyImpact(gameState, budget, manualStrategy.allocations);
+  gameState.player.cash = Math.max(0, gameState.player.cash - budget);
+  gameState.player.followers = Math.max(0, gameState.player.followers + impact.followersGained);
+  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + impact.subscribersGained);
+  manualStrategy.dailyBudget = budget;
+  manualStrategy.lastAppliedDay = gameState.player.day;
+
+  ensureStoryLogState(gameState);
+  const dayLabel = Number.isFinite(gameState.player.day) ? "Day " + gameState.player.day : "Today";
+  const spendLines = getManualStrategyChannels().map(function (channel) {
+    const pct = Number.isFinite(manualStrategy.allocations[channel]) ? manualStrategy.allocations[channel] : 0;
+    const spend = Math.round(budget * (pct / 100));
+    return getManualStrategyChannelLabel(channel) + " " + formatCurrency(spend);
+  });
+  const logEntry = {
+    id: "manual_strategy_day_" + gameState.player.day,
+    dayNumber: gameState.player.day,
+    title: "Manual Social Strategy",
+    body: dayLabel + " — Spent " + formatCurrency(budget) + " (" + spendLines.join(", ") + "). +" +
+      impact.followersGained + " followers, +" + impact.subscribersGained + " subscribers.",
+    timestamp: new Date().toISOString()
+  };
+  if (!gameState.storyLog.some(function (entry) {
+    return entry.id === logEntry.id;
+  })) {
+    gameState.storyLog.push(logEntry);
+  }
+
+  const milestoneEvents = checkMilestones(gameState);
+
+  return {
+    ok: true,
+    message: "Manual strategy applied. +" + impact.followersGained + " followers, +" +
+      impact.subscribersGained + " subscribers.",
+    milestoneEvents: milestoneEvents
+  };
+}
+
 function setSocialStrategy(gameState, strategyId) {
   if (!gameState || !gameState.social) {
     return { ok: false, message: "No social data available." };

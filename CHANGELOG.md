@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Manual Social Strategy with daily budget allocation and once-per-day apply on the Social screen.
+  - Why: Deliver the approved deterministic, manual social spend mechanic with immediate feedback and save persistence.
+  - Files touched: src/config.js, config.toml, src/state.js, src/save.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 2 story events at Days 95/120/145/170 with Story Log entries.
   - Why: Deliver the approved Act 2 story schedule as one-time day-start events that persist in the Story Log.
   - Files touched: src/config.js, src/systems/story.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.

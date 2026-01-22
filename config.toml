@@ -448,6 +448,24 @@ instagramReachMult = 0.9
 xReachMult = 1.2
 subscriberConversionMult = 1.1
 
+[social.manual_strategy]
+channels = ["tease", "collabs", "ads"]
+minSpend = 0
+maxSpend = "playerCash"
+defaultDailyBudget = 200
+subsPerFollower = 0.01
+diminishingReturnsK = 0.002
+
+[social.manual_strategy.channelLabels]
+tease = "Tease"
+collabs = "Collabs"
+ads = "Ads"
+
+[social.manual_strategy.followersPerDollar]
+tease = 1.2
+collabs = 1.6
+ads = 0.8
+
 [milestones]
 milestoneOrder = [
   "ms_followers_1000",

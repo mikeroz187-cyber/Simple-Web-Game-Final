@@ -276,6 +276,32 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "normalize-manual-strategy") {
+      ensureSocialManualStrategyState(window.gameState);
+      const manualStrategy = window.gameState.social.manualStrategy;
+      manualStrategy.allocations = normalizeManualStrategyAllocations(manualStrategy.allocations);
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "apply-manual-strategy") {
+      const result = applyManualSocialStrategy(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+        const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
+        if (milestoneCards.length) {
+          showEventCards(milestoneCards);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "post-instagram" || action === "post-x") {
       const platform = action === "post-instagram" ? "Instagram" : "X";
       const result = postPromoContent(window.gameState, platform, uiState.social.selectedContentId);
@@ -392,6 +418,7 @@ function setupEventHandlers() {
         ensureUnlocksState(window.gameState);
         ensureShootOutputsState(window.gameState);
         ensureStoryLogState(window.gameState);
+        ensureSocialManualStrategyState(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
           appendStoryLogEntries(window.gameState, storyResult.events);
@@ -422,6 +449,7 @@ function setupEventHandlers() {
           ensureUnlocksState(window.gameState);
           ensureShootOutputsState(window.gameState);
           ensureStoryLogState(window.gameState);
+          ensureSocialManualStrategyState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             appendStoryLogEntries(window.gameState, storyResult.events);
@@ -463,6 +491,34 @@ function setupEventHandlers() {
     }
 
     console.warn("Action not wired yet:", action);
+  });
+
+  document.body.addEventListener("input", function (event) {
+    const target = event.target;
+    const action = target && target.dataset ? target.dataset.action : null;
+    if (action === "manual-strategy-budget") {
+      ensureSocialManualStrategyState(window.gameState);
+      const manualStrategy = window.gameState.social.manualStrategy;
+      const nextValue = Number(target.value);
+      const minSpend = Number.isFinite(CONFIG.social.manualStrategy.minSpend)
+        ? CONFIG.social.manualStrategy.minSpend
+        : 0;
+      manualStrategy.dailyBudget = Number.isFinite(nextValue) ? Math.max(minSpend, Math.round(nextValue)) : minSpend;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "manual-strategy-channel") {
+      ensureSocialManualStrategyState(window.gameState);
+      const channel = target.dataset.channel;
+      const manualStrategy = window.gameState.social.manualStrategy;
+      const nextValue = Number(target.value);
+      const sanitized = Number.isFinite(nextValue) ? Math.min(100, Math.max(0, Math.round(nextValue))) : 0;
+      manualStrategy.allocations[channel] = sanitized;
+      setUiMessage("");
+      renderApp(window.gameState);
+    }
   });
 
   document.body.addEventListener("change", function (event) {
