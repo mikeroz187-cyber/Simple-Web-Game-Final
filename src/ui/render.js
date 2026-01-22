@@ -181,13 +181,28 @@ function renderBooking(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No performers available.</p>";
 
-  const locations = CONFIG.locations.tier0_ids.concat(CONFIG.locations.tier1_ids);
+  const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
+  const locations = CONFIG.locations.tier0_ids
+    .concat(CONFIG.locations.tier1_ids)
+    .concat(tier2Ids);
   const locationRows = locations.map(function (locationId) {
     const location = CONFIG.locations.catalog[locationId];
     const isSelected = location.id === uiState.booking.locationId;
-    const isLocked = location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
+    const tier2RepRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+      ? CONFIG.locations.tier2ReputationRequirement
+      : 0;
+    const tier1Locked = location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
+    const tier2Locked = location.tier === 2 && !isLocationTierUnlocked(gameState, "tier2");
+    const tier2RepLocked = location.tier === 2 && gameState.player.reputation < tier2RepRequirement;
+    const isLocked = tier1Locked || tier2Locked || tier2RepLocked;
     const label = location.name + " (Tier " + location.tier + ")";
-    const detail = "Cost: " + formatCurrency(location.cost) + (isLocked ? " — Locked" : "");
+    let lockNote = "";
+    if (tier1Locked || tier2Locked) {
+      lockNote = "Locked";
+    } else if (tier2RepLocked) {
+      lockNote = "Requires Rep ≥ " + tier2RepRequirement;
+    }
+    const detail = "Cost: " + formatCurrency(location.cost) + (lockNote ? " — " + lockNote : "");
     const thumbPath = getLocationThumbnailPath(location);
     const fallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
     const thumbAlt = "Thumbnail of " + location.name;
@@ -228,7 +243,14 @@ function renderBooking(gameState) {
     ? formatCurrency(shootCostResult.value)
     : "Select a location";
 
-  const canConfirm = hasPerformers && uiState.booking.performerId && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= shootCostResult.value && performerAvailable;
+  const selectedLocationLocked = selectedLocation
+    ? (selectedLocation.tier === 1 && !isLocationTierUnlocked(gameState, "tier1"))
+      || (selectedLocation.tier === 2 && !isLocationTierUnlocked(gameState, "tier2"))
+      || (selectedLocation.tier === 2 && gameState.player.reputation < (Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+        ? CONFIG.locations.tier2ReputationRequirement
+        : 0))
+    : false;
+  const canConfirm = hasPerformers && uiState.booking.performerId && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= shootCostResult.value && performerAvailable && !selectedLocationLocked;
 
   const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" + performerRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
@@ -579,6 +601,15 @@ function renderShop(gameState) {
   const unlocked = isLocationTierUnlocked(gameState, "tier1");
   const canBuy = !unlocked && gameState.player.cash >= cost;
   const tier1Name = CONFIG.locations.tier1Name || "Location Tier 1";
+  const tier2Cost = Number.isFinite(CONFIG.locations.tier2UnlockCost)
+    ? CONFIG.locations.tier2UnlockCost
+    : 0;
+  const tier2RepRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+    ? CONFIG.locations.tier2ReputationRequirement
+    : 0;
+  const tier2Unlocked = isLocationTierUnlocked(gameState, "tier2");
+  const canBuyTier2 = !tier2Unlocked && gameState.player.cash >= tier2Cost && gameState.player.reputation >= tier2RepRequirement;
+  const tier2Name = CONFIG.locations.tier2Name || "Location Tier 2";
 
   const equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
     ? CONFIG.equipment.upgradeOrder
@@ -627,6 +658,14 @@ function renderShop(gameState) {
     "<p class=\"helper-text\">Cost: " + formatCurrency(cost) + " | Status: " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
     "<div class=\"button-row\">" +
     createButton("Unlock", "unlock-location-tier", "primary", !canBuy, "data-tier=\"tier1\"") +
+    "</div>" +
+    "</div>" +
+    "<div class=\"list-item\">" +
+    "<p><strong>" + tier2Name + "</strong></p>" +
+    "<p class=\"helper-text\">Cost: " + formatCurrency(tier2Cost) + " | Rep ≥ " + tier2RepRequirement +
+    " | Status: " + (tier2Unlocked ? "Unlocked" : "Locked") + "</p>" +
+    "<div class=\"button-row\">" +
+    createButton("Unlock", "unlock-location-tier", "primary", !canBuyTier2, "data-tier=\"tier2\"") +
     "</div>" +
     "</div>" +
     "</div>" +

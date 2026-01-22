@@ -19,7 +19,9 @@ function getAutoBookingSelection(gameState) {
     return { ok: false, reason: "No performers available" };
   }
 
-  const locationIds = CONFIG.locations.tier0_ids.concat(CONFIG.locations.tier1_ids);
+  const locationIds = CONFIG.locations.tier0_ids
+    .concat(CONFIG.locations.tier1_ids)
+    .concat(CONFIG.locations.tier2_ids || []);
   const location = locationIds.map(function (locationId) {
     return CONFIG.locations.catalog[locationId];
   }).find(function (entry) {
@@ -28,6 +30,17 @@ function getAutoBookingSelection(gameState) {
     }
     if (entry.tier === 1 && !isLocationTierUnlocked(gameState, "tier1")) {
       return false;
+    }
+    if (entry.tier === 2 && !isLocationTierUnlocked(gameState, "tier2")) {
+      return false;
+    }
+    if (entry.tier === 2) {
+      const repRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+        ? CONFIG.locations.tier2ReputationRequirement
+        : 0;
+      if (gameState.player.reputation < repRequirement) {
+        return false;
+      }
     }
     return true;
   });
@@ -113,6 +126,17 @@ function confirmBooking(gameState, selection) {
   }
   if (location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1")) {
     return { ok: false, message: "Tier 1 locations are locked." };
+  }
+  if (location.tier === 2 && !isLocationTierUnlocked(gameState, "tier2")) {
+    return { ok: false, message: "Tier 2 locations are locked." };
+  }
+  if (location.tier === 2) {
+    const repRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+      ? CONFIG.locations.tier2ReputationRequirement
+      : 0;
+    if (gameState.player.reputation < repRequirement) {
+      return { ok: false, message: "Need Reputation ≥ " + repRequirement + " to use Tier 2 locations." };
+    }
   }
 
   const theme = CONFIG.themes.mvp.themes[selection.themeId];

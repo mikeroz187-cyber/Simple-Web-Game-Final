@@ -251,8 +251,16 @@ const CONFIG = {
       "location_city_apartment",
       "location_small_warehouse"
     ],
+    tier2_ids: [
+      "location_downtown_penthouse",
+      "location_suburban_house",
+      "location_private_studio"
+    ],
     tier1UnlockCost: 2000,
     tier1Name: "Tier 1 — Downtown Studio",
+    tier2UnlockCost: 5000,
+    tier2Name: "Tier 2 — High-End Sets",
+    tier2ReputationRequirement: 25,
     catalog: {
       location_basic_bedroom: {
         id: "location_basic_bedroom",
@@ -313,6 +321,36 @@ const CONFIG = {
         unlockRequirements: [],
         thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A larger, flexible space suited for varied set dressing."
+      },
+      location_downtown_penthouse: {
+        id: "location_downtown_penthouse",
+        name: "Downtown Penthouse",
+        tier: 2,
+        cost: 1800,
+        unlockCost: 4000,
+        unlockRequirements: ["Reputation ≥ 20"],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
+        description: "A sleek high-rise space that signals serious growth."
+      },
+      location_suburban_house: {
+        id: "location_suburban_house",
+        name: "Suburban House",
+        tier: 2,
+        cost: 2200,
+        unlockCost: 5000,
+        unlockRequirements: ["Reputation ≥ 25"],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
+        description: "A full home set that unlocks richer lifestyle shoots."
+      },
+      location_private_studio: {
+        id: "location_private_studio",
+        name: "Private Studio",
+        tier: 2,
+        cost: 2600,
+        unlockCost: 6000,
+        unlockRequirements: ["Reputation ≥ 30"],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
+        description: "A dedicated studio with controlled lighting and props."
       }
     }
   },

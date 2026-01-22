@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Act 2 Tier 2 location unlock configuration with Shop/Booking gating and validation.
+  - Why: Enable the approved Tier 2 location access flow with reputation requirements and locked state handling.
+  - Files touched: src/config.js, src/state.js, src/main.js, src/systems/progression.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to authorize the Act 2 Tier 2 location unlock slice.
+  - Why: Keep scope documentation aligned with the new Tier 2 location gating requirement.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Advanced Analytics rollups and snapshot history to the Analytics screen (read-only, config-driven).
   - Why: Provide minimal Act 2-style analytics insights without changing pacing or adding new screens.
   - Files touched: index.html, src/config.js, src/systems/analytics.js, src/systems/booking.js, src/ui/render.js, CHANGELOG.md.
