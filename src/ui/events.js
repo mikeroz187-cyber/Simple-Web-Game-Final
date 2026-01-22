@@ -287,16 +287,19 @@ function setupEventHandlers() {
 
     if (action === "apply-manual-strategy") {
       const result = applyManualSocialStrategy(window.gameState);
+      if (!result.ok) {
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+        return;
+      }
       setUiMessage(result.message || "");
-      if (result.ok) {
-        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-        if (!saveResult.ok) {
-          setUiMessage(saveResult.message);
-        }
-        const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
-        if (milestoneCards.length) {
-          showEventCards(milestoneCards);
-        }
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message);
+      }
+      const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
+      if (milestoneCards.length) {
+        showEventCards(milestoneCards);
       }
       renderApp(window.gameState);
       return;

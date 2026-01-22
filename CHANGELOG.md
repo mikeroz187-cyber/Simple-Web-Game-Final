@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Corrected Manual Social Strategy apply messaging to show success details and block only repeat same-day applies.
+  - Why: Ensure the UI reports actual apply results and only shows the already-applied message on the second attempt.
+  - Files touched: src/systems/social.js, src/ui/events.js, CHANGELOG.md.
 - What: FIX: Cleared stale manual strategy applied-day flags when no matching story log entry exists.
   - Why: Prevent false “Strategy already applied today” messaging when saves have mismatched manual strategy metadata.
   - Files touched: src/state.js, CHANGELOG.md.
