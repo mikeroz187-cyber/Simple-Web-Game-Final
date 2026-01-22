@@ -38,6 +38,9 @@
 - **Follower gain modifiers** applied during social posting using the selected strategy multipliers (no formula rebalance).
 - **Persistence**: active strategy selection is saved and restored on refresh.
 
+## In Scope Now (Automation Tier 1 — Auto-Book on Advance Day)
+- **Automation Tier 1**: add a single toggle for **Auto-Book (1/day)** that runs only when the player clicks **Advance Day**; **no auto-run days, no scheduling UI, and no multi-tier automation**.
+
 ## In Scope Now (Act 2 Option A — Milestone Trigger Resolution)
 - **Milestone trigger detection** using `CONFIG.milestones` to mark milestones as completed exactly once.
 - **Reward application** from milestone data (cash/followers/subscribers/reputation/unlock flags if defined).

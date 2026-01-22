@@ -27,6 +27,8 @@ const CONFIG = {
     no_database: true,
     no_frameworks: true
   },
+  AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT: false,
+  AUTOMATION_AUTO_BOOK_PER_DAY: 1,
   save: {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,

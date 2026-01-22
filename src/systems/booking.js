@@ -6,6 +6,87 @@ function advanceDay(gameState) {
   return storyResult.events || [];
 }
 
+function getAutoBookingSelection(gameState) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return { ok: false, reason: "Roster data missing" };
+  }
+
+  const performer = gameState.roster.performers.find(function (entry) {
+    return isPerformerAvailable(entry);
+  });
+  if (!performer) {
+    return { ok: false, reason: "No performers available" };
+  }
+
+  const locationIds = CONFIG.locations.tier0_ids.concat(CONFIG.locations.tier1_ids);
+  const location = locationIds.map(function (locationId) {
+    return CONFIG.locations.catalog[locationId];
+  }).find(function (entry) {
+    if (!entry) {
+      return false;
+    }
+    if (entry.tier === 1 && !isLocationTierUnlocked(gameState, "tier1")) {
+      return false;
+    }
+    return true;
+  });
+  if (!location) {
+    return { ok: false, reason: "No available locations" };
+  }
+
+  const themeId = CONFIG.themes.mvp.theme_ids[0];
+  const theme = themeId ? CONFIG.themes.mvp.themes[themeId] : null;
+  if (!theme) {
+    return { ok: false, reason: "No themes available" };
+  }
+
+  const contentType = CONFIG.content_types.available[0];
+  if (!contentType) {
+    return { ok: false, reason: "No content types available" };
+  }
+
+  return {
+    ok: true,
+    selection: {
+      performerId: performer.id,
+      locationId: location.id,
+      themeId: theme.id,
+      contentType: contentType
+    }
+  };
+}
+
+function tryAutoBookOne(gameState) {
+  if (!gameState || !gameState.player) {
+    return { success: false, reason: "Game state missing" };
+  }
+
+  if (gameState.player.day >= gameState.player.debtDueDay) {
+    return { success: false, reason: "Day limit reached" };
+  }
+
+  const selectionResult = getAutoBookingSelection(gameState);
+  if (!selectionResult.ok) {
+    return { success: false, reason: selectionResult.reason };
+  }
+
+  const location = CONFIG.locations.catalog[selectionResult.selection.locationId];
+  const shootCostResult = calculateShootCost(location);
+  if (!shootCostResult.ok) {
+    return { success: false, reason: "Unable to calculate shoot cost" };
+  }
+  if (gameState.player.cash < shootCostResult.value) {
+    return { success: false, reason: "Not enough cash" };
+  }
+
+  const result = confirmBooking(gameState, selectionResult.selection);
+  if (!result.ok) {
+    return { success: false, reason: result.message || "Booking failed" };
+  }
+
+  return { success: true, result: result };
+}
+
 function confirmBooking(gameState, selection) {
   if (!gameState || !selection) {
     return { ok: false, message: "Select all fields before confirming." };

@@ -51,6 +51,26 @@ function newGameState() {
     performerManagement: { contracts: {}, availability: {}, retentionFlags: {} },
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
-    milestones: []
+    milestones: [],
+    automation: {
+      autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
+    }
   };
+}
+
+function ensureAutomationState(gameState) {
+  if (!gameState) {
+    return;
+  }
+
+  if (!gameState.automation || typeof gameState.automation !== "object") {
+    gameState.automation = {
+      autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
+    };
+    return;
+  }
+
+  if (typeof gameState.automation.autoBookEnabled !== "boolean") {
+    gameState.automation.autoBookEnabled = CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT;
+  }
 }

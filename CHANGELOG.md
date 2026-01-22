@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Automation Tier 1: Auto-Book (1/day) toggle that runs on Advance Day with clear event messages.
+  - Why: Deliver the approved automation slice that books exactly one shoot per Advance Day click without auto-run days.
+  - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to explicitly include Automation Tier 1 (Auto-Book on Advance Day) as in-scope.
+  - Why: Make the Automation Tier 1 slice explicitly authorized in the current scope.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added manual Social Strategy selection on the Social screen with single-active persistence and follower gain modifiers.
   - Why: Let players choose a strategy, receive confirmation feedback, and apply the defined multipliers without automation.
   - Files touched: src/systems/social.js, src/state.js, src/ui/render.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
