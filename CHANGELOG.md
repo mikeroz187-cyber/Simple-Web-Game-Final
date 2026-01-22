@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Ensure Shop upgrade purchases always show the result message using the existing UI status system.
   - Files touched: src/ui/render.js, CHANGELOG.md.
 ### Changed
+- What: Clarified Manual Advance Day as the intentional, player-facing Act 1 time control and noted automation as out of scope.
+  - Why: Prevent future confusion by documenting the canonical time progression method for MVP/Act 1.
+  - Files touched: docs/CURRENT_SCOPE.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_BUILD_ORDER.md, CHANGELOG.md.
 - What: Removed the Premium booking gate from the Tier 1 unlock scope so Premium shoots are allowed without Tier 1 while Tier 1 locations stay locked.
   - Why: Align Tier 1 unlock behavior with the updated mechanic that only controls Tier 1 location access.
   - Files touched: src/systems/booking.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.

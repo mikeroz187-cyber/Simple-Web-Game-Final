@@ -39,6 +39,10 @@ A step is “done” only when:
 - Doesn’t break previous steps.
 - Save/load still works (after Step 2 exists).
 
+## 4.5) Implemented MVP Notes (Historical)
+- **DONE:** Manual Advance Day is a player-facing UI action and the canonical Act 1 time control.
+  - **Prerequisite for:** story events, milestones, and any future automation systems (post-MVP).
+
 ## 5) Build Phases (THE ACTUAL SEQUENCE)
 
 ### Phase 0 — Preflight (Read + Plan)
