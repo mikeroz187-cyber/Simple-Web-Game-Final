@@ -25,6 +25,7 @@ function newGameState() {
             name: performer.name,
             type: performer.type,
             starPower: performer.starPower,
+            portraitPath: getPerformerPortraitPath(performer),
             fatigue: 0,
             loyalty: CONFIG.performers.starting_loyalty
           };

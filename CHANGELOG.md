@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added performer portrait placeholders in roster and booking UI (data-driven, safe fallback).
+  - Why: Surface performer portraits consistently across roster and booking with a safe placeholder default.
+  - Files touched: src/state.js, src/ui/render.js, src/utils/format.js, docs/DATA_PERFORMERS.md, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to include Performer Portraits v1 placeholder integration.
+  - Why: Authorize the Act 1 UI integration slice for performer portraits.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Automation Tier 1: Auto-Book (1/day) toggle that runs on Advance Day with clear event messages.
   - Why: Deliver the approved automation slice that books exactly one shoot per Advance Day click without auto-run days.
   - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
