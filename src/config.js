@@ -170,6 +170,24 @@ const CONFIG = {
   social: {
     strategy: {
       defaultStrategyId: "balanced"
+    },
+    manualStrategy: {
+      channels: ["tease", "collabs", "ads"],
+      channelLabels: {
+        tease: "Tease",
+        collabs: "Collabs",
+        ads: "Ads"
+      },
+      minSpend: 0,
+      maxSpend: "playerCash",
+      defaultDailyBudget: 200,
+      followersPerDollar: {
+        tease: 1.2,
+        collabs: 1.6,
+        ads: 0.8
+      },
+      subsPerFollower: 0.01,
+      diminishingReturnsK: 0.002
     }
   },
   analytics: {

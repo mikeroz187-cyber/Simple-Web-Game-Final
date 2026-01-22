@@ -39,7 +39,8 @@ function newGameState() {
     shootOutputs: [],
     social: {
       posts: [],
-      activeSocialStrategyId: CONFIG.social.strategy.defaultStrategyId
+      activeSocialStrategyId: CONFIG.social.strategy.defaultStrategyId,
+      manualStrategy: buildDefaultManualStrategyState()
     },
     unlocks: {
       locationTier1Unlocked: false,
@@ -61,6 +62,66 @@ function newGameState() {
   };
 }
 
+function getManualStrategyConfig() {
+  if (CONFIG.social && CONFIG.social.manualStrategy) {
+    return CONFIG.social.manualStrategy;
+  }
+  return null;
+}
+
+function getDefaultManualStrategyAllocations() {
+  const config = getManualStrategyConfig();
+  const channels = config && Array.isArray(config.channels) ? config.channels : [];
+  const count = channels.length || 1;
+  const base = Math.floor(100 / count);
+  const remainder = 100 - base * count;
+  const allocations = {};
+  channels.forEach(function (channel, index) {
+    allocations[channel] = base + (index === 0 ? remainder : 0);
+  });
+  return allocations;
+}
+
+function normalizeManualStrategyAllocations(allocations) {
+  const config = getManualStrategyConfig();
+  const channels = config && Array.isArray(config.channels) ? config.channels : [];
+  if (!allocations || typeof allocations !== "object") {
+    return getDefaultManualStrategyAllocations();
+  }
+  const total = channels.reduce(function (sum, channel) {
+    const value = Number.isFinite(allocations[channel]) ? allocations[channel] : 0;
+    return sum + value;
+  }, 0);
+  if (total <= 0) {
+    return getDefaultManualStrategyAllocations();
+  }
+  const normalized = {};
+  let runningTotal = 0;
+  channels.forEach(function (channel, index) {
+    if (index === channels.length - 1) {
+      normalized[channel] = Math.max(0, 100 - runningTotal);
+      return;
+    }
+    const raw = Number.isFinite(allocations[channel]) ? allocations[channel] : 0;
+    const portion = Math.max(0, Math.floor((raw / total) * 100));
+    normalized[channel] = portion;
+    runningTotal += portion;
+  });
+  return normalized;
+}
+
+function buildDefaultManualStrategyState() {
+  const config = getManualStrategyConfig();
+  const defaultBudget = config && Number.isFinite(config.defaultDailyBudget)
+    ? config.defaultDailyBudget
+    : 0;
+  return {
+    dailyBudget: defaultBudget,
+    allocations: getDefaultManualStrategyAllocations(),
+    lastAppliedDay: null
+  };
+}
+
 function ensureShootOutputsState(gameState) {
   if (!gameState) {
     return;
@@ -78,6 +139,33 @@ function ensureStoryLogState(gameState) {
 
   if (!Array.isArray(gameState.storyLog)) {
     gameState.storyLog = [];
+  }
+}
+
+function ensureSocialManualStrategyState(gameState) {
+  if (!gameState || !gameState.social) {
+    return;
+  }
+  const config = getManualStrategyConfig();
+  if (!config) {
+    return;
+  }
+  if (!gameState.social.manualStrategy || typeof gameState.social.manualStrategy !== "object") {
+    gameState.social.manualStrategy = buildDefaultManualStrategyState();
+    return;
+  }
+  const manualStrategy = gameState.social.manualStrategy;
+  if (!Number.isFinite(manualStrategy.dailyBudget)) {
+    manualStrategy.dailyBudget = Number.isFinite(config.defaultDailyBudget) ? config.defaultDailyBudget : 0;
+  }
+  if (!manualStrategy.allocations || typeof manualStrategy.allocations !== "object") {
+    manualStrategy.allocations = getDefaultManualStrategyAllocations();
+  } else {
+    const normalized = normalizeManualStrategyAllocations(manualStrategy.allocations);
+    manualStrategy.allocations = normalized;
+  }
+  if (!Number.isFinite(manualStrategy.lastAppliedDay)) {
+    manualStrategy.lastAppliedDay = null;
   }
 }
 

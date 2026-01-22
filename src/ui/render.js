@@ -406,6 +406,10 @@ function renderSocial(gameState) {
   const uiState = getUiState();
   const strategies = getSocialStrategies();
   const activeStrategyId = getActiveSocialStrategyId(gameState);
+  const manualConfig = getManualSocialStrategyConfig();
+  const manualStrategy = gameState.social && gameState.social.manualStrategy
+    ? gameState.social.manualStrategy
+    : null;
   const promoEntries = gameState.content.entries.filter(function (entry) {
     return entry.contentType === "Promo";
   });
@@ -431,6 +435,56 @@ function renderSocial(gameState) {
     : "<p class=\"helper-text\">No social strategies available.</p>";
 
   const strategyPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Social Strategies</h3>" + strategyList + "</div>";
+
+  const manualChannels = manualConfig ? manualConfig.channels : [];
+  const manualPreview = getManualSocialStrategyPreview(gameState);
+  const manualIssues = getManualSocialStrategyIssues(gameState);
+  const manualMaxSpend = manualConfig ? getManualStrategyMaxSpend(gameState) : 0;
+  const manualAllocationRows = manualChannels.map(function (channel) {
+    const label = getManualStrategyChannelLabel(channel);
+    const value = manualStrategy && manualStrategy.allocations && Number.isFinite(manualStrategy.allocations[channel])
+      ? manualStrategy.allocations[channel]
+      : 0;
+    const inputId = "manual-strategy-" + channel;
+    return "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"" + inputId + "\">" + label + " %</label>" +
+      "<input id=\"" + inputId + "\" class=\"select-control\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"" + value + "\"" +
+      " data-action=\"manual-strategy-channel\" data-channel=\"" + channel + "\" />" +
+      "</div>";
+  }).join("");
+
+  const budgetValue = manualStrategy && Number.isFinite(manualStrategy.dailyBudget)
+    ? manualStrategy.dailyBudget
+    : 0;
+  const totalPct = manualPreview.totalPct || 0;
+  const allocationStatus = totalPct === 100
+    ? "Allocation total: 100%."
+    : "Allocation total: " + totalPct + "% (must be 100%).";
+  const previewLine = "Est. Followers +" + manualPreview.followersGained + ", Est. Subs +" + manualPreview.subscribersGained;
+  const issueLines = manualIssues.length
+    ? "<p class=\"helper-text\">" + manualIssues.join(" ") + "</p>"
+    : "";
+  const canApplyManual = manualIssues.length === 0;
+
+  const manualPanel = manualConfig
+    ? "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Manual Social Strategy</h3>" +
+      "<p class=\"helper-text\">Allocate a daily budget across channels and apply once per day.</p>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"manual-strategy-budget\">Daily Social Budget</label>" +
+      "<input id=\"manual-strategy-budget\" class=\"select-control\" type=\"number\" min=\"" + manualConfig.minSpend + "\" max=\"" + manualMaxSpend + "\" step=\"1\" value=\"" + budgetValue + "\"" +
+      " data-action=\"manual-strategy-budget\" />" +
+      "</div>" +
+      manualAllocationRows +
+      "<p class=\"helper-text\">" + allocationStatus + "</p>" +
+      "<p class=\"helper-text\">" + previewLine + "</p>" +
+      issueLines +
+      "<div class=\"button-row\">" +
+      createButton("Auto-normalize", "normalize-manual-strategy") +
+      createButton("Apply Strategy", "apply-manual-strategy", "primary", !canApplyManual) +
+      "</div>" +
+      "</div>"
+    : "";
 
   const postsList = gameState.social.posts.length
     ? gameState.social.posts.map(function (post) {
@@ -471,6 +525,7 @@ function renderSocial(gameState) {
   const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
 
   const body = strategyPanel +
+    manualPanel +
     "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +

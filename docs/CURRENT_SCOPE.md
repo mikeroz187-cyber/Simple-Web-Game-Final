@@ -45,6 +45,7 @@
 - **Selection feedback** via the existing UI event modal confirming activation.
 - **Follower gain modifiers** applied during social posting using the selected strategy multipliers (no formula rebalance).
 - **Persistence**: active strategy selection is saved and restored on refresh.
+- **Manual Social Strategy (Daily Budget Allocation)**: allocate a daily social budget across Tease/Collabs/Ads and apply once per day to convert spend into followers/subscribers, with immediate feedback and persistence.
 
 ## In Scope Now (Automation Tier 1 — Auto-Book on Advance Day)
 - **Automation Tier 1**: add a single toggle for **Auto-Book (1/day)** that runs only when the player clicks **Advance Day**; **no auto-run days, no scheduling UI, and no multi-tier automation**.

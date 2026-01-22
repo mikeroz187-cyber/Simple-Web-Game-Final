@@ -161,6 +161,19 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.social.posts)) {
     candidate.social.posts = [];
   }
+  if (!candidate.social.manualStrategy || typeof candidate.social.manualStrategy !== "object") {
+    candidate.social.manualStrategy = buildDefaultManualStrategyState();
+  } else {
+    const manualStrategy = candidate.social.manualStrategy;
+    if (!Number.isFinite(manualStrategy.dailyBudget) ||
+      !manualStrategy.allocations ||
+      typeof manualStrategy.allocations !== "object" ||
+      Array.isArray(manualStrategy.allocations) ||
+      (manualStrategy.lastAppliedDay !== null && !Number.isFinite(manualStrategy.lastAppliedDay))
+    ) {
+      candidate.social.manualStrategy = buildDefaultManualStrategyState();
+    }
+  }
   if (!Array.isArray(candidate.milestones)) {
     candidate.milestones = [];
   }
@@ -338,6 +351,20 @@ function validateGameState(candidate) {
   }
   if (social.strategy !== undefined && (typeof social.strategy !== "object" || social.strategy === null || Array.isArray(social.strategy))) {
     return { ok: false, message: "Social strategy invalid." };
+  }
+  if (social.manualStrategy !== undefined) {
+    if (typeof social.manualStrategy !== "object" || social.manualStrategy === null || Array.isArray(social.manualStrategy)) {
+      return { ok: false, message: "Manual social strategy invalid." };
+    }
+    if (!Number.isFinite(social.manualStrategy.dailyBudget)) {
+      return { ok: false, message: "Manual social budget invalid." };
+    }
+    if (!social.manualStrategy.allocations || typeof social.manualStrategy.allocations !== "object" || Array.isArray(social.manualStrategy.allocations)) {
+      return { ok: false, message: "Manual social allocations invalid." };
+    }
+    if (social.manualStrategy.lastAppliedDay !== null && !Number.isFinite(social.manualStrategy.lastAppliedDay)) {
+      return { ok: false, message: "Manual social strategy day invalid." };
+    }
   }
 
   for (let index = 0; index < social.posts.length; index += 1) {
