@@ -472,6 +472,14 @@ const CONFIG = {
         win: { id: "act1_end_win_day90", triggerDay: 90 },
         loss: { id: "act1_end_loss_day90", triggerDay: 90 }
       }
+    },
+    act2: {
+      schedule: [
+        { id: "act2_expansion_plan_day95", triggerDay: 95 },
+        { id: "act2_staffing_push_day120", triggerDay: 120 },
+        { id: "act2_studio_upgrade_day145", triggerDay: 145 },
+        { id: "act2_partnership_offer_day170", triggerDay: 170 }
+      ]
     }
   }
 };

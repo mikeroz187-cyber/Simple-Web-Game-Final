@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Act 2 story events at Days 95/120/145/170 with Story Log entries.
+  - Why: Deliver the approved Act 2 story schedule as one-time day-start events that persist in the Story Log.
+  - Files touched: src/config.js, src/systems/story.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 2 Theme Pack (5 new themes) selectable in Booking and displayed across UI.
   - Why: Expand the content theme catalog with the approved Act 2 themes while keeping selection and display consistent.
   - Files touched: src/config.js, src/ui/render.js, src/systems/booking.js, src/save.js, CHANGELOG.md.

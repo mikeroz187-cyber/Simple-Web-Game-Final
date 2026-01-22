@@ -78,6 +78,7 @@
 - **Event history list** shows newest-first entries with day label, title, and short preview.
 - **Reuse the existing modal** to view full story event text when a log entry is selected.
 - **No new story systems**: no branching, no authoring tools, no new content beyond existing packs.
+- **Act 2 Story Events Pack (Days 95/120/145/170)** — triggers + Story Log entries.
 
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).

@@ -6,6 +6,13 @@ function checkStoryEvents(gameState) {
   const events = [];
   const currentDay = gameState.player.day;
 
+  if (!gameState.story.act2 || typeof gameState.story.act2 !== "object" || Array.isArray(gameState.story.act2)) {
+    gameState.story.act2 = { eventsShown: [], lastEventId: null };
+  }
+  if (!Array.isArray(gameState.story.act2.eventsShown)) {
+    gameState.story.act2.eventsShown = [];
+  }
+
   if (!gameState.story.introShown && currentDay === CONFIG.story.act1.act1_intro_day) {
     gameState.story.introShown = true;
     events.push({ id: CONFIG.story.act1.intro.id, day: currentDay });
@@ -26,6 +33,20 @@ function checkStoryEvents(gameState) {
       ? CONFIG.story.act1.endEvents.win
       : CONFIG.story.act1.endEvents.loss;
     events.push({ id: endEvent.id, day: currentDay });
+  }
+
+  if (CONFIG.story.act2 && Array.isArray(CONFIG.story.act2.schedule)) {
+    CONFIG.story.act2.schedule.forEach(function (entry) {
+      if (!entry || entry.triggerDay !== currentDay) {
+        return;
+      }
+      if (gameState.story.act2.eventsShown.indexOf(entry.id) !== -1) {
+        return;
+      }
+      gameState.story.act2.eventsShown.push(entry.id);
+      gameState.story.act2.lastEventId = entry.id;
+      events.push({ id: entry.id, day: currentDay });
+    });
   }
 
   return { ok: true, events: events };
@@ -123,6 +144,22 @@ const STORY_EVENT_COPY = {
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",
     message: "The $10,000 debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."
+  },
+  act2_expansion_plan_day95: {
+    title: "Expansion Plan Drafted",
+    message: "With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table."
+  },
+  act2_staffing_push_day120: {
+    title: "Staffing Push",
+    message: "Demand is rising, and capacity is tight. You greenlight a staffing push to stabilize booking consistency."
+  },
+  act2_studio_upgrade_day145: {
+    title: "Studio Upgrade Decision",
+    message: "Production quality is plateauing. You decide to invest in equipment upgrades to keep premium output competitive."
+  },
+  act2_partnership_offer_day170: {
+    title: "Partnership Offer",
+    message: "A platform partner offers cross-promotion in exchange for consistent premium releases. You accept and lock in a long-term collaboration."
   }
 };
 
