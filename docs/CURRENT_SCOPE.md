@@ -31,6 +31,13 @@
 - **Location lock behavior**: Tier 1 locations remain locked until Tier 1 is purchased; Premium bookings are allowed without the Tier 1 unlock.
 - **Unlock persistence**: `gameState.unlocks.locationTiers.tier1` is authoritative; keep `locationTier1Unlocked` in sync for backward compatibility.
 
+## In Scope Now (Manual Social Strategy Selection — Single Active Strategy)
+- **Strategy list UI** on the existing Social screen showing all strategies from the social strategy data catalog.
+- **Single active selection** stored as `gameState.social.activeSocialStrategyId` with one strategy active at a time.
+- **Selection feedback** via the existing UI event modal confirming activation.
+- **Follower gain modifiers** applied during social posting using the selected strategy multipliers (no formula rebalance).
+- **Persistence**: active strategy selection is saved and restored on refresh.
+
 ## In Scope Now (Act 2 Option A — Milestone Trigger Resolution)
 - **Milestone trigger detection** using `CONFIG.milestones` to mark milestones as completed exactly once.
 - **Reward application** from milestone data (cash/followers/subscribers/reputation/unlock flags if defined).
@@ -53,6 +60,7 @@
 - [ ] Equipment upgrades are implemented only as defined in scope (Shop purchases + multipliers).
 - [ ] Location Tier 1 unlock is purchasable in Shop and Tier 1 locations stay locked until purchased (Premium shoots are not gated).
 - [ ] Milestones trigger once, apply data-driven rewards, and show player-facing messages via the existing event system.
+- [ ] Social strategy selection is manual, single-active, affects follower gains, persists on refresh, and confirms activation via the event system.
 - [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
 

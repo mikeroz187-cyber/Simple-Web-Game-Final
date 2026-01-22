@@ -202,6 +202,24 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "select-social-strategy") {
+      const strategyId = target.dataset.id;
+      const result = setSocialStrategy(window.gameState, strategyId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+        showEventCards([{
+          title: "📣 Social Strategy Activated",
+          message: "You’ve committed to " + result.strategy.label + ". Your follower growth will reflect this approach."
+        }]);
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "post-instagram" || action === "post-x") {
       const platform = action === "post-instagram" ? "Instagram" : "X";
       const result = postPromoContent(window.gameState, platform, uiState.social.selectedContentId);

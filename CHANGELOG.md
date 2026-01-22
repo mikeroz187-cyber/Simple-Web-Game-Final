@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added manual Social Strategy selection on the Social screen with single-active persistence and follower gain modifiers.
+  - Why: Let players choose a strategy, receive confirmation feedback, and apply the defined multipliers without automation.
+  - Files touched: src/systems/social.js, src/state.js, src/ui/render.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Implemented milestone trigger resolution with data-driven rewards, modal feedback, and scope documentation updates.
   - Why: Deliver the approved milestone trigger slice with one-time completion and clear player messaging.
   - Files touched: src/config.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/events.js, src/save.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
