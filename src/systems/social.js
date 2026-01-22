@@ -179,9 +179,6 @@ function getManualSocialStrategyIssues(gameState) {
   if (manualStrategy.dailyBudget > maxSpend) {
     issues.push("Not enough cash for this budget.");
   }
-  if (manualStrategy.lastAppliedDay === gameState.player.day) {
-    issues.push("Strategy already applied today.");
-  }
   return issues;
 }
 
