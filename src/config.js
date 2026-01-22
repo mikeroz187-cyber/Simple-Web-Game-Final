@@ -160,6 +160,42 @@ const CONFIG = {
     starting_reputation: 0,
     location_tier_1_unlock_cost: 2000
   },
+  milestones: {
+    milestoneOrder: [
+      "ms_followers_1000",
+      "ms_subscribers_250",
+      "ms_revenue_50000",
+      "ms_reputation_25",
+      "ms_reputation_50"
+    ],
+    milestones: {
+      ms_followers_1000: {
+        label: "First 1,000 Followers",
+        type: "followers",
+        threshold: 1000
+      },
+      ms_subscribers_250: {
+        label: "First 250 Subscribers",
+        type: "subscribers",
+        threshold: 250
+      },
+      ms_revenue_50000: {
+        label: "$50k Lifetime Revenue",
+        type: "lifetimeRevenue",
+        threshold: 50000
+      },
+      ms_reputation_25: {
+        label: "Reputation 25",
+        type: "reputation",
+        threshold: 25
+      },
+      ms_reputation_50: {
+        label: "Reputation 50",
+        type: "reputation",
+        threshold: 50
+      }
+    }
+  },
   equipment: {
     upgradeOrder: ["lighting", "camera", "set_dressing"],
     upgrades: {

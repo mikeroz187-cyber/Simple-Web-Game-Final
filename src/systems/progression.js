@@ -54,3 +54,124 @@ function purchaseTier1Location(gameState) {
 function purchaseLocationUnlock(gameState) {
   return purchaseTier1Location(gameState);
 }
+
+function getLifetimeRevenue(gameState) {
+  if (!gameState || !gameState.content || !Array.isArray(gameState.content.entries)) {
+    return 0;
+  }
+  return gameState.content.entries.reduce(function (total, entry) {
+    const revenue = entry && entry.results ? entry.results.revenue : 0;
+    return total + (Number.isFinite(revenue) ? revenue : 0);
+  }, 0);
+}
+
+function getMilestoneMetricValue(gameState, milestone) {
+  if (!gameState || !milestone) {
+    return 0;
+  }
+  const type = milestone.type;
+  if (type === "followers") {
+    return gameState.player.followers;
+  }
+  if (type === "subscribers") {
+    return gameState.player.subscribers;
+  }
+  if (type === "reputation") {
+    return gameState.player.reputation;
+  }
+  if (type === "lifetimeRevenue") {
+    return getLifetimeRevenue(gameState);
+  }
+  return 0;
+}
+
+function applyMilestoneRewards(gameState, milestone) {
+  const rewardLabels = [];
+  if (!gameState || !milestone) {
+    return "Rewards: none.";
+  }
+
+  const cashReward = milestone.rewardCash;
+  if (Number.isFinite(cashReward) && cashReward !== 0) {
+    gameState.player.cash = Math.max(0, gameState.player.cash + cashReward);
+    rewardLabels.push("+" + formatCurrency(cashReward) + " cash");
+  }
+
+  const followerReward = milestone.rewardFollowers;
+  if (Number.isFinite(followerReward) && followerReward !== 0) {
+    gameState.player.followers = Math.max(0, gameState.player.followers + followerReward);
+    rewardLabels.push("+" + followerReward + " followers");
+  }
+
+  const subscriberReward = milestone.rewardSubscribers;
+  if (Number.isFinite(subscriberReward) && subscriberReward !== 0) {
+    gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscriberReward);
+    rewardLabels.push("+" + subscriberReward + " subscribers");
+  }
+
+  const reputationReward = milestone.rewardReputation;
+  if (Number.isFinite(reputationReward) && reputationReward !== 0) {
+    gameState.player.reputation = Math.max(0, gameState.player.reputation + reputationReward);
+    rewardLabels.push("+" + reputationReward + " reputation");
+  }
+
+  if (milestone.unlockFlags && typeof milestone.unlockFlags === "object") {
+    const unlockKeys = Object.keys(milestone.unlockFlags);
+    unlockKeys.forEach(function (key) {
+      if (gameState.unlocks && typeof milestone.unlockFlags[key] === "boolean") {
+        gameState.unlocks[key] = milestone.unlockFlags[key];
+        rewardLabels.push("Unlocked " + key);
+      }
+    });
+  }
+
+  if (rewardLabels.length === 0) {
+    return "Rewards: none.";
+  }
+
+  return "Rewards: " + rewardLabels.join(", ") + ".";
+}
+
+function checkMilestones(gameState) {
+  const order = CONFIG.milestones ? CONFIG.milestones.milestoneOrder : [];
+  if (!gameState || !Array.isArray(order) || order.length === 0) {
+    return [];
+  }
+
+  if (!Array.isArray(gameState.milestones)) {
+    gameState.milestones = [];
+  }
+
+  const triggered = [];
+  order.forEach(function (milestoneId) {
+    const definition = CONFIG.milestones.milestones[milestoneId];
+    if (!definition) {
+      return;
+    }
+    const existing = gameState.milestones.find(function (entry) {
+      return entry.id === milestoneId;
+    });
+    if (existing && existing.completed) {
+      return;
+    }
+    const metricValue = getMilestoneMetricValue(gameState, definition);
+    if (!Number.isFinite(metricValue) || metricValue < definition.threshold) {
+      return;
+    }
+
+    const rewardSummary = applyMilestoneRewards(gameState, definition);
+    const record = existing || { id: milestoneId };
+    record.completed = true;
+    if (!existing) {
+      gameState.milestones.push(record);
+    }
+
+    triggered.push({
+      id: milestoneId,
+      title: definition.label || milestoneId,
+      rewardSummary: rewardSummary
+    });
+  });
+
+  return triggered;
+}
