@@ -161,6 +161,9 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.social.posts)) {
     candidate.social.posts = [];
   }
+  if (!Array.isArray(candidate.milestones)) {
+    candidate.milestones = [];
+  }
   return { ok: true, gameState: candidate, didReset: false };
 }
 

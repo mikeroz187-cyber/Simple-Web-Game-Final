@@ -10,6 +10,10 @@ This changelog is optimized for:
 ---
 
 ## [Unreleased]
+### Added
+- What: Implemented milestone trigger resolution with data-driven rewards, modal feedback, and scope documentation updates.
+  - Why: Deliver the approved milestone trigger slice with one-time completion and clear player messaging.
+  - Files touched: src/config.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/events.js, src/save.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 ### Fixed
 - FIX: Added dedicated Equipment Upgrades feedback messaging with detailed success/failure copy directly under the Shop panel.
   - Why: Ensure upgrade attempts always display clear outcomes in the Equipment Upgrades section as requested.

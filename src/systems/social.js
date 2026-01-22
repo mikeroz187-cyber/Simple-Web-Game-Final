@@ -51,8 +51,11 @@ function postPromoContent(gameState, platform, contentId) {
   gameState.player.followers = Math.max(0, gameState.player.followers + followersGained);
   gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscribersGained);
 
+  const milestoneEvents = checkMilestones(gameState);
+
   return {
     ok: true,
-    message: "Posted to " + platform + ". +" + followersGained + " followers."
+    message: "Posted to " + platform + ". +" + followersGained + " followers.",
+    milestoneEvents: milestoneEvents
   };
 }

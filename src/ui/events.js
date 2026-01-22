@@ -28,17 +28,16 @@ function clearModal() {
   }
 }
 
-function showStoryEvents(events) {
+function showEventCards(cards) {
   const modalRoot = qs("#modal-root");
-  if (!modalRoot || !Array.isArray(events) || events.length === 0) {
+  if (!modalRoot || !Array.isArray(cards) || cards.length === 0) {
     return;
   }
 
-  const eventHtml = events.map(function (event) {
-    const copy = getStoryEventCopy(event.id);
+  const eventHtml = cards.map(function (card) {
     return "<div class=\"modal-event\">" +
-      "<h3 class=\"modal-title\">" + copy.title + "</h3>" +
-      "<p class=\"modal-message\">" + copy.message + "</p>" +
+      "<h3 class=\"modal-title\">" + card.title + "</h3>" +
+      "<p class=\"modal-message\">" + card.message + "</p>" +
       "</div>";
   }).join("");
 
@@ -51,6 +50,35 @@ function showStoryEvents(events) {
     "</div>" +
     "</div>" +
     "</div>";
+}
+
+function buildStoryEventCards(events) {
+  if (!Array.isArray(events)) {
+    return [];
+  }
+  return events.map(function (event) {
+    const copy = getStoryEventCopy(event.id);
+    return {
+      title: copy.title,
+      message: copy.message
+    };
+  });
+}
+
+function buildMilestoneEventCards(events) {
+  if (!Array.isArray(events)) {
+    return [];
+  }
+  return events.map(function (event) {
+    return {
+      title: "🏆 Milestone Reached",
+      message: event.title + " — " + (event.rewardSummary || "Rewards: none.")
+    };
+  });
+}
+
+function showStoryEvents(events) {
+  showEventCards(buildStoryEventCards(events));
 }
 
 function setupEventHandlers() {
@@ -153,8 +181,11 @@ function setupEventHandlers() {
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
-        if (result.storyEvents && result.storyEvents.length) {
-          showStoryEvents(result.storyEvents);
+        const eventCards = buildMilestoneEventCards(result.milestoneEvents).concat(
+          buildStoryEventCards(result.storyEvents)
+        );
+        if (eventCards.length) {
+          showEventCards(eventCards);
         }
         renderApp(window.gameState);
         showScreen("screen-content");
@@ -179,6 +210,10 @@ function setupEventHandlers() {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
+        }
+        const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
+        if (milestoneCards.length) {
+          showEventCards(milestoneCards);
         }
       }
       renderApp(window.gameState);

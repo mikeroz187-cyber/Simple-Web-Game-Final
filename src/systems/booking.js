@@ -98,6 +98,8 @@ function confirmBooking(gameState, selection) {
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
 
+  const milestoneEvents = checkMilestones(gameState);
+
   let storyEvents = [];
   if (nextShoots >= shootsPerDay) {
     storyEvents = advanceDay(gameState);
@@ -107,6 +109,7 @@ function confirmBooking(gameState, selection) {
     ok: true,
     contentId: entry.id,
     message: "Shoot booked. +" + followersGained + " followers, +" + formatCurrency(revenue) + ".",
-    storyEvents: storyEvents
+    storyEvents: storyEvents,
+    milestoneEvents: milestoneEvents
   };
 }

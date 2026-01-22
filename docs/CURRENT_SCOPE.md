@@ -31,6 +31,12 @@
 - **Location lock behavior**: Tier 1 locations remain locked until Tier 1 is purchased; Premium bookings are allowed without the Tier 1 unlock.
 - **Unlock persistence**: `gameState.unlocks.locationTiers.tier1` is authoritative; keep `locationTier1Unlocked` in sync for backward compatibility.
 
+## In Scope Now (Act 2 Option A — Milestone Trigger Resolution)
+- **Milestone trigger detection** using `CONFIG.milestones` to mark milestones as completed exactly once.
+- **Reward application** from milestone data (cash/followers/subscribers/reputation/unlock flags if defined).
+- **Player-facing milestone messages** emitted immediately on trigger using the existing UI event system.
+- **One-time guarantee**: completed milestones persist in `gameState.milestones` and never re-trigger on refresh.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
 - **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.
@@ -46,6 +52,7 @@
 - [ ] Export/import continues to work for v2 saves without silent failures.
 - [ ] Equipment upgrades are implemented only as defined in scope (Shop purchases + multipliers).
 - [ ] Location Tier 1 unlock is purchasable in Shop and Tier 1 locations stay locked until purchased (Premium shoots are not gated).
+- [ ] Milestones trigger once, apply data-driven rewards, and show player-facing messages via the existing event system.
 - [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
 
