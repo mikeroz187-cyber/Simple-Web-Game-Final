@@ -9,6 +9,11 @@
 - Advance Day button complete.
 - Act 1 Content Pack 01 + 02 story events complete (if present).
 
+## Act 1 Time Control (Locked)
+- **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.
+- **Primary time progression for Act 1**: time advances only when the player triggers Advance Day after the required shoots; this is the canonical pacing/testing mechanism for Act 1.
+- **No automation yet**: automated/background day progression is explicitly out of scope until a later Act.
+
 ## In Scope Now (Act 2 Phase 1 — Save v2, New Games Only)
 - **Bump save version to v2** using `gameState.meta.version`.
 - **Add v2 defaults** per the Act 2 state extensions document(s) referenced in the plan (additive-only fields).
@@ -31,6 +36,7 @@
 - **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.
 - **New UI screens/panels** or navigation changes.
 - **Refactors or new systems** unrelated to the v2 schema bump and reset behavior.
+- **Automated/background day progression** or passive time simulation.
 - **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
 
 ## Definition of Done (Act 2 Phase 1)
