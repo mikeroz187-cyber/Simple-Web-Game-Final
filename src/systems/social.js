@@ -225,9 +225,11 @@ function applyManualSocialStrategy(gameState) {
   }
 
   const impact = calculateManualSocialStrategyImpact(gameState, budget, manualStrategy.allocations);
+  const followersGained = impact.followersGained;
+  const subscribersGained = impact.subscribersGained;
   gameState.player.cash = Math.max(0, gameState.player.cash - budget);
-  gameState.player.followers = Math.max(0, gameState.player.followers + impact.followersGained);
-  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + impact.subscribersGained);
+  gameState.player.followers = Math.max(0, gameState.player.followers + followersGained);
+  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscribersGained);
   manualStrategy.dailyBudget = budget;
   manualStrategy.lastAppliedDay = gameState.player.day;
 
@@ -243,7 +245,7 @@ function applyManualSocialStrategy(gameState) {
     dayNumber: gameState.player.day,
     title: "Manual Social Strategy",
     body: dayLabel + " — Spent " + formatCurrency(budget) + " (" + spendLines.join(", ") + "). +" +
-      impact.followersGained + " followers, +" + impact.subscribersGained + " subscribers.",
+      followersGained + " followers, +" + subscribersGained + " subscribers.",
     timestamp: new Date().toISOString()
   };
   if (!gameState.storyLog.some(function (entry) {
@@ -256,8 +258,11 @@ function applyManualSocialStrategy(gameState) {
 
   return {
     ok: true,
-    message: "Manual strategy applied. +" + impact.followersGained + " followers, +" +
-      impact.subscribersGained + " subscribers.",
+    cost: budget,
+    followersGained: followersGained,
+    subscribersGained: subscribersGained,
+    message: "Strategy applied: -" + formatCurrency(budget) + ", +" + followersGained +
+      " followers, +" + subscribersGained + " subs.",
     milestoneEvents: milestoneEvents
   };
 }
