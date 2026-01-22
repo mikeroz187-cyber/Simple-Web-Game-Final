@@ -10,6 +10,8 @@ const SHOOT_OUTPUT_PLACEHOLDER_SVG = [
   "</svg>"
 ].join("");
 
+const LOCATION_PLACEHOLDER_THUMB_PATH = "assets/images/placeholders/location_placeholder.svg";
+
 const CONFIG = {
   project: {
     name: "Studio Empire",
@@ -38,6 +40,7 @@ const CONFIG = {
   AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT: false,
   AUTOMATION_AUTO_BOOK_PER_DAY: 1,
   SHOOT_OUTPUTS_MAX_HISTORY: 50,
+  LOCATION_PLACEHOLDER_THUMB_PATH: LOCATION_PLACEHOLDER_THUMB_PATH,
   SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH: "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG),
   save: {
     localstorage_key: "studio_empire_save",
@@ -252,6 +255,7 @@ const CONFIG = {
         cost: 50,
         unlockCost: 0,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A simple, familiar space for low-stakes starter shoots."
       },
       location_shared_apartment: {
@@ -261,6 +265,7 @@ const CONFIG = {
         cost: 80,
         unlockCost: 0,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A modest room with everyday clutter and casual vibes."
       },
       location_spare_office: {
@@ -270,6 +275,7 @@ const CONFIG = {
         cost: 120,
         unlockCost: 0,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A quiet corner with a desk setup for clean, focused content."
       },
       location_studio_loft: {
@@ -279,6 +285,7 @@ const CONFIG = {
         cost: 300,
         unlockCost: 750,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A compact loft with improved lighting and a cleaner backdrop."
       },
       location_city_apartment: {
@@ -288,6 +295,7 @@ const CONFIG = {
         cost: 450,
         unlockCost: 1100,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A tidy urban space that feels more professional and polished."
       },
       location_small_warehouse: {
@@ -297,6 +305,7 @@ const CONFIG = {
         cost: 600,
         unlockCost: 1500,
         unlockRequirements: [],
+        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A larger, flexible space suited for varied set dressing."
       }
     }

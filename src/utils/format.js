@@ -29,3 +29,19 @@ function getPerformerPortraitSizePx() {
 function getPerformerPortraitRadiusPx() {
   return CONFIG.ui.panel_gap_px / 2;
 }
+
+function getLocationThumbnailPath(location) {
+  if (!location || typeof location.thumbnailPath !== "string") {
+    return CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+  }
+  const trimmed = location.thumbnailPath.trim();
+  return trimmed ? trimmed : CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+}
+
+function getLocationThumbnailSizePx() {
+  return CONFIG.ui.main_padding_px * 3;
+}
+
+function getLocationThumbnailRadiusPx() {
+  return CONFIG.ui.panel_gap_px / 2;
+}

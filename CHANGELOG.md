@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added location thumbnail placeholders in booking/content/gallery views with data-driven thumbnail paths and fallback behavior.
+  - Why: Provide consistent location visuals using safe placeholder assets with no new screens or systems.
+  - Files touched: src/config.js, src/utils/format.js, src/ui/render.js, assets/images/placeholders/location_placeholder.svg, docs/DATA_LOCATIONS.md, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to authorize Location Thumbnails v1 (placeholders only).
+  - Why: Document the approved scope expansion for location thumbnail UI integration.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Shoot Output Cards v1 with placeholder thumbnails and persistent shoot history.
   - Why: Provide a visible, persistent output log for completed shoots without adding new screens or assets.
   - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
