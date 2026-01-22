@@ -410,6 +410,13 @@ function renderSocial(gameState) {
   const manualStrategy = gameState.social && gameState.social.manualStrategy
     ? gameState.social.manualStrategy
     : null;
+  const lastAppliedDay = manualStrategy && Number.isFinite(manualStrategy.lastAppliedDay)
+    ? manualStrategy.lastAppliedDay
+    : null;
+  const appliedToday = Boolean(gameState && gameState.player) &&
+    Number.isFinite(lastAppliedDay) &&
+    lastAppliedDay > 0 &&
+    lastAppliedDay === gameState.player.day;
   const promoEntries = gameState.content.entries.filter(function (entry) {
     return entry.contentType === "Promo";
   });
@@ -464,7 +471,10 @@ function renderSocial(gameState) {
   const issueLines = manualIssues.length
     ? "<p class=\"helper-text\">" + manualIssues.join(" ") + "</p>"
     : "";
-  const canApplyManual = manualIssues.length === 0;
+  const appliedStatusLine = appliedToday
+    ? "<p class=\"helper-text\">Strategy already applied today.</p>"
+    : "";
+  const canApplyManual = manualIssues.length === 0 && !appliedToday;
 
   const manualPanel = manualConfig
     ? "<div class=\"panel\">" +
@@ -478,6 +488,7 @@ function renderSocial(gameState) {
       manualAllocationRows +
       "<p class=\"helper-text\">" + allocationStatus + "</p>" +
       "<p class=\"helper-text\">" + previewLine + "</p>" +
+      appliedStatusLine +
       issueLines +
       "<div class=\"button-row\">" +
       createButton("Auto-normalize", "normalize-manual-strategy") +
