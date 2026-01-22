@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Shoot Output Cards v1 with placeholder thumbnails and persistent shoot history.
+  - Why: Provide a visible, persistent output log for completed shoots without adding new screens or assets.
+  - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to include Shoot Outputs (placeholder asset slots) as in-scope.
+  - Why: Authorize the Act 1 UI integration slice for shoot output cards.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added performer portrait placeholders in roster and booking UI (data-driven, safe fallback).
   - Why: Surface performer portraits consistently across roster and booking with a safe placeholder default.
   - Files touched: src/state.js, src/ui/render.js, src/utils/format.js, docs/DATA_PERFORMERS.md, CHANGELOG.md.

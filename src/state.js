@@ -36,6 +36,7 @@ function newGameState() {
       lastContentId: null,
       entries: []
     },
+    shootOutputs: [],
     social: {
       posts: [],
       activeSocialStrategyId: CONFIG.social.strategy.defaultStrategyId
@@ -57,6 +58,16 @@ function newGameState() {
       autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
     }
   };
+}
+
+function ensureShootOutputsState(gameState) {
+  if (!gameState) {
+    return;
+  }
+
+  if (!Array.isArray(gameState.shootOutputs)) {
+    gameState.shootOutputs = [];
+  }
 }
 
 function ensureAutomationState(gameState) {

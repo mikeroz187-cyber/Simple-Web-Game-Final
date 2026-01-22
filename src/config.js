@@ -2,6 +2,14 @@
  * Studio Empire Config
  * Mirrors config.toml values plus MVP data catalogs.
  */
+const SHOOT_OUTPUT_PLACEHOLDER_SVG = [
+  "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\">",
+  "<rect width=\"96\" height=\"96\" fill=\"#eef1f6\"/>",
+  "<circle cx=\"48\" cy=\"38\" r=\"18\" fill=\"#c3cad6\"/>",
+  "<rect x=\"20\" y=\"62\" width=\"56\" height=\"22\" rx=\"10\" fill=\"#c3cad6\"/>",
+  "</svg>"
+].join("");
+
 const CONFIG = {
   project: {
     name: "Studio Empire",
@@ -29,6 +37,8 @@ const CONFIG = {
   },
   AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT: false,
   AUTOMATION_AUTO_BOOK_PER_DAY: 1,
+  SHOOT_OUTPUTS_MAX_HISTORY: 50,
+  SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH: "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG),
   save: {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,

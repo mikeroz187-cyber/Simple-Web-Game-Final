@@ -96,6 +96,7 @@ function ensureAutomationValidation() {
     }
     const stripped = Object.assign({}, candidate);
     delete stripped.automation;
+    delete stripped.shootOutputs;
     const result = baseValidate(stripped);
     if (!result || !result.ok) {
       return result;
@@ -369,6 +370,7 @@ function setupEventHandlers() {
       if (result.ok) {
         window.gameState = result.gameState;
         ensureAutomationState(window.gameState);
+        ensureShootOutputsState(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
           const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
@@ -395,6 +397,7 @@ function setupEventHandlers() {
         if (result.ok) {
           window.gameState = result.gameState;
           ensureAutomationState(window.gameState);
+          ensureShootOutputsState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             const saveResult = saveGame(window.gameState, uiState.save.selectedSlotId);
