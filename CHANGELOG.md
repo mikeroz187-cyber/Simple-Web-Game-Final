@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Cleared stale manual strategy applied-day flags when no matching story log entry exists.
+  - Why: Prevent false “Strategy already applied today” messaging when saves have mismatched manual strategy metadata.
+  - Files touched: src/state.js, CHANGELOG.md.
 - What: FIX: Prevented manual social strategy from reporting an already-applied day unless a matching strategy log entry exists.
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
