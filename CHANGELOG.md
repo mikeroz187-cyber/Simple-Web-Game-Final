@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Simplified Manual Social Strategy messaging by removing the applied-today status line and disabling Apply with the new label plus a single success toast.
+  - Why: Eliminate confusing duplicate messaging while keeping once-per-day feedback clear.
+  - Files touched: src/ui/render.js, src/ui/events.js, src/systems/social.js, CHANGELOG.md.
 - What: FIX: Corrected Manual Social Strategy apply messaging to show success details and block only repeat same-day applies.
   - Why: Ensure the UI reports actual apply results and only shows the already-applied message on the second attempt.
   - Files touched: src/systems/social.js, src/ui/events.js, CHANGELOG.md.

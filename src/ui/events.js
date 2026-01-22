@@ -292,7 +292,7 @@ function setupEventHandlers() {
         renderApp(window.gameState);
         return;
       }
-      setUiMessage(result.message || "");
+      setUiMessage("Applied — come back tomorrow to change.");
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message);
