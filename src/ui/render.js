@@ -215,8 +215,12 @@ function renderBooking(gameState) {
       "</div>";
   }).join("");
 
-  const themeRows = CONFIG.themes.mvp.theme_ids.map(function (themeId) {
-    const theme = CONFIG.themes.mvp.themes[themeId];
+  const themeIds = CONFIG.themes.mvp.theme_ids.concat(CONFIG.themes.act2 ? CONFIG.themes.act2.theme_ids : []);
+  const themeRows = themeIds.map(function (themeId) {
+    const theme = getThemeById(themeId);
+    if (!theme) {
+      return "";
+    }
     const isSelected = theme.id === uiState.booking.themeId;
     return "<div class=\"list-item\">" +
       "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-theme\" data-id=\"" + theme.id + "\">" + theme.name + "</button>" +
@@ -701,9 +705,22 @@ function getLocationName(locationId) {
   return location ? location.name : "Unknown";
 }
 
+function getThemeById(themeId) {
+  if (!themeId) {
+    return null;
+  }
+  if (CONFIG.themes.mvp && CONFIG.themes.mvp.themes && CONFIG.themes.mvp.themes[themeId]) {
+    return CONFIG.themes.mvp.themes[themeId];
+  }
+  if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
+    return CONFIG.themes.act2.themes[themeId];
+  }
+  return null;
+}
+
 function getThemeName(themeId) {
-  const theme = CONFIG.themes.mvp.themes[themeId];
-  return theme ? theme.name : "Unknown";
+  const theme = getThemeById(themeId);
+  return theme ? theme.name : (themeId || "Unknown");
 }
 
 function getNextActionLabel(gameState) {

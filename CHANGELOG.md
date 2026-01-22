@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Added
+- What: Added Act 2 Theme Pack (5 new themes) selectable in Booking and displayed across UI.
+  - Why: Expand the content theme catalog with the approved Act 2 themes while keeping selection and display consistent.
+  - Files touched: src/config.js, src/ui/render.js, src/systems/booking.js, src/save.js, CHANGELOG.md.
+- What: Updated CURRENT_SCOPE to authorize the Act 2 Theme Pack.
+  - Why: Document the approved scope expansion for the Act 2 Theme Pack slice.
+  - Files touched: docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 2 Tier 2 location unlock configuration with Shop/Booking gating and validation.
   - Why: Enable the approved Tier 2 location access flow with reputation requirements and locked state handling.
   - Files touched: src/config.js, src/state.js, src/main.js, src/systems/progression.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.

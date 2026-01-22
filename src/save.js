@@ -170,6 +170,19 @@ function migrateGameState(candidate) {
   return { ok: true, gameState: candidate, didReset: false };
 }
 
+function getThemeById(themeId) {
+  if (!themeId) {
+    return null;
+  }
+  if (CONFIG.themes.mvp && CONFIG.themes.mvp.themes && CONFIG.themes.mvp.themes[themeId]) {
+    return CONFIG.themes.mvp.themes[themeId];
+  }
+  if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
+    return CONFIG.themes.act2.themes[themeId];
+  }
+  return null;
+}
+
 function validateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -295,7 +308,7 @@ function validateGameState(candidate) {
     if (!CONFIG.locations.catalog[entry.locationId]) {
       return { ok: false, message: "Content location invalid." };
     }
-    if (!CONFIG.themes.mvp.themes[entry.themeId]) {
+    if (!getThemeById(entry.themeId)) {
       return { ok: false, message: "Content theme invalid." };
     }
     if (CONFIG.content_types.available.indexOf(entry.contentType) === -1) {
