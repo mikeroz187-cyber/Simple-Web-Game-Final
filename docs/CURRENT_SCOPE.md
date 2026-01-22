@@ -52,6 +52,11 @@
 - **Roster + Booking thumbnails** rendered from the same portrait resolver with a safe fallback.
 - **Placeholder-only visuals**: no NSFW assets, no gallery viewer, no new screens or navigation.
 
+## In Scope Now (Act 1 UI Integration — Shoot Output Cards v1)
+- **Shoot output records** are created when a shoot completes and persisted in a capped history list.
+- **Gallery screen cards** render placeholder thumbnails with minimal metadata (day, tier, performers, revenue/followers).
+- **Placeholder-only visuals**: no gallery viewer, no new screens or navigation, no explicit assets.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
 - **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.

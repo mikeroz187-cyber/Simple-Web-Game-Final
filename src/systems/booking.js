@@ -172,6 +172,7 @@ function confirmBooking(gameState, selection) {
 
   gameState.content.entries.push(entry);
   gameState.content.lastContentId = entry.id;
+  appendShootOutputRecord(gameState, entry);
 
   updatePerformerStats(gameState, performer.id);
   const shootsPerDay = CONFIG.game.shoots_per_day;
@@ -193,4 +194,45 @@ function confirmBooking(gameState, selection) {
     storyEvents: storyEvents,
     milestoneEvents: milestoneEvents
   };
+}
+
+function createShootOutputRecord(entry) {
+  if (!entry || !entry.results) {
+    return null;
+  }
+  const tier = entry.contentType === "Premium" ? "premium" : "standard";
+  return {
+    id: "shoot_output_" + entry.id,
+    day: entry.dayCreated,
+    performerIds: [entry.performerId],
+    themeId: entry.themeId || null,
+    tier: tier,
+    revenue: Number.isFinite(entry.results.revenue) ? entry.results.revenue : 0,
+    followersGained: Number.isFinite(entry.results.followersGained) ? entry.results.followersGained : 0,
+    thumbnailPath: CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH
+  };
+}
+
+function appendShootOutputRecord(gameState, entry) {
+  ensureShootOutputsState(gameState);
+  const record = createShootOutputRecord(entry);
+  if (!record) {
+    return;
+  }
+
+  const exists = gameState.shootOutputs.some(function (output) {
+    return output.id === record.id;
+  });
+  if (exists) {
+    return;
+  }
+
+  gameState.shootOutputs.push(record);
+
+  const maxHistory = Number.isFinite(CONFIG.SHOOT_OUTPUTS_MAX_HISTORY)
+    ? CONFIG.SHOOT_OUTPUTS_MAX_HISTORY
+    : 50;
+  if (gameState.shootOutputs.length > maxHistory) {
+    gameState.shootOutputs = gameState.shootOutputs.slice(-maxHistory);
+  }
 }

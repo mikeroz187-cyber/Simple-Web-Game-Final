@@ -398,6 +398,12 @@ function renderGallery(gameState) {
   const screen = qs("#screen-gallery");
   const uiState = getUiState();
   const entries = gameState.content.entries;
+  const shootOutputs = Array.isArray(gameState.shootOutputs) ? gameState.shootOutputs : [];
+  const outputThumbSize = getShootOutputThumbnailSizePx();
+  const outputThumbRadius = getShootOutputThumbnailRadiusPx();
+  const outputThumbStyle = "width:" + outputThumbSize + "px;height:" + outputThumbSize + "px;object-fit:cover;border-radius:" + outputThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const outputCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:flex-start;";
+  const outputMetaStyle = "display:flex;flex-direction:column;gap:" + Math.max(1, Math.round(CONFIG.ui.panel_gap_px / 2)) + "px;";
 
   const entryList = entries.length
     ? entries.map(function (entry) {
@@ -430,7 +436,29 @@ function renderGallery(gameState) {
       "</div>"
     : "";
 
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Content History</h3>" + entryList + "</div>" +
+  const outputCards = shootOutputs.length
+    ? shootOutputs.slice().reverse().map(function (output) {
+      const thumbPath = output.thumbnailPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
+      const fallbackPath = CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
+      const performerLabel = getShootOutputPerformerLabel(gameState, output.performerIds);
+      const tierLabel = formatShootOutputTierLabel(output.tier);
+      const dayLabel = Number.isFinite(output.day) ? output.day : "?";
+      const revenue = Number.isFinite(output.revenue) ? output.revenue : 0;
+      const followers = Number.isFinite(output.followersGained) ? output.followersGained : 0;
+      return "<div class=\"panel\" style=\"" + outputCardStyle + "\">" +
+        "<img src=\"" + thumbPath + "\" alt=\"Shoot output thumbnail\" width=\"" + outputThumbSize + "\" height=\"" + outputThumbSize + "\"" +
+        " style=\"" + outputThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />" +
+        "<div style=\"" + outputMetaStyle + "\">" +
+        "<p><strong>Day " + dayLabel + " — " + tierLabel + " Shoot</strong></p>" +
+        "<p class=\"helper-text\">Performers: " + performerLabel + "</p>" +
+        "<p class=\"helper-text\">Revenue: " + formatCurrency(revenue) + " | Followers: " + followers + "</p>" +
+        "</div>" +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
+
+  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Shoot Outputs</h3>" + outputCards + "</div>" +
+    "<div class=\"panel\"><h3 class=\"panel-title\">Content History</h3>" + entryList + "</div>" +
     detailPanel +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
@@ -540,6 +568,31 @@ function getNextActionLabel(gameState) {
     return "Book your first shoot.";
   }
   return "Review the latest content and analytics, then book again.";
+}
+
+function getShootOutputThumbnailSizePx() {
+  return CONFIG.ui.main_padding_px * 6;
+}
+
+function getShootOutputThumbnailRadiusPx() {
+  return CONFIG.ui.panel_gap_px / 2;
+}
+
+function formatShootOutputTierLabel(tierId) {
+  if (tierId === "premium") {
+    return "Premium";
+  }
+  return "Standard";
+}
+
+function getShootOutputPerformerLabel(gameState, performerIds) {
+  if (!Array.isArray(performerIds) || performerIds.length === 0) {
+    return "Unknown";
+  }
+  const names = performerIds.map(function (performerId) {
+    return getPerformerName(gameState, performerId);
+  });
+  return names.join(", ");
 }
 
 function hasPosted(gameState, contentId, platform) {
