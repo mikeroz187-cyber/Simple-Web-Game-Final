@@ -37,9 +37,7 @@ function newGameState() {
     },
     social: {
       posts: [],
-      strategy: {
-        activeStrategyId: CONFIG.social.strategy.defaultStrategyId
-      }
+      activeSocialStrategyId: CONFIG.social.strategy.defaultStrategyId
     },
     unlocks: {
       locationTier1Unlocked: false,

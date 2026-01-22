@@ -282,9 +282,33 @@ function renderRoster(gameState) {
 function renderSocial(gameState) {
   const screen = qs("#screen-social");
   const uiState = getUiState();
+  const strategies = getSocialStrategies();
+  const activeStrategyId = getActiveSocialStrategyId(gameState);
   const promoEntries = gameState.content.entries.filter(function (entry) {
     return entry.contentType === "Promo";
   });
+
+  const strategyList = strategies.length
+    ? strategies.map(function (strategy) {
+      const isActive = strategy.id === activeStrategyId;
+      const activeTag = isActive ? " <span class=\"helper-text\">(Active)</span>" : "";
+      const statusLine = isActive ? "<p><strong>Status:</strong> Active</p>" : "";
+      const buttonLabel = isActive ? "Active Strategy" : "Select Strategy";
+      return "<div class=\"list-item\">" +
+        "<div class=\"panel\">" +
+        "<p><strong>" + strategy.label + "</strong>" + activeTag + "</p>" +
+        "<p class=\"helper-text\">" + strategy.description + "</p>" +
+        "<p><strong>Primary Effect:</strong> " + strategy.primaryEffect + "</p>" +
+        statusLine +
+        "<div class=\"button-row\">" +
+        createButton(buttonLabel, "select-social-strategy", isActive ? "is-disabled" : "", isActive, "data-id=\"" + strategy.id + "\"") +
+        "</div>" +
+        "</div>" +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No social strategies available.</p>";
+
+  const strategyPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Social Strategies</h3>" + strategyList + "</div>";
 
   const postsList = gameState.social.posts.length
     ? gameState.social.posts.map(function (post) {
@@ -324,7 +348,8 @@ function renderSocial(gameState) {
   const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
   const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
 
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
+  const body = strategyPanel +
+    "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +
     renderStatusMessage() +
