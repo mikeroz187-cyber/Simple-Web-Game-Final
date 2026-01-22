@@ -41,10 +41,6 @@ function confirmBooking(gameState, selection) {
   if (CONFIG.content_types.available.indexOf(selection.contentType) === -1) {
     return { ok: false, message: "Select a content type." };
   }
-  if (selection.contentType === "Premium" && !isLocationTierUnlocked(gameState, "tier1")) {
-    return { ok: false, message: "Premium shoots require Location Tier 1. Unlock it in Shop \u2192 Location Tiers." };
-  }
-
   const shootCostResult = calculateShootCost(location);
   if (!shootCostResult.ok) {
     return { ok: false, message: "Unable to calculate shoot cost." };
