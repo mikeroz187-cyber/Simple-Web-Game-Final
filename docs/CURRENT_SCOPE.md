@@ -47,6 +47,11 @@
 - **Player-facing milestone messages** emitted immediately on trigger using the existing UI event system.
 - **One-time guarantee**: completed milestones persist in `gameState.milestones` and never re-trigger on refresh.
 
+## In Scope Now (Act 1 UI Integration — Performer Portraits v1)
+- **Performer portraitPath field** added to performer data using placeholder image paths or data URIs.
+- **Roster + Booking thumbnails** rendered from the same portrait resolver with a safe fallback.
+- **Placeholder-only visuals**: no NSFW assets, no gallery viewer, no new screens or navigation.
+
 ## Explicitly Out of Scope (Act 2 Phase 1)
 - **Any migration helpers** (no detectVersion, migrateV1ToV2, or similar migration utilities).
 - **Act 2 mechanics expansion** beyond the v2 schema defaults + reset behavior and the explicitly listed equipment upgrades and location tier slice.
@@ -66,6 +71,7 @@
 - [ ] Social strategy selection is manual, single-active, affects follower gains, persists on refresh, and confirms activation via the event system.
 - [ ] No new systems, screens, or refactors were introduced beyond the listed scope.
 - [ ] CHANGELOG.md updated to record the doc change.
+- [ ] Roster and Booking screens render performer portrait placeholders with a safe fallback.
 
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.

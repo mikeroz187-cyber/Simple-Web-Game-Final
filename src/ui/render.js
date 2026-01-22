@@ -141,6 +141,10 @@ function renderBooking(gameState) {
   const uiState = getUiState();
   const performers = gameState.roster.performers;
   const hasPerformers = performers.length > 0;
+  const portraitSize = getPerformerPortraitSizePx();
+  const portraitRadius = getPerformerPortraitRadiusPx();
+  const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   const performerRows = hasPerformers
     ? performers.map(function (performer) {
@@ -148,9 +152,14 @@ function renderBooking(gameState) {
       const available = isPerformerAvailable(performer);
       const label = performer.name + " (" + performer.type + ")";
       const detail = "Star Power: " + performer.starPower + " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty;
-      return "<div class=\"list-item\">" +
+      const portraitPath = getPerformerPortraitPath(performer);
+      const portraitAlt = "Portrait of " + performer.name;
+      return "<div class=\"list-item\" style=\"" + performerRowStyle + "\">" +
+        "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
+        "<div>" +
         "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-performer\" data-id=\"" + performer.id + "\"" + (available ? "" : " disabled") + ">" + label + "</button>" +
         "<p class=\"helper-text\">" + detail + (available ? "" : " — Unavailable") + "</p>" +
+        "</div>" +
         "</div>";
     }).join("")
     : "<p class=\"helper-text\">No performers available.</p>";
@@ -273,15 +282,24 @@ function renderAnalytics(gameState) {
 function renderRoster(gameState) {
   const screen = qs("#screen-roster");
   const performers = gameState.roster.performers;
+  const portraitSize = getPerformerPortraitSizePx();
+  const portraitRadius = getPerformerPortraitRadiusPx();
+  const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
+  const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   const rosterBody = performers.length
     ? performers.map(function (performer) {
       const availability = isPerformerAvailable(performer) ? "Available" : "Unavailable";
-      return "<div class=\"panel\">" +
+      const portraitPath = getPerformerPortraitPath(performer);
+      const portraitAlt = "Portrait of " + performer.name;
+      return "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
+        "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
+        "<div>" +
         "<p><strong>" + performer.name + "</strong> (" + performer.type + ")</p>" +
         "<p>Star Power: " + performer.starPower + "</p>" +
         "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
         "<p>Loyalty: " + performer.loyalty + "</p>" +
+        "</div>" +
         "</div>";
     }).join("")
     : "<p class=\"helper-text\">No performers available.</p>";

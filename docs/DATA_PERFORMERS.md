@@ -5,6 +5,11 @@ All values are config-driven and should map directly to `config.js` and the init
 
 ---
 
+## Field Definitions (Applies to All Performers)
+- **portraitPath** (string): Placeholder image path or data URI for the performer portrait. If missing or blank, the UI falls back to a generic placeholder.
+
+---
+
 ## MVP — Core Performers (Your Team)
 
 These are the three core performers that start as your in-house team.
