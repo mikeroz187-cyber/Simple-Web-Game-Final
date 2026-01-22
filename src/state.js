@@ -97,3 +97,37 @@ function ensureAutomationState(gameState) {
     gameState.automation.autoBookEnabled = CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT;
   }
 }
+
+function ensureUnlocksState(gameState) {
+  if (!gameState) {
+    return;
+  }
+
+  if (!gameState.unlocks || typeof gameState.unlocks !== "object") {
+    gameState.unlocks = {};
+  }
+
+  if (!gameState.unlocks.locationTiers || typeof gameState.unlocks.locationTiers !== "object") {
+    gameState.unlocks.locationTiers = { tier0: true, tier1: false, tier2: false };
+  }
+
+  if (typeof gameState.unlocks.locationTiers.tier0 !== "boolean") {
+    gameState.unlocks.locationTiers.tier0 = true;
+  }
+
+  if (typeof gameState.unlocks.locationTiers.tier1 !== "boolean") {
+    gameState.unlocks.locationTiers.tier1 = false;
+  }
+
+  if (typeof gameState.unlocks.locationTiers.tier2 !== "boolean") {
+    gameState.unlocks.locationTiers.tier2 = false;
+  }
+
+  if (typeof gameState.unlocks.locationTier1Unlocked !== "boolean") {
+    gameState.unlocks.locationTier1Unlocked = false;
+  }
+
+  if (gameState.unlocks.locationTier1Unlocked) {
+    gameState.unlocks.locationTiers.tier1 = true;
+  }
+}

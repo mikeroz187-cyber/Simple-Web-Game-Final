@@ -20,7 +20,9 @@ function unlockLocationTier(gameState, tierId) {
   }
 
   if (tierId !== "tier1") {
-    return { ok: false, message: "Unknown location tier." };
+    if (tierId !== "tier2") {
+      return { ok: false, message: "Unknown location tier." };
+    }
   }
 
   if (!gameState.unlocks.locationTiers || typeof gameState.unlocks.locationTiers !== "object") {
@@ -28,7 +30,29 @@ function unlockLocationTier(gameState, tierId) {
   }
 
   if (isLocationTierUnlocked(gameState, tierId)) {
+    if (tierId === "tier2") {
+      return { ok: false, message: "Location Tier 2 already unlocked." };
+    }
     return { ok: false, message: "Location Tier 1 already unlocked." };
+  }
+
+  if (tierId === "tier2") {
+    const repRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
+      ? CONFIG.locations.tier2ReputationRequirement
+      : 0;
+    const cost = Number.isFinite(CONFIG.locations.tier2UnlockCost)
+      ? CONFIG.locations.tier2UnlockCost
+      : 0;
+    if (gameState.player.reputation < repRequirement) {
+      return { ok: false, message: "Need Reputation ≥ " + repRequirement + " to unlock Tier 2." };
+    }
+    if (gameState.player.cash < cost) {
+      return { ok: false, message: "Not enough cash to unlock Location Tier 2." };
+    }
+    gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+    gameState.unlocks.locationTiers.tier2 = true;
+    const tierName = CONFIG.locations.tier2Name || "Location Tier 2";
+    return { ok: true, message: tierName + " unlocked." };
   }
 
   const fallbackCost = CONFIG.progression.location_tier_1_unlock_cost;

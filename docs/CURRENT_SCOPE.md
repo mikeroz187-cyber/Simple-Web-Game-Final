@@ -31,6 +31,11 @@
 - **Location lock behavior**: Tier 1 locations remain locked until Tier 1 is purchased; Premium bookings are allowed without the Tier 1 unlock.
 - **Unlock persistence**: `gameState.unlocks.locationTiers.tier1` is authoritative; keep `locationTier1Unlocked` in sync for backward compatibility.
 
+## In Scope Now (Act 2 Option A — Location Tiers Slice 3)
+- **Location Tier 2 unlock** as a single Shop purchase using config-driven cost and reputation requirement.
+- **Tier 2 location access**: Tier 2 locations appear in Booking but are disabled until Tier 2 is purchased and reputation meets the requirement.
+- **Tier 2 only**: no Tier 3 unlocks, no new screens or systems.
+
 ## In Scope Now (Manual Social Strategy Selection — Single Active Strategy)
 - **Strategy list UI** on the existing Social screen showing all strategies from the social strategy data catalog.
 - **Single active selection** stored as `gameState.social.activeSocialStrategyId` with one strategy active at a time.

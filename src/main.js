@@ -10,6 +10,7 @@
       window.gameState = newGameState();
     }
     ensureAutomationState(window.gameState);
+    ensureUnlocksState(window.gameState);
     ensureShootOutputsState(window.gameState);
     ensureStoryLogState(window.gameState);
     const storyResult = checkStoryEvents(window.gameState);

@@ -389,6 +389,7 @@ function setupEventHandlers() {
       if (result.ok) {
         window.gameState = result.gameState;
         ensureAutomationState(window.gameState);
+        ensureUnlocksState(window.gameState);
         ensureShootOutputsState(window.gameState);
         ensureStoryLogState(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
@@ -418,6 +419,7 @@ function setupEventHandlers() {
         if (result.ok) {
           window.gameState = result.gameState;
           ensureAutomationState(window.gameState);
+          ensureUnlocksState(window.gameState);
           ensureShootOutputsState(window.gameState);
           ensureStoryLogState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
