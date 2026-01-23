@@ -390,6 +390,28 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "debug-set-day-reload") {
+      if (!isDebugEnabled()) {
+        return;
+      }
+      const input = qs("#debug-day-input");
+      const minDay = Number.isFinite(CONFIG.debug.minDay) ? CONFIG.debug.minDay : 1;
+      const maxDay = Number.isFinite(CONFIG.debug.maxDay) ? CONFIG.debug.maxDay : minDay;
+      const rawValue = input ? Number.parseInt(input.value, 10) : NaN;
+      const fallbackDay = window.gameState.player.day;
+      let nextDay = Number.isFinite(rawValue) ? rawValue : fallbackDay;
+      nextDay = Math.min(Math.max(nextDay, minDay), maxDay);
+      window.gameState.player.day = nextDay;
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message || "Failed to save debug day change.");
+        renderApp(window.gameState);
+        return;
+      }
+      window.location.reload();
+      return;
+    }
+
     if (action === "advance-day") {
       ensureAutomationState(window.gameState);
       const storyEvents = advanceDay(window.gameState);

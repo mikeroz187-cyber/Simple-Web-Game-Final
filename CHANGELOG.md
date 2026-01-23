@@ -61,6 +61,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Added a dev-only debug panel on the Hub to set the day when `?debug=1` is present.
+  - Why: Allow manual iOS testing without devtools while keeping the panel hidden by default.
+  - Files touched: src/config.js, src/utils/dom.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: A3.6: Added deterministic Premium revenue variance (±15%) starting Day 181.
   - Why: Apply bounded, seeded variance to late-game Premium payouts with roll logging and messaging.
   - Files touched: config.toml, src/config.js, src/state.js, src/save.js, src/utils/rng.js, src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.

@@ -10,6 +10,7 @@
 - **Act 2 complete**: expanded performer management, advanced analytics rollups, location tier 2, equipment upgrades, Act 2 themes, story events, expanded roster depth, social strategies (manual + daily budget), milestones, automation tier 1, Story Log, portrait/thumbnail placeholders, gallery output cards, save v2 schema.
 - **Post-MVP Fixes/QoL complete**: promo posting fixes, analytics clarity, freelancer rerolls, metrics split, booking UI/validation fixes, promo platform posting rules, daily cap behavior, promo conversion tuning, booking role restrictions removed.
 - **Act 3 complete**: A3.4 Act 3 Story Arc (Days 200/225/245/270).
+- **Debug tooling**: dev-only Set Day panel gated by `?debug=1` for testing.
 
 ## Completed / Previous Phases (Archived Scope)
 - The prior **Act 2 Phase 1 / Option A slice** scope items are fully delivered and no longer active.

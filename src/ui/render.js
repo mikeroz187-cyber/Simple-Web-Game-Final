@@ -253,6 +253,21 @@ function renderHub(gameState) {
 
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
+  const debugPanel = isDebugEnabled()
+    ? "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-day-input\">Day</label>" +
+      "<input id=\"debug-day-input\" class=\"input-control\" type=\"number\" min=\"" + CONFIG.debug.minDay +
+      "\" max=\"" + CONFIG.debug.maxDay + "\" step=\"1\" value=\"" + gameState.player.day + "\" />" +
+      "</div>" +
+      "<div class=\"button-row\">" +
+      "<button class=\"button\" data-action=\"debug-set-day-reload\">Set Day + Reload</button>" +
+      "</div>" +
+      "<p class=\"helper-text\">Current day: " + gameState.player.day +
+      ". Debug mode is enabled via ?" + CONFIG.debug.queryParam + "=" + CONFIG.debug.queryValue + ".</p>" +
+      "</div>"
+    : "";
 
   hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
     "<div class=\"panel\">" + statusHtml + "</div>" +
@@ -261,7 +276,8 @@ function renderHub(gameState) {
     renderStatusMessage() +
     automationPanel +
     saveSlotControl +
-    "<div class=\"button-row\">" + saveButtons + "</div>";
+    "<div class=\"button-row\">" + saveButtons + "</div>" +
+    debugPanel;
 }
 
 function renderBooking(gameState) {
