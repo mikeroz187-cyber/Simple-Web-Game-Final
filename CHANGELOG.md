@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Act 3 story arc scheduling, save-state defaults/migration, and copy for days 200/225/245/270.
+  - Why: Ensure Act 3 story events trigger once on the configured days and persist across saves.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/story.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Updated CURRENT_SCOPE to reflect Act 3 as the current phase with completed summaries and the next 3 steps.
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.

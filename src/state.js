@@ -147,7 +147,8 @@ function newGameState() {
     story: {
       introShown: false,
       debtReminderDaysShown: [],
-      act2: { eventsShown: [], lastEventId: null }
+      act2: { eventsShown: [], lastEventId: null },
+      act3: { eventsShown: [], lastEventId: null }
     },
     storyLog: [],
     performerManagement: performerManagement,

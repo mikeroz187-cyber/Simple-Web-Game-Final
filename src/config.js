@@ -611,6 +611,14 @@ const CONFIG = {
         { id: "act2_studio_upgrade_day145", triggerDay: 145 },
         { id: "act2_partnership_offer_day170", triggerDay: 170 }
       ]
+    },
+    act3: {
+      schedule: [
+        { id: "act3_brand_legacy_day200", triggerDay: 200 },
+        { id: "act3_market_shift_day225", triggerDay: 225 },
+        { id: "act3_mentorship_day245", triggerDay: 245 },
+        { id: "act3_exit_strategy_day270", triggerDay: 270 }
+      ]
     }
   }
 };
