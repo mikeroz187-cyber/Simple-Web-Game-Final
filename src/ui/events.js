@@ -13,11 +13,15 @@ function setEquipmentMessage(message) {
 
 function resetBookingSelection() {
   const uiState = getUiState();
+  const performerFilter = uiState.booking && uiState.booking.performerFilter
+    ? uiState.booking.performerFilter
+    : "contracted";
   uiState.booking = {
     performerId: null,
     locationId: null,
     themeId: null,
-    contentType: null
+    contentType: null,
+    performerFilter: performerFilter
   };
 }
 
@@ -216,6 +220,16 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "toggle-freelancer-pool") {
+      if (!uiState.roster) {
+        uiState.roster = { showFreelancers: false };
+      }
+      uiState.roster.showFreelancers = !uiState.roster.showFreelancers;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "select-location") {
       uiState.booking.locationId = target.dataset.id;
       setUiMessage("");
@@ -264,6 +278,20 @@ function setupEventHandlers() {
     if (action === "renew-contract") {
       const performerId = target.dataset.id;
       const result = renewPerformerContract(window.gameState, performerId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "rotate-freelancer") {
+      const performerId = target.dataset.id;
+      const result = rotateFreelancerProfile(window.gameState, performerId);
       setUiMessage(result.message || "");
       if (result.ok) {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
@@ -554,6 +582,28 @@ function setupEventHandlers() {
     if (action === "select-save-slot") {
       const uiState = getUiState();
       uiState.save.selectedSlotId = target.value;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "set-performer-filter") {
+      const uiState = getUiState();
+      uiState.booking.performerFilter = target.value;
+      const selectedPerformerId = uiState.booking.performerId;
+      if (selectedPerformerId) {
+        const selectedPerformer = window.gameState.roster.performers.find(function (entry) {
+          return entry.id === selectedPerformerId;
+        });
+        if (selectedPerformer) {
+          const isVisible = uiState.booking.performerFilter === "all"
+            || (uiState.booking.performerFilter === "freelancers" && selectedPerformer.type === "freelance")
+            || (uiState.booking.performerFilter === "contracted" && selectedPerformer.type !== "freelance");
+          if (!isVisible) {
+            uiState.booking.performerId = null;
+          }
+        }
+      }
       setUiMessage("");
       renderApp(window.gameState);
       return;

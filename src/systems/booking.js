@@ -175,20 +175,37 @@ function confirmBooking(gameState, selection) {
 
   let followersGained = 0;
   let revenue = 0;
+  const isFreelancer = performer.type === "freelance";
+  const freelancerConfig = CONFIG.freelancers && typeof CONFIG.freelancers === "object" ? CONFIG.freelancers : {};
+  const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
+    ? freelancerConfig.promoFollowersBonusFlat
+    : 0;
+  const subscriberMultiplier = Number.isFinite(freelancerConfig.subscriberConversionMultiplier)
+    ? freelancerConfig.subscriberConversionMultiplier
+    : 1;
   if (selection.contentType === "Promo") {
     const promoResult = calculatePromoFollowers(performer, theme);
     const baseFollowers = promoResult.ok ? promoResult.value : 0;
     followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+    if (isFreelancer && promoBonus > 0) {
+      followersGained += promoBonus;
+    }
   } else {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
     revenue = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
   }
 
-  const subscribersGained = calculateSubscribersGained(followersGained);
-  const feedbackSummary = selection.contentType === "Promo"
+  let subscribersGained = calculateSubscribersGained(followersGained);
+  if (isFreelancer && subscriberMultiplier >= 0 && subscriberMultiplier <= 1) {
+    subscribersGained = Math.floor(subscribersGained * subscriberMultiplier);
+  }
+  let feedbackSummary = selection.contentType === "Promo"
     ? "Promo reach boosted visibility."
     : "Premium release generated revenue.";
+  if (isFreelancer) {
+    feedbackSummary += " Guest drop spiked attention, but converted fewer subs.";
+  }
 
   const contentId = "content_" + (gameState.content.entries.length + 1);
   const entry = {

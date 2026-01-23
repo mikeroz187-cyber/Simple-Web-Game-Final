@@ -6,13 +6,17 @@ function getUiState() {
         performerId: null,
         locationId: null,
         themeId: null,
-        contentType: null
+        contentType: null,
+        performerFilter: "contracted"
       },
       social: {
         selectedContentId: null
       },
       gallery: {
         selectedContentId: null
+      },
+      roster: {
+        showFreelancers: false
       },
       shop: {
         equipmentMessage: ""
@@ -77,6 +81,57 @@ function getPerformerRoleLabel(gameState, performerId) {
     return labels.support;
   }
   return "Support";
+}
+
+function getFreelancerProfilesConfig() {
+  if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
+    return CONFIG.freelancers;
+  }
+  return {};
+}
+
+function getFreelancerProfiles() {
+  const config = getFreelancerProfilesConfig();
+  return Array.isArray(config.profiles) ? config.profiles : [];
+}
+
+function getFreelancerProfileById(profileId) {
+  if (!profileId) {
+    return null;
+  }
+  const profiles = getFreelancerProfiles();
+  return profiles.find(function (profile) {
+    return profile && profile.id === profileId;
+  }) || null;
+}
+
+function getFreelancerProfileId(gameState, performerId) {
+  if (!gameState || !gameState.roster || !performerId) {
+    return null;
+  }
+  const profiles = gameState.roster.freelancerProfiles || {};
+  return profiles[performerId] || null;
+}
+
+function getPerformerDisplayProfile(gameState, performer) {
+  if (!performer) {
+    return { name: "Unknown", description: "" };
+  }
+  if (performer.type === "freelance") {
+    const profileId = getFreelancerProfileId(gameState, performer.id);
+    const profile = getFreelancerProfileById(profileId);
+    if (profile) {
+      return {
+        name: profile.name || performer.name,
+        description: profile.description || ""
+      };
+    }
+  }
+  const catalogEntry = CONFIG.performers.catalog[performer.id];
+  return {
+    name: performer.name,
+    description: catalogEntry && catalogEntry.description ? catalogEntry.description : ""
+  };
 }
 
 function getContractSummary(gameState, performerId) {
@@ -205,6 +260,17 @@ function renderBooking(gameState) {
   const uiState = getUiState();
   const performers = gameState.roster.performers;
   const hasPerformers = performers.length > 0;
+  const performerFilter = uiState.booking.performerFilter || "contracted";
+  const filteredPerformers = performers.filter(function (performer) {
+    if (performerFilter === "freelancers") {
+      return performer.type === "freelance";
+    }
+    if (performerFilter === "all") {
+      return true;
+    }
+    return performer.type !== "freelance";
+  });
+  const hasFilteredPerformers = filteredPerformers.length > 0;
   const portraitSize = getPerformerPortraitSizePx();
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
@@ -214,12 +280,13 @@ function renderBooking(gameState) {
   const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
-  const performerRows = hasPerformers
-    ? performers.map(function (performer) {
+  const performerRows = hasFilteredPerformers
+    ? filteredPerformers.map(function (performer) {
       const isSelected = performer.id === uiState.booking.performerId;
       const performerStatus = isPerformerBookable(gameState, performer);
       const available = performerStatus.ok;
-      const label = performer.name + " (" + performer.type + ")";
+      const displayProfile = getPerformerDisplayProfile(gameState, performer);
+      const label = displayProfile.name + " (" + performer.type + ")";
       const roleLabel = getPerformerRoleLabel(gameState, performer.id);
       const contractSummary = getContractSummary(gameState, performer.id);
       const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
@@ -228,18 +295,22 @@ function renderBooking(gameState) {
         " | " + contractSummary.label +
         " | " + availabilitySummary.label;
       const portraitPath = getPerformerPortraitPath(performer);
-      const portraitAlt = "Portrait of " + performer.name;
+      const portraitAlt = "Portrait of " + displayProfile.name;
       const availabilityNote = available ? "Available" : "Unavailable — " + performerStatus.reason;
+      const descriptionLine = performer.type === "freelance" && displayProfile.description
+        ? "<p class=\"helper-text\">" + displayProfile.description + "</p>"
+        : "";
       return "<div class=\"list-item\" style=\"" + performerRowStyle + "\">" +
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
         "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-performer\" data-id=\"" + performer.id + "\"" + (available ? "" : " disabled") + ">" + label + "</button>" +
+        descriptionLine +
         "<p class=\"helper-text\">" + detail + "</p>" +
         "<p class=\"helper-text\">" + availabilityNote + "</p>" +
         "</div>" +
         "</div>";
     }).join("")
-    : "<p class=\"helper-text\">No performers available.</p>";
+    : "<p class=\"helper-text\">No performers available for this filter.</p>";
 
   const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
   const locations = CONFIG.locations.tier0_ids
@@ -316,7 +387,23 @@ function renderBooking(gameState) {
     : false;
   const canConfirm = hasPerformers && uiState.booking.performerId && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= shootCostResult.value && performerAvailable && !selectedLocationLocked;
 
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" + performerRows + "</div>" +
+  const filterOptions = [
+    { id: "contracted", label: "Contracted" },
+    { id: "freelancers", label: "Freelancers" },
+    { id: "all", label: "All" }
+  ];
+  const filterSelect = filterOptions.map(function (option) {
+    const selectedAttr = option.id === performerFilter ? " selected" : "";
+    return "<option value=\"" + option.id + "\"" + selectedAttr + ">" + option.label + "</option>";
+  }).join("");
+  const performerFilterControl = "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"performer-filter\">Show Performers</label>" +
+    "<select id=\"performer-filter\" class=\"select-control\" data-action=\"set-performer-filter\">" +
+    filterSelect +
+    "</select>" +
+    "</div>";
+
+  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" + performerFilterControl + performerRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Themes</h3>" + themeRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Content Type</h3><div class=\"button-row\">" + contentTypeRows + "</div></div>" +
@@ -435,13 +522,25 @@ function renderRoster(gameState) {
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
+  const compactRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;justify-content:space-between;";
+  const compactMetaStyle = "display:flex;flex-direction:column;gap:4px;";
+  const uiState = getUiState();
+  const showFreelancers = Boolean(uiState.roster && uiState.roster.showFreelancers);
 
-  const rosterBody = performers.length
-    ? performers.map(function (performer) {
+  const contractedPerformers = performers.filter(function (performer) {
+    return performer.type !== "freelance";
+  });
+  const freelancerPerformers = performers.filter(function (performer) {
+    return performer.type === "freelance";
+  });
+
+  const contractedRows = contractedPerformers.length
+    ? contractedPerformers.map(function (performer) {
       const performerStatus = isPerformerBookable(gameState, performer);
       const availability = performerStatus.ok ? "Available" : "Unavailable";
       const portraitPath = getPerformerPortraitPath(performer);
-      const portraitAlt = "Portrait of " + performer.name;
+      const displayProfile = getPerformerDisplayProfile(gameState, performer);
+      const portraitAlt = "Portrait of " + displayProfile.name;
       const roleLabel = getPerformerRoleLabel(gameState, performer.id);
       const contractSummary = getContractSummary(gameState, performer.id);
       const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
@@ -455,7 +554,7 @@ function renderRoster(gameState) {
       return "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
-        "<p><strong>" + performer.name + "</strong> (" + performer.type + ")</p>" +
+        "<p><strong>" + displayProfile.name + "</strong> (" + performer.type + ")</p>" +
         "<p>Role: " + roleLabel + "</p>" +
         "<p>Star Power: " + performer.starPower + "</p>" +
         "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
@@ -466,9 +565,49 @@ function renderRoster(gameState) {
         "</div>" +
         "</div>";
     }).join("")
-    : "<p class=\"helper-text\">No performers available.</p>";
+    : "<p class=\"helper-text\">No contracted performers available.</p>";
 
-  const body = rosterBody +
+  const rotationCost = Number.isFinite(CONFIG.freelancers && CONFIG.freelancers.rotationCost)
+    ? CONFIG.freelancers.rotationCost
+    : 0;
+  const rotationNote = rotationCost > 0
+    ? "Rotation fee: " + formatCurrency(rotationCost) + "."
+    : "Rotation fee: Free.";
+  const freelancerRows = freelancerPerformers.length
+    ? freelancerPerformers.map(function (performer) {
+      const displayProfile = getPerformerDisplayProfile(gameState, performer);
+      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
+      const contractSummary = getContractSummary(gameState, performer.id);
+      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+      const descriptionLine = displayProfile.description
+        ? "<p class=\"helper-text\">" + displayProfile.description + "</p>"
+        : "";
+      const availabilityLine = "Contract: " + contractSummary.label + " | " + availabilitySummary.label;
+      return "<div class=\"list-item\" style=\"" + compactRowStyle + "\">" +
+        "<div style=\"" + compactMetaStyle + "\">" +
+        "<p><strong>" + displayProfile.name + "</strong> (" + performer.type + ")</p>" +
+        descriptionLine +
+        "<p class=\"helper-text\">Role: " + roleLabel + "</p>" +
+        "<p class=\"helper-text\">" + availabilityLine + "</p>" +
+        "</div>" +
+        "<div class=\"button-row\">" +
+        createButton("Rotate", "rotate-freelancer", "", false, "data-id=\"" + performer.id + "\"") +
+        "</div>" +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No freelancers available.</p>";
+
+  const contractedSection = "<div class=\"panel\"><h3 class=\"panel-title\">Contracted Talent</h3>" + contractedRows + "</div>";
+  const freelancerToggleLabel = showFreelancers ? "Hide Freelancer Pool" : "Show Freelancer Pool";
+  const freelancerToggle = "<div class=\"button-row\">" + createButton(freelancerToggleLabel, "toggle-freelancer-pool") + "</div>";
+  const freelancerSection = "<div class=\"panel\"><h3 class=\"panel-title\">Freelancer Pool</h3>" +
+    freelancerToggle +
+    "<p class=\"helper-text\">" + rotationNote + "</p>" +
+    (showFreelancers ? freelancerRows : "<p class=\"helper-text\">Hidden. Use the toggle to browse guest talent.</p>") +
+    "</div>";
+
+  const body = contractedSection +
+    freelancerSection +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Back to Hub", "nav-hub") +
@@ -840,7 +979,10 @@ function getPerformerName(gameState, performerId) {
   const performer = gameState.roster.performers.find(function (entry) {
     return entry.id === performerId;
   });
-  return performer ? performer.name : "Unknown";
+  if (!performer) {
+    return "Unknown";
+  }
+  return getPerformerDisplayProfile(gameState, performer).name;
 }
 
 function getLocationName(locationId) {
