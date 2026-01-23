@@ -61,7 +61,7 @@
 - [x] Social: Promo list hides fully-posted promos; Recent Posts capped at 5.
 - [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
 - [x] Social: Promo OF conversion tuned to ~1 per 20 posts + fractional carry implemented.
-- [ ] Booking: any two performers can be booked; roles do not restrict booking.
+- [x] Booking: any two performers can be booked; roles do not restrict booking.
 
 ---
 
@@ -86,9 +86,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 10/11 | 1 |
+| Fixes/QoL | 11/11 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **44/54** | **10** |
+| **Total** | **45/54** | **9** |
 
 ---
 

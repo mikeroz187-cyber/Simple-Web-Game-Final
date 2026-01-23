@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Marked the booking role restriction checklist item as completed and updated summary totals.
+  - Why: Reflect the already-implemented booking behavior in the Post-MVP Fixes/QoL checklist.
+  - Files touched: docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Added fractional carry for promo OF conversion and rebalanced conversion rates to ~1 OF sub per ~20 posts.
   - Why: Ensure OF growth reflects follower/subscriber variance while hitting the intended average pace without RNG.
   - Files touched: src/systems/social.js, src/config.js, src/state.js, docs/task-checklist.md, docs/MVP/MVP_STATE_MODEL.md, CHANGELOG.md.
