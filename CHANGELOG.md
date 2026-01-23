@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Added A2.1 performer management with contracts, availability rules, renewals, booking locks, and save backfill.
+  - Why: Deliver Act 2 expanded performer management while keeping booking and roster feedback clear and saves compatible.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 2 roster expansion with four new performers, role mappings, UI role labels, and save backfill logic.
   - Why: Deliver A2.7 expanded roster depth with clear role visibility and safe save compatibility.
   - Files touched: src/config.js, src/state.js, src/save.js, src/ui/render.js, docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.

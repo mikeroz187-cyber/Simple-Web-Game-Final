@@ -2,6 +2,7 @@ function advanceDay(gameState) {
   gameState.player.shootsToday = 0;
   gameState.player.day += 1;
   recoverAllPerformers(gameState);
+  advancePerformerManagementDay(gameState);
   recordAnalyticsSnapshot(gameState);
   const storyResult = checkStoryEvents(gameState);
   return storyResult.events || [];
@@ -13,7 +14,8 @@ function getAutoBookingSelection(gameState) {
   }
 
   const performer = gameState.roster.performers.find(function (entry) {
-    return isPerformerAvailable(entry);
+    const status = isPerformerBookable(gameState, entry);
+    return status.ok;
   });
   if (!performer) {
     return { ok: false, reason: "No performers available" };
@@ -129,8 +131,9 @@ function confirmBooking(gameState, selection) {
   if (!performer) {
     return { ok: false, message: "Select a performer." };
   }
-  if (!isPerformerAvailable(performer)) {
-    return { ok: false, message: "Performer is unavailable due to fatigue." };
+  const performerStatus = isPerformerBookable(gameState, performer);
+  if (!performerStatus.ok) {
+    return { ok: false, message: performerStatus.reason || "Performer is unavailable." };
   }
 
   const location = CONFIG.locations.catalog[selection.locationId];
@@ -213,6 +216,7 @@ function confirmBooking(gameState, selection) {
   appendShootOutputRecord(gameState, entry);
 
   updatePerformerStats(gameState, performer.id);
+  updatePerformerAvailabilityAfterBooking(gameState, performer);
   const shootsPerDay = CONFIG.game.shoots_per_day;
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
   const nextShoots = currentShoots + 1;

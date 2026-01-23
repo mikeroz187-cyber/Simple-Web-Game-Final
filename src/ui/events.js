@@ -200,7 +200,17 @@ function setupEventHandlers() {
     }
 
     if (action === "select-performer") {
-      uiState.booking.performerId = target.dataset.id;
+      const performerId = target.dataset.id;
+      const performer = window.gameState.roster.performers.find(function (entry) {
+        return entry.id === performerId;
+      });
+      const performerStatus = performer ? isPerformerBookable(window.gameState, performer) : { ok: false, reason: "Performer not found." };
+      if (!performerStatus.ok) {
+        setUiMessage(performerStatus.reason || "Performer unavailable.");
+        renderApp(window.gameState);
+        return;
+      }
+      uiState.booking.performerId = performerId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
@@ -246,6 +256,20 @@ function setupEventHandlers() {
         renderApp(window.gameState);
         showScreen("screen-content");
         return;
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "renew-contract") {
+      const performerId = target.dataset.id;
+      const result = renewPerformerContract(window.gameState, performerId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
       }
       renderApp(window.gameState);
       return;

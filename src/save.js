@@ -189,6 +189,30 @@ function ensureRosterCompleteness(candidate) {
   });
 }
 
+function ensurePerformerManagementState(candidate) {
+  if (!candidate) {
+    return;
+  }
+  if (!candidate.performerManagement || typeof candidate.performerManagement !== "object") {
+    candidate.performerManagement = { contracts: {}, availability: {}, retentionFlags: {} };
+  }
+  const management = candidate.performerManagement;
+  if (!management.contracts || typeof management.contracts !== "object") {
+    management.contracts = {};
+  }
+  if (!management.availability || typeof management.availability !== "object") {
+    management.availability = {};
+  }
+  if (!management.retentionFlags || typeof management.retentionFlags !== "object") {
+    management.retentionFlags = {};
+  }
+  if (candidate.roster && Array.isArray(candidate.roster.performers)) {
+    candidate.roster.performers.forEach(function (performer) {
+      ensurePerformerManagementForId(candidate, performer);
+    });
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -236,6 +260,7 @@ function migrateGameState(candidate) {
     candidate.storyLog = [];
   }
   ensureRosterCompleteness(candidate);
+  ensurePerformerManagementState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 
