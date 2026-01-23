@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (A3.4 Act 3 Story Arc)
+**Last Updated:** January 23, 2026 (A3.4 Act 3 Story Arc)
 
 ---
 
@@ -62,6 +62,7 @@
 - [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
 - [x] Social: Promo OF conversion tuned to ~1 per 20 posts + fractional carry implemented.
 - [x] Booking: any two performers can be booked; roles do not restrict booking.
+- [x] Debug: Dev-only Set Day panel (?debug=1) for iOS testing.
 
 ---
 
@@ -86,9 +87,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 11/11 | 0 |
+| Fixes/QoL | 12/12 | 0 |
 | Act 3 | 3/9 | 6 |
-| **Total** | **48/54** | **6** |
+| **Total** | **49/55** | **6** |
 
 ---
 

@@ -65,6 +65,13 @@ const CONFIG = {
     main_padding_px: 16,
     story_log_preview_length: 120
   },
+  debug: {
+    enabled: true,
+    queryParam: "debug",
+    queryValue: "1",
+    minDay: 1,
+    maxDay: 9999
+  },
   game: {
     starting_day: 1,
     action_day_max: 90,
