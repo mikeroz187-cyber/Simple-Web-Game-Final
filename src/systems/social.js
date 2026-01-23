@@ -300,11 +300,11 @@ function postPromoContent(gameState, platform, contentId) {
   }
 
   const alreadyPosted = gameState.social.posts.some(function (post) {
-    return post.contentId === entry.id;
+    return post.contentId === entry.id && post.platform === platform;
   });
 
   if (alreadyPosted) {
-    return { ok: false, message: "Promo already posted." };
+    return { ok: false, message: platform + " already posted for this Promo." };
   }
 
   const platformMultiplier = platform === "Instagram"
