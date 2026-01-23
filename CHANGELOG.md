@@ -58,6 +58,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: A3.6: Added deterministic Premium revenue variance (±15%) starting Day 181.
+  - Why: Apply bounded, seeded variance to late-game Premium payouts with roll logging and messaging.
+  - Files touched: config.toml, src/config.js, src/state.js, src/save.js, src/utils/rng.js, src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Feature: Split social/OF metrics with MRR-only reporting and v3 save reset behavior.
   - Why: Clarify Social Followers/Social Subs/OF Subs, compute MRR from OF subs, and simplify saves during rapid iteration.
   - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/systems/social.js, src/systems/analytics.js, src/systems/progression.js, src/systems/story.js, src/systems/shop.js, src/ui/render.js, src/systems/economy.js, src/save.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

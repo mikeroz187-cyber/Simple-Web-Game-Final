@@ -23,6 +23,33 @@ function getFreelancerProfileIds() {
   });
 }
 
+function getContentVarianceConfig() {
+  if (CONFIG.content && CONFIG.content.variance && typeof CONFIG.content.variance === "object") {
+    return CONFIG.content.variance;
+  }
+  return {};
+}
+
+function getContentVarianceEnabledDefault() {
+  const config = getContentVarianceConfig();
+  if (typeof config.enabled === "boolean") {
+    return config.enabled;
+  }
+  return true;
+}
+
+function createContentVarianceSeed() {
+  return Math.floor(Math.random() * 4294967296) >>> 0;
+}
+
+function buildDefaultContentVarianceState() {
+  return {
+    enabled: getContentVarianceEnabledDefault(),
+    seed: createContentVarianceSeed(),
+    rollLog: []
+  };
+}
+
 function getRandomFreelancerProfileId(avoidId) {
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
@@ -104,7 +131,8 @@ function newGameState() {
     },
     content: {
       lastContentId: null,
-      entries: []
+      entries: [],
+      variance: buildDefaultContentVarianceState()
     },
     shootOutputs: [],
     social: {
