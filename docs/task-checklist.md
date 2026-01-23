@@ -58,6 +58,7 @@
 - [x] Booking: performer preview cards align correctly when two performers are selected.
 - [x] Bugfix: Booking confirm works with 2 performers when combo is disabled (combo-gated lead rule).
 - [x] Social: Promo content can be posted to both Instagram and X (once per platform).
+- [x] Social: Promo list hides fully-posted promos; Recent Posts capped at 5.
 - [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
 - [ ] Booking: any two performers can be booked; roles do not restrict booking.
 
@@ -84,9 +85,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 8/9 | 1 |
+| Fixes/QoL | 9/10 | 1 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **42/52** | **10** |
+| **Total** | **43/53** | **10** |
 
 ---
 
