@@ -350,7 +350,7 @@ function renderBooking(gameState) {
       "</div>";
   }).join("");
   const performerCardsRow = performerCards
-    ? "<div style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
+    ? "<div class=\"panel-row\" style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
     : "<p class=\"helper-text\">Select performers to preview their portraits.</p>";
 
   const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
