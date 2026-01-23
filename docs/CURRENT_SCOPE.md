@@ -88,6 +88,7 @@
 ## In Scope Now (Act 2 UI Enhancement — Advanced Analytics Rollups)
 - **Advanced Analytics Rollups**: read-only 7/30 day rollup summaries on the existing Analytics screen (no new navigation or screens).
 - **Periodic analytics snapshots** recorded at a config-driven cadence for display in the Analytics screen history list.
+- **Analytics clarity**: the Analytics screen distinguishes Today (Day X) totals from the latest shoot results.
 - **No new authoring controls or refactors**: data-only enhancement using the existing save/export/import paths.
 
 ## In Scope Now (Act 1 UI Integration — Story Log)
@@ -119,6 +120,7 @@
 - [ ] Roster and Booking screens render performer portrait placeholders with a safe fallback.
 - [ ] Story Log screen lists triggered story events newest-first and opens the existing modal for full text.
 - [ ] Analytics screen shows config-driven rollups and recent snapshots without changing pacing or navigation.
+- [ ] Analytics screen shows Today (Day X) totals separately from the latest shoot results panel.
 
 ## Authority Order (Documentation to Follow)
 Repo layout is authoritative here to prevent drift across MVP docs.

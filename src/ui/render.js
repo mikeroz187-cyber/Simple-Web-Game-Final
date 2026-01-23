@@ -463,19 +463,32 @@ function renderContent(gameState) {
 function renderAnalytics(gameState) {
   const screen = qs("#screen-analytics");
   const entry = getLatestContentEntry(gameState);
+  const dayNumber = gameState && gameState.player && Number.isFinite(gameState.player.day)
+    ? gameState.player.day
+    : 0;
+  const todaySummary = getWindowedSummary(gameState, 1);
 
-  let analyticsBody = "<p class=\"helper-text\">No analytics yet. Book a shoot first.</p>";
+  const todayTotalsPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
+    "<p><strong>Revenue Gained:</strong> " + formatCurrency(todaySummary.revenue) + "</p>" +
+    "<p><strong>Followers Gained:</strong> " + todaySummary.followers + "</p>" +
+    "<p><strong>Subscribers Gained:</strong> " + todaySummary.subscribers + "</p>" +
+    "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
+    "</div>";
+
+  let latestShootBody = "<p class=\"helper-text\">No shoots yet today.</p>";
   if (!entry && gameState.content.lastContentId) {
-    analyticsBody = "<p class=\"helper-text\">Latest analytics record missing.</p>";
+    latestShootBody = "<p class=\"helper-text\">Latest shoot record missing.</p>";
   }
   if (entry) {
-    analyticsBody = "<div class=\"panel\">" +
-      "<p><strong>Revenue Gained:</strong> " + formatCurrency(entry.results.revenue) + "</p>" +
+    latestShootBody = "<p><strong>Revenue Gained:</strong> " + formatCurrency(entry.results.revenue) + "</p>" +
       "<p><strong>Followers Gained:</strong> " + entry.results.followersGained + "</p>" +
       "<p><strong>Subscribers Gained:</strong> " + entry.results.subscribersGained + "</p>" +
-      "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>" +
-      "</div>";
+      "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>";
   }
+  const latestShootPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Latest Shoot Results</h3>" +
+    latestShootBody + "</div>";
+  const analyticsBody = todayTotalsPanel + latestShootPanel;
 
   const rollupWindows = CONFIG.analytics && Array.isArray(CONFIG.analytics.rollupWindowsDays)
     ? CONFIG.analytics.rollupWindowsDays
