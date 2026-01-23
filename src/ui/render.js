@@ -676,6 +676,18 @@ function renderSocial(gameState) {
   const promoEntries = gameState.content.entries.filter(function (entry) {
     return entry.contentType === "Promo";
   });
+  const postedPlatformsByContent = new Map();
+  gameState.social.posts.forEach(function (post) {
+    if (!postedPlatformsByContent.has(post.contentId)) {
+      postedPlatformsByContent.set(post.contentId, new Set());
+    }
+    postedPlatformsByContent.get(post.contentId).add(post.platform);
+  });
+  const availablePromoEntries = promoEntries.filter(function (entry) {
+    const platforms = postedPlatformsByContent.get(entry.id) || new Set();
+    const isFullyPosted = platforms.has("Instagram") && platforms.has("X");
+    return !isFullyPosted;
+  });
 
   const strategyList = strategies.length
     ? strategies.map(function (strategy) {
@@ -759,8 +771,11 @@ function renderSocial(gameState) {
       "</div>"
     : "";
 
-  const postsList = gameState.social.posts.length
-    ? gameState.social.posts.map(function (post) {
+  const recentPosts = gameState.social.posts.length
+    ? gameState.social.posts.slice(-5).reverse()
+    : [];
+  const postsList = recentPosts.length
+    ? recentPosts.map(function (post) {
       return "<div class=\"panel\">" +
         "<p><strong>" + post.platform + "</strong> — Day " + post.dayPosted + "</p>" +
         "<p>Social Followers Gained: " + post.socialFollowersGained + "</p>" +
@@ -770,8 +785,8 @@ function renderSocial(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No social posts yet.</p>";
 
-  const promoList = promoEntries.length
-    ? promoEntries.map(function (entry) {
+  const promoList = availablePromoEntries.length
+    ? availablePromoEntries.map(function (entry) {
       const isSelected = entry.id === uiState.social.selectedContentId;
       const performer = getContentEntryPerformerLabel(gameState, entry);
       const theme = getThemeName(entry.themeId);
@@ -780,10 +795,10 @@ function renderSocial(gameState) {
         "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-social-content\" data-id=\"" + entry.id + "\">" + label + "</button>" +
         "</div>";
     }).join("")
-    : "<p class=\"helper-text\">No Promo content available to post.</p>";
+    : "<p class=\"helper-text\">No unposted promo content available.</p>";
 
   const selectedEntry = uiState.social.selectedContentId
-    ? promoEntries.find(function (entry) {
+    ? availablePromoEntries.find(function (entry) {
       return entry.id === uiState.social.selectedContentId;
     })
     : null;
@@ -794,7 +809,7 @@ function renderSocial(gameState) {
     }).join(" / ") + "</p>"
     : "<p class=\"helper-text\">Select a Promo content entry to see posted status.</p>";
 
-  const canPost = promoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
+  const canPost = availablePromoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
   const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
   const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
 

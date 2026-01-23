@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Hide fully-posted promo content entries and cap Social Recent Posts to the 5 newest.
+  - Why: Keep the Promo list focused on remaining post targets and limit Recent Posts to the latest activity without altering save data.
+  - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Stop auto-advancing the day after hitting the daily shoot limit, and block extra bookings with a manual Advance Day prompt.
   - Why: Keep day progression manual while enforcing the per-day booking cap without mutating state.
   - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
