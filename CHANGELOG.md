@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Gate the two-performer lead requirement behind the booking combo config.
+  - Why: Allow two non-lead performers to book successfully when combos are disabled.
+  - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Allow two-performer booking validation when combo mode is disabled.
   - Why: Prevent Confirm Shoot from staying disabled when booking two non-lead performers before combos are enabled.
   - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
