@@ -289,13 +289,18 @@ function renewPerformerContract(gameState, performerId) {
   return { ok: true, message: "Contract renewed for " + daysRemaining + " days." };
 }
 
-function applyShootFatigue(performer) {
+function applyShootFatigue(performer, multiplier) {
   if (!performer) {
     return;
   }
+  const fatiguePerShoot = Number.isFinite(CONFIG.performers.fatigue_per_shoot)
+    ? CONFIG.performers.fatigue_per_shoot
+    : 0;
+  const appliedMultiplier = Number.isFinite(multiplier) ? multiplier : 1;
+  const fatigueGain = Math.round(fatiguePerShoot * appliedMultiplier);
   performer.fatigue = Math.min(
     CONFIG.performers.max_fatigue,
-    performer.fatigue + CONFIG.performers.fatigue_per_shoot
+    performer.fatigue + fatigueGain
   );
 }
 
@@ -318,7 +323,7 @@ function recoverAllPerformers(gameState) {
   });
 }
 
-function updatePerformerStats(gameState, performerId) {
+function updatePerformerStats(gameState, performerId, fatigueMultiplier) {
   if (!gameState || !performerId) {
     return { ok: false, message: "Missing performer selection." };
   }
@@ -330,6 +335,6 @@ function updatePerformerStats(gameState, performerId) {
     return { ok: false, message: "Performer not found." };
   }
 
-  applyShootFatigue(performer);
+  applyShootFatigue(performer, fatigueMultiplier);
   return { ok: true };
 }

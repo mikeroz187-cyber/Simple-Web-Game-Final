@@ -27,6 +27,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Feature: Two-performer shoots with role-gated combos + booking UI slots.
+  - Why: Allow paired bookings with immediate combo multipliers, two-slot selection, and updated promo posting behavior.
+  - Files touched: src/config.js, src/systems/booking.js, src/systems/performers.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: QoL: Freelancers auto-reroll daily personas and remove manual rotate control.
   - Why: Keep freelancer personas fresh each day without requiring a paid swap action.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
