@@ -101,7 +101,7 @@ function getBookingPerformerSelection(gameState, selection) {
     const roleA = getPerformerRoleIdForBooking(gameState, performerA.id);
     const roleB = getPerformerRoleIdForBooking(gameState, performerB.id);
     const comboConfig = getBookingComboConfig();
-    if (comboConfig.enabled) {
+    if (comboConfig && comboConfig.enabled) {
       const leadCount = (roleA === "lead" ? 1 : 0) + (roleB === "lead" ? 1 : 0);
       if (leadCount !== 1) {
         return { ok: false, message: "Two-performer shoots require exactly one Lead." };
