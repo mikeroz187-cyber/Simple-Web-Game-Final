@@ -37,7 +37,7 @@
 - [x] A2.7 — Expanded Roster Depth (4 new performers with roles)
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
 - [x] A2.9 — Studio Milestones (5 milestone triggers)
-- [x] Freelancer Differentiation: persona rotation + One-Off Buzz + Booking filter + Roster Freelancer Pool
+- [x] Freelancer Differentiation: daily persona reroll + One-Off Buzz + Booking filter + Roster Freelancer Pool
 - [x] Manual Social Strategy (daily budget allocation)
 - [x] Automation Tier 1 (Auto-Book toggle)
 - [x] Story Log screen
@@ -52,6 +52,7 @@
 
 - [x] Promo gains apply only on posting (no double count).
 - [x] Analytics: Today (Day X) Totals panel + clarify Latest Shoot Results.
+- [x] Freelancers reroll personas each day; removed manual rotation UI.
 
 ---
 
@@ -76,9 +77,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 17/17 | 0 |
-| Fixes/QoL | 2/2 | 0 |
+| Fixes/QoL | 3/3 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **35/44** | **9** |
+| **Total** | **36/45** | **9** |
 
 ---
 

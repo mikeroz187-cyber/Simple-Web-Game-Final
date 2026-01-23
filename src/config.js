@@ -217,10 +217,8 @@ const CONFIG = {
       { id: "persona_polaroid_heat", name: "Polaroid Heat", description: "Flash-frame favorite who sparks fast buzz with playful flair." },
       { id: "persona_moondust_viper", name: "Moondust Viper", description: "Sultry mystique with a bite, built for short-term spikes." }
     ],
-    rotationCost: 100,
     promoFollowersBonusFlat: 80,
-    subscriberConversionMultiplier: 0.6,
-    avoidSameProfileOnRotate: true
+    subscriberConversionMultiplier: 0.6
   },
   performerManagement: {
     contractDaysByType: {

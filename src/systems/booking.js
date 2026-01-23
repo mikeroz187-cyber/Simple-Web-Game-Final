@@ -3,6 +3,7 @@ function advanceDay(gameState) {
   gameState.player.day += 1;
   recoverAllPerformers(gameState);
   advancePerformerManagementDay(gameState);
+  rerollFreelancerProfilesOnNewDay(gameState);
   recordAnalyticsSnapshot(gameState);
   const storyResult = checkStoryEvents(gameState);
   return storyResult.events || [];

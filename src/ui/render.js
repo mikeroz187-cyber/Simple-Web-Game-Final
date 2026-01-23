@@ -580,12 +580,6 @@ function renderRoster(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No contracted performers available.</p>";
 
-  const rotationCost = Number.isFinite(CONFIG.freelancers && CONFIG.freelancers.rotationCost)
-    ? CONFIG.freelancers.rotationCost
-    : 0;
-  const rotationNote = rotationCost > 0
-    ? "Rotation fee: " + formatCurrency(rotationCost) + "."
-    : "Rotation fee: Free.";
   const freelancerRows = freelancerPerformers.length
     ? freelancerPerformers.map(function (performer) {
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
@@ -603,9 +597,6 @@ function renderRoster(gameState) {
         "<p class=\"helper-text\">Role: " + roleLabel + "</p>" +
         "<p class=\"helper-text\">" + availabilityLine + "</p>" +
         "</div>" +
-        "<div class=\"button-row\">" +
-        createButton("Rotate", "rotate-freelancer", "", false, "data-id=\"" + performer.id + "\"") +
-        "</div>" +
         "</div>";
     }).join("")
     : "<p class=\"helper-text\">No freelancers available.</p>";
@@ -615,7 +606,6 @@ function renderRoster(gameState) {
   const freelancerToggle = "<div class=\"button-row\">" + createButton(freelancerToggleLabel, "toggle-freelancer-pool") + "</div>";
   const freelancerSection = "<div class=\"panel\"><h3 class=\"panel-title\">Freelancer Pool</h3>" +
     freelancerToggle +
-    "<p class=\"helper-text\">" + rotationNote + "</p>" +
     (showFreelancers ? freelancerRows : "<p class=\"helper-text\">Hidden. Use the toggle to browse guest talent.</p>") +
     "</div>";
 
