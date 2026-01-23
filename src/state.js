@@ -1,5 +1,16 @@
+function getPerformerRoleId(performerId) {
+  if (!performerId) {
+    return "support";
+  }
+  const roleMap = CONFIG.performers.role_by_id || {};
+  return roleMap[performerId] || "support";
+}
+
 function newGameState() {
   const now = new Date().toISOString();
+  const rosterIds = CONFIG.performers.core_ids
+    .concat(CONFIG.performers.freelance_ids)
+    .concat(CONFIG.performers.act2_ids || []);
 
   return {
     version: CONFIG.save.save_schema_version,
@@ -16,9 +27,7 @@ function newGameState() {
       reputation: CONFIG.progression.starting_reputation
     },
     roster: {
-      performers: CONFIG.performers.core_ids
-        .concat(CONFIG.performers.freelance_ids)
-        .map(function (id) {
+      performers: rosterIds.map(function (id) {
           const performer = CONFIG.performers.catalog[id];
           return {
             id: performer.id,
@@ -30,7 +39,10 @@ function newGameState() {
             loyalty: CONFIG.performers.starting_loyalty
           };
         }),
-      performerRoles: {}
+      performerRoles: rosterIds.reduce(function (roles, performerId) {
+        roles[performerId] = getPerformerRoleId(performerId);
+        return roles;
+      }, {})
     },
     content: {
       lastContentId: null,

@@ -134,6 +134,61 @@ function importSaveFromFile() {
   });
 }
 
+function getDefaultPerformerRoleId(performerId) {
+  if (!performerId) {
+    return "support";
+  }
+  const roleMap = CONFIG.performers.role_by_id || {};
+  return roleMap[performerId] || "support";
+}
+
+function buildRosterPerformer(performerId) {
+  const performer = CONFIG.performers.catalog[performerId];
+  if (!performer) {
+    return null;
+  }
+  return {
+    id: performer.id,
+    name: performer.name,
+    type: performer.type,
+    starPower: performer.starPower,
+    portraitPath: getPerformerPortraitPath(performer),
+    fatigue: 0,
+    loyalty: CONFIG.performers.starting_loyalty
+  };
+}
+
+function ensureRosterCompleteness(candidate) {
+  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
+    return;
+  }
+  const roster = candidate.roster;
+  const rosterIds = roster.performers.map(function (entry) {
+    return entry.id;
+  });
+  const catalogIds = CONFIG.performers.core_ids
+    .concat(CONFIG.performers.freelance_ids)
+    .concat(CONFIG.performers.act2_ids || []);
+  const missingIds = catalogIds.filter(function (performerId) {
+    return rosterIds.indexOf(performerId) === -1;
+  });
+  missingIds.forEach(function (performerId) {
+    const entry = buildRosterPerformer(performerId);
+    if (entry) {
+      roster.performers.push(entry);
+      rosterIds.push(entry.id);
+    }
+  });
+  if (!roster.performerRoles || typeof roster.performerRoles !== "object") {
+    roster.performerRoles = {};
+  }
+  roster.performers.forEach(function (performer) {
+    if (!roster.performerRoles[performer.id]) {
+      roster.performerRoles[performer.id] = getDefaultPerformerRoleId(performer.id);
+    }
+  });
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -180,6 +235,7 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.storyLog)) {
     candidate.storyLog = [];
   }
+  ensureRosterCompleteness(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 

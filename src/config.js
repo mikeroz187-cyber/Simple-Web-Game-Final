@@ -100,6 +100,23 @@ const CONFIG = {
       "free_kira_sol",
       "free_eli_hart"
     ],
+    act2_ids: [
+      "act2_ivy_glaze",
+      "act2_dex_marion",
+      "act2_sable_quinn",
+      "act2_joel_riggs"
+    ],
+    role_labels: {
+      lead: "Lead",
+      specialist: "Specialist",
+      support: "Support"
+    },
+    role_by_id: {
+      act2_ivy_glaze: "lead",
+      act2_dex_marion: "specialist",
+      act2_sable_quinn: "lead",
+      act2_joel_riggs: "support"
+    },
     catalog: {
       core_lena_watts: {
         id: "core_lena_watts",
@@ -156,6 +173,34 @@ const CONFIG = {
         type: "freelance",
         starPower: 1,
         description: "Budget-friendly helper with earnest charm and limited reach."
+      },
+      act2_ivy_glaze: {
+        id: "act2_ivy_glaze",
+        name: "Ivy Glaze",
+        type: "freelance",
+        starPower: 4,
+        description: "Glossy brand-builder who treats every shoot like a product launch."
+      },
+      act2_dex_marion: {
+        id: "act2_dex_marion",
+        name: "Dex Marion",
+        type: "freelance",
+        starPower: 3,
+        description: "Over-prepared specialist who still improvises to steal the scene."
+      },
+      act2_sable_quinn: {
+        id: "act2_sable_quinn",
+        name: "Sable Quinn",
+        type: "freelance",
+        starPower: 3,
+        description: "Trend-chasing chameleon with a knack for monetizing the moment."
+      },
+      act2_joel_riggs: {
+        id: "act2_joel_riggs",
+        name: "Joel Riggs",
+        type: "freelance",
+        starPower: 2,
+        description: "Deadpan support who makes chaos look like a deliberate choice."
       }
     }
   },

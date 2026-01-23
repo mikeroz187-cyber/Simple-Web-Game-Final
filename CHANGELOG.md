@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Added Act 2 roster expansion with four new performers, role mappings, UI role labels, and save backfill logic.
+  - Why: Deliver A2.7 expanded roster depth with clear role visibility and safe save compatibility.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/ui/render.js, docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Added Manual Social Strategy with daily budget allocation and once-per-day apply on the Social screen.
   - Why: Deliver the approved deterministic, manual social spend mechanic with immediate feedback and save persistence.
   - Files touched: src/config.js, config.toml, src/state.js, src/save.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
