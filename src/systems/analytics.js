@@ -7,9 +7,10 @@ function getWindowedSummary(gameState, windowDays) {
   const startDay = safeWindowDays > 0 ? currentDay - safeWindowDays + 1 : currentDay;
   const summary = {
     windowDays: safeWindowDays,
-    revenue: 0,
-    followers: 0,
-    subscribers: 0,
+    mrrDelta: 0,
+    socialFollowers: 0,
+    socialSubscribers: 0,
+    onlyFansSubscribers: 0,
     promoCount: 0,
     premiumCount: 0
   };
@@ -31,9 +32,9 @@ function getWindowedSummary(gameState, windowDays) {
     }
 
     const results = entry.results || {};
-    summary.revenue += Number.isFinite(results.revenue) ? results.revenue : 0;
-    summary.followers += Number.isFinite(results.followersGained) ? results.followersGained : 0;
-    summary.subscribers += Number.isFinite(results.subscribersGained) ? results.subscribersGained : 0;
+    summary.socialFollowers += Number.isFinite(results.socialFollowersGained) ? results.socialFollowersGained : 0;
+    summary.socialSubscribers += Number.isFinite(results.socialSubscribersGained) ? results.socialSubscribersGained : 0;
+    summary.onlyFansSubscribers += Number.isFinite(results.onlyFansSubscribersGained) ? results.onlyFansSubscribersGained : 0;
 
     if (entry.contentType === "Promo") {
       summary.promoCount += 1;
@@ -55,9 +56,12 @@ function getWindowedSummary(gameState, windowDays) {
       return;
     }
 
-    summary.followers += Number.isFinite(post.followersGained) ? post.followersGained : 0;
-    summary.subscribers += Number.isFinite(post.subscribersGained) ? post.subscribersGained : 0;
+    summary.socialFollowers += Number.isFinite(post.socialFollowersGained) ? post.socialFollowersGained : 0;
+    summary.socialSubscribers += Number.isFinite(post.socialSubscribersGained) ? post.socialSubscribersGained : 0;
+    summary.onlyFansSubscribers += Number.isFinite(post.onlyFansSubscribersGained) ? post.onlyFansSubscribersGained : 0;
   });
+
+  summary.mrrDelta = getMRRDeltaForSubs(summary.onlyFansSubscribers);
 
   return summary;
 }
@@ -93,10 +97,11 @@ function recordAnalyticsSnapshot(gameState) {
   const snapshot = {
     dayNumber: dayNumber,
     timestamp: Date.now(),
-    lifetimeRevenue: Number.isFinite(gameState.player.lifetimeRevenue) ? gameState.player.lifetimeRevenue : 0,
+    mrr: getMRR(gameState),
     cash: Number.isFinite(gameState.player.cash) ? gameState.player.cash : 0,
-    followers: Number.isFinite(gameState.player.followers) ? gameState.player.followers : 0,
-    subscribers: Number.isFinite(gameState.player.subscribers) ? gameState.player.subscribers : 0,
+    socialFollowers: Number.isFinite(gameState.player.socialFollowers) ? gameState.player.socialFollowers : 0,
+    socialSubscribers: Number.isFinite(gameState.player.socialSubscribers) ? gameState.player.socialSubscribers : 0,
+    onlyFansSubscribers: Number.isFinite(gameState.player.onlyFansSubscribers) ? gameState.player.onlyFansSubscribers : 0,
     reputation: Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0,
     totalShoots: gameState.content && Array.isArray(gameState.content.entries) ? gameState.content.entries.length : 0,
     totalPosts: gameState.social && Array.isArray(gameState.social.posts) ? gameState.social.posts.length : 0

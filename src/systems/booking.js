@@ -288,35 +288,35 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
 
-  let followersGained = 0;
-  let revenue = 0;
+  let socialFollowersGained = 0;
+  let socialSubscribersGained = 0;
+  let onlyFansSubscribersGained = 0;
+  let payout = 0;
   if (selection.contentType === "Premium") {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
-    revenue = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
+    payout = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
     if (hasCombo) {
       const revenueMultiplier = getBookingComboMultiplier(
         comboConfig,
         performerSelection.roleKey,
         comboConfig.revenueMultiplierByRoles
       );
-      revenue = Math.round(revenue * revenueMultiplier);
+      payout = Math.round(payout * revenueMultiplier);
     }
+    const baselineFollowersResult = calculatePromoFollowers(performer, theme);
+    const baselineFollowers = baselineFollowersResult.ok ? baselineFollowersResult.value : 0;
+    const baselineSubscribers = calculateSubscribersGained(baselineFollowers);
+    const premiumConfig = CONFIG.conversion && CONFIG.conversion.premium ? CONFIG.conversion.premium : {};
+    const premiumMultiplier = Number.isFinite(premiumConfig.ofSubsMultiplier)
+      ? premiumConfig.ofSubsMultiplier
+      : 1;
+    onlyFansSubscribersGained = Math.max(0, Math.floor(baselineSubscribers * premiumMultiplier));
   }
 
-  let subscribersGained = calculateSubscribersGained(followersGained);
   let feedbackSummary = selection.contentType === "Promo"
     ? "Promo shot complete. Post it to generate reach."
-    : "Premium release generated revenue.";
-  const hasFreelancer = performerSelection.performerIds.some(function (performerId) {
-    const entry = gameState.roster.performers.find(function (rosterEntry) {
-      return rosterEntry.id === performerId;
-    });
-    return entry && entry.type === "freelance";
-  });
-  if (hasFreelancer && selection.contentType === "Premium") {
-    feedbackSummary += " Guest drop spiked attention, but converted fewer subs.";
-  }
+    : "Premium release boosted OF subscribers.";
 
   const contentId = "content_" + (gameState.content.entries.length + 1);
   const entry = {
@@ -329,16 +329,17 @@ function confirmBooking(gameState, selection) {
     contentType: selection.contentType,
     shootCost: shootCost,
     results: {
-      revenue: revenue,
-      followersGained: followersGained,
-      subscribersGained: subscribersGained,
+      socialFollowersGained: socialFollowersGained,
+      socialSubscribersGained: socialSubscribersGained,
+      onlyFansSubscribersGained: onlyFansSubscribersGained,
       feedbackSummary: feedbackSummary
     }
   };
 
-  gameState.player.cash = Math.max(0, gameState.player.cash - shootCost + revenue);
-  gameState.player.followers = Math.max(0, gameState.player.followers + followersGained);
-  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscribersGained);
+  gameState.player.cash = Math.max(0, gameState.player.cash - shootCost + payout);
+  gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
+  gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
+  gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);
 
   gameState.content.entries.push(entry);
   gameState.content.lastContentId = entry.id;
@@ -365,9 +366,10 @@ function confirmBooking(gameState, selection) {
     storyEvents = advanceDay(gameState);
   }
 
+  const mrrDelta = getMRRDeltaForSubs(onlyFansSubscribersGained);
   const resultMessage = selection.contentType === "Promo"
     ? "Promo shot complete. Post it to generate reach."
-    : "Shoot booked. +" + followersGained + " followers, +" + formatCurrency(revenue) + ".";
+    : "Premium release complete. +" + onlyFansSubscribersGained + " OF subs (MRR +" + formatCurrency(mrrDelta) + "/mo).";
 
   return {
     ok: true,
@@ -390,8 +392,9 @@ function createShootOutputRecord(entry) {
     performerIds: performerIds.length ? performerIds : [entry.performerId],
     themeId: entry.themeId || null,
     tier: tier,
-    revenue: Number.isFinite(entry.results.revenue) ? entry.results.revenue : 0,
-    followersGained: Number.isFinite(entry.results.followersGained) ? entry.results.followersGained : 0,
+    socialFollowersGained: Number.isFinite(entry.results.socialFollowersGained) ? entry.results.socialFollowersGained : 0,
+    socialSubscribersGained: Number.isFinite(entry.results.socialSubscribersGained) ? entry.results.socialSubscribersGained : 0,
+    onlyFansSubscribersGained: Number.isFinite(entry.results.onlyFansSubscribersGained) ? entry.results.onlyFansSubscribersGained : 0,
     thumbnailPath: CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH
   };
 }

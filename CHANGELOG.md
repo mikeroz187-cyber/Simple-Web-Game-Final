@@ -27,6 +27,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Feature: Split social/OF metrics with MRR-only reporting and v3 save reset behavior.
+  - Why: Clarify Social Followers/Social Subs/OF Subs, compute MRR from OF subs, and simplify saves during rapid iteration.
+  - Files touched: src/config.js, src/state.js, src/systems/booking.js, src/systems/social.js, src/systems/analytics.js, src/systems/progression.js, src/systems/story.js, src/systems/shop.js, src/ui/render.js, src/systems/economy.js, src/save.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Feature: Two-performer shoots with role-gated combos + booking UI slots.
   - Why: Allow paired bookings with immediate combo multipliers, two-slot selection, and updated promo posting behavior.
   - Files touched: src/config.js, src/systems/booking.js, src/systems/performers.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

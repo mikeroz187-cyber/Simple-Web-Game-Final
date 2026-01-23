@@ -19,9 +19,9 @@ const SOCIAL_STRATEGY_CATALOG = [
   },
   {
     id: "revenue_focus",
-    label: "Revenue Focus",
+    label: "MRR Focus",
     description: "Prioritize higher-value audiences over raw reach.",
-    primaryEffect: "Instagram reach x0.9, X reach x1.2, subscriber conversion x1.1.",
+    primaryEffect: "Instagram reach x0.9, X reach x1.2, social sub conversion x1.1.",
     instagramReachMult: 0.9,
     xReachMult: 1.2,
     subscriberConversionMult: 1.1
@@ -138,7 +138,7 @@ function hasAppliedManualSocialStrategyToday(gameState) {
 function calculateManualSocialStrategyImpact(gameState, budget, allocations) {
   const config = getManualSocialStrategyConfig();
   if (!config) {
-    return { followersGained: 0, subscribersGained: 0 };
+    return { socialFollowersGained: 0, socialSubscribersGained: 0 };
   }
   const minSpend = Number.isFinite(config.minSpend) ? config.minSpend : 0;
   const safeBudget = Number.isFinite(budget) ? Math.max(minSpend, Math.round(budget)) : minSpend;
@@ -152,12 +152,12 @@ function calculateManualSocialStrategyImpact(gameState, budget, allocations) {
       : 0;
     return sum + (effectiveSpend * rate);
   }, 0);
-  const followersGained = applyEquipmentFollowersMultiplier(Math.round(baseFollowers), gameState);
+  const socialFollowersGained = applyEquipmentFollowersMultiplier(Math.round(baseFollowers), gameState);
   const subsPerFollower = Number.isFinite(config.subsPerFollower) ? config.subsPerFollower : 0;
-  const subscribersGained = Math.max(0, Math.floor(followersGained * subsPerFollower));
+  const socialSubscribersGained = Math.max(0, Math.floor(socialFollowersGained * subsPerFollower));
   return {
-    followersGained: followersGained,
-    subscribersGained: subscribersGained
+    socialFollowersGained: socialFollowersGained,
+    socialSubscribersGained: socialSubscribersGained
   };
 }
 
@@ -170,8 +170,8 @@ function getManualSocialStrategyPreview(gameState) {
   return {
     totalPct: totalPct,
     budget: budget,
-    followersGained: impact.followersGained,
-    subscribersGained: impact.subscribersGained
+    socialFollowersGained: impact.socialFollowersGained,
+    socialSubscribersGained: impact.socialSubscribersGained
   };
 }
 
@@ -225,11 +225,11 @@ function applyManualSocialStrategy(gameState) {
   }
 
   const impact = calculateManualSocialStrategyImpact(gameState, budget, manualStrategy.allocations);
-  const followersGained = impact.followersGained;
-  const subscribersGained = impact.subscribersGained;
+  const socialFollowersGained = impact.socialFollowersGained;
+  const socialSubscribersGained = impact.socialSubscribersGained;
   gameState.player.cash = Math.max(0, gameState.player.cash - budget);
-  gameState.player.followers = Math.max(0, gameState.player.followers + followersGained);
-  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscribersGained);
+  gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
+  gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
   manualStrategy.dailyBudget = budget;
   manualStrategy.lastAppliedDay = gameState.player.day;
 
@@ -245,7 +245,7 @@ function applyManualSocialStrategy(gameState) {
     dayNumber: gameState.player.day,
     title: "Manual Social Strategy",
     body: dayLabel + " — Spent " + formatCurrency(budget) + " (" + spendLines.join(", ") + "). +" +
-      followersGained + " followers, +" + subscribersGained + " subscribers.",
+      socialFollowersGained + " social followers, +" + socialSubscribersGained + " social subs.",
     timestamp: new Date().toISOString()
   };
   if (!gameState.storyLog.some(function (entry) {
@@ -259,8 +259,8 @@ function applyManualSocialStrategy(gameState) {
   return {
     ok: true,
     cost: budget,
-    followersGained: followersGained,
-    subscribersGained: subscribersGained,
+    socialFollowersGained: socialFollowersGained,
+    socialSubscribersGained: socialSubscribersGained,
     message: "Applied — come back tomorrow to change.",
     milestoneEvents: milestoneEvents
   };
@@ -318,7 +318,7 @@ function postPromoContent(gameState, platform, contentId) {
   const baseFollowers = Math.round(
     CONFIG.economy.promo_followers_gain * platformMultiplier * strategyReachMult
   );
-  let followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+  let socialFollowersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
   const performerIds = getEntryPerformerIds(entry);
   const comboConfig = getBookingComboConfig();
   const hasCombo = comboConfig.enabled && performerIds.length === 2;
@@ -332,7 +332,7 @@ function postPromoContent(gameState, platform, contentId) {
       roleKey,
       comboConfig.promoFollowersMultiplierByRoles
     );
-    followersGained = Math.round(followersGained * promoMultiplier);
+    socialFollowersGained = Math.round(socialFollowersGained * promoMultiplier);
   }
   const isFreelancer = performerIds.some(function (performerId) {
     const performer = gameState.roster.performers.find(function (rosterEntry) {
@@ -344,19 +344,27 @@ function postPromoContent(gameState, platform, contentId) {
   const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
     ? freelancerConfig.promoFollowersBonusFlat
     : 0;
-  const subscriberMultiplier = Number.isFinite(freelancerConfig.subscriberConversionMultiplier)
-    ? freelancerConfig.subscriberConversionMultiplier
+  const subscriberMultiplier = Number.isFinite(freelancerConfig.freelancerSocialSubMultiplier)
+    ? freelancerConfig.freelancerSocialSubMultiplier
     : 1;
   if (isFreelancer && promoBonus > 0) {
-    followersGained += promoBonus;
+    socialFollowersGained += promoBonus;
   }
-  const baseSubscribers = calculateSubscribersGained(followersGained);
-  let subscribersGained = activeStrategy
+  const baseSubscribers = calculateSubscribersGained(socialFollowersGained);
+  let socialSubscribersGained = activeStrategy
     ? Math.max(0, Math.round(baseSubscribers * activeStrategy.subscriberConversionMult))
     : baseSubscribers;
   if (isFreelancer && subscriberMultiplier >= 0) {
-    subscribersGained = Math.floor(subscribersGained * subscriberMultiplier);
+    socialSubscribersGained = Math.floor(socialSubscribersGained * subscriberMultiplier);
   }
+  const conversionConfig = CONFIG.conversion && CONFIG.conversion.promo ? CONFIG.conversion.promo : {};
+  const ofFromFollowers = Math.floor(
+    socialFollowersGained * (Number.isFinite(conversionConfig.followersToOF) ? conversionConfig.followersToOF : 0)
+  );
+  const ofFromSocialSubs = Math.floor(
+    socialSubscribersGained * (Number.isFinite(conversionConfig.socialSubsToOF) ? conversionConfig.socialSubsToOF : 0)
+  );
+  const onlyFansSubscribersGained = Math.max(0, ofFromFollowers + ofFromSocialSubs);
 
   const postId = "post_" + (gameState.social.posts.length + 1);
   const post = {
@@ -364,19 +372,22 @@ function postPromoContent(gameState, platform, contentId) {
     dayPosted: gameState.player.day,
     platform: platform,
     contentId: entry.id,
-    followersGained: followersGained,
-    subscribersGained: subscribersGained
+    socialFollowersGained: socialFollowersGained,
+    socialSubscribersGained: socialSubscribersGained,
+    onlyFansSubscribersGained: onlyFansSubscribersGained
   };
 
   gameState.social.posts.push(post);
-  gameState.player.followers = Math.max(0, gameState.player.followers + followersGained);
-  gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscribersGained);
+  gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
+  gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
+  gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);
 
   const milestoneEvents = checkMilestones(gameState);
 
   return {
     ok: true,
-    message: "Posted promo. +" + followersGained + " followers, +" + subscribersGained + " subs.",
+    message: "Posted promo: +" + socialFollowersGained + " social followers, +" + socialSubscribersGained +
+      " social subs, +" + onlyFansSubscribersGained + " OF subs.",
     milestoneEvents: milestoneEvents
   };
 }

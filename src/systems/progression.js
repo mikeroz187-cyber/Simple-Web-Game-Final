@@ -95,16 +95,19 @@ function getMilestoneMetricValue(gameState, milestone) {
   }
   const type = milestone.type;
   if (type === "followers") {
-    return gameState.player.followers;
+    return gameState.player.socialFollowers;
   }
   if (type === "subscribers") {
-    return gameState.player.subscribers;
+    return gameState.player.onlyFansSubscribers;
   }
   if (type === "reputation") {
     return gameState.player.reputation;
   }
   if (type === "lifetimeRevenue") {
     return getLifetimeRevenue(gameState);
+  }
+  if (type === "mrr") {
+    return getMRR(gameState);
   }
   return 0;
 }
@@ -123,14 +126,14 @@ function applyMilestoneRewards(gameState, milestone) {
 
   const followerReward = milestone.rewardFollowers;
   if (Number.isFinite(followerReward) && followerReward !== 0) {
-    gameState.player.followers = Math.max(0, gameState.player.followers + followerReward);
-    rewardLabels.push("+" + followerReward + " followers");
+    gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + followerReward);
+    rewardLabels.push("+" + followerReward + " social followers");
   }
 
   const subscriberReward = milestone.rewardSubscribers;
   if (Number.isFinite(subscriberReward) && subscriberReward !== 0) {
-    gameState.player.subscribers = Math.max(0, gameState.player.subscribers + subscriberReward);
-    rewardLabels.push("+" + subscriberReward + " subscribers");
+    gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + subscriberReward);
+    rewardLabels.push("+" + subscriberReward + " OF subs");
   }
 
   const reputationReward = milestone.rewardReputation;

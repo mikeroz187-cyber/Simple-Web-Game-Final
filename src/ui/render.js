@@ -193,8 +193,10 @@ function renderHub(gameState) {
     "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + " / " + CONFIG.game.shoots_per_day + "</p>",
     "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
     "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
-    "<p><strong>Followers:</strong> " + gameState.player.followers + "</p>",
-    "<p><strong>Subscribers:</strong> " + gameState.player.subscribers + "</p>",
+    "<p><strong>Social Followers:</strong> " + gameState.player.socialFollowers + "</p>",
+    "<p><strong>Social Subscribers:</strong> " + gameState.player.socialSubscribers + "</p>",
+    "<p><strong>OnlyFans Subscribers:</strong> " + gameState.player.onlyFansSubscribers + "</p>",
+    "<p><strong>MRR:</strong> " + formatCurrency(getMRR(gameState)) + "/mo</p>",
     "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",
     "<p><strong>Next Action:</strong> " + nextAction + "</p>"
   ].join("");
@@ -502,9 +504,10 @@ function renderAnalytics(gameState) {
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
-    "<p><strong>Revenue Gained:</strong> " + formatCurrency(todaySummary.revenue) + "</p>" +
-    "<p><strong>Followers Gained:</strong> " + todaySummary.followers + "</p>" +
-    "<p><strong>Subscribers Gained:</strong> " + todaySummary.subscribers + "</p>" +
+    "<p><strong>MRR Change:</strong> " + formatCurrency(todaySummary.mrrDelta) + "/mo</p>" +
+    "<p><strong>Social Followers Gained:</strong> " + todaySummary.socialFollowers + "</p>" +
+    "<p><strong>Social Subscribers Gained:</strong> " + todaySummary.socialSubscribers + "</p>" +
+    "<p><strong>OnlyFans Subscribers Gained:</strong> " + todaySummary.onlyFansSubscribers + "</p>" +
     "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
     "</div>";
 
@@ -513,9 +516,14 @@ function renderAnalytics(gameState) {
     latestShootBody = "<p class=\"helper-text\">Latest shoot record missing.</p>";
   }
   if (entry) {
-    latestShootBody = "<p><strong>Revenue Gained:</strong> " + formatCurrency(entry.results.revenue) + "</p>" +
-      "<p><strong>Followers Gained:</strong> " + entry.results.followersGained + "</p>" +
-      "<p><strong>Subscribers Gained:</strong> " + entry.results.subscribersGained + "</p>" +
+    const latestOnlyFansSubs = Number.isFinite(entry.results.onlyFansSubscribersGained)
+      ? entry.results.onlyFansSubscribersGained
+      : 0;
+    const latestMrrDelta = getMRRDeltaForSubs(latestOnlyFansSubs);
+    latestShootBody = "<p><strong>MRR Change:</strong> " + formatCurrency(latestMrrDelta) + "/mo</p>" +
+      "<p><strong>Social Followers Gained:</strong> " + entry.results.socialFollowersGained + "</p>" +
+      "<p><strong>Social Subscribers Gained:</strong> " + entry.results.socialSubscribersGained + "</p>" +
+      "<p><strong>OnlyFans Subscribers Gained:</strong> " + latestOnlyFansSubs + "</p>" +
       "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>";
   }
   const latestShootPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Latest Shoot Results</h3>" +
@@ -528,9 +536,10 @@ function renderAnalytics(gameState) {
   const rollupRows = rollupWindows.length
     ? rollupWindows.map(function (windowDays) {
       const summary = getWindowedSummary(gameState, windowDays);
-      return "<div class=\"list-item\"><p>Last " + summary.windowDays + " days: Revenue " + formatCurrency(summary.revenue) +
-        " | Followers +" + summary.followers + " | Subs +" + summary.subscribers +
-        " | Shoots: Promo " + summary.promoCount + " / Premium " + summary.premiumCount + "</p></div>";
+      return "<div class=\"list-item\"><p>Last " + summary.windowDays + " days: MRR +" + formatCurrency(summary.mrrDelta) +
+        "/mo | Social Followers +" + summary.socialFollowers + " | Social Subs +" + summary.socialSubscribers +
+        " | OF Subs +" + summary.onlyFansSubscribers + " | Shoots: Promo " + summary.promoCount +
+        " / Premium " + summary.premiumCount + "</p></div>";
     }).join("")
     : "<p class=\"helper-text\">No rollup windows configured.</p>";
   const rollupsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Rollups</h3>" + rollupRows + "</div>";
@@ -538,13 +547,14 @@ function renderAnalytics(gameState) {
   const snapshots = Array.isArray(gameState.analyticsHistory) ? gameState.analyticsHistory.slice(-5).reverse() : [];
   const snapshotRows = snapshots.length
     ? snapshots.map(function (snapshot) {
-      const followers = Number.isFinite(snapshot.followers) ? snapshot.followers : 0;
-      const subscribers = Number.isFinite(snapshot.subscribers) ? snapshot.subscribers : 0;
+      const socialFollowers = Number.isFinite(snapshot.socialFollowers) ? snapshot.socialFollowers : 0;
+      const socialSubscribers = Number.isFinite(snapshot.socialSubscribers) ? snapshot.socialSubscribers : 0;
+      const onlyFansSubscribers = Number.isFinite(snapshot.onlyFansSubscribers) ? snapshot.onlyFansSubscribers : 0;
       const cash = Number.isFinite(snapshot.cash) ? snapshot.cash : 0;
-      const lifetimeRevenue = Number.isFinite(snapshot.lifetimeRevenue) ? snapshot.lifetimeRevenue : 0;
-      return "<div class=\"list-item\"><p>Day " + snapshot.dayNumber + " — Followers " + followers +
-        ", Subs " + subscribers + ", Cash " + formatCurrency(cash) +
-        ", Lifetime Revenue " + formatCurrency(lifetimeRevenue) + "</p></div>";
+      const mrr = Number.isFinite(snapshot.mrr) ? snapshot.mrr : 0;
+      return "<div class=\"list-item\"><p>Day " + snapshot.dayNumber + " — Social Followers " + socialFollowers +
+        ", Social Subs " + socialSubscribers + ", OF Subs " + onlyFansSubscribers +
+        ", Cash " + formatCurrency(cash) + ", MRR " + formatCurrency(mrr) + "/mo</p></div>";
     }).join("")
     : "<p class=\"helper-text\">No snapshots yet.</p>";
   const snapshotsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Snapshots</h3>" + snapshotRows + "</div>";
@@ -713,7 +723,8 @@ function renderSocial(gameState) {
   const allocationStatus = totalPct === 100
     ? "Allocation total: 100%."
     : "Allocation total: " + totalPct + "% (must be 100%).";
-  const previewLine = "Est. Followers +" + manualPreview.followersGained + ", Est. Subs +" + manualPreview.subscribersGained;
+  const previewLine = "Est. Social Followers +" + manualPreview.socialFollowersGained +
+    ", Est. Social Subs +" + manualPreview.socialSubscribersGained;
   const issueLines = manualIssues.length
     ? "<p class=\"helper-text\">" + manualIssues.join(" ") + "</p>"
     : "";
@@ -752,8 +763,9 @@ function renderSocial(gameState) {
     ? gameState.social.posts.map(function (post) {
       return "<div class=\"panel\">" +
         "<p><strong>" + post.platform + "</strong> — Day " + post.dayPosted + "</p>" +
-        "<p>Followers Gained: " + post.followersGained + "</p>" +
-        "<p>Subscribers Gained: " + post.subscribersGained + "</p>" +
+        "<p>Social Followers Gained: " + post.socialFollowersGained + "</p>" +
+        "<p>Social Subscribers Gained: " + post.socialSubscribersGained + "</p>" +
+        "<p>OnlyFans Subscribers Gained: " + post.onlyFansSubscribersGained + "</p>" +
         "</div>";
     }).join("")
     : "<p class=\"helper-text\">No social posts yet.</p>";
@@ -866,15 +878,15 @@ function renderGallery(gameState) {
       const performerLabel = getShootOutputPerformerLabel(gameState, output.performerIds);
       const tierLabel = formatShootOutputTierLabel(output.tier);
       const dayLabel = Number.isFinite(output.day) ? output.day : "?";
-      const revenue = Number.isFinite(output.revenue) ? output.revenue : 0;
-      const followers = Number.isFinite(output.followersGained) ? output.followersGained : 0;
+      const socialFollowers = Number.isFinite(output.socialFollowersGained) ? output.socialFollowersGained : 0;
+      const onlyFansSubscribers = Number.isFinite(output.onlyFansSubscribersGained) ? output.onlyFansSubscribersGained : 0;
       return "<div class=\"panel\" style=\"" + outputCardStyle + "\">" +
         "<img src=\"" + thumbPath + "\" alt=\"Shoot output thumbnail\" width=\"" + outputThumbSize + "\" height=\"" + outputThumbSize + "\"" +
         " style=\"" + outputThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />" +
         "<div style=\"" + outputMetaStyle + "\">" +
         "<p><strong>Day " + dayLabel + " — " + tierLabel + " Shoot</strong></p>" +
         "<p class=\"helper-text\">Performers: " + performerLabel + "</p>" +
-        "<p class=\"helper-text\">Revenue: " + formatCurrency(revenue) + " | Followers: " + followers + "</p>" +
+        "<p class=\"helper-text\">Social Followers: " + socialFollowers + " | OF Subs: " + onlyFansSubscribers + "</p>" +
         "</div>" +
         "</div>";
     }).join("")

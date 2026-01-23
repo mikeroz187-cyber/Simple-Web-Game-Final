@@ -77,8 +77,9 @@ function newGameState() {
       debtRemaining: CONFIG.game.loan_total_due,
       debtDueDay: CONFIG.game.debt_due_day,
       shootsToday: 0,
-      followers: 0,
-      subscribers: 0,
+      socialFollowers: 0,
+      socialSubscribers: 0,
+      onlyFansSubscribers: 0,
       reputation: CONFIG.progression.starting_reputation
     },
     roster: {

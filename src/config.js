@@ -46,7 +46,7 @@ const CONFIG = {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,
     autosave_interval_seconds: 10,
-    save_schema_version: 2,
+    save_schema_version: 3,
     default_slot_id: "slot_1",
     autosave_slot_id: "autosave",
     slots: [
@@ -79,6 +79,19 @@ const CONFIG = {
     premium_base_revenue: 250,
     subscriber_conversion_rate: 0.01,
     base_shoot_cost: 100
+  },
+  onlyfans: {
+    pricePerMonth: 10,
+    daysPerMonth: 30
+  },
+  conversion: {
+    promo: {
+      followersToOF: 0.0025,
+      socialSubsToOF: 0.006
+    },
+    premium: {
+      ofSubsMultiplier: 1.25
+    }
   },
   booking: {
     combo: {
@@ -233,7 +246,7 @@ const CONFIG = {
       { id: "persona_moondust_viper", name: "Moondust Viper", description: "Sultry mystique with a bite, built for short-term spikes." }
     ],
     promoFollowersBonusFlat: 80,
-    subscriberConversionMultiplier: 0.6
+    freelancerSocialSubMultiplier: 0.6
   },
   performerManagement: {
     contractDaysByType: {
@@ -283,7 +296,7 @@ const CONFIG = {
   },
   analytics: {
     rollupWindowsDays: [7, 30],
-    metricKeys: ["revenue", "followers", "subscribers", "promoCount", "premiumCount"],
+    metricKeys: ["mrrDelta", "socialFollowers", "socialSubscribers", "onlyFansSubscribers", "promoCount", "premiumCount"],
     snapshotFrequencyDays: 7
   },
   progression: {
@@ -300,18 +313,18 @@ const CONFIG = {
     ],
     milestones: {
       ms_followers_1000: {
-        label: "First 1,000 Followers",
+        label: "First 1,000 Social Followers",
         type: "followers",
         threshold: 1000
       },
       ms_subscribers_250: {
-        label: "First 250 Subscribers",
+        label: "First 250 OF Subscribers",
         type: "subscribers",
         threshold: 250
       },
       ms_revenue_50000: {
-        label: "$50k Lifetime Revenue",
-        type: "lifetimeRevenue",
+        label: "$50k MRR",
+        type: "mrr",
         threshold: 50000
       },
       ms_reputation_25: {
