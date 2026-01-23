@@ -13,15 +13,12 @@ function setEquipmentMessage(message) {
 
 function resetBookingSelection() {
   const uiState = getUiState();
-  const performerFilter = uiState.booking && uiState.booking.performerFilter
-    ? uiState.booking.performerFilter
-    : "contracted";
   uiState.booking = {
-    performerId: null,
+    performerIdA: null,
+    performerIdB: null,
     locationId: null,
     themeId: null,
-    contentType: null,
-    performerFilter: performerFilter
+    contentType: null
   };
 }
 
@@ -199,23 +196,6 @@ function setupEventHandlers() {
 
     if (action === "nav-shop") {
       showScreen("screen-shop");
-      renderApp(window.gameState);
-      return;
-    }
-
-    if (action === "select-performer") {
-      const performerId = target.dataset.id;
-      const performer = window.gameState.roster.performers.find(function (entry) {
-        return entry.id === performerId;
-      });
-      const performerStatus = performer ? isPerformerBookable(window.gameState, performer) : { ok: false, reason: "Performer not found." };
-      if (!performerStatus.ok) {
-        setUiMessage(performerStatus.reason || "Performer unavailable.");
-        renderApp(window.gameState);
-        return;
-      }
-      uiState.booking.performerId = performerId;
-      setUiMessage("");
       renderApp(window.gameState);
       return;
     }
@@ -573,23 +553,17 @@ function setupEventHandlers() {
       return;
     }
 
-    if (action === "set-performer-filter") {
+    if (action === "select-performer-a") {
       const uiState = getUiState();
-      uiState.booking.performerFilter = target.value;
-      const selectedPerformerId = uiState.booking.performerId;
-      if (selectedPerformerId) {
-        const selectedPerformer = window.gameState.roster.performers.find(function (entry) {
-          return entry.id === selectedPerformerId;
-        });
-        if (selectedPerformer) {
-          const isVisible = uiState.booking.performerFilter === "all"
-            || (uiState.booking.performerFilter === "freelancers" && selectedPerformer.type === "freelance")
-            || (uiState.booking.performerFilter === "contracted" && selectedPerformer.type !== "freelance");
-          if (!isVisible) {
-            uiState.booking.performerId = null;
-          }
-        }
-      }
+      uiState.booking.performerIdA = target.value || null;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-performer-b") {
+      const uiState = getUiState();
+      uiState.booking.performerIdB = target.value || null;
       setUiMessage("");
       renderApp(window.gameState);
       return;

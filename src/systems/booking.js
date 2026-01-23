@@ -9,6 +9,118 @@ function advanceDay(gameState) {
   return storyResult.events || [];
 }
 
+function getBookingComboConfig() {
+  if (CONFIG.booking && CONFIG.booking.combo && typeof CONFIG.booking.combo === "object") {
+    return CONFIG.booking.combo;
+  }
+  return { enabled: false };
+}
+
+function getBookingComboRoleKey(roleA, roleB) {
+  if (!roleA || !roleB) {
+    return null;
+  }
+  const normalized = [roleA, roleB].map(function (role) {
+    return String(role || "").toLowerCase();
+  }).sort();
+  return normalized.join("+");
+}
+
+function getPerformerRoleIdForBooking(gameState, performerId) {
+  if (!gameState || !gameState.roster || !performerId) {
+    return "support";
+  }
+  const roleMap = gameState.roster.performerRoles || {};
+  if (roleMap[performerId]) {
+    return roleMap[performerId];
+  }
+  if (typeof getPerformerRoleId === "function") {
+    return getPerformerRoleId(performerId);
+  }
+  return "support";
+}
+
+function getBookingComboMultiplier(comboConfig, roleKey, multiplierMap) {
+  if (!comboConfig || !comboConfig.enabled || !roleKey) {
+    return 1;
+  }
+  if (!multiplierMap || typeof multiplierMap !== "object") {
+    return 1;
+  }
+  const value = multiplierMap[roleKey];
+  return Number.isFinite(value) ? value : 1;
+}
+
+function getEntryPerformerIds(entry) {
+  if (!entry) {
+    return [];
+  }
+  if (Array.isArray(entry.performerIds) && entry.performerIds.length) {
+    return entry.performerIds.filter(Boolean);
+  }
+  if (entry.performerId) {
+    return [entry.performerId];
+  }
+  return [];
+}
+
+function getBookingPerformerSelection(gameState, selection) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return { ok: false, message: "Roster data missing." };
+  }
+  const performerIdA = selection.performerIdA || selection.performerId;
+  const performerIdB = selection.performerIdB || null;
+  if (!performerIdA) {
+    return { ok: false, message: "Select a performer." };
+  }
+  const performerA = gameState.roster.performers.find(function (entry) {
+    return entry.id === performerIdA;
+  });
+  if (!performerA) {
+    return { ok: false, message: "Select a performer." };
+  }
+  if (performerIdB && performerIdB === performerIdA) {
+    return { ok: false, message: "Select two different performers." };
+  }
+  const performerStatusA = isPerformerBookable(gameState, performerA);
+  if (!performerStatusA.ok) {
+    return { ok: false, message: performerStatusA.reason || "Performer is unavailable." };
+  }
+  let performerB = null;
+  if (performerIdB) {
+    performerB = gameState.roster.performers.find(function (entry) {
+      return entry.id === performerIdB;
+    });
+    if (!performerB) {
+      return { ok: false, message: "Second performer not found." };
+    }
+    const performerStatusB = isPerformerBookable(gameState, performerB);
+    if (!performerStatusB.ok) {
+      return { ok: false, message: performerStatusB.reason || "Performer is unavailable." };
+    }
+    const roleA = getPerformerRoleIdForBooking(gameState, performerA.id);
+    const roleB = getPerformerRoleIdForBooking(gameState, performerB.id);
+    const leadCount = (roleA === "lead" ? 1 : 0) + (roleB === "lead" ? 1 : 0);
+    if (leadCount !== 1) {
+      return { ok: false, message: "Two-performer shoots require exactly one Lead." };
+    }
+    return {
+      ok: true,
+      performerA: performerA,
+      performerB: performerB,
+      performerIds: [performerA.id, performerB.id],
+      roleKey: getBookingComboRoleKey(roleA, roleB)
+    };
+  }
+  return {
+    ok: true,
+    performerA: performerA,
+    performerB: null,
+    performerIds: [performerA.id],
+    roleKey: null
+  };
+}
+
 function getAutoBookingSelection(gameState) {
   if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
     return { ok: false, reason: "Roster data missing" };
@@ -65,7 +177,8 @@ function getAutoBookingSelection(gameState) {
   return {
     ok: true,
     selection: {
-      performerId: performer.id,
+      performerIdA: performer.id,
+      performerIdB: null,
       locationId: location.id,
       themeId: theme.id,
       contentType: contentType
@@ -126,16 +239,12 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Day limit reached. No more shoots allowed." };
   }
 
-  const performer = gameState.roster.performers.find(function (entry) {
-    return entry.id === selection.performerId;
-  });
-  if (!performer) {
-    return { ok: false, message: "Select a performer." };
+  const performerSelection = getBookingPerformerSelection(gameState, selection);
+  if (!performerSelection.ok) {
+    return { ok: false, message: performerSelection.message || "Select valid performers." };
   }
-  const performerStatus = isPerformerBookable(gameState, performer);
-  if (!performerStatus.ok) {
-    return { ok: false, message: performerStatus.reason || "Performer is unavailable." };
-  }
+  const performer = performerSelection.performerA;
+  const performerB = performerSelection.performerB;
 
   const location = CONFIG.locations.catalog[selection.locationId];
   if (!location) {
@@ -169,25 +278,43 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Unable to calculate shoot cost." };
   }
 
-  const shootCost = shootCostResult.value;
+  const comboConfig = getBookingComboConfig();
+  const hasCombo = comboConfig.enabled && performerSelection.performerIds.length === 2;
+  const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
+  const shootCost = hasCombo
+    ? Math.floor(shootCostResult.value * costMultiplier)
+    : shootCostResult.value;
   if (gameState.player.cash < shootCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
 
   let followersGained = 0;
   let revenue = 0;
-  const isFreelancer = performer.type === "freelance";
   if (selection.contentType === "Premium") {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
     revenue = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
+    if (hasCombo) {
+      const revenueMultiplier = getBookingComboMultiplier(
+        comboConfig,
+        performerSelection.roleKey,
+        comboConfig.revenueMultiplierByRoles
+      );
+      revenue = Math.round(revenue * revenueMultiplier);
+    }
   }
 
   let subscribersGained = calculateSubscribersGained(followersGained);
   let feedbackSummary = selection.contentType === "Promo"
     ? "Promo shot complete. Post it to generate reach."
     : "Premium release generated revenue.";
-  if (isFreelancer && selection.contentType === "Premium") {
+  const hasFreelancer = performerSelection.performerIds.some(function (performerId) {
+    const entry = gameState.roster.performers.find(function (rosterEntry) {
+      return rosterEntry.id === performerId;
+    });
+    return entry && entry.type === "freelance";
+  });
+  if (hasFreelancer && selection.contentType === "Premium") {
     feedbackSummary += " Guest drop spiked attention, but converted fewer subs.";
   }
 
@@ -196,6 +323,7 @@ function confirmBooking(gameState, selection) {
     id: contentId,
     dayCreated: gameState.player.day,
     performerId: performer.id,
+    performerIds: performerSelection.performerIds,
     locationId: location.id,
     themeId: theme.id,
     contentType: selection.contentType,
@@ -216,8 +344,15 @@ function confirmBooking(gameState, selection) {
   gameState.content.lastContentId = entry.id;
   appendShootOutputRecord(gameState, entry);
 
-  updatePerformerStats(gameState, performer.id);
+  const fatigueMultiplier = hasCombo && Number.isFinite(comboConfig.fatigueMultiplierEach)
+    ? comboConfig.fatigueMultiplierEach
+    : 1;
+  updatePerformerStats(gameState, performer.id, fatigueMultiplier);
   updatePerformerAvailabilityAfterBooking(gameState, performer);
+  if (performerB) {
+    updatePerformerStats(gameState, performerB.id, fatigueMultiplier);
+    updatePerformerAvailabilityAfterBooking(gameState, performerB);
+  }
   const shootsPerDay = CONFIG.game.shoots_per_day;
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
   const nextShoots = currentShoots + 1;
@@ -248,10 +383,11 @@ function createShootOutputRecord(entry) {
     return null;
   }
   const tier = entry.contentType === "Premium" ? "premium" : "standard";
+  const performerIds = getEntryPerformerIds(entry);
   return {
     id: "shoot_output_" + entry.id,
     day: entry.dayCreated,
-    performerIds: [entry.performerId],
+    performerIds: performerIds.length ? performerIds : [entry.performerId],
     themeId: entry.themeId || null,
     tier: tier,
     revenue: Number.isFinite(entry.results.revenue) ? entry.results.revenue : 0,

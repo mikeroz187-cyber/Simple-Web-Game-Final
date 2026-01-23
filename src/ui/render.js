@@ -3,11 +3,11 @@ function getUiState() {
     window.uiState = {
       message: "",
       booking: {
-        performerId: null,
+        performerIdA: null,
+        performerIdB: null,
         locationId: null,
         themeId: null,
-        contentType: null,
-        performerFilter: "contracted"
+        contentType: null
       },
       social: {
         selectedContentId: null
@@ -81,6 +81,13 @@ function getPerformerRoleLabel(gameState, performerId) {
     return labels.support;
   }
   return "Support";
+}
+
+function getPerformerTypeLabel(type) {
+  if (type === "freelance") {
+    return "Freelance";
+  }
+  return "Core";
 }
 
 function getFreelancerProfilesConfig() {
@@ -260,57 +267,89 @@ function renderBooking(gameState) {
   const uiState = getUiState();
   const performers = gameState.roster.performers;
   const hasPerformers = performers.length > 0;
-  const performerFilter = uiState.booking.performerFilter || "contracted";
-  const filteredPerformers = performers.filter(function (performer) {
-    if (performerFilter === "freelancers") {
-      return performer.type === "freelance";
-    }
-    if (performerFilter === "all") {
-      return true;
-    }
-    return performer.type !== "freelance";
-  });
-  const hasFilteredPerformers = filteredPerformers.length > 0;
   const portraitSize = getPerformerPortraitSizePx();
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
   const locationThumbSize = getLocationThumbnailSizePx();
   const locationThumbRadius = getLocationThumbnailRadiusPx();
   const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
-  const performerRows = hasFilteredPerformers
-    ? filteredPerformers.map(function (performer) {
-      const isSelected = performer.id === uiState.booking.performerId;
-      const performerStatus = isPerformerBookable(gameState, performer);
-      const available = performerStatus.ok;
+  const performerOptions = hasPerformers
+    ? performers.map(function (performer) {
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
-      const label = displayProfile.name + " (" + performer.type + ")";
       const roleLabel = getPerformerRoleLabel(gameState, performer.id);
-      const contractSummary = getContractSummary(gameState, performer.id);
-      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
-      const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower +
-        " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
-        " | " + contractSummary.label +
-        " | " + availabilitySummary.label;
-      const portraitPath = getPerformerPortraitPath(performer);
-      const portraitAlt = "Portrait of " + displayProfile.name;
-      const availabilityNote = available ? "Available" : "Unavailable — " + performerStatus.reason;
-      const descriptionLine = performer.type === "freelance" && displayProfile.description
-        ? "<p class=\"helper-text\">" + displayProfile.description + "</p>"
-        : "";
-      return "<div class=\"list-item\" style=\"" + performerRowStyle + "\">" +
-        "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
-        "<div>" +
-        "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-performer\" data-id=\"" + performer.id + "\"" + (available ? "" : " disabled") + ">" + label + "</button>" +
-        descriptionLine +
-        "<p class=\"helper-text\">" + detail + "</p>" +
-        "<p class=\"helper-text\">" + availabilityNote + "</p>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No performers available for this filter.</p>";
+      const typeLabel = getPerformerTypeLabel(performer.type);
+      const optionLabel = "[" + typeLabel + "][" + roleLabel + "] " + displayProfile.name;
+      const selectedA = performer.id === uiState.booking.performerIdA ? " selected" : "";
+      const selectedB = performer.id === uiState.booking.performerIdB ? " selected" : "";
+      return {
+        id: performer.id,
+        label: optionLabel,
+        selectedA: selectedA,
+        selectedB: selectedB
+      };
+    })
+    : [];
+  const performerOptionsA = performerOptions.map(function (option) {
+    return "<option value=\"" + option.id + "\"" + option.selectedA + ">" + option.label + "</option>";
+  }).join("");
+  const performerOptionsB = performerOptions.map(function (option) {
+    return "<option value=\"" + option.id + "\"" + option.selectedB + ">" + option.label + "</option>";
+  }).join("");
+  const performerSelectA = "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"performer-slot-a\">Slot A (Required)</label>" +
+    "<select id=\"performer-slot-a\" class=\"select-control\" data-action=\"select-performer-a\">" +
+    "<option value=\"\"" + (uiState.booking.performerIdA ? "" : " selected") + ">Select performer...</option>" +
+    performerOptionsA +
+    "</select>" +
+    "</div>";
+  const performerSelectB = "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"performer-slot-b\">Slot B (Optional)</label>" +
+    "<select id=\"performer-slot-b\" class=\"select-control\" data-action=\"select-performer-b\">" +
+    "<option value=\"\"" + (uiState.booking.performerIdB ? "" : " selected") + ">None</option>" +
+    performerOptionsB +
+    "</select>" +
+    "</div>";
+
+  const selectedPerformerA = uiState.booking.performerIdA
+    ? performers.find(function (performer) {
+      return performer.id === uiState.booking.performerIdA;
+    })
+    : null;
+  const selectedPerformerB = uiState.booking.performerIdB
+    ? performers.find(function (performer) {
+      return performer.id === uiState.booking.performerIdB;
+    })
+    : null;
+  const performerCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
+  const performerCards = [selectedPerformerA, selectedPerformerB].filter(Boolean).map(function (performer) {
+    const displayProfile = getPerformerDisplayProfile(gameState, performer);
+    const roleLabel = getPerformerRoleLabel(gameState, performer.id);
+    const typeLabel = getPerformerTypeLabel(performer.type);
+    const contractSummary = getContractSummary(gameState, performer.id);
+    const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+    const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower +
+      " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
+      " | " + contractSummary.label +
+      " | " + availabilitySummary.label;
+    const performerStatus = isPerformerBookable(gameState, performer);
+    const availabilityNote = performerStatus.ok ? "Available" : "Unavailable — " + performerStatus.reason;
+    const portraitPath = getPerformerPortraitPath(performer);
+    const portraitAlt = "Portrait of " + displayProfile.name;
+    return "<div class=\"panel\" style=\"" + performerCardStyle + "\">" +
+      "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
+      "<div>" +
+      "<p><strong>" + displayProfile.name + "</strong></p>" +
+      "<p class=\"helper-text\">" + typeLabel + " | " + roleLabel + "</p>" +
+      "<p class=\"helper-text\">" + detail + "</p>" +
+      "<p class=\"helper-text\">" + availabilityNote + "</p>" +
+      "</div>" +
+      "</div>";
+  }).join("");
+  const performerCardsRow = performerCards
+    ? "<div style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
+    : "<p class=\"helper-text\">Select performers to preview their portraits.</p>";
 
   const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
   const locations = CONFIG.locations.tier0_ids
@@ -364,18 +403,23 @@ function renderBooking(gameState) {
     return "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-content-type\" data-id=\"" + type + "\">" + type + "</button>";
   }).join("");
 
-  const selectedPerformer = uiState.booking.performerId
-    ? performers.find(function (performer) {
-      return performer.id === uiState.booking.performerId;
-    })
-    : null;
-  const performerAvailable = selectedPerformer ? isPerformerBookable(gameState, selectedPerformer).ok : false;
+  const performerSelection = getBookingPerformerSelection(gameState, {
+    performerIdA: uiState.booking.performerIdA,
+    performerIdB: uiState.booking.performerIdB
+  });
+  const performerSelectionOk = performerSelection.ok;
   const selectedLocation = uiState.booking.locationId
     ? CONFIG.locations.catalog[uiState.booking.locationId]
     : null;
   const shootCostResult = calculateShootCost(selectedLocation);
+  const comboConfig = getBookingComboConfig();
+  const hasCombo = comboConfig.enabled && performerSelectionOk && performerSelection.performerIds.length === 2;
+  const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
+  const computedShootCost = selectedLocation
+    ? (hasCombo ? Math.floor(shootCostResult.value * costMultiplier) : shootCostResult.value)
+    : 0;
   const shootCostLabel = selectedLocation
-    ? formatCurrency(shootCostResult.value)
+    ? formatCurrency(computedShootCost)
     : "Select a location";
 
   const selectedLocationLocked = selectedLocation
@@ -385,25 +429,13 @@ function renderBooking(gameState) {
         ? CONFIG.locations.tier2ReputationRequirement
         : 0))
     : false;
-  const canConfirm = hasPerformers && uiState.booking.performerId && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= shootCostResult.value && performerAvailable && !selectedLocationLocked;
+  const canConfirm = hasPerformers && performerSelectionOk && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= computedShootCost && !selectedLocationLocked;
 
-  const filterOptions = [
-    { id: "contracted", label: "Contracted" },
-    { id: "freelancers", label: "Freelancers" },
-    { id: "all", label: "All" }
-  ];
-  const filterSelect = filterOptions.map(function (option) {
-    const selectedAttr = option.id === performerFilter ? " selected" : "";
-    return "<option value=\"" + option.id + "\"" + selectedAttr + ">" + option.label + "</option>";
-  }).join("");
-  const performerFilterControl = "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"performer-filter\">Show Performers</label>" +
-    "<select id=\"performer-filter\" class=\"select-control\" data-action=\"set-performer-filter\">" +
-    filterSelect +
-    "</select>" +
-    "</div>";
-
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" + performerFilterControl + performerRows + "</div>" +
+  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" +
+    performerSelectA +
+    performerSelectB +
+    performerCardsRow +
+    "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Themes</h3>" + themeRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Content Type</h3><div class=\"button-row\">" + contentTypeRows + "</div></div>" +
@@ -430,7 +462,7 @@ function renderContent(gameState) {
     contentBody = "<p class=\"helper-text\">Content record missing.</p>";
   }
   if (entry) {
-    const performer = getPerformerName(gameState, entry.performerId);
+    const performer = getContentEntryPerformerLabel(gameState, entry);
     const location = getLocationName(entry.locationId);
     const locationData = CONFIG.locations.catalog[entry.locationId];
     const locationThumbPath = getLocationThumbnailPath(locationData);
@@ -729,7 +761,7 @@ function renderSocial(gameState) {
   const promoList = promoEntries.length
     ? promoEntries.map(function (entry) {
       const isSelected = entry.id === uiState.social.selectedContentId;
-      const performer = getPerformerName(gameState, entry.performerId);
+      const performer = getContentEntryPerformerLabel(gameState, entry);
       const theme = getThemeName(entry.themeId);
       const label = "Day " + entry.dayCreated + " — " + performer + " (" + theme + ")";
       return "<div class=\"list-item\">" +
@@ -789,7 +821,7 @@ function renderGallery(gameState) {
   const entryList = entries.length
     ? entries.map(function (entry) {
       const isSelected = entry.id === uiState.gallery.selectedContentId;
-      const performer = getPerformerName(gameState, entry.performerId);
+      const performer = getContentEntryPerformerLabel(gameState, entry);
       const location = getLocationName(entry.locationId);
       const theme = getThemeName(entry.themeId);
       const locationData = CONFIG.locations.catalog[entry.locationId];
@@ -816,7 +848,7 @@ function renderGallery(gameState) {
   const detailPanel = selectedEntry
     ? "<div class=\"panel\"><h3 class=\"panel-title\">Entry Details</h3>" +
       "<p><strong>Day:</strong> " + selectedEntry.dayCreated + "</p>" +
-      "<p><strong>Performer:</strong> " + getPerformerName(gameState, selectedEntry.performerId) + "</p>" +
+      "<p><strong>Performer:</strong> " + getContentEntryPerformerLabel(gameState, selectedEntry) + "</p>" +
       "<div style=\"" + locationRowStyle + "\">" +
       "<img src=\"" + getLocationThumbnailPath(CONFIG.locations.catalog[selectedEntry.locationId]) + "\" alt=\"Thumbnail of " + getLocationName(selectedEntry.locationId) + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH + "';\" />" +
       "<p><strong>Location:</strong> " + getLocationName(selectedEntry.locationId) + "</p>" +
@@ -989,6 +1021,13 @@ function getPerformerName(gameState, performerId) {
     return "Unknown";
   }
   return getPerformerDisplayProfile(gameState, performer).name;
+}
+
+function getContentEntryPerformerLabel(gameState, entry) {
+  const performerIds = typeof getEntryPerformerIds === "function"
+    ? getEntryPerformerIds(entry)
+    : (entry && entry.performerId ? [entry.performerId] : []);
+  return getShootOutputPerformerLabel(gameState, performerIds);
 }
 
 function getLocationName(locationId) {

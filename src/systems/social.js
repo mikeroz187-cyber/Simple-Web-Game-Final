@@ -319,10 +319,27 @@ function postPromoContent(gameState, platform, contentId) {
     CONFIG.economy.promo_followers_gain * platformMultiplier * strategyReachMult
   );
   let followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
-  const performer = gameState.roster.performers.find(function (rosterEntry) {
-    return rosterEntry.id === entry.performerId;
+  const performerIds = getEntryPerformerIds(entry);
+  const comboConfig = getBookingComboConfig();
+  const hasCombo = comboConfig.enabled && performerIds.length === 2;
+  if (hasCombo) {
+    const roleKey = getBookingComboRoleKey(
+      getPerformerRoleIdForBooking(gameState, performerIds[0]),
+      getPerformerRoleIdForBooking(gameState, performerIds[1])
+    );
+    const promoMultiplier = getBookingComboMultiplier(
+      comboConfig,
+      roleKey,
+      comboConfig.promoFollowersMultiplierByRoles
+    );
+    followersGained = Math.round(followersGained * promoMultiplier);
+  }
+  const isFreelancer = performerIds.some(function (performerId) {
+    const performer = gameState.roster.performers.find(function (rosterEntry) {
+      return rosterEntry.id === performerId;
+    });
+    return performer && performer.type === "freelance";
   });
-  const isFreelancer = performer && performer.type === "freelance";
   const freelancerConfig = CONFIG.freelancers && typeof CONFIG.freelancers === "object" ? CONFIG.freelancers : {};
   const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
     ? freelancerConfig.promoFollowersBonusFlat

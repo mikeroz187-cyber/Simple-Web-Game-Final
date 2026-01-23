@@ -80,6 +80,21 @@ const CONFIG = {
     subscriber_conversion_rate: 0.01,
     base_shoot_cost: 100
   },
+  booking: {
+    combo: {
+      enabled: true,
+      costMultiplier: 1.6,
+      fatigueMultiplierEach: 0.85,
+      revenueMultiplierByRoles: {
+        "lead+specialist": 1.18,
+        "lead+support": 1.1
+      },
+      promoFollowersMultiplierByRoles: {
+        "lead+specialist": 1.08,
+        "lead+support": 1.15
+      }
+    }
+  },
   performers: {
     core_count: 3,
     freelance_count: 5,
