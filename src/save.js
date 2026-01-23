@@ -349,6 +349,33 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.milestones)) {
     candidate.milestones = [];
   }
+  if (!candidate.story || typeof candidate.story !== "object") {
+    candidate.story = {};
+  }
+  if (typeof candidate.story.introShown !== "boolean") {
+    candidate.story.introShown = false;
+  }
+  if (!Array.isArray(candidate.story.debtReminderDaysShown)) {
+    candidate.story.debtReminderDaysShown = [];
+  }
+  if (!candidate.story.act2 || typeof candidate.story.act2 !== "object" || Array.isArray(candidate.story.act2)) {
+    candidate.story.act2 = { eventsShown: [], lastEventId: null };
+  }
+  if (!Array.isArray(candidate.story.act2.eventsShown)) {
+    candidate.story.act2.eventsShown = [];
+  }
+  if (typeof candidate.story.act2.lastEventId !== "string" && candidate.story.act2.lastEventId !== null) {
+    candidate.story.act2.lastEventId = null;
+  }
+  if (!candidate.story.act3 || typeof candidate.story.act3 !== "object" || Array.isArray(candidate.story.act3)) {
+    candidate.story.act3 = { eventsShown: [], lastEventId: null };
+  }
+  if (!Array.isArray(candidate.story.act3.eventsShown)) {
+    candidate.story.act3.eventsShown = [];
+  }
+  if (typeof candidate.story.act3.lastEventId !== "string" && candidate.story.act3.lastEventId !== null) {
+    candidate.story.act3.lastEventId = null;
+  }
   if (!Array.isArray(candidate.storyLog)) {
     candidate.storyLog = [];
   }

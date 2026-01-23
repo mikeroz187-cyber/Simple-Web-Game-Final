@@ -12,6 +12,12 @@ function checkStoryEvents(gameState) {
   if (!Array.isArray(gameState.story.act2.eventsShown)) {
     gameState.story.act2.eventsShown = [];
   }
+  if (!gameState.story.act3 || typeof gameState.story.act3 !== "object" || Array.isArray(gameState.story.act3)) {
+    gameState.story.act3 = { eventsShown: [], lastEventId: null };
+  }
+  if (!Array.isArray(gameState.story.act3.eventsShown)) {
+    gameState.story.act3.eventsShown = [];
+  }
 
   if (!gameState.story.introShown && currentDay === CONFIG.story.act1.act1_intro_day) {
     gameState.story.introShown = true;
@@ -45,6 +51,20 @@ function checkStoryEvents(gameState) {
       }
       gameState.story.act2.eventsShown.push(entry.id);
       gameState.story.act2.lastEventId = entry.id;
+      events.push({ id: entry.id, day: currentDay });
+    });
+  }
+
+  if (CONFIG.story.act3 && Array.isArray(CONFIG.story.act3.schedule)) {
+    CONFIG.story.act3.schedule.forEach(function (entry) {
+      if (!entry || entry.triggerDay !== currentDay) {
+        return;
+      }
+      if (gameState.story.act3.eventsShown.indexOf(entry.id) !== -1) {
+        return;
+      }
+      gameState.story.act3.eventsShown.push(entry.id);
+      gameState.story.act3.lastEventId = entry.id;
       events.push({ id: entry.id, day: currentDay });
     });
   }
@@ -160,6 +180,22 @@ const STORY_EVENT_COPY = {
   act2_partnership_offer_day170: {
     title: "Partnership Offer",
     message: "A platform partner offers cross-promotion in exchange for consistent premium releases. You accept and lock in a long-term collaboration."
+  },
+  act3_brand_legacy_day200: {
+    title: "Brand Legacy Review",
+    message: "Your studio is now a recognizable brand. You commit to a legacy plan that prioritizes long-term reputation and stability."
+  },
+  act3_market_shift_day225: {
+    title: "Market Shift",
+    message: "Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention."
+  },
+  act3_mentorship_day245: {
+    title: "Mentorship and Succession",
+    message: "You begin mentoring a successor team to preserve studio standards while scaling output."
+  },
+  act3_exit_strategy_day270: {
+    title: "Exit Strategy",
+    message: "You formalize a long-term exit strategy focused on stability and legacy recognition."
   }
 };
 
