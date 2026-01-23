@@ -56,6 +56,7 @@
 - [x] Freelancers reroll personas each day; removed manual rotation UI.
 - [x] v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium stronger)
 - [x] Booking: performer preview cards align correctly when two performers are selected.
+- [x] Bugfix: Booking confirm works with 2 performers when combo is disabled.
 
 ---
 
@@ -80,9 +81,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 5/5 | 0 |
+| Fixes/QoL | 6/6 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **39/48** | **9** |
+| **Total** | **40/49** | **9** |
 
 ---
 
