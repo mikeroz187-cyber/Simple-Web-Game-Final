@@ -45,6 +45,14 @@
 - **Display role labels** on Roster and Booking screens alongside existing performer stats.
 - **Existing v2 saves** append the new performers and role assignments without resetting.
 
+## In Scope Now (Act 2 A2.1 — Expanded Performer Management)
+- **Performer contracts** with days remaining and expired status, config-driven by performer type.
+- **Availability rules**: rest-day requirements, max-consecutive bookings per day, and fatigue-based blocking.
+- **Booking validation** blocks selection/confirmation for unavailable performers with clear messaging.
+- **Roster + Booking UI indicators** for contract days, rest days, and booking streaks.
+- **Contract renewal** action in the Roster with cash cost and safe save persistence.
+- **Save migration safety**: existing v2 saves backfill performer-management entries without resets.
+
 ## In Scope Now (Manual Social Strategy Selection — Single Active Strategy)
 - **Strategy list UI** on the existing Social screen showing all strategies from the social strategy data catalog.
 - **Single active selection** stored as `gameState.social.activeSocialStrategyId` with one strategy active at a time.

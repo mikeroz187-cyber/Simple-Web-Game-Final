@@ -79,6 +79,43 @@ function getPerformerRoleLabel(gameState, performerId) {
   return "Support";
 }
 
+function getContractSummary(gameState, performerId) {
+  const contract = getContractState(gameState, performerId);
+  const daysRemaining = contract && Number.isFinite(contract.daysRemaining) ? contract.daysRemaining : 0;
+  const isExpired = daysRemaining <= 0 || (contract && contract.status === "expired");
+  const warningThreshold = Number.isFinite(CONFIG.performerManagement.contractWarningThresholdDays)
+    ? CONFIG.performerManagement.contractWarningThresholdDays
+    : 0;
+  const warningLabel = !isExpired && warningThreshold > 0 && daysRemaining <= warningThreshold
+    ? " (Expiring Soon)"
+    : "";
+  return {
+    isExpired: isExpired,
+    daysRemaining: daysRemaining,
+    label: "Contract: " + (isExpired ? "EXPIRED" : daysRemaining + " days" + warningLabel)
+  };
+}
+
+function getAvailabilitySummary(gameState, performerId) {
+  const availability = getAvailabilityState(gameState, performerId);
+  const restDaysRemaining = availability && Number.isFinite(availability.restDaysRemaining)
+    ? availability.restDaysRemaining
+    : 0;
+  const consecutiveBookings = availability && Number.isFinite(availability.consecutiveBookings)
+    ? availability.consecutiveBookings
+    : 0;
+  const maxConsecutive = Number.isFinite(CONFIG.performerManagement.maxConsecutiveBookings)
+    ? CONFIG.performerManagement.maxConsecutiveBookings
+    : 0;
+  return {
+    restDaysRemaining: restDaysRemaining,
+    consecutiveBookings: consecutiveBookings,
+    maxConsecutive: maxConsecutive,
+    label: (restDaysRemaining > 0 ? "Rest: " + restDaysRemaining + " day(s) | " : "") +
+      "Streak: " + consecutiveBookings + " / " + maxConsecutive
+  };
+}
+
 function renderHub(gameState) {
   const hub = qs("#screen-hub");
   const hasContent = Boolean(gameState.content.lastContentId);
@@ -180,17 +217,25 @@ function renderBooking(gameState) {
   const performerRows = hasPerformers
     ? performers.map(function (performer) {
       const isSelected = performer.id === uiState.booking.performerId;
-      const available = isPerformerAvailable(performer);
+      const performerStatus = isPerformerBookable(gameState, performer);
+      const available = performerStatus.ok;
       const label = performer.name + " (" + performer.type + ")";
       const roleLabel = getPerformerRoleLabel(gameState, performer.id);
-      const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower + " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty;
+      const contractSummary = getContractSummary(gameState, performer.id);
+      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+      const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower +
+        " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
+        " | " + contractSummary.label +
+        " | " + availabilitySummary.label;
       const portraitPath = getPerformerPortraitPath(performer);
       const portraitAlt = "Portrait of " + performer.name;
+      const availabilityNote = available ? "Available" : "Unavailable — " + performerStatus.reason;
       return "<div class=\"list-item\" style=\"" + performerRowStyle + "\">" +
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
         "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-performer\" data-id=\"" + performer.id + "\"" + (available ? "" : " disabled") + ">" + label + "</button>" +
-        "<p class=\"helper-text\">" + detail + (available ? "" : " — Unavailable") + "</p>" +
+        "<p class=\"helper-text\">" + detail + "</p>" +
+        "<p class=\"helper-text\">" + availabilityNote + "</p>" +
         "</div>" +
         "</div>";
     }).join("")
@@ -253,7 +298,7 @@ function renderBooking(gameState) {
       return performer.id === uiState.booking.performerId;
     })
     : null;
-  const performerAvailable = selectedPerformer ? isPerformerAvailable(selectedPerformer) : false;
+  const performerAvailable = selectedPerformer ? isPerformerBookable(gameState, selectedPerformer).ok : false;
   const selectedLocation = uiState.booking.locationId
     ? CONFIG.locations.catalog[uiState.booking.locationId]
     : null;
@@ -393,10 +438,20 @@ function renderRoster(gameState) {
 
   const rosterBody = performers.length
     ? performers.map(function (performer) {
-      const availability = isPerformerAvailable(performer) ? "Available" : "Unavailable";
+      const performerStatus = isPerformerBookable(gameState, performer);
+      const availability = performerStatus.ok ? "Available" : "Unavailable";
       const portraitPath = getPerformerPortraitPath(performer);
       const portraitAlt = "Portrait of " + performer.name;
       const roleLabel = getPerformerRoleLabel(gameState, performer.id);
+      const contractSummary = getContractSummary(gameState, performer.id);
+      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+      const renewalCost = getRenewalCostByType(performer.type);
+      const renewLabel = Number.isFinite(renewalCost)
+        ? "Renew Contract (" + formatCurrency(renewalCost) + ")"
+        : "Renew Contract";
+      const renewButton = contractSummary.isExpired
+        ? "<div class=\"button-row\">" + createButton(renewLabel, "renew-contract", "primary", false, "data-id=\"" + performer.id + "\"") + "</div>"
+        : "";
       return "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
@@ -405,6 +460,9 @@ function renderRoster(gameState) {
         "<p>Star Power: " + performer.starPower + "</p>" +
         "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
         "<p>Loyalty: " + performer.loyalty + "</p>" +
+        "<p>" + contractSummary.label + "</p>" +
+        "<p>Availability: " + availabilitySummary.label + "</p>" +
+        renewButton +
         "</div>" +
         "</div>";
     }).join("")

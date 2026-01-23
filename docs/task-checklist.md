@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 23, 2026
+**Last Updated:** March 5, 2026
 
 ---
 
@@ -28,6 +28,7 @@
 ## Act 2 — Days 91-180
 
 ### Completed
+- [x] A2.1 — Expanded Performer Management (contracts, retention, availability rules)
 - [x] A2.2 — Advanced Analytics (7/30 day rollups, snapshots)
 - [x] A2.3 — Location Tier 2 (reputation-gated unlock)
 - [x] A2.4 — Equipment Upgrades (Lighting, Camera, Set Dressing)
@@ -43,9 +44,6 @@
 - [x] Location thumbnail placeholders
 - [x] Shoot output cards in Gallery
 - [x] Save v2 schema
-
-### Not Started
-- [ ] A2.1 — Expanded Performer Management (contracts, retention, availability rules)
 
 ---
 
@@ -69,9 +67,9 @@
 | Phase | Complete | Remaining |
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
-| Act 2 | 15/16 | 1 |
+| Act 2 | 16/16 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **31/41** | **10** |
+| **Total** | **32/41** | **9** |
 
 ---
 

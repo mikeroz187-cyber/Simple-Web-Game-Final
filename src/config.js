@@ -204,6 +204,21 @@ const CONFIG = {
       }
     }
   },
+  performerManagement: {
+    contractDaysByType: {
+      core: 90,
+      freelance: 30,
+      act2: 30
+    },
+    renewalCostByType: {
+      core: 0,
+      freelance: 500,
+      act2: 500
+    },
+    maxConsecutiveBookings: 3,
+    restDaysOnMaxFatigue: 1,
+    contractWarningThresholdDays: 5
+  },
   content_types: {
     available: ["Promo", "Premium"]
   },

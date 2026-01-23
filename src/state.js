@@ -11,6 +11,21 @@ function newGameState() {
   const rosterIds = CONFIG.performers.core_ids
     .concat(CONFIG.performers.freelance_ids)
     .concat(CONFIG.performers.act2_ids || []);
+  const performerManagement = { contracts: {}, availability: {}, retentionFlags: {} };
+
+  rosterIds.forEach(function (performerId) {
+    const performer = CONFIG.performers.catalog[performerId];
+    if (!performer) {
+      return;
+    }
+    const contractDays = getContractDaysByType(performer.type);
+    performerManagement.contracts[performerId] = {
+      daysRemaining: contractDays,
+      status: contractDays > 0 ? "active" : "expired"
+    };
+    performerManagement.availability[performerId] = { restDaysRemaining: 0, consecutiveBookings: 0 };
+    performerManagement.retentionFlags[performerId] = { warned: false, left: false };
+  });
 
   return {
     version: CONFIG.save.save_schema_version,
@@ -64,7 +79,7 @@ function newGameState() {
       act2: { eventsShown: [], lastEventId: null }
     },
     storyLog: [],
-    performerManagement: { contracts: {}, availability: {}, retentionFlags: {} },
+    performerManagement: performerManagement,
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
     milestones: [],
