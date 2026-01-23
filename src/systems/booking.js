@@ -235,6 +235,15 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Day limit reached. No more shoots allowed." };
   }
 
+  const shootsPerDay = CONFIG.game.shoots_per_day;
+  const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
+  if (currentShoots >= shootsPerDay) {
+    return {
+      ok: false,
+      message: "Daily shoot limit reached (" + shootsPerDay + "). Click Advance Day on the Hub to shoot more."
+    };
+  }
+
   const performerSelection = getBookingPerformerSelection(gameState, selection);
   if (!performerSelection.ok) {
     return { ok: false, message: performerSelection.message || "Select valid performers." };
@@ -350,17 +359,12 @@ function confirmBooking(gameState, selection) {
     updatePerformerStats(gameState, performerB.id, fatigueMultiplier);
     updatePerformerAvailabilityAfterBooking(gameState, performerB);
   }
-  const shootsPerDay = CONFIG.game.shoots_per_day;
-  const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
 
   const milestoneEvents = checkMilestones(gameState);
 
-  let storyEvents = [];
-  if (nextShoots >= shootsPerDay) {
-    storyEvents = advanceDay(gameState);
-  }
+  const storyEvents = [];
 
   const mrrDelta = getMRRDeltaForSubs(onlyFansSubscribersGained);
   const resultMessage = selection.contentType === "Promo"

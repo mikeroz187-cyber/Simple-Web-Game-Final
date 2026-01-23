@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Stop auto-advancing the day after hitting the daily shoot limit, and block extra bookings with a manual Advance Day prompt.
+  - Why: Keep day progression manual while enforcing the per-day booking cap without mutating state.
+  - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Allow Promo posts to be published once per platform (Instagram and X).
   - Why: Let the same Promo content post to both platforms while still blocking duplicates per platform.
   - Files touched: src/systems/social.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
