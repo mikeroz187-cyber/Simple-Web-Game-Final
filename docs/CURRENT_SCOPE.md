@@ -39,6 +39,12 @@
 ## In Scope Now (Act 2 Theme Pack A2.5)
 - **Act 2 Theme Pack (A2.5) — Additional Content Themes (5 themes)**.
 
+## In Scope Now (Act 2 A2.7 — Expanded Roster Depth)
+- **Add four Act 2 performers** to the roster catalog and booking selection via config-driven IDs.
+- **Assign performer roles** (Lead/Specialist/Support) using data-driven role mappings.
+- **Display role labels** on Roster and Booking screens alongside existing performer stats.
+- **Existing v2 saves** append the new performers and role assignments without resetting.
+
 ## In Scope Now (Manual Social Strategy Selection — Single Active Strategy)
 - **Strategy list UI** on the existing Social screen showing all strategies from the social strategy data catalog.
 - **Single active selection** stored as `gameState.social.activeSocialStrategyId` with one strategy active at a time.

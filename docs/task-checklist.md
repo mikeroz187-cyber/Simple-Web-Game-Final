@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 22, 2026
+**Last Updated:** January 23, 2026
 
 ---
 
@@ -33,6 +33,7 @@
 - [x] A2.4 — Equipment Upgrades (Lighting, Camera, Set Dressing)
 - [x] A2.5 — Additional Content Themes (5 Act 2 themes)
 - [x] A2.6 — Act 2 Story Events (Days 95/120/145/170)
+- [x] A2.7 — Expanded Roster Depth (4 new performers with roles)
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
 - [x] A2.9 — Studio Milestones (5 milestone triggers)
 - [x] Manual Social Strategy (daily budget allocation)
@@ -45,7 +46,6 @@
 
 ### Not Started
 - [ ] A2.1 — Expanded Performer Management (contracts, retention, availability rules)
-- [ ] A2.7 — Expanded Roster Depth (4 new performers with roles)
 
 ---
 
@@ -69,9 +69,9 @@
 | Phase | Complete | Remaining |
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
-| Act 2 | 14/16 | 2 |
+| Act 2 | 15/16 | 1 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **30/41** | **11** |
+| **Total** | **31/41** | **10** |
 
 ---
 

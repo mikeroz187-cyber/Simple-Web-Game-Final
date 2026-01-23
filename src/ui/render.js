@@ -65,6 +65,20 @@ function getStoryLogPreview(text) {
   return normalized.slice(0, limit).trim() + "…";
 }
 
+function getPerformerRoleLabel(gameState, performerId) {
+  const roster = gameState && gameState.roster ? gameState.roster : {};
+  const roleMap = roster.performerRoles || {};
+  const roleId = roleMap[performerId];
+  const labels = CONFIG.performers.role_labels || {};
+  if (roleId && labels[roleId]) {
+    return labels[roleId];
+  }
+  if (labels.support) {
+    return labels.support;
+  }
+  return "Support";
+}
+
 function renderHub(gameState) {
   const hub = qs("#screen-hub");
   const hasContent = Boolean(gameState.content.lastContentId);
@@ -168,7 +182,8 @@ function renderBooking(gameState) {
       const isSelected = performer.id === uiState.booking.performerId;
       const available = isPerformerAvailable(performer);
       const label = performer.name + " (" + performer.type + ")";
-      const detail = "Star Power: " + performer.starPower + " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty;
+      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
+      const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower + " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty;
       const portraitPath = getPerformerPortraitPath(performer);
       const portraitAlt = "Portrait of " + performer.name;
       return "<div class=\"list-item\" style=\"" + performerRowStyle + "\">" +
@@ -381,10 +396,12 @@ function renderRoster(gameState) {
       const availability = isPerformerAvailable(performer) ? "Available" : "Unavailable";
       const portraitPath = getPerformerPortraitPath(performer);
       const portraitAlt = "Portrait of " + performer.name;
+      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
       return "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
         "<p><strong>" + performer.name + "</strong> (" + performer.type + ")</p>" +
+        "<p>Role: " + roleLabel + "</p>" +
         "<p>Star Power: " + performer.starPower + "</p>" +
         "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
         "<p>Loyalty: " + performer.loyalty + "</p>" +
