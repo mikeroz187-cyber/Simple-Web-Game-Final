@@ -86,8 +86,8 @@ const CONFIG = {
   },
   conversion: {
     promo: {
-      followersToOF: 0.0025,
-      socialSubsToOF: 0.006
+      followersToOF: 0.0001,
+      socialSubsToOF: 0.04
     },
     premium: {
       ofSubsMultiplier: 1.25

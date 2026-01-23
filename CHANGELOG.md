@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Added fractional carry for promo OF conversion and rebalanced conversion rates to ~1 OF sub per ~20 posts.
+  - Why: Ensure OF growth reflects follower/subscriber variance while hitting the intended average pace without RNG.
+  - Files touched: src/systems/social.js, src/config.js, src/state.js, docs/task-checklist.md, docs/MVP/MVP_STATE_MODEL.md, CHANGELOG.md.
 - What: FIX: Hide fully-posted promo content entries and cap Social Recent Posts to the 5 newest.
   - Why: Keep the Promo list focused on remaining post targets and limit Recent Posts to the latest activity without altering save data.
   - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

@@ -80,6 +80,7 @@ function newGameState() {
       socialFollowers: 0,
       socialSubscribers: 0,
       onlyFansSubscribers: 0,
+      onlyFansSubCarry: 0,
       reputation: CONFIG.progression.starting_reputation
     },
     roster: {

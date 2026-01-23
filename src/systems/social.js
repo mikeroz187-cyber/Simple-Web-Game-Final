@@ -357,14 +357,17 @@ function postPromoContent(gameState, platform, contentId) {
   if (isFreelancer && subscriberMultiplier >= 0) {
     socialSubscribersGained = Math.floor(socialSubscribersGained * subscriberMultiplier);
   }
+  if (!Number.isFinite(gameState.player.onlyFansSubCarry)) {
+    gameState.player.onlyFansSubCarry = 0;
+  }
   const conversionConfig = CONFIG.conversion && CONFIG.conversion.promo ? CONFIG.conversion.promo : {};
-  const ofFromFollowers = Math.floor(
-    socialFollowersGained * (Number.isFinite(conversionConfig.followersToOF) ? conversionConfig.followersToOF : 0)
-  );
-  const ofFromSocialSubs = Math.floor(
-    socialSubscribersGained * (Number.isFinite(conversionConfig.socialSubsToOF) ? conversionConfig.socialSubsToOF : 0)
-  );
-  const onlyFansSubscribersGained = Math.max(0, ofFromFollowers + ofFromSocialSubs);
+  const rateFollowers = Number.isFinite(conversionConfig.followersToOF) ? conversionConfig.followersToOF : 0;
+  const rateSocialSubs = Number.isFinite(conversionConfig.socialSubsToOF) ? conversionConfig.socialSubsToOF : 0;
+  const exact = (socialFollowersGained * rateFollowers) + (socialSubscribersGained * rateSocialSubs);
+  const total = gameState.player.onlyFansSubCarry + exact;
+  const gained = Math.floor(total);
+  gameState.player.onlyFansSubCarry = total - gained;
+  const onlyFansSubscribersGained = Math.max(0, gained);
 
   const postId = "post_" + (gameState.social.posts.length + 1);
   const post = {
