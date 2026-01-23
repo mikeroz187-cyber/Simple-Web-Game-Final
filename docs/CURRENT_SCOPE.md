@@ -8,7 +8,8 @@
 ## Completed (Confirmed)
 - Advance Day button complete.
 - Act 1 Content Pack 01 + 02 story events complete (if present).
-- Freelancer differentiation complete: rotating personas, One-Off Buzz modifiers, Booking filter, and Roster Freelancer Pool.
+- Freelancer differentiation complete: daily persona rerolls, One-Off Buzz modifiers, Booking filter, and Roster Freelancer Pool.
+- Freelancers now reroll personas on day advance; no manual rotate control.
 - Fix: Promo gains now apply only on posting (prevents double-counting).
 
 ## Act 1 Time Control (Locked)

@@ -53,26 +53,13 @@ function getFreelancerProfileIds() {
   });
 }
 
-function getFreelancerProfileById(profileId) {
-  if (!profileId) {
-    return null;
-  }
-  const config = getFreelancerConfig();
-  const profiles = Array.isArray(config.profiles) ? config.profiles : [];
-  return profiles.find(function (profile) {
-    return profile && profile.id === profileId;
-  }) || null;
-}
-
 function getRandomFreelancerProfileId(avoidId) {
-  const config = getFreelancerConfig();
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
     return null;
   }
-  const avoidSame = Boolean(config.avoidSameProfileOnRotate);
   let candidates = profileIds;
-  if (avoidSame && avoidId) {
+  if (avoidId) {
     const filtered = profileIds.filter(function (profileId) {
       return profileId !== avoidId;
     });
@@ -82,14 +69,29 @@ function getRandomFreelancerProfileId(avoidId) {
   return candidates[index] || profileIds[0];
 }
 
-function setFreelancerProfile(gameState, performerId, profileId) {
-  if (!gameState || !gameState.roster || !performerId || !profileId) {
+function rerollFreelancerProfilesOnNewDay(gameState) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return;
+  }
+  const profileIds = getFreelancerProfileIds();
+  if (profileIds.length === 0) {
     return;
   }
   if (!gameState.roster.freelancerProfiles || typeof gameState.roster.freelancerProfiles !== "object") {
     gameState.roster.freelancerProfiles = {};
   }
-  gameState.roster.freelancerProfiles[performerId] = profileId;
+  const assignments = gameState.roster.freelancerProfiles;
+  gameState.roster.performers.forEach(function (performer) {
+    if (!performer || performer.type !== "freelance") {
+      return;
+    }
+    const currentProfileId = assignments[performer.id];
+    const nextProfileId = getRandomFreelancerProfileId(currentProfileId);
+    if (!nextProfileId) {
+      return;
+    }
+    assignments[performer.id] = nextProfileId;
+  });
 }
 
 function ensurePerformerManagementForId(gameState, performer) {
@@ -285,57 +287,6 @@ function renewPerformerContract(gameState, performerId) {
   contract.daysRemaining = daysRemaining;
   contract.status = "active";
   return { ok: true, message: "Contract renewed for " + daysRemaining + " days." };
-}
-
-function rotateFreelancerProfile(gameState, performerId) {
-  if (!gameState || !performerId) {
-    return { ok: false, message: "Missing freelancer selection." };
-  }
-  const performer = gameState.roster && Array.isArray(gameState.roster.performers)
-    ? gameState.roster.performers.find(function (entry) {
-      return entry.id === performerId;
-    })
-    : null;
-  if (!performer || performer.type !== "freelance") {
-    return { ok: false, message: "Freelancer not found." };
-  }
-  const profileIds = getFreelancerProfileIds();
-  if (profileIds.length === 0) {
-    return { ok: false, message: "No freelancer personas available." };
-  }
-  const config = getFreelancerConfig();
-  const rotationCost = Number.isFinite(config.rotationCost) ? config.rotationCost : 0;
-  if (rotationCost > 0 && gameState.player.cash < rotationCost) {
-    return { ok: false, message: "Not enough cash to rotate this guest." };
-  }
-  const currentProfileId = gameState.roster && gameState.roster.freelancerProfiles
-    ? gameState.roster.freelancerProfiles[performerId]
-    : null;
-  const nextProfileId = getRandomFreelancerProfileId(currentProfileId);
-  if (!nextProfileId) {
-    return { ok: false, message: "Unable to rotate guest profile." };
-  }
-  if (rotationCost > 0) {
-    gameState.player.cash = Math.max(0, gameState.player.cash - rotationCost);
-  }
-  setFreelancerProfile(gameState, performerId, nextProfileId);
-
-  ensurePerformerManagementForId(gameState, performer);
-  const availability = getAvailabilityState(gameState, performerId);
-  if (availability) {
-    availability.consecutiveBookings = 0;
-    availability.restDaysRemaining = 0;
-  }
-  const contract = getContractState(gameState, performerId);
-  const contractDays = getContractDaysByType(performer.type);
-  if (contract && Number.isFinite(contractDays)) {
-    contract.daysRemaining = contractDays;
-    contract.status = contractDays > 0 ? "active" : "expired";
-  }
-
-  const profile = getFreelancerProfileById(nextProfileId);
-  const profileName = profile && profile.name ? profile.name : performer.name;
-  return { ok: true, message: "New guest booked: " + profileName + ". Fresh face, fresh buzz." };
 }
 
 function applyShootFatigue(performer) {

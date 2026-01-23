@@ -289,20 +289,6 @@ function setupEventHandlers() {
       return;
     }
 
-    if (action === "rotate-freelancer") {
-      const performerId = target.dataset.id;
-      const result = rotateFreelancerProfile(window.gameState, performerId);
-      setUiMessage(result.message || "");
-      if (result.ok) {
-        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-        if (!saveResult.ok) {
-          setUiMessage(saveResult.message || "");
-        }
-      }
-      renderApp(window.gameState);
-      return;
-    }
-
     if (action === "select-social-content") {
       uiState.social.selectedContentId = target.dataset.id;
       setUiMessage("");

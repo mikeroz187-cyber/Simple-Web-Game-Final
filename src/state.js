@@ -24,14 +24,12 @@ function getFreelancerProfileIds() {
 }
 
 function getRandomFreelancerProfileId(avoidId) {
-  const config = getFreelancerProfilesConfig();
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
     return null;
   }
-  const avoidSame = Boolean(config.avoidSameProfileOnRotate);
   let candidates = profileIds;
-  if (avoidSame && avoidId) {
+  if (avoidId) {
     const filtered = profileIds.filter(function (profileId) {
       return profileId !== avoidId;
     });

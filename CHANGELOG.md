@@ -27,6 +27,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: QoL: Freelancers auto-reroll daily personas and remove manual rotate control.
+  - Why: Keep freelancer personas fresh each day without requiring a paid swap action.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: QoL: Analytics screen now shows Today totals and clarifies latest shoot results.
   - Why: Make daily gains and latest shoot outcomes unambiguous without adding new systems.
   - Files touched: src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
