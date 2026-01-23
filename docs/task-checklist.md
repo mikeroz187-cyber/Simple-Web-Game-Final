@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** March 5, 2026
+**Last Updated:** January 23, 2026
 
 ---
 
@@ -37,6 +37,7 @@
 - [x] A2.7 — Expanded Roster Depth (4 new performers with roles)
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
 - [x] A2.9 — Studio Milestones (5 milestone triggers)
+- [x] Freelancer Differentiation: persona rotation + One-Off Buzz + Booking filter + Roster Freelancer Pool
 - [x] Manual Social Strategy (daily budget allocation)
 - [x] Automation Tier 1 (Auto-Book toggle)
 - [x] Story Log screen
@@ -67,9 +68,9 @@
 | Phase | Complete | Remaining |
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
-| Act 2 | 16/16 | 0 |
+| Act 2 | 17/17 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **32/41** | **9** |
+| **Total** | **33/42** | **9** |
 
 ---
 

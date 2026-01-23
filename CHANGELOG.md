@@ -24,6 +24,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: Added freelancer persona rotation, One-Off Buzz booking modifiers, booking performer filter, and a roster freelancer pool toggle.
+  - Why: Differentiate guest talent while keeping booking and roster views clean and configurable.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/performers.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added A2.1 performer management with contracts, availability rules, renewals, booking locks, and save backfill.
   - Why: Deliver Act 2 expanded performer management while keeping booking and roster feedback clear and saves compatible.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

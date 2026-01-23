@@ -204,6 +204,24 @@ const CONFIG = {
       }
     }
   },
+  freelancers: {
+    profiles: [
+      { id: "persona_midnight_muse", name: "Midnight Muse", description: "Late-night icon with velvet confidence and an algorithm-ready wink." },
+      { id: "persona_glass_hearts", name: "Glass Hearts", description: "Glam auteur who treats every shoot like a glossy editorial." },
+      { id: "persona_arcade_angel", name: "Arcade Angel", description: "Bright retro pulse who turns nostalgia into instant chatter." },
+      { id: "persona_velvet_riot", name: "Velvet Riot", description: "Stylish troublemaker with a loyal cult following and bold instincts." },
+      { id: "persona_neon_paper", name: "Neon Paper", description: "Sharp, buzzy newcomer who wins crowds with effortless swagger." },
+      { id: "persona_spark_syntax", name: "Spark Syntax", description: "Tech-chic performer who sells the vibe with crisp precision." },
+      { id: "persona_satin_ace", name: "Satin Ace", description: "Cool tactician who keeps the shoot smooth and the fans curious." },
+      { id: "persona_cosmic_rose", name: "Cosmic Rose", description: "Dreamy headliner with a cosmic edge and contagious momentum." },
+      { id: "persona_polaroid_heat", name: "Polaroid Heat", description: "Flash-frame favorite who sparks fast buzz with playful flair." },
+      { id: "persona_moondust_viper", name: "Moondust Viper", description: "Sultry mystique with a bite, built for short-term spikes." }
+    ],
+    rotationCost: 100,
+    promoFollowersBonusFlat: 80,
+    subscriberConversionMultiplier: 0.6,
+    avoidSameProfileOnRotate: true
+  },
   performerManagement: {
     contractDaysByType: {
       core: 90,

@@ -6,12 +6,48 @@ function getPerformerRoleId(performerId) {
   return roleMap[performerId] || "support";
 }
 
+function getFreelancerProfilesConfig() {
+  if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
+    return CONFIG.freelancers;
+  }
+  return {};
+}
+
+function getFreelancerProfileIds() {
+  const config = getFreelancerProfilesConfig();
+  const profiles = Array.isArray(config.profiles) ? config.profiles : [];
+  return profiles.map(function (profile) {
+    return profile.id;
+  }).filter(function (profileId) {
+    return typeof profileId === "string" && profileId.length > 0;
+  });
+}
+
+function getRandomFreelancerProfileId(avoidId) {
+  const config = getFreelancerProfilesConfig();
+  const profileIds = getFreelancerProfileIds();
+  if (profileIds.length === 0) {
+    return null;
+  }
+  const avoidSame = Boolean(config.avoidSameProfileOnRotate);
+  let candidates = profileIds;
+  if (avoidSame && avoidId) {
+    const filtered = profileIds.filter(function (profileId) {
+      return profileId !== avoidId;
+    });
+    candidates = filtered.length ? filtered : profileIds;
+  }
+  const index = Math.floor(Math.random() * candidates.length);
+  return candidates[index] || profileIds[0];
+}
+
 function newGameState() {
   const now = new Date().toISOString();
   const rosterIds = CONFIG.performers.core_ids
     .concat(CONFIG.performers.freelance_ids)
     .concat(CONFIG.performers.act2_ids || []);
   const performerManagement = { contracts: {}, availability: {}, retentionFlags: {} };
+  const freelancerProfiles = {};
 
   rosterIds.forEach(function (performerId) {
     const performer = CONFIG.performers.catalog[performerId];
@@ -25,6 +61,12 @@ function newGameState() {
     };
     performerManagement.availability[performerId] = { restDaysRemaining: 0, consecutiveBookings: 0 };
     performerManagement.retentionFlags[performerId] = { warned: false, left: false };
+    if (performer.type === "freelance") {
+      const profileId = getRandomFreelancerProfileId();
+      if (profileId) {
+        freelancerProfiles[performerId] = profileId;
+      }
+    }
   });
 
   return {
@@ -57,7 +99,8 @@ function newGameState() {
       performerRoles: rosterIds.reduce(function (roles, performerId) {
         roles[performerId] = getPerformerRoleId(performerId);
         return roles;
-      }, {})
+      }, {}),
+      freelancerProfiles: freelancerProfiles
     },
     content: {
       lastContentId: null,
