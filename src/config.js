@@ -266,6 +266,15 @@ const CONFIG = {
   content_types: {
     available: ["Promo", "Premium"]
   },
+  content: {
+    variance: {
+      enabled: true,
+      maxVariancePct: 0.15,
+      seedPolicy: "stored",
+      startDay: 181,
+      maxRollLogEntries: 100
+    }
+  },
   social_platforms: {
     platforms: ["Instagram", "X"],
     instagram_reach_multiplier: 1.0,

@@ -272,6 +272,40 @@ function ensurePerformerManagementState(candidate) {
   }
 }
 
+function ensureContentVarianceState(candidate) {
+  if (!candidate) {
+    return;
+  }
+  if (!candidate.content || typeof candidate.content !== "object") {
+    candidate.content = { lastContentId: null, entries: [] };
+  }
+  if (!candidate.content.variance || typeof candidate.content.variance !== "object") {
+    candidate.content.variance = buildDefaultContentVarianceState();
+  }
+
+  const variance = candidate.content.variance;
+  const config = (CONFIG.content && CONFIG.content.variance && typeof CONFIG.content.variance === "object")
+    ? CONFIG.content.variance
+    : {};
+
+  if (typeof variance.enabled !== "boolean") {
+    variance.enabled = typeof config.enabled === "boolean" ? config.enabled : true;
+  }
+  if (!Number.isFinite(variance.seed)) {
+    variance.seed = buildDefaultContentVarianceState().seed;
+  } else {
+    variance.seed = variance.seed >>> 0;
+  }
+  if (!Array.isArray(variance.rollLog)) {
+    variance.rollLog = [];
+  }
+
+  const maxEntries = Number.isFinite(config.maxRollLogEntries) ? config.maxRollLogEntries : 100;
+  if (variance.rollLog.length > maxEntries) {
+    variance.rollLog = variance.rollLog.slice(-maxEntries);
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -321,6 +355,7 @@ function migrateGameState(candidate) {
   ensureRosterCompleteness(candidate);
   ensureFreelancerProfilesState(candidate);
   ensurePerformerManagementState(candidate);
+  ensureContentVarianceState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 

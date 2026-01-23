@@ -637,6 +637,8 @@ resolvePerDay = 1
 enabled = true
 maxVariancePct = 0.15
 seedPolicy = "stored"
+startDay = 181
+maxRollLogEntries = 100
 
 [story.act3]
 startDay = 181

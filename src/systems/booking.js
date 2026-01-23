@@ -51,6 +51,48 @@ function getBookingComboMultiplier(comboConfig, roleKey, multiplierMap) {
   return Number.isFinite(value) ? value : 1;
 }
 
+function getContentVarianceConfig() {
+  if (CONFIG.content && CONFIG.content.variance && typeof CONFIG.content.variance === "object") {
+    return CONFIG.content.variance;
+  }
+  return { enabled: false };
+}
+
+function canApplyContentVariance(gameState) {
+  if (!gameState || !gameState.player || !gameState.content || !gameState.content.variance) {
+    return false;
+  }
+  const config = getContentVarianceConfig();
+  const startDay = Number.isFinite(config.startDay) ? config.startDay : Infinity;
+  return Boolean(config.enabled) &&
+    Boolean(gameState.content.variance.enabled) &&
+    gameState.player.day >= startDay;
+}
+
+function rollContentVariance(gameState) {
+  const varianceState = gameState.content.variance;
+  const seed = Number.isFinite(varianceState.seed) ? varianceState.seed : 1;
+  const next = getNextSeededFloat(seed);
+  varianceState.seed = next.seed;
+  return next.value;
+}
+
+function appendContentVarianceLog(gameState, logEntry) {
+  if (!gameState || !gameState.content || !gameState.content.variance) {
+    return;
+  }
+  const varianceState = gameState.content.variance;
+  if (!Array.isArray(varianceState.rollLog)) {
+    varianceState.rollLog = [];
+  }
+  varianceState.rollLog.push(logEntry);
+  const config = getContentVarianceConfig();
+  const maxEntries = Number.isFinite(config.maxRollLogEntries) ? config.maxRollLogEntries : 100;
+  if (varianceState.rollLog.length > maxEntries) {
+    varianceState.rollLog = varianceState.rollLog.slice(-maxEntries);
+  }
+}
+
 function getEntryPerformerIds(entry) {
   if (!entry) {
     return [];
@@ -297,6 +339,10 @@ function confirmBooking(gameState, selection) {
   let socialSubscribersGained = 0;
   let onlyFansSubscribersGained = 0;
   let payout = 0;
+  let basePayout = 0;
+  let varianceApplied = false;
+  let variancePct = 0;
+  let varianceRoll = null;
   if (selection.contentType === "Premium") {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
@@ -308,6 +354,15 @@ function confirmBooking(gameState, selection) {
         comboConfig.revenueMultiplierByRoles
       );
       payout = Math.round(payout * revenueMultiplier);
+    }
+    basePayout = payout;
+    if (canApplyContentVariance(gameState)) {
+      const varianceConfig = getContentVarianceConfig();
+      const maxVariance = Number.isFinite(varianceConfig.maxVariancePct) ? varianceConfig.maxVariancePct : 0;
+      varianceRoll = rollContentVariance(gameState);
+      variancePct = (varianceRoll * 2 * maxVariance) - maxVariance;
+      payout = Math.round(basePayout * (1 + variancePct));
+      varianceApplied = true;
     }
     const baselineFollowersResult = calculatePromoFollowers(performer, theme);
     const baselineFollowers = baselineFollowersResult.ok ? baselineFollowersResult.value : 0;
@@ -341,6 +396,23 @@ function confirmBooking(gameState, selection) {
     }
   };
 
+  if (selection.contentType === "Premium") {
+    entry.results.payout = payout;
+    entry.results.variancePct = variancePct;
+  }
+
+  if (varianceApplied) {
+    appendContentVarianceLog(gameState, {
+      day: gameState.player.day,
+      contentId: entry.id,
+      contentType: "Premium",
+      roll: varianceRoll,
+      variancePct: variancePct,
+      basePayout: basePayout,
+      adjustedPayout: payout
+    });
+  }
+
   gameState.player.cash = Math.max(0, gameState.player.cash - shootCost + payout);
   gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
   gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
@@ -367,9 +439,16 @@ function confirmBooking(gameState, selection) {
   const storyEvents = [];
 
   const mrrDelta = getMRRDeltaForSubs(onlyFansSubscribersGained);
+  let varianceMessage = "";
+  if (selection.contentType === "Premium" && varianceApplied) {
+    const variancePercent = Math.round(variancePct * 100);
+    const varianceLabel = (variancePercent >= 0 ? "+" : "") + variancePercent + "%";
+    varianceMessage = " Revenue variance: " + varianceLabel + ".";
+  }
   const resultMessage = selection.contentType === "Promo"
     ? "Promo shot complete. Post it to generate reach."
-    : "Premium release complete. +" + onlyFansSubscribersGained + " OF subs (MRR +" + formatCurrency(mrrDelta) + "/mo).";
+    : "Premium release complete. +" + onlyFansSubscribersGained + " OF subs (MRR +" + formatCurrency(mrrDelta) + "/mo)." +
+      varianceMessage;
 
   return {
     ok: true,
