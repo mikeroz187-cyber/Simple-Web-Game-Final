@@ -176,34 +176,17 @@ function confirmBooking(gameState, selection) {
   let followersGained = 0;
   let revenue = 0;
   const isFreelancer = performer.type === "freelance";
-  const freelancerConfig = CONFIG.freelancers && typeof CONFIG.freelancers === "object" ? CONFIG.freelancers : {};
-  const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
-    ? freelancerConfig.promoFollowersBonusFlat
-    : 0;
-  const subscriberMultiplier = Number.isFinite(freelancerConfig.subscriberConversionMultiplier)
-    ? freelancerConfig.subscriberConversionMultiplier
-    : 1;
-  if (selection.contentType === "Promo") {
-    const promoResult = calculatePromoFollowers(performer, theme);
-    const baseFollowers = promoResult.ok ? promoResult.value : 0;
-    followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
-    if (isFreelancer && promoBonus > 0) {
-      followersGained += promoBonus;
-    }
-  } else {
+  if (selection.contentType === "Premium") {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
     revenue = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
   }
 
   let subscribersGained = calculateSubscribersGained(followersGained);
-  if (isFreelancer && subscriberMultiplier >= 0 && subscriberMultiplier <= 1) {
-    subscribersGained = Math.floor(subscribersGained * subscriberMultiplier);
-  }
   let feedbackSummary = selection.contentType === "Promo"
-    ? "Promo reach boosted visibility."
+    ? "Promo shot complete. Post it to generate reach."
     : "Premium release generated revenue.";
-  if (isFreelancer) {
+  if (isFreelancer && selection.contentType === "Premium") {
     feedbackSummary += " Guest drop spiked attention, but converted fewer subs.";
   }
 
@@ -246,10 +229,14 @@ function confirmBooking(gameState, selection) {
     storyEvents = advanceDay(gameState);
   }
 
+  const resultMessage = selection.contentType === "Promo"
+    ? "Promo shot complete. Post it to generate reach."
+    : "Shoot booked. +" + followersGained + " followers, +" + formatCurrency(revenue) + ".";
+
   return {
     ok: true,
     contentId: entry.id,
-    message: "Shoot booked. +" + followersGained + " followers, +" + formatCurrency(revenue) + ".",
+    message: resultMessage,
     storyEvents: storyEvents,
     milestoneEvents: milestoneEvents
   };

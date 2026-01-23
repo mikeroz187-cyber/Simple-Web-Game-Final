@@ -9,6 +9,7 @@
 - Advance Day button complete.
 - Act 1 Content Pack 01 + 02 story events complete (if present).
 - Freelancer differentiation complete: rotating personas, One-Off Buzz modifiers, Booking filter, and Roster Freelancer Pool.
+- Fix: Promo gains now apply only on posting (prevents double-counting).
 
 ## Act 1 Time Control (Locked)
 - **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.

@@ -300,11 +300,11 @@ function postPromoContent(gameState, platform, contentId) {
   }
 
   const alreadyPosted = gameState.social.posts.some(function (post) {
-    return post.contentId === entry.id && post.platform === platform;
+    return post.contentId === entry.id;
   });
 
   if (alreadyPosted) {
-    return { ok: false, message: "Already posted to " + platform + "." };
+    return { ok: false, message: "Promo already posted." };
   }
 
   const platformMultiplier = platform === "Instagram"
@@ -318,11 +318,28 @@ function postPromoContent(gameState, platform, contentId) {
   const baseFollowers = Math.round(
     CONFIG.economy.promo_followers_gain * platformMultiplier * strategyReachMult
   );
-  const followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+  let followersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+  const performer = gameState.roster.performers.find(function (rosterEntry) {
+    return rosterEntry.id === entry.performerId;
+  });
+  const isFreelancer = performer && performer.type === "freelance";
+  const freelancerConfig = CONFIG.freelancers && typeof CONFIG.freelancers === "object" ? CONFIG.freelancers : {};
+  const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
+    ? freelancerConfig.promoFollowersBonusFlat
+    : 0;
+  const subscriberMultiplier = Number.isFinite(freelancerConfig.subscriberConversionMultiplier)
+    ? freelancerConfig.subscriberConversionMultiplier
+    : 1;
+  if (isFreelancer && promoBonus > 0) {
+    followersGained += promoBonus;
+  }
   const baseSubscribers = calculateSubscribersGained(followersGained);
-  const subscribersGained = activeStrategy
+  let subscribersGained = activeStrategy
     ? Math.max(0, Math.round(baseSubscribers * activeStrategy.subscriberConversionMult))
     : baseSubscribers;
+  if (isFreelancer && subscriberMultiplier >= 0) {
+    subscribersGained = Math.floor(subscribersGained * subscriberMultiplier);
+  }
 
   const postId = "post_" + (gameState.social.posts.length + 1);
   const post = {
@@ -342,7 +359,7 @@ function postPromoContent(gameState, platform, contentId) {
 
   return {
     ok: true,
-    message: "Posted to " + platform + ". +" + followersGained + " followers.",
+    message: "Posted promo. +" + followersGained + " followers, +" + subscribersGained + " subs.",
     milestoneEvents: milestoneEvents
   };
 }

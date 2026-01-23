@@ -48,6 +48,12 @@
 
 ---
 
+## Fixes / QoL (Post-MVP)
+
+- [x] Promo gains apply only on posting (no double count).
+
+---
+
 ## Act 3 — Days 181-270
 
 ### Not Started
@@ -69,8 +75,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 17/17 | 0 |
+| Fixes/QoL | 1/1 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **33/42** | **9** |
+| **Total** | **34/43** | **9** |
 
 ---
 
