@@ -27,6 +27,9 @@ This changelog is optimized for:
   - Why: Avoid false “already applied today” messaging when the save lacks the apply log entry for the current day.
   - Files touched: src/systems/social.js, CHANGELOG.md.
 ### Added
+- What: QoL: Analytics screen now shows Today totals and clarifies latest shoot results.
+  - Why: Make daily gains and latest shoot outcomes unambiguous without adding new systems.
+  - Files touched: src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added freelancer persona rotation, One-Off Buzz booking modifiers, booking performer filter, and a roster freelancer pool toggle.
   - Why: Differentiate guest talent while keeping booking and roster views clean and configurable.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/performers.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

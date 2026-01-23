@@ -51,6 +51,7 @@
 ## Fixes / QoL (Post-MVP)
 
 - [x] Promo gains apply only on posting (no double count).
+- [x] Analytics: Today (Day X) Totals panel + clarify Latest Shoot Results.
 
 ---
 
@@ -75,9 +76,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 17/17 | 0 |
-| Fixes/QoL | 1/1 | 0 |
+| Fixes/QoL | 2/2 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **34/43** | **9** |
+| **Total** | **35/44** | **9** |
 
 ---
 
