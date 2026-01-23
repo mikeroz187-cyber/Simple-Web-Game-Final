@@ -10,6 +10,10 @@ This changelog is optimized for:
 ---
 
 ## [Unreleased]
+### Changed
+- What: Updated CURRENT_SCOPE to reflect Act 3 as the current phase with completed summaries and the next 3 steps.
+  - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
+  - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
 - What: FIX: Marked the booking role restriction checklist item as completed and updated summary totals.
   - Why: Reflect the already-implemented booking behavior in the Post-MVP Fixes/QoL checklist.

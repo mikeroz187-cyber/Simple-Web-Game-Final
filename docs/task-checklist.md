@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 23, 2026
+**Last Updated:** January 23, 2026 (Act 3 alignment)
 
 ---
 
