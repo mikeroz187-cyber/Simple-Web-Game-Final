@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Promo gains now apply only when posted (prevents double-counting).
+  - Why: Ensure Promo shoots generate reach only on posting and keep freelancer One-Off Buzz modifiers in the correct flow.
+  - Files touched: src/systems/booking.js, src/systems/social.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX: Simplified Manual Social Strategy messaging by removing the applied-today status line and disabling Apply with the new label plus a single success toast.
   - Why: Eliminate confusing duplicate messaging while keeping once-per-day feedback clear.
   - Files touched: src/ui/render.js, src/ui/events.js, src/systems/social.js, CHANGELOG.md.
