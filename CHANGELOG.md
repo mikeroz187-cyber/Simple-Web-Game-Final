@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Allow Promo posts to be published once per platform (Instagram and X).
+  - Why: Let the same Promo content post to both platforms while still blocking duplicates per platform.
+  - Files touched: src/systems/social.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Removed role-based booking restriction so any two performers can book together.
   - Why: Allow non-lead combinations to confirm shoots for Promo and Premium content when performers are available.
   - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.

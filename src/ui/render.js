@@ -797,9 +797,6 @@ function renderSocial(gameState) {
   const canPost = promoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
   const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
   const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
-  const hasPostedAny = selectedEntry
-    ? gameState.social.posts.some(function (post) { return post.contentId === selectedEntry.id; })
-    : false;
 
   const body = strategyPanel +
     manualPanel +
@@ -808,8 +805,8 @@ function renderSocial(gameState) {
     "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
-    createButton("Post to Instagram", "post-instagram", "primary", !canPost || hasPostedAny || hasPostedInstagram) +
-    createButton("Post to X", "post-x", "", !canPost || hasPostedAny || hasPostedX) +
+    createButton("Post to Instagram", "post-instagram", "primary", !canPost || hasPostedInstagram) +
+    createButton("Post to X", "post-x", "", !canPost || hasPostedX) +
     createButton("Back to Hub", "nav-hub") +
     "</div>";
   screen.innerHTML = createPanel("Social", body, "screen-social-title");
