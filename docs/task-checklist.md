@@ -55,6 +55,7 @@
 - [x] Analytics: Today (Day X) Totals panel + clarify Latest Shoot Results.
 - [x] Freelancers reroll personas each day; removed manual rotation UI.
 - [x] v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium stronger)
+- [x] Booking: performer preview cards align correctly when two performers are selected.
 
 ---
 
@@ -79,9 +80,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 4/4 | 0 |
+| Fixes/QoL | 5/5 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **38/47** | **9** |
+| **Total** | **39/48** | **9** |
 
 ---
 

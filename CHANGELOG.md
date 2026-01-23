@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Aligned Booking performer preview cards in a shared row when two performers are selected.
+  - Why: Prevent the global stacked panel margin from pushing the second card down in the Booking preview row.
+  - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Promo gains now apply only when posted (prevents double-counting).
   - Why: Ensure Promo shoots generate reach only on posting and keep freelancer One-Off Buzz modifiers in the correct flow.
   - Files touched: src/systems/booking.js, src/systems/social.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
