@@ -40,14 +40,14 @@ function buildEquipmentBonusMessage(upgrade, level) {
 
   if (followerPerLevel > 0) {
     parts.push(
-      "Follower bonus: +" + formatEquipmentPercent(followerPerLevel) +
+      "Social follower bonus: +" + formatEquipmentPercent(followerPerLevel) +
       "% per level (you're now at +" + formatEquipmentPercent(followerPerLevel * level) + "%)."
     );
   }
 
   if (revenuePerLevel > 0) {
     parts.push(
-      "Revenue bonus: +" + formatEquipmentPercent(revenuePerLevel) +
+      "Payout bonus: +" + formatEquipmentPercent(revenuePerLevel) +
       "% per level (you're now at +" + formatEquipmentPercent(revenuePerLevel * level) + "%)."
     );
   }

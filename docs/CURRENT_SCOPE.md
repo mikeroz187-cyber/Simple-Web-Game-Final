@@ -1,7 +1,7 @@
 # CURRENT SCOPE (Authoritative)
 
 ## Current Phase
-- **Act 2 Phase 1 — Save Version v2 (New Games Only)** – Post-MVP work is focused on a v2 save schema and reset-on-incompatible-save behavior.
+- **Act 2 Phase 1 — Save Version v3 (New Games Only)** – Post-MVP work is focused on a v3 save schema and reset-on-incompatible-save behavior.
 - **Act 2 Option A (Slice 1) — Equipment Upgrades + Multipliers** – Add Shop equipment upgrade purchases and apply equipment multipliers to follower/subscriber and revenue gains, as explicitly listed below.
 - **Act 2 Option A (Slice 2) — Location Tiers (Tier 1 Unlock Only)** – Add Shop unlock for Location Tier 1; Tier 1 locations remain locked until purchased, but Premium shoots are not gated by this unlock.
 
@@ -12,17 +12,18 @@
 - Two-performer booking slots complete: slot A required/slot B optional, role-gated combos, and immediate combo multipliers.
 - Freelancers now reroll personas on day advance; no manual rotate control.
 - Fix: Promo gains now apply only on posting (prevents double-counting).
+- v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium boosts OF subs on booking).
 
 ## Act 1 Time Control (Locked)
 - **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.
 - **Primary time progression for Act 1**: time advances only when the player triggers Advance Day after the required shoots; this is the canonical pacing/testing mechanism for Act 1.
 - **No automation yet**: automated/background day progression is explicitly out of scope until a later Act.
 
-## In Scope Now (Act 2 Phase 1 — Save v2, New Games Only)
-- **Bump save version to v2** using `gameState.meta.version`.
-- **Add v2 defaults** per the Act 2 state extensions document(s) referenced in the plan (additive-only fields).
-- **Reset on incompatible save:** If a loaded or imported save is not v2, the game resets to a fresh v2 save and clearly notifies the player (no silent failures).
-- **Export/import behavior stays consistent** with the “new games only” decision: exports represent v2 saves; imports of non-v2 saves trigger reset + message.
+## In Scope Now (Act 2 Phase 1 — Save v3, New Games Only)
+- **Bump save version to v3** using `gameState.version`.
+- **Add v3 defaults** per the Act 2 state extensions document(s) referenced in the plan (additive-only fields).
+- **Reset on incompatible save:** If a loaded or imported save is not v3, the game resets to a fresh v3 save and clearly notifies the player (no silent failures).
+- **Export/import behavior stays consistent** with the “new games only” decision: exports represent v3 saves; imports of non-v3 saves trigger reset + message.
 
 ## In Scope Now (Act 2 Option A — Equipment Upgrades + Multipliers)
 - **Shop equipment upgrades** for lighting, camera, and set dressing using `CONFIG.equipment.*` costs/levels, stored in `gameState.equipment.*`.
@@ -109,10 +110,10 @@
 - **Mobile/responsive work**, online features, frameworks, build tooling, or backend services.
 
 ## Definition of Done (Act 2 Phase 1)
-- [ ] `gameState.meta.version` is set to v2 for new saves.
-- [ ] v2 defaults match the Act 2 extensions docs referenced in the Master Implementation Plan.
-- [ ] Loading or importing a non-v2 save resets to a new v2 save and displays a clear player message.
-- [ ] Export/import continues to work for v2 saves without silent failures.
+- [ ] `gameState.version` is set to v3 for new saves.
+- [ ] v3 defaults match the Act 2 extensions docs referenced in the Master Implementation Plan.
+- [ ] Loading or importing a non-v3 save resets to a new v3 save and displays a clear player message.
+- [ ] Export/import continues to work for v3 saves without silent failures.
 - [ ] Equipment upgrades are implemented only as defined in scope (Shop purchases + multipliers).
 - [ ] Location Tier 1 unlock is purchasable in Shop and Tier 1 locations stay locked until purchased (Premium shoots are not gated).
 - [ ] Milestones trigger once, apply data-driven rewards, and show player-facing messages via the existing event system.

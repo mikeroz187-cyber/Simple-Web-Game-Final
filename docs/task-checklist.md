@@ -54,6 +54,7 @@
 - [x] Promo gains apply only on posting (no double count).
 - [x] Analytics: Today (Day X) Totals panel + clarify Latest Shoot Results.
 - [x] Freelancers reroll personas each day; removed manual rotation UI.
+- [x] v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium stronger)
 
 ---
 
@@ -78,9 +79,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 3/3 | 0 |
+| Fixes/QoL | 4/4 | 0 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **37/46** | **9** |
+| **Total** | **38/47** | **9** |
 
 ---
 

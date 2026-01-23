@@ -285,11 +285,11 @@ function migrateGameState(candidate) {
       ok: true,
       gameState: newGameState(),
       didReset: true,
-      message: "Incompatible save detected. Starting a new game (v2)."
+      message: "Major update: resetting save for v3 metrics."
     };
   }
 
-  // Version 2 -> 2 no-op migration. Keep explicit for future schema updates.
+  // Version 3 -> 3 no-op migration. Keep explicit for future schema updates.
   if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
     candidate.player.shootsToday = 0;
   }
@@ -380,7 +380,17 @@ function validateGameState(candidate) {
     return { ok: false, message: "Player data missing." };
   }
 
-  const requiredNumbers = ["day", "cash", "debtRemaining", "debtDueDay", "shootsToday", "followers", "subscribers", "reputation"];
+  const requiredNumbers = [
+    "day",
+    "cash",
+    "debtRemaining",
+    "debtDueDay",
+    "shootsToday",
+    "socialFollowers",
+    "socialSubscribers",
+    "onlyFansSubscribers",
+    "reputation"
+  ];
   for (let index = 0; index < requiredNumbers.length; index += 1) {
     const key = requiredNumbers[index];
     if (!Number.isFinite(player[key]) || player[key] < 0) {
@@ -485,10 +495,17 @@ function validateGameState(candidate) {
     if (!Number.isFinite(entry.shootCost) || entry.shootCost < 0) {
       return { ok: false, message: "Content cost invalid." };
     }
-    if (!entry.results || !Number.isFinite(entry.results.revenue) || !Number.isFinite(entry.results.followersGained) || !Number.isFinite(entry.results.subscribersGained)) {
+    if (!entry.results ||
+      !Number.isFinite(entry.results.socialFollowersGained) ||
+      !Number.isFinite(entry.results.socialSubscribersGained) ||
+      !Number.isFinite(entry.results.onlyFansSubscribersGained)
+    ) {
       return { ok: false, message: "Content results invalid." };
     }
-    if (entry.results.revenue < 0 || entry.results.followersGained < 0 || entry.results.subscribersGained < 0) {
+    if (entry.results.socialFollowersGained < 0 ||
+      entry.results.socialSubscribersGained < 0 ||
+      entry.results.onlyFansSubscribersGained < 0
+    ) {
       return { ok: false, message: "Content results invalid." };
     }
     if (typeof entry.results.feedbackSummary !== "string" || entry.results.feedbackSummary.length === 0) {
@@ -542,10 +559,16 @@ function validateGameState(candidate) {
     if (!contentEntry || contentEntry.contentType !== "Promo") {
       return { ok: false, message: "Social content invalid." };
     }
-    if (!Number.isFinite(post.followersGained) || !Number.isFinite(post.subscribersGained)) {
+    if (!Number.isFinite(post.socialFollowersGained) ||
+      !Number.isFinite(post.socialSubscribersGained) ||
+      !Number.isFinite(post.onlyFansSubscribersGained)
+    ) {
       return { ok: false, message: "Social impact invalid." };
     }
-    if (post.followersGained < 0 || post.subscribersGained < 0) {
+    if (post.socialFollowersGained < 0 ||
+      post.socialSubscribersGained < 0 ||
+      post.onlyFansSubscribersGained < 0
+    ) {
       return { ok: false, message: "Social impact invalid." };
     }
   }

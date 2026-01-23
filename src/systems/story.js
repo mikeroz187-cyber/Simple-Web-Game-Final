@@ -55,7 +55,7 @@ function checkStoryEvents(gameState) {
 const STORY_EVENT_COPY = {
   act1_intro_day1: {
     title: "Loan Due, Day 90",
-    message: "You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady revenue early."
+    message: "You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady MRR early."
   },
   act1_pack01_client_referral_day15: {
     title: "Client Referral Pipeline",
@@ -131,7 +131,7 @@ const STORY_EVENT_COPY = {
   },
   act1_debt_reminder_day60: {
     title: "Debt Check — Day 60",
-    message: "Day 60 puts you in the final stretch. The $10,000 debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep revenue predictable."
+    message: "Day 60 puts you in the final stretch. The $10,000 debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep MRR predictable."
   },
   act1_debt_reminder_day80: {
     title: "Debt Check — Day 80",
@@ -147,7 +147,7 @@ const STORY_EVENT_COPY = {
   },
   act2_expansion_plan_day95: {
     title: "Expansion Plan Drafted",
-    message: "With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table."
+    message: "With the debt cleared, you formalize a growth plan focused on steady MRR and brand consistency. New hires and upgrades are now on the table."
   },
   act2_staffing_push_day120: {
     title: "Staffing Push",

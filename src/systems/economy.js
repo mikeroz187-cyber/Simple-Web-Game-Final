@@ -28,6 +28,27 @@ function getEquipmentRevenueMultiplier(gameState) {
     (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.revenueMultPerLevel);
 }
 
+function getMRR(gameState) {
+  if (!gameState || !gameState.player) {
+    return 0;
+  }
+  const subs = Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
+  const price = CONFIG.onlyfans && Number.isFinite(CONFIG.onlyfans.pricePerMonth)
+    ? CONFIG.onlyfans.pricePerMonth
+    : 0;
+  return Math.max(0, subs * price);
+}
+
+function getMRRDeltaForSubs(subsDelta) {
+  const safeSubs = Number.isFinite(subsDelta) ? subsDelta : 0;
+  const price = CONFIG.onlyfans && Number.isFinite(CONFIG.onlyfans.pricePerMonth)
+    ? CONFIG.onlyfans.pricePerMonth
+    : 0;
+  return Math.max(0, safeSubs * price);
+}
+
 function applyEquipmentFollowersMultiplier(baseFollowers, gameState) {
   const safeFollowers = Number.isFinite(baseFollowers) ? baseFollowers : 0;
   const multiplier = getEquipmentFollowersMultiplier(gameState);
