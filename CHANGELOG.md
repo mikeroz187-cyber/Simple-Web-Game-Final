@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Allow two-performer booking validation when combo mode is disabled.
+  - Why: Prevent Confirm Shoot from staying disabled when booking two non-lead performers before combos are enabled.
+  - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Aligned Booking performer preview cards in a shared row when two performers are selected.
   - Why: Prevent the global stacked panel margin from pushing the second card down in the Booking preview row.
   - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
