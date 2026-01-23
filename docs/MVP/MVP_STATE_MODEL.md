@@ -59,6 +59,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `shootsToday` | integer | Required | `0` | Must be `>= 0` and `<= config.game.shoots_per_day`. |
 | `followers` | integer | Required | `0` | Must be `>= 0`. |
 | `subscribers` | integer | Required | `0` | Must be `>= 0`. |
+| `onlyFansSubCarry` | number | Optional | `0` | Fractional carry for OF conversion; must be finite and `>= 0`. |
 | `reputation` | integer | Required | `config.progression.starting_reputation` | Must be `>= 0` (if negatives are not defined in scope). |
 | `lifetimeRevenue` | number | Optional | `0` | Only include if MVP UI displays cumulative revenue. Must be `>= 0`. |
 
