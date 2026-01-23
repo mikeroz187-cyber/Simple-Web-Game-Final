@@ -57,6 +57,7 @@
 - [x] v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium stronger)
 - [x] Booking: performer preview cards align correctly when two performers are selected.
 - [x] Bugfix: Booking confirm works with 2 performers when combo is disabled (combo-gated lead rule).
+- [ ] Booking: any two performers can be booked; roles do not restrict booking.
 
 ---
 
@@ -81,9 +82,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 6/6 | 0 |
+| Fixes/QoL | 6/7 | 1 |
 | Act 3 | 0/9 | 9 |
-| **Total** | **40/49** | **9** |
+| **Total** | **40/50** | **10** |
 
 ---
 

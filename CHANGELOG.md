@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Fixed
+- What: FIX: Removed role-based booking restriction so any two performers can book together.
+  - Why: Allow non-lead combinations to confirm shoots for Promo and Premium content when performers are available.
+  - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Gate the two-performer lead requirement behind the booking combo config.
   - Why: Allow two non-lead performers to book successfully when combos are disabled.
   - Files touched: src/systems/booking.js, docs/task-checklist.md, CHANGELOG.md.
