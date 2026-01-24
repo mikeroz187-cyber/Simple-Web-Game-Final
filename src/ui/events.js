@@ -395,11 +395,21 @@ function setupEventHandlers() {
         return;
       }
       const input = qs("#debug-day-input");
+      if (!input) {
+        setUiMessage("Debug day input missing.");
+        renderApp(window.gameState);
+        return;
+      }
       const minDay = Number.isFinite(CONFIG.debug.minDay) ? CONFIG.debug.minDay : 1;
       const maxDay = Number.isFinite(CONFIG.debug.maxDay) ? CONFIG.debug.maxDay : minDay;
-      const rawValue = input ? Number.parseInt(input.value, 10) : NaN;
-      const fallbackDay = window.gameState.player.day;
-      let nextDay = Number.isFinite(rawValue) ? rawValue : fallbackDay;
+      const valueAsNumber = input.valueAsNumber;
+      const rawValue = Number.isFinite(valueAsNumber) ? Math.trunc(valueAsNumber) : Number.parseInt(input.value, 10);
+      if (!Number.isFinite(rawValue)) {
+        setUiMessage("Invalid day.");
+        renderApp(window.gameState);
+        return;
+      }
+      let nextDay = rawValue;
       nextDay = Math.min(Math.max(nextDay, minDay), maxDay);
       window.gameState.player.day = nextDay;
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
@@ -408,7 +418,11 @@ function setupEventHandlers() {
         renderApp(window.gameState);
         return;
       }
-      window.location.reload();
+      setUiMessage("Debug: saved Day " + nextDay + ". Reloading...");
+      renderApp(window.gameState);
+      window.setTimeout(function () {
+        window.location.reload();
+      }, 0);
       return;
     }
 
