@@ -68,6 +68,7 @@
 - [x] Fix: Save validation allowlist includes all actual top-level keys (prevents resets on reload / GH Pages).
 - [x] Fix: Save validation day range uses CONFIG.game.max_day (supports Act 2/3 testing).
 - [x] Debug: Dev-only stat setters (cash/rep/followers/subs) for milestone testing.
+- [x] Fix: Legacy milestones now mark Complete and pay reward cash once (status + rewards).
 
 ---
 

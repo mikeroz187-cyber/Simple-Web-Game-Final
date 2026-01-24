@@ -39,6 +39,9 @@ This changelog is optimized for:
 - What: FIX: Save validation now accepts current top-level gameState keys and allows days up to CONFIG.game.max_day.
   - Why: Prevent autosave reloads from resetting on unsupported fields and allow Act 2/3 day testing beyond the debt due day.
   - Files touched: src/save.js, src/config.js, src/main.js, docs/task-checklist.md, CHANGELOG.md.
+- What: FIX: Legacy milestones now complete on thresholds, pay rewards once, and render ✅ Complete in the Hub.
+  - Why: Ensure legacy milestone progress reliably grants cash and persists completion status without double payouts.
+  - Files touched: src/systems/progression.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Debug Set Day now verifies autosave persistence before reloading on GitHub Pages.
   - Why: Prevent native refreshes from resetting the day by ensuring the autosave payload matches the requested day.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.

@@ -236,7 +236,13 @@ function checkLegacyMilestones(gameState) {
     const existing = gameState.legacyMilestones.find(function (entry) {
       return entry.id === milestoneId;
     });
-    if (existing && existing.completed) {
+    if (existing) {
+      if (!Number.isFinite(existing.completedDay)) {
+        existing.completedDay = gameState.player.day;
+      }
+      if (existing.rewardPaid !== true) {
+        existing.rewardPaid = true;
+      }
       return;
     }
     const metricValue = getLegacyMilestoneMetricValue(gameState, definition);
@@ -245,19 +251,22 @@ function checkLegacyMilestones(gameState) {
     }
 
     const rewardSummary = applyMilestoneRewards(gameState, definition);
-    const record = existing || { id: milestoneId };
-    record.completed = true;
-    if (!Number.isFinite(record.completedDay)) {
-      record.completedDay = gameState.player.day;
-    }
-    if (!existing) {
-      gameState.legacyMilestones.push(record);
-    }
+    const record = {
+      id: milestoneId,
+      completedDay: gameState.player.day,
+      rewardPaid: true
+    };
+    gameState.legacyMilestones.push(record);
+    const cashReward = Number.isFinite(definition.rewardCash) ? definition.rewardCash : 0;
+    const legacyMessage = "Legacy Milestone Achieved: " + (definition.label || milestoneId) +
+      " (+" + formatCurrency(cashReward) + ")";
 
     triggered.push({
       id: milestoneId,
       title: definition.label || milestoneId,
-      rewardSummary: rewardSummary
+      rewardSummary: rewardSummary,
+      kind: "legacy",
+      message: legacyMessage
     });
   });
 
