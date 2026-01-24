@@ -5,6 +5,7 @@ function advanceDay(gameState) {
   advancePerformerManagementDay(gameState);
   rerollFreelancerProfilesOnNewDay(gameState);
   recordAnalyticsSnapshot(gameState);
+  maybeApplyWeeklyCompetitionCheck(gameState, gameState.player.day);
   const storyResult = checkStoryEvents(gameState);
   return storyResult.events || [];
 }
@@ -364,6 +365,8 @@ function confirmBooking(gameState, selection) {
       payout = Math.round(basePayout * (1 + variancePct));
       varianceApplied = true;
     }
+    const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
+    payout = Math.round(payout * competitionMultipliers.premiumRevenueMult);
     const baselineFollowersResult = calculatePromoFollowers(performer, theme);
     const baselineFollowers = baselineFollowersResult.ok ? baselineFollowersResult.value : 0;
     const baselineSubscribers = calculateSubscribersGained(baselineFollowers);

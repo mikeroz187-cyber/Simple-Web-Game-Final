@@ -529,6 +529,7 @@ function setupEventHandlers() {
         ensureShootOutputsState(window.gameState);
         ensureStoryLogState(window.gameState);
         ensureSocialManualStrategyState(window.gameState);
+        initCompetitionStateIfMissing(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
           appendStoryLogEntries(window.gameState, storyResult.events);

@@ -17,6 +17,7 @@
     ensureShootOutputsState(window.gameState);
     ensureStoryLogState(window.gameState);
     ensureSocialManualStrategyState(window.gameState);
+    initCompetitionStateIfMissing(window.gameState);
     const storyResult = checkStoryEvents(window.gameState);
     if (CONFIG.save.autosave_enabled) {
       const intervalMs = CONFIG.save.autosave_interval_seconds * 1000;

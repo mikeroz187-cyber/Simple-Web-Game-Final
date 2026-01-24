@@ -50,6 +50,23 @@ function buildDefaultContentVarianceState() {
   };
 }
 
+function buildDefaultRivalStudiosState() {
+  const config = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const rivals = Array.isArray(config.rivals) ? config.rivals : [];
+  return rivals.map(function (rival) {
+    const baseScore = Number.isFinite(rival.baseReputationScore) ? rival.baseReputationScore : 0;
+    const weeklyGrowthRate = Number.isFinite(rival.weeklyGrowthRate) ? rival.weeklyGrowthRate : 0;
+    return {
+      id: rival.id,
+      name: rival.name,
+      reputationScore: baseScore,
+      weeklyGrowthRate: weeklyGrowthRate
+    };
+  }).filter(function (rival) {
+    return rival && typeof rival.id === "string";
+  });
+}
+
 function getRandomFreelancerProfileId(avoidId) {
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
@@ -133,6 +150,14 @@ function newGameState() {
       lastContentId: null,
       entries: [],
       variance: buildDefaultContentVarianceState()
+    },
+    rivals: {
+      studios: buildDefaultRivalStudiosState(),
+      lastCheckDay: 0
+    },
+    market: {
+      activeShiftId: null,
+      shiftHistory: []
     },
     shootOutputs: [],
     social: {

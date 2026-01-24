@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (Save validation allowlist + max day validation)
+**Last Updated:** January 24, 2026 (A3.1 — Rival Studios baseline)
 
 ---
 
@@ -74,7 +74,7 @@
 
 ### Not Started
 - [x] Save v3 schema + migration (v2 → v3)
-- [ ] A3.1 — Rival Studios / Competitive Pressure
+- [x] A3.1 — Rival Studios / Competitive Pressure
 - [ ] A3.2 — Structured High-Impact Events
 - [ ] A3.3 — Reputation Branches (Prestige, Volume, Boutique)
 - [x] A3.4 — Act 3 Story Arc (Days 200/225/245/270)
@@ -92,8 +92,8 @@
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
 | Fixes/QoL | 16/16 | 0 |
-| Act 3 | 3/9 | 6 |
-| **Total** | **53/59** | **6** |
+| Act 3 | 4/9 | 5 |
+| **Total** | **54/59** | **5** |
 
 ---
 

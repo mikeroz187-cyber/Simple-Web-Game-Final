@@ -306,6 +306,58 @@ function ensureContentVarianceState(candidate) {
   }
 }
 
+function getCompetitionConfigForSave() {
+  if (CONFIG.competition && typeof CONFIG.competition === "object") {
+    return CONFIG.competition;
+  }
+  return {};
+}
+
+function buildDefaultRivalStudiosForSave() {
+  const config = getCompetitionConfigForSave();
+  const rivals = Array.isArray(config.rivals) ? config.rivals : [];
+  return rivals.map(function (rival) {
+    const baseScore = Number.isFinite(rival.baseReputationScore) ? rival.baseReputationScore : 0;
+    const weeklyGrowthRate = Number.isFinite(rival.weeklyGrowthRate) ? rival.weeklyGrowthRate : 0;
+    return {
+      id: rival.id,
+      name: rival.name,
+      reputationScore: baseScore,
+      weeklyGrowthRate: weeklyGrowthRate
+    };
+  }).filter(function (rival) {
+    return rival && typeof rival.id === "string";
+  });
+}
+
+function ensureCompetitionState(candidate) {
+  if (!candidate) {
+    return;
+  }
+  if (!candidate.rivals || typeof candidate.rivals !== "object") {
+    candidate.rivals = { studios: [], lastCheckDay: 0 };
+  }
+  if (!Array.isArray(candidate.rivals.studios)) {
+    candidate.rivals.studios = [];
+  }
+  if (!Number.isFinite(candidate.rivals.lastCheckDay)) {
+    candidate.rivals.lastCheckDay = 0;
+  }
+  if (candidate.rivals.studios.length === 0) {
+    candidate.rivals.studios = buildDefaultRivalStudiosForSave();
+  }
+
+  if (!candidate.market || typeof candidate.market !== "object") {
+    candidate.market = { activeShiftId: null, shiftHistory: [] };
+  }
+  if (typeof candidate.market.activeShiftId !== "string" && candidate.market.activeShiftId !== null) {
+    candidate.market.activeShiftId = null;
+  }
+  if (!Array.isArray(candidate.market.shiftHistory)) {
+    candidate.market.shiftHistory = [];
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -383,6 +435,7 @@ function migrateGameState(candidate) {
   ensureFreelancerProfilesState(candidate);
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
+  ensureCompetitionState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -421,7 +474,9 @@ function validateGameState(candidate) {
     "analyticsHistory",
     "equipment",
     "milestones",
-    "automation"
+    "automation",
+    "rivals",
+    "market"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
