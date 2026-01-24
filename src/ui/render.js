@@ -72,6 +72,11 @@ function getStoryLogPreview(text) {
   return normalized.slice(0, limit).trim() + "…";
 }
 
+function formatCompetitionMultiplier(value) {
+  const numeric = Number.isFinite(value) ? value : 1;
+  return "x" + numeric.toFixed(2);
+}
+
 function getPerformerRoleLabel(gameState, performerId) {
   const roster = gameState && gameState.roster ? gameState.roster : {};
   const roleMap = roster.performerRoles || {};
@@ -189,6 +194,18 @@ function renderHub(gameState) {
   });
   const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
   const nextAction = getNextActionLabel(gameState);
+  const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const competitionEnabled = Boolean(competitionConfig.enabled);
+  const standings = competitionEnabled && typeof getCompetitionStandings === "function"
+    ? getCompetitionStandings(gameState)
+    : null;
+  const standingLabel = competitionEnabled && standings
+    ? standings.rank + "/" + standings.total
+    : "—";
+  const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
+    ? getActiveMarketShift(gameState, gameState.player.day)
+    : null;
+  const marketShiftLabel = activeMarketShift ? activeMarketShift.name : "None";
 
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
@@ -203,6 +220,13 @@ function renderHub(gameState) {
     "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",
     "<p><strong>Next Action:</strong> " + nextAction + "</p>"
   ].join("");
+
+  const competitionPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Competition</h3>" +
+    "<p><strong>Status:</strong> " + (competitionEnabled ? "Enabled" : "Disabled") + "</p>" +
+    "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
+    "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>" +
+    "</div>";
 
   const navButtons = [
     createButton("Booking", "nav-booking", "primary"),
@@ -276,6 +300,7 @@ function renderHub(gameState) {
 
   hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
     "<div class=\"panel\">" + statusHtml + "</div>" +
+    competitionPanel +
     debtButtonRow +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +
@@ -522,6 +547,14 @@ function renderAnalytics(gameState) {
     ? gameState.player.day
     : 0;
   const todaySummary = getWindowedSummary(gameState, 1);
+  const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const competitionEnabled = Boolean(competitionConfig.enabled);
+  const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
+    ? getActiveMarketShift(gameState, dayNumber)
+    : null;
+  const competitionMultipliers = competitionEnabled && typeof getCompetitionMultipliers === "function"
+    ? getCompetitionMultipliers(gameState, dayNumber)
+    : { promoFollowerMult: 1, premiumRevenueMult: 1 };
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
@@ -531,6 +564,12 @@ function renderAnalytics(gameState) {
     "<p><strong>OnlyFans Subscribers Gained:</strong> " + todaySummary.onlyFansSubscribers + "</p>" +
     "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
     "</div>";
+
+  const marketShiftNote = activeMarketShift
+    ? "<div class=\"panel\"><p class=\"helper-text\">Market shift active: " + activeMarketShift.name +
+      " (Promo " + formatCompetitionMultiplier(competitionMultipliers.promoFollowerMult) +
+      ", Premium " + formatCompetitionMultiplier(competitionMultipliers.premiumRevenueMult) + ").</p></div>"
+    : "";
 
   let latestShootBody = "<p class=\"helper-text\">No shoots yet today.</p>";
   if (!entry && gameState.content.lastContentId) {
@@ -549,7 +588,7 @@ function renderAnalytics(gameState) {
   }
   const latestShootPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Latest Shoot Results</h3>" +
     latestShootBody + "</div>";
-  const analyticsBody = todayTotalsPanel + latestShootPanel;
+  const analyticsBody = todayTotalsPanel + marketShiftNote + latestShootPanel;
 
   const rollupWindows = CONFIG.analytics && Array.isArray(CONFIG.analytics.rollupWindowsDays)
     ? CONFIG.analytics.rollupWindowsDays

@@ -350,6 +350,8 @@ function postPromoContent(gameState, platform, contentId) {
   if (isFreelancer && promoBonus > 0) {
     socialFollowersGained += promoBonus;
   }
+  const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
+  socialFollowersGained = Math.round(socialFollowersGained * competitionMultipliers.promoFollowerMult);
   const baseSubscribers = calculateSubscribersGained(socialFollowersGained);
   let socialSubscribersGained = activeStrategy
     ? Math.max(0, Math.round(baseSubscribers * activeStrategy.subscriberConversionMult))

@@ -101,6 +101,45 @@ const CONFIG = {
       ofSubsMultiplier: 1.25
     }
   },
+  competition: {
+    enabled: false,
+    weeklyCheckCadenceDays: 7,
+    storyLogEnabled: true,
+    rivals: [
+      {
+        id: "rival_night_slate",
+        name: "Night Slate Media",
+        baseReputationScore: 55,
+        weeklyGrowthRate: 1.2
+      },
+      {
+        id: "rival_luxe_pixel",
+        name: "Luxe Pixel Studios",
+        baseReputationScore: 48,
+        weeklyGrowthRate: 0.9
+      }
+    ],
+    marketShifts: {
+      shift_promo_cooldown: {
+        name: "Promo Cooldown",
+        startDay: 190,
+        endDay: 205,
+        multipliers: {
+          promoFollowerMult: 0.95,
+          premiumRevenueMult: 1
+        }
+      },
+      shift_premium_bump: {
+        name: "Premium Bump",
+        startDay: 220,
+        endDay: 235,
+        multipliers: {
+          promoFollowerMult: 1,
+          premiumRevenueMult: 1.08
+        }
+      }
+    }
+  },
   booking: {
     combo: {
       enabled: true,
