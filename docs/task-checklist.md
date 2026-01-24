@@ -75,6 +75,7 @@
 ### Not Started
 - [x] Save v3 schema + migration (v2 → v3)
 - [x] A3.1 — Rival Studios / Competitive Pressure
+  - [x] Auto-enable competition at Day 181.
 - [ ] A3.2 — Structured High-Impact Events
 - [ ] A3.3 — Reputation Branches (Prestige, Volume, Boutique)
 - [x] A3.4 — Act 3 Story Arc (Days 200/225/245/270)

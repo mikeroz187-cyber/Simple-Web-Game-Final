@@ -195,7 +195,13 @@ function renderHub(gameState) {
   const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
   const nextAction = getNextActionLabel(gameState);
   const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
-  const competitionEnabled = Boolean(competitionConfig.enabled);
+  const competitionDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  const competitionStartDay = typeof getCompetitionStartDay === "function"
+    ? getCompetitionStartDay(competitionConfig)
+    : null;
+  const competitionEnabled = typeof isCompetitionEnabled === "function"
+    ? isCompetitionEnabled(competitionConfig, competitionDay)
+    : Boolean(competitionConfig.enabled);
   const standings = competitionEnabled && typeof getCompetitionStandings === "function"
     ? getCompetitionStandings(gameState)
     : null;
@@ -203,7 +209,7 @@ function renderHub(gameState) {
     ? standings.rank + "/" + standings.total
     : "—";
   const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
-    ? getActiveMarketShift(gameState, gameState.player.day)
+    ? getActiveMarketShift(gameState, competitionDay)
     : null;
   const marketShiftLabel = activeMarketShift ? activeMarketShift.name : "None";
 
@@ -221,11 +227,20 @@ function renderHub(gameState) {
     "<p><strong>Next Action:</strong> " + nextAction + "</p>"
   ].join("");
 
+  let competitionPanelBody = "";
+  if (competitionEnabled) {
+    competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
+      "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
+      "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
+  } else {
+    const startDayLabel = Number.isFinite(competitionStartDay)
+      ? "Competition begins Day " + competitionStartDay + "."
+      : "Competition begins soon.";
+    competitionPanelBody = "<p class=\"helper-text\">" + startDayLabel + "</p>";
+  }
   const competitionPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Competition</h3>" +
-    "<p><strong>Status:</strong> " + (competitionEnabled ? "Enabled" : "Disabled") + "</p>" +
-    "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
-    "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>" +
+    competitionPanelBody +
     "</div>";
 
   const navButtons = [
@@ -548,7 +563,9 @@ function renderAnalytics(gameState) {
     : 0;
   const todaySummary = getWindowedSummary(gameState, 1);
   const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
-  const competitionEnabled = Boolean(competitionConfig.enabled);
+  const competitionEnabled = typeof isCompetitionEnabled === "function"
+    ? isCompetitionEnabled(competitionConfig, dayNumber)
+    : Boolean(competitionConfig.enabled);
   const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
     ? getActiveMarketShift(gameState, dayNumber)
     : null;
@@ -565,7 +582,7 @@ function renderAnalytics(gameState) {
     "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
     "</div>";
 
-  const marketShiftNote = activeMarketShift
+  const marketShiftNote = competitionEnabled && activeMarketShift
     ? "<div class=\"panel\"><p class=\"helper-text\">Market shift active: " + activeMarketShift.name +
       " (Promo " + formatCompetitionMultiplier(competitionMultipliers.promoFollowerMult) +
       ", Premium " + formatCompetitionMultiplier(competitionMultipliers.premiumRevenueMult) + ").</p></div>"

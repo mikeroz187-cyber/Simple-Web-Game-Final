@@ -5,8 +5,22 @@ function getCompetitionConfig() {
   return {};
 }
 
-function isCompetitionEnabled(config) {
-  return Boolean(config && config.enabled);
+function getCompetitionStartDay(config) {
+  if (config && Number.isFinite(config.startDay)) {
+    return config.startDay;
+  }
+  return Infinity;
+}
+
+function isCompetitionEnabled(config, day) {
+  if (config && config.enabled === true) {
+    return true;
+  }
+  const startDay = getCompetitionStartDay(config);
+  if (!Number.isFinite(day)) {
+    return false;
+  }
+  return day >= startDay;
 }
 
 function getCompetitionCadenceDays(config) {
@@ -105,7 +119,7 @@ function getShiftForDay(catalog, day) {
 
 function getActiveMarketShift(gameState, day) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config)) {
+  if (!isCompetitionEnabled(config, day)) {
     return null;
   }
   const catalog = getMarketShiftsCatalog(config);
@@ -133,7 +147,7 @@ function clampMultiplier(value) {
 
 function getCompetitionMultipliers(gameState, day) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config)) {
+  if (!isCompetitionEnabled(config, day)) {
     return { promoFollowerMult: 1, premiumRevenueMult: 1 };
   }
   const shift = getActiveMarketShift(gameState, day);
@@ -204,7 +218,7 @@ function addCompetitionStoryLogEntry(gameState, day, rank, total) {
 
 function maybeApplyWeeklyCompetitionCheck(gameState, currentDay) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config)) {
+  if (!isCompetitionEnabled(config, currentDay)) {
     return { ok: false, checked: false };
   }
   if (!gameState || !Number.isFinite(currentDay)) {

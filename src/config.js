@@ -103,6 +103,7 @@ const CONFIG = {
   },
   competition: {
     enabled: false,
+    startDay: 181,
     weeklyCheckCadenceDays: 7,
     storyLogEnabled: true,
     rivals: [
