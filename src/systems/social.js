@@ -267,7 +267,8 @@ function applyManualSocialStrategy(gameState) {
     gameState.storyLog.push(logEntry);
   }
 
-  const milestoneEvents = checkMilestones(gameState);
+  const legacyEvents = checkLegacyMilestones(gameState);
+  const milestoneEvents = checkMilestones(gameState).concat(legacyEvents);
 
   return {
     ok: true,
@@ -402,7 +403,8 @@ function postPromoContent(gameState, platform, contentId) {
   gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
   gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);
 
-  const milestoneEvents = checkMilestones(gameState);
+  const legacyEvents = checkLegacyMilestones(gameState);
+  const milestoneEvents = checkMilestones(gameState).concat(legacyEvents);
 
   return {
     ok: true,

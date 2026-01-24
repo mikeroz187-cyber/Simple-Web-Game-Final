@@ -188,6 +188,7 @@ function newGameState() {
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
     milestones: [],
+    legacyMilestones: [],
     automation: {
       autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
     }

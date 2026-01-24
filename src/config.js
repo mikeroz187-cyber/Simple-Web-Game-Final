@@ -425,6 +425,44 @@ const CONFIG = {
       }
     }
   },
+  legacyMilestones: {
+    milestoneOrder: [
+      "legacy_revenue_250k",
+      "legacy_subscribers_1500",
+      "legacy_reputation_80",
+      "legacy_story_complete"
+    ],
+    milestones: {
+      legacy_revenue_250k: {
+        id: "legacy_revenue_250k",
+        label: "$250k Lifetime Revenue",
+        type: "lifetimeRevenue",
+        threshold: 250000,
+        rewardCash: 5000
+      },
+      legacy_subscribers_1500: {
+        id: "legacy_subscribers_1500",
+        label: "1,500 Subscribers",
+        type: "subscribers",
+        threshold: 1500,
+        rewardCash: 4000
+      },
+      legacy_reputation_80: {
+        id: "legacy_reputation_80",
+        label: "Reputation 80",
+        type: "reputation",
+        threshold: 80,
+        rewardCash: 6000
+      },
+      legacy_story_complete: {
+        id: "legacy_story_complete",
+        label: "Complete Act 3 Story",
+        type: "storyComplete",
+        threshold: 1,
+        rewardCash: 8000
+      }
+    }
+  },
   equipment: {
     upgradeOrder: ["lighting", "camera", "set_dressing"],
     upgrades: {
