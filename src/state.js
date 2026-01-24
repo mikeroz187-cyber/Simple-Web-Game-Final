@@ -67,6 +67,13 @@ function buildDefaultRivalStudiosState() {
   });
 }
 
+function buildDefaultReputationState() {
+  return {
+    branchId: null,
+    branchProgress: 0
+  };
+}
+
 function getRandomFreelancerProfileId(avoidId) {
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
@@ -159,6 +166,7 @@ function newGameState() {
       activeShiftId: null,
       shiftHistory: []
     },
+    reputation: buildDefaultReputationState(),
     shootOutputs: [],
     social: {
       posts: [],
@@ -351,5 +359,21 @@ function ensureUnlocksState(gameState) {
 
   if (gameState.unlocks.locationTier1Unlocked) {
     gameState.unlocks.locationTiers.tier1 = true;
+  }
+}
+
+function ensureReputationState(gameState) {
+  if (!gameState) {
+    return;
+  }
+  if (!gameState.reputation || typeof gameState.reputation !== "object") {
+    gameState.reputation = buildDefaultReputationState();
+    return;
+  }
+  if (typeof gameState.reputation.branchId !== "string" && gameState.reputation.branchId !== null) {
+    gameState.reputation.branchId = null;
+  }
+  if (!Number.isFinite(gameState.reputation.branchProgress)) {
+    gameState.reputation.branchProgress = 0;
   }
 }

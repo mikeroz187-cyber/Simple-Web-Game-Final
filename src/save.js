@@ -358,6 +358,22 @@ function ensureCompetitionState(candidate) {
   }
 }
 
+function ensureReputationState(candidate) {
+  if (!candidate) {
+    return;
+  }
+  if (!candidate.reputation || typeof candidate.reputation !== "object") {
+    candidate.reputation = buildDefaultReputationState();
+    return;
+  }
+  if (typeof candidate.reputation.branchId !== "string" && candidate.reputation.branchId !== null) {
+    candidate.reputation.branchId = null;
+  }
+  if (!Number.isFinite(candidate.reputation.branchProgress)) {
+    candidate.reputation.branchProgress = 0;
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -436,6 +452,7 @@ function migrateGameState(candidate) {
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
   ensureCompetitionState(candidate);
+  ensureReputationState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -476,7 +493,8 @@ function validateGameState(candidate) {
     "milestones",
     "automation",
     "rivals",
-    "market"
+    "market",
+    "reputation"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {

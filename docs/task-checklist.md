@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (A3.2 — Structured High-Impact Events)
+**Last Updated:** January 24, 2026 (A3.3 — Reputation Branches)
 
 ---
 
@@ -77,7 +77,7 @@
 - [x] A3.1 — Rival Studios / Competitive Pressure
   - [x] Auto-enable competition at Day 181.
 - [x] A3.2 — Structured High-Impact Events
-- [ ] A3.3 — Reputation Branches (Prestige, Volume, Boutique)
+- [x] A3.3 — Reputation Branches (Prestige, Volume, Boutique)
 - [x] A3.4 — Act 3 Story Arc (Days 200/225/245/270)
 - [ ] A3.5 — Optional Automation (expanded)
 - [x] A3.6 — Content Performance Variance (±15%)
@@ -93,8 +93,8 @@
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
 | Fixes/QoL | 16/16 | 0 |
-| Act 3 | 5/9 | 4 |
-| **Total** | **55/59** | **4** |
+| Act 3 | 6/9 | 3 |
+| **Total** | **56/59** | **3** |
 
 ---
 

@@ -59,6 +59,17 @@ function getContentVarianceConfig() {
   return { enabled: false };
 }
 
+function getReputationRevenueMultiplier(gameState) {
+  if (typeof getSelectedReputationBranch !== "function") {
+    return 1;
+  }
+  const branch = getSelectedReputationBranch(gameState);
+  if (!branch) {
+    return 1;
+  }
+  return Number.isFinite(branch.revenueMult) ? branch.revenueMult : 1;
+}
+
 function canApplyContentVariance(gameState) {
   if (!gameState || !gameState.player || !gameState.content || !gameState.content.variance) {
     return false;
@@ -367,6 +378,8 @@ function confirmBooking(gameState, selection) {
     }
     const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
     payout = Math.round(payout * competitionMultipliers.premiumRevenueMult);
+    const reputationRevenueMult = getReputationRevenueMultiplier(gameState);
+    payout = Math.round(payout * reputationRevenueMult);
     const baselineFollowersResult = calculatePromoFollowers(performer, theme);
     const baselineFollowers = baselineFollowersResult.ok ? baselineFollowersResult.value : 0;
     const baselineSubscribers = calculateSubscribersGained(baselineFollowers);

@@ -141,6 +141,35 @@ const CONFIG = {
       }
     }
   },
+  reputation: {
+    branches: [
+      {
+        id: "prestige",
+        label: "Prestige",
+        requiredReputation: 60,
+        revenueMult: 1.10,
+        followersMult: 0.95,
+        blurb: "High-end brand. More money per premium, slightly less reach."
+      },
+      {
+        id: "volume",
+        label: "Volume",
+        requiredReputation: 60,
+        revenueMult: 0.95,
+        followersMult: 1.10,
+        blurb: "Chase reach. More followers, slightly less money per premium."
+      },
+      {
+        id: "boutique",
+        label: "Boutique",
+        requiredReputation: 60,
+        revenueMult: 1.05,
+        followersMult: 1.05,
+        blurb: "Balanced refinement. Slight boost to both."
+      }
+    ],
+    selectionStartDay: 181
+  },
   booking: {
     combo: {
       enabled: true,
