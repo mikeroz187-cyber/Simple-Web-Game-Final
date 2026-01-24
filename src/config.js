@@ -75,6 +75,7 @@ const CONFIG = {
   game: {
     starting_day: 1,
     action_day_max: 90,
+    max_day: 270,
     starting_cash: 5000,
     loan_principal: 5000,
     loan_total_due: 10000,

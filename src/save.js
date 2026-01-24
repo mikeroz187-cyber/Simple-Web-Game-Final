@@ -411,6 +411,7 @@ function validateGameState(candidate) {
     "player",
     "roster",
     "content",
+    "shootOutputs",
     "social",
     "unlocks",
     "story",
@@ -419,7 +420,8 @@ function validateGameState(candidate) {
     "performerManagement",
     "analyticsHistory",
     "equipment",
-    "milestones"
+    "milestones",
+    "automation"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
@@ -460,7 +462,7 @@ function validateGameState(candidate) {
     }
   }
 
-  if (player.day < 1 || player.day > player.debtDueDay) {
+  if (player.day < 1 || player.day > CONFIG.game.max_day) {
     return { ok: false, message: "Player day out of range." };
   }
 

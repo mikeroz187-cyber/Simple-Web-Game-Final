@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (Debug Set Day GH Pages fix)
+**Last Updated:** January 24, 2026 (Save validation allowlist + max day validation)
 
 ---
 
@@ -65,6 +65,8 @@
 - [x] Debug: Dev-only Set Day panel (?debug=1) for iOS testing.
   - Fix: debug Set Day persists correctly.
 - [x] Fix: Debug Set Day works on GH Pages.
+- [x] Fix: Save validation allowlist includes all actual top-level keys (prevents resets on reload / GH Pages).
+- [x] Fix: Save validation day range uses CONFIG.game.max_day (supports Act 2/3 testing).
 
 ---
 
@@ -89,9 +91,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 14/14 | 0 |
+| Fixes/QoL | 16/16 | 0 |
 | Act 3 | 3/9 | 6 |
-| **Total** | **51/57** | **6** |
+| **Total** | **53/59** | **6** |
 
 ---
 

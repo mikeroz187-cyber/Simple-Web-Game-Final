@@ -7,6 +7,9 @@
         setUiMessage(loadResult.message);
       }
     } else {
+      if (loadResult && loadResult.message) {
+        setUiMessage(loadResult.message);
+      }
       window.gameState = newGameState();
     }
     ensureAutomationState(window.gameState);
