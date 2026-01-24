@@ -450,7 +450,8 @@ function confirmBooking(gameState, selection) {
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
 
-  const milestoneEvents = checkMilestones(gameState);
+  const legacyEvents = checkLegacyMilestones(gameState);
+  const milestoneEvents = checkMilestones(gameState).concat(legacyEvents);
 
   const storyEvents = [];
 

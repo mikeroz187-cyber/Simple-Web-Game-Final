@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (A3.3 — Reputation Branches)
+**Last Updated:** January 24, 2026 (A3.8 — Legacy Milestones)
 
 ---
 
@@ -82,7 +82,7 @@
 - [ ] A3.5 — Optional Automation (expanded)
 - [x] A3.6 — Content Performance Variance (±15%)
 - [ ] A3.7 — Advanced Scheduling (booking queue)
-- [ ] A3.8 — Legacy Milestones
+- [x] A3.8 — Legacy Milestones
 
 ---
 
@@ -93,8 +93,8 @@
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
 | Fixes/QoL | 16/16 | 0 |
-| Act 3 | 6/9 | 3 |
-| **Total** | **56/59** | **3** |
+| Act 3 | 7/9 | 2 |
+| **Total** | **57/59** | **2** |
 
 ---
 

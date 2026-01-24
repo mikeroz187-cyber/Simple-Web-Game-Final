@@ -112,6 +112,19 @@ function getMilestoneMetricValue(gameState, milestone) {
   return 0;
 }
 
+function getLegacyMilestoneMetricValue(gameState, milestone) {
+  if (!gameState || !milestone) {
+    return 0;
+  }
+  if (milestone.type === "storyComplete") {
+    if (gameState.story && gameState.story.act3 && Array.isArray(gameState.story.act3.eventsShown)) {
+      return gameState.story.act3.eventsShown.indexOf("act3_exit_strategy_day270") !== -1 ? 1 : 0;
+    }
+    return 0;
+  }
+  return getMilestoneMetricValue(gameState, milestone);
+}
+
 function applyMilestoneRewards(gameState, milestone) {
   const rewardLabels = [];
   if (!gameState || !milestone) {
@@ -191,6 +204,54 @@ function checkMilestones(gameState) {
     record.completed = true;
     if (!existing) {
       gameState.milestones.push(record);
+    }
+
+    triggered.push({
+      id: milestoneId,
+      title: definition.label || milestoneId,
+      rewardSummary: rewardSummary
+    });
+  });
+
+  return triggered;
+}
+
+function checkLegacyMilestones(gameState) {
+  const legacyConfig = CONFIG.legacyMilestones;
+  const order = legacyConfig ? legacyConfig.milestoneOrder : [];
+  if (!gameState || !Array.isArray(order) || order.length === 0) {
+    return [];
+  }
+
+  if (!Array.isArray(gameState.legacyMilestones)) {
+    gameState.legacyMilestones = [];
+  }
+
+  const triggered = [];
+  order.forEach(function (milestoneId) {
+    const definition = legacyConfig.milestones[milestoneId];
+    if (!definition) {
+      return;
+    }
+    const existing = gameState.legacyMilestones.find(function (entry) {
+      return entry.id === milestoneId;
+    });
+    if (existing && existing.completed) {
+      return;
+    }
+    const metricValue = getLegacyMilestoneMetricValue(gameState, definition);
+    if (!Number.isFinite(metricValue) || metricValue < definition.threshold) {
+      return;
+    }
+
+    const rewardSummary = applyMilestoneRewards(gameState, definition);
+    const record = existing || { id: milestoneId };
+    record.completed = true;
+    if (!Number.isFinite(record.completedDay)) {
+      record.completedDay = gameState.player.day;
+    }
+    if (!existing) {
+      gameState.legacyMilestones.push(record);
     }
 
     triggered.push({

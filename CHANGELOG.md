@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Act 3 legacy milestones tracking, rewards, and Hub panel status display.
+  - Why: Deliver A3.8 recognition milestones with save persistence and milestone rewards.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added Act 3 reputation branches with UI selection, save defaults, and follower/revenue multipliers.
   - Why: Deliver the Studio Identity choice at Day 181 with persistent modifiers on Promo and Premium outcomes.
   - Files touched: src/state.js, src/save.js, src/config.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, src/main.js, docs/task-checklist.md, CHANGELOG.md.

@@ -218,6 +218,10 @@ function renderHub(gameState) {
   const selectedBranch = typeof getSelectedReputationBranch === "function"
     ? getSelectedReputationBranch(gameState)
     : null;
+  const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
+    ? CONFIG.legacyMilestones
+    : { milestoneOrder: [], milestones: {} };
+  const legacyOrder = Array.isArray(legacyConfig.milestoneOrder) ? legacyConfig.milestoneOrder : [];
 
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
@@ -287,6 +291,46 @@ function renderHub(gameState) {
   const reputationPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Studio Identity</h3>" +
     reputationPanelBody +
+    "</div>";
+
+  const legacyMilestoneRows = legacyOrder.map(function (milestoneId) {
+    const definition = legacyConfig.milestones ? legacyConfig.milestones[milestoneId] : null;
+    if (!definition) {
+      return "";
+    }
+    const legacyEntries = Array.isArray(gameState.legacyMilestones) ? gameState.legacyMilestones : [];
+    const existing = legacyEntries.find(function (entry) {
+      return entry.id === milestoneId;
+    });
+    const metricValue = typeof getLegacyMilestoneMetricValue === "function"
+      ? getLegacyMilestoneMetricValue(gameState, definition)
+      : 0;
+    const threshold = Number.isFinite(definition.threshold) ? definition.threshold : 0;
+    const currentValue = Number.isFinite(metricValue) ? metricValue : 0;
+    const isComplete = existing && existing.completed;
+    const label = definition.type === "storyComplete"
+      ? "Complete Act 3 Story (Day 270 event)"
+      : definition.label;
+    let progressLabel = currentValue + " / " + threshold;
+    if (definition.type === "lifetimeRevenue") {
+      progressLabel = formatCurrency(currentValue) + " / " + formatCurrency(threshold);
+    }
+    if (definition.type === "storyComplete") {
+      progressLabel = currentValue >= threshold ? "1 / 1" : "0 / 1";
+    }
+    const statusLabel = isComplete ? "✅ Complete" : "⏳ In Progress";
+    return "<div class=\"list-item\">" +
+      "<p><strong>" + label + "</strong></p>" +
+      "<p class=\"helper-text\">Progress: " + progressLabel + "</p>" +
+      "<p class=\"helper-text\">Status: " + statusLabel + "</p>" +
+      "</div>";
+  }).join("");
+  const legacyPanelBody = legacyMilestoneRows
+    ? legacyMilestoneRows
+    : "<p class=\"helper-text\">No legacy milestones available.</p>";
+  const legacyPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Legacy Milestones</h3>" +
+    legacyPanelBody +
     "</div>";
 
   const navButtons = [
@@ -363,6 +407,7 @@ function renderHub(gameState) {
     "<div class=\"panel\">" + statusHtml + "</div>" +
     competitionPanel +
     reputationPanel +
+    legacyPanel +
     debtButtonRow +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +

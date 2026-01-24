@@ -374,6 +374,15 @@ function ensureReputationState(candidate) {
   }
 }
 
+function ensureLegacyMilestonesState(candidate) {
+  if (!candidate) {
+    return;
+  }
+  if (!Array.isArray(candidate.legacyMilestones)) {
+    candidate.legacyMilestones = [];
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -453,6 +462,7 @@ function migrateGameState(candidate) {
   ensureContentVarianceState(candidate);
   ensureCompetitionState(candidate);
   ensureReputationState(candidate);
+  ensureLegacyMilestonesState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -491,6 +501,7 @@ function validateGameState(candidate) {
     "analyticsHistory",
     "equipment",
     "milestones",
+    "legacyMilestones",
     "automation",
     "rivals",
     "market",
@@ -790,6 +801,10 @@ function validateGameState(candidate) {
 
   if (candidate.milestones !== undefined && !Array.isArray(candidate.milestones)) {
     return { ok: false, message: "Milestones data invalid." };
+  }
+
+  if (candidate.legacyMilestones !== undefined && !Array.isArray(candidate.legacyMilestones)) {
+    return { ok: false, message: "Legacy milestones data invalid." };
   }
 
   return { ok: true };
