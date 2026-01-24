@@ -3,6 +3,14 @@ function setUiMessage(message) {
   uiState.message = message || "";
 }
 
+function setDebugDayStatus(message) {
+  const uiState = getUiState();
+  if (!uiState.debug) {
+    uiState.debug = { dayStatus: "" };
+  }
+  uiState.debug.dayStatus = message || "";
+}
+
 function setEquipmentMessage(message) {
   const uiState = getUiState();
   if (!uiState.shop) {
@@ -127,6 +135,19 @@ function normalizeAutomationReason(reason) {
     return "Unknown issue";
   }
   return trimmed.endsWith(".") ? trimmed.slice(0, -1) : trimmed;
+}
+
+function clamp(value, min, max) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  if (!Number.isFinite(min)) {
+    return value;
+  }
+  if (!Number.isFinite(max)) {
+    return value;
+  }
+  return Math.min(Math.max(value, min), max);
 }
 
 function setupEventHandlers() {
@@ -391,39 +412,71 @@ function setupEventHandlers() {
     }
 
     if (action === "debug-set-day-reload") {
+      event.preventDefault();
+      event.stopPropagation();
       if (!isDebugEnabled()) {
         return;
       }
       const input = qs("#debug-day-input");
       if (!input) {
-        setUiMessage("Debug day input missing.");
+        setDebugDayStatus("Attempted day: (missing). Save key: unknown. Verified: no. Debug day input missing.");
+        renderApp(window.gameState);
+        return;
+      }
+      const dayRaw = input.valueAsNumber;
+      const saveSlotId = CONFIG.save.autosave_slot_id;
+      const saveKey = getSaveSlotKey(saveSlotId);
+      if (!Number.isFinite(dayRaw)) {
+        setDebugDayStatus("Attempted day: " + (input.value || "(blank)") + ". Save key: " + saveKey + ". Verified: no. Invalid day.");
         renderApp(window.gameState);
         return;
       }
       const minDay = Number.isFinite(CONFIG.debug.minDay) ? CONFIG.debug.minDay : 1;
-      const maxDay = Number.isFinite(CONFIG.debug.maxDay) ? CONFIG.debug.maxDay : minDay;
-      const valueAsNumber = input.valueAsNumber;
-      const rawValue = Number.isFinite(valueAsNumber) ? Math.trunc(valueAsNumber) : Number.parseInt(input.value, 10);
-      if (!Number.isFinite(rawValue)) {
-        setUiMessage("Invalid day.");
+      const configuredMaxDay = CONFIG.game && Number.isFinite(CONFIG.game.max_day) ? CONFIG.game.max_day : null;
+      const debugMaxDay = Number.isFinite(CONFIG.debug.maxDay) ? CONFIG.debug.maxDay : 9999;
+      const maxDay = Number.isFinite(configuredMaxDay) ? configuredMaxDay : debugMaxDay;
+      const day = clamp(Math.floor(dayRaw), minDay, maxDay);
+      const attemptedLabel = Math.floor(dayRaw);
+      try {
+        window.gameState.player.day = day;
+        const saveResult = saveGame(window.gameState, saveSlotId);
+        if (!saveResult.ok) {
+          setDebugDayStatus("Attempted day: " + attemptedLabel + ". Save key: " + saveKey + ". Verified: no. " + (saveResult.message || "Failed to save debug day change."));
+          renderApp(window.gameState);
+          return;
+        }
+        const savedPayload = localStorage.getItem(saveKey);
+        if (!savedPayload) {
+          setDebugDayStatus("Attempted day: " + attemptedLabel + ". Save key: " + saveKey + ". Verified: no. Save verification failed (missing payload).");
+          renderApp(window.gameState);
+          return;
+        }
+        let parsedSave = null;
+        try {
+          parsedSave = JSON.parse(savedPayload);
+        } catch (error) {
+          setDebugDayStatus("Attempted day: " + attemptedLabel + ". Save key: " + saveKey + ". Verified: no. Save verification failed (invalid JSON).");
+          renderApp(window.gameState);
+          return;
+        }
+        const savedDay = parsedSave && parsedSave.player ? parsedSave.player.day : null;
+        if (savedDay !== day) {
+          setDebugDayStatus("Attempted day: " + attemptedLabel + ". Save key: " + saveKey + ". Verified: no. Save verification failed (did not persist).");
+          renderApp(window.gameState);
+          return;
+        }
+        setDebugDayStatus("Attempted day: " + attemptedLabel + ". Saved day: " + day + ". Save key: " + saveKey + ". Verified: yes. Reloading...");
+        renderApp(window.gameState);
+        window.setTimeout(function () {
+          window.location.reload();
+        }, 0);
+        return;
+      } catch (error) {
+        const message = error && error.message ? error.message : "Unknown error.";
+        setDebugDayStatus("Attempted day: " + attemptedLabel + ". Save key: " + saveKey + ". Verified: no. Error: " + message);
         renderApp(window.gameState);
         return;
       }
-      let nextDay = rawValue;
-      nextDay = Math.min(Math.max(nextDay, minDay), maxDay);
-      window.gameState.player.day = nextDay;
-      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-      if (!saveResult.ok) {
-        setUiMessage(saveResult.message || "Failed to save debug day change.");
-        renderApp(window.gameState);
-        return;
-      }
-      setUiMessage("Debug: saved Day " + nextDay + ". Reloading...");
-      renderApp(window.gameState);
-      window.setTimeout(function () {
-        window.location.reload();
-      }, 0);
-      return;
     }
 
     if (action === "advance-day") {

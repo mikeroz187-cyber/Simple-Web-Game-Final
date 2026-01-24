@@ -23,6 +23,9 @@ function getUiState() {
       },
       save: {
         selectedSlotId: CONFIG.save.default_slot_id
+      },
+      debug: {
+        dayStatus: ""
       }
     };
   }
@@ -253,6 +256,7 @@ function renderHub(gameState) {
 
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
+  const debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
   const debugPanel = isDebugEnabled()
     ? "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
@@ -262,8 +266,9 @@ function renderHub(gameState) {
       "\" max=\"" + CONFIG.debug.maxDay + "\" step=\"1\" value=\"" + gameState.player.day + "\" />" +
       "</div>" +
       "<div class=\"button-row\">" +
-      "<button class=\"button\" data-action=\"debug-set-day-reload\">Set Day + Reload</button>" +
+      "<button class=\"button\" type=\"button\" data-action=\"debug-set-day-reload\">Set Day + Reload</button>" +
       "</div>" +
+      "<div id=\"debug-day-status\" class=\"muted\">" + debugStatus + "</div>" +
       "<p class=\"helper-text\">Current day: " + gameState.player.day +
       ". Debug mode is enabled via ?" + CONFIG.debug.queryParam + "=" + CONFIG.debug.queryValue + ".</p>" +
       "</div>"
