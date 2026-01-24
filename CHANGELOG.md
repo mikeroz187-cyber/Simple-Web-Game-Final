@@ -18,6 +18,9 @@ This changelog is optimized for:
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
+- What: FIX: Ensure debug Set Day saves the autosave slot before reloading and validates input.
+  - Why: Prevent debug day changes from resetting to Day 1 by persisting the update safely.
+  - Files touched: src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Marked the booking role restriction checklist item as completed and updated summary totals.
   - Why: Reflect the already-implemented booking behavior in the Post-MVP Fixes/QoL checklist.
   - Files touched: docs/task-checklist.md, CHANGELOG.md.
