@@ -18,6 +18,9 @@ This changelog is optimized for:
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
+- What: FIX: Debug Set Day now verifies autosave persistence before reloading on GitHub Pages.
+  - Why: Prevent native refreshes from resetting the day by ensuring the autosave payload matches the requested day.
+  - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Ensure debug Set Day saves the autosave slot before reloading and validates input.
   - Why: Prevent debug day changes from resetting to Day 1 by persisting the update safely.
   - Files touched: src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.

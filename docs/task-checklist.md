@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 24, 2026 (A3.4 Act 3 Story Arc)
+**Last Updated:** January 24, 2026 (Debug Set Day GH Pages fix)
 
 ---
 
@@ -64,6 +64,7 @@
 - [x] Booking: any two performers can be booked; roles do not restrict booking.
 - [x] Debug: Dev-only Set Day panel (?debug=1) for iOS testing.
   - Fix: debug Set Day persists correctly.
+- [x] Fix: Debug Set Day works on GH Pages.
 
 ---
 
@@ -88,9 +89,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 13/13 | 0 |
+| Fixes/QoL | 14/14 | 0 |
 | Act 3 | 3/9 | 6 |
-| **Total** | **50/56** | **6** |
+| **Total** | **51/57** | **6** |
 
 ---
 

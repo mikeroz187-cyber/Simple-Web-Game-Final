@@ -107,6 +107,11 @@ body {
   font-size: 13px;
 }
 
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .screen-title {
   margin: 0 0 12px 0;
   font-size: 18px;
