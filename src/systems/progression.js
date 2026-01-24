@@ -202,3 +202,54 @@ function checkMilestones(gameState) {
 
   return triggered;
 }
+
+function getReputationBranches() {
+  if (CONFIG.reputation && Array.isArray(CONFIG.reputation.branches)) {
+    return CONFIG.reputation.branches.slice();
+  }
+  return [];
+}
+
+function getSelectedReputationBranch(gameState) {
+  if (!gameState || !gameState.reputation) {
+    return null;
+  }
+  const branchId = gameState.reputation.branchId;
+  if (!branchId) {
+    return null;
+  }
+  return getReputationBranches().find(function (branch) {
+    return branch && branch.id === branchId;
+  }) || null;
+}
+
+function selectReputationBranch(gameState, branchId) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, code: "missing_state", message: "Game state missing." };
+  }
+  ensureReputationState(gameState);
+  const branch = getReputationBranches().find(function (entry) {
+    return entry && entry.id === branchId;
+  });
+  if (!branch) {
+    return { ok: false, code: "branch_not_found", message: "Branch not found." };
+  }
+  if (gameState.reputation.branchId) {
+    return { ok: false, code: "branch_already_selected", message: "Studio Identity already locked." };
+  }
+  const requiredReputation = Number.isFinite(branch.requiredReputation) ? branch.requiredReputation : 0;
+  if (gameState.player.reputation < requiredReputation) {
+    return {
+      ok: false,
+      code: "branch_not_eligible",
+      message: "Need Reputation ≥ " + requiredReputation + " to choose an identity."
+    };
+  }
+  gameState.reputation.branchId = branch.id;
+  gameState.reputation.branchProgress = 0;
+  return {
+    ok: true,
+    code: "branch_selected",
+    message: "Studio Identity locked: " + branch.label + "."
+  };
+}

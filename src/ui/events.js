@@ -231,6 +231,24 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "select-reputation-branch") {
+      const branchId = target.dataset.id;
+      const result = selectReputationBranch(window.gameState, branchId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        showEventCards([{
+          title: "🏷️ Studio Identity Locked",
+          message: result.message
+        }]);
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "select-location") {
       uiState.booking.locationId = target.dataset.id;
       setUiMessage("");
@@ -529,6 +547,7 @@ function setupEventHandlers() {
         ensureShootOutputsState(window.gameState);
         ensureStoryLogState(window.gameState);
         ensureSocialManualStrategyState(window.gameState);
+        ensureReputationState(window.gameState);
         initCompetitionStateIfMissing(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
@@ -561,6 +580,7 @@ function setupEventHandlers() {
           ensureShootOutputsState(window.gameState);
           ensureStoryLogState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
+          ensureReputationState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             appendStoryLogEntries(window.gameState, storyResult.events);

@@ -212,6 +212,12 @@ function renderHub(gameState) {
     ? getActiveMarketShift(gameState, competitionDay)
     : null;
   const marketShiftLabel = activeMarketShift ? activeMarketShift.name : "None";
+  const reputationConfig = CONFIG.reputation && typeof CONFIG.reputation === "object" ? CONFIG.reputation : {};
+  const selectionStartDay = Number.isFinite(reputationConfig.selectionStartDay) ? reputationConfig.selectionStartDay : null;
+  const reputationBranches = typeof getReputationBranches === "function" ? getReputationBranches() : [];
+  const selectedBranch = typeof getSelectedReputationBranch === "function"
+    ? getSelectedReputationBranch(gameState)
+    : null;
 
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
@@ -241,6 +247,46 @@ function renderHub(gameState) {
   const competitionPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Competition</h3>" +
     competitionPanelBody +
+    "</div>";
+
+  let reputationPanelBody = "";
+  if (!Number.isFinite(selectionStartDay)) {
+    reputationPanelBody = "<p class=\"helper-text\">Studio Identity unavailable.</p>";
+  } else if (gameState.player.day < selectionStartDay) {
+    reputationPanelBody = "<p class=\"helper-text\">Studio Identity unlocks Day " + selectionStartDay + ".</p>";
+  } else if (!selectedBranch) {
+    const requiredReputation = reputationBranches.length && Number.isFinite(reputationBranches[0].requiredReputation)
+      ? reputationBranches[0].requiredReputation
+      : 0;
+    if (gameState.player.reputation < requiredReputation) {
+      reputationPanelBody = "<p class=\"helper-text\">Need Reputation ≥ " + requiredReputation + " to choose an identity.</p>";
+    } else if (reputationBranches.length === 0) {
+      reputationPanelBody = "<p class=\"helper-text\">No identity paths available.</p>";
+    } else {
+      const branchCards = reputationBranches.map(function (branch) {
+        const revenueLabel = "Premium payout " + formatCompetitionMultiplier(branch.revenueMult);
+        const followersLabel = "Promo followers " + formatCompetitionMultiplier(branch.followersMult);
+        return "<div class=\"list-item\">" +
+          "<p><strong>" + branch.label + "</strong></p>" +
+          "<p class=\"helper-text\">" + branch.blurb + "</p>" +
+          "<p class=\"helper-text\">" + revenueLabel + ", " + followersLabel + "</p>" +
+          "<div class=\"button-row\">" +
+          createButton("Choose", "select-reputation-branch", "primary", false, "data-id=\"" + branch.id + "\"") +
+          "</div>" +
+          "</div>";
+      }).join("");
+      reputationPanelBody = branchCards;
+    }
+  } else {
+    const revenueLabel = "Premium payout " + formatCompetitionMultiplier(selectedBranch.revenueMult);
+    const followersLabel = "Promo followers " + formatCompetitionMultiplier(selectedBranch.followersMult);
+    reputationPanelBody = "<p><strong>Selected:</strong> " + selectedBranch.label + "</p>" +
+      "<p class=\"helper-text\">" + revenueLabel + ", " + followersLabel + "</p>" +
+      "<p class=\"helper-text\">Locked.</p>";
+  }
+  const reputationPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Studio Identity</h3>" +
+    reputationPanelBody +
     "</div>";
 
   const navButtons = [
@@ -316,6 +362,7 @@ function renderHub(gameState) {
   hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
     "<div class=\"panel\">" + statusHtml + "</div>" +
     competitionPanel +
+    reputationPanel +
     debtButtonRow +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +

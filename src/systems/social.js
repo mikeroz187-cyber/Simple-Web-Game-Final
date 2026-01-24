@@ -62,6 +62,17 @@ function getActiveSocialStrategy(gameState) {
   return getSocialStrategyById(activeId);
 }
 
+function getReputationFollowersMultiplier(gameState) {
+  if (typeof getSelectedReputationBranch !== "function") {
+    return 1;
+  }
+  const branch = getSelectedReputationBranch(gameState);
+  if (!branch) {
+    return 1;
+  }
+  return Number.isFinite(branch.followersMult) ? branch.followersMult : 1;
+}
+
 function getManualSocialStrategyConfig() {
   return getManualStrategyConfig();
 }
@@ -152,7 +163,9 @@ function calculateManualSocialStrategyImpact(gameState, budget, allocations) {
       : 0;
     return sum + (effectiveSpend * rate);
   }, 0);
-  const socialFollowersGained = applyEquipmentFollowersMultiplier(Math.round(baseFollowers), gameState);
+  const equipmentAdjustedFollowers = applyEquipmentFollowersMultiplier(Math.round(baseFollowers), gameState);
+  const reputationMult = getReputationFollowersMultiplier(gameState);
+  const socialFollowersGained = Math.round(equipmentAdjustedFollowers * reputationMult);
   const subsPerFollower = Number.isFinite(config.subsPerFollower) ? config.subsPerFollower : 0;
   const socialSubscribersGained = Math.max(0, Math.floor(socialFollowersGained * subsPerFollower));
   return {
@@ -352,6 +365,8 @@ function postPromoContent(gameState, platform, contentId) {
   }
   const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
   socialFollowersGained = Math.round(socialFollowersGained * competitionMultipliers.promoFollowerMult);
+  const reputationMultiplier = getReputationFollowersMultiplier(gameState);
+  socialFollowersGained = Math.round(socialFollowersGained * reputationMultiplier);
   const baseSubscribers = calculateSubscribersGained(socialFollowersGained);
   let socialSubscribersGained = activeStrategy
     ? Math.max(0, Math.round(baseSubscribers * activeStrategy.subscriberConversionMult))
