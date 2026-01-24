@@ -33,6 +33,9 @@ This changelog is optimized for:
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
+- What: FIX: Added debug stat setters (cash/reputation/followers/subscribers) with autosave for milestone testing.
+  - Why: Allow dev-only stat adjustments without reload while keeping autosave persistence on GH Pages.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Save validation now accepts current top-level gameState keys and allows days up to CONFIG.game.max_day.
   - Why: Prevent autosave reloads from resetting on unsupported fields and allow Act 2/3 day testing beyond the debt due day.
   - Files touched: src/save.js, src/config.js, src/main.js, docs/task-checklist.md, CHANGELOG.md.

@@ -67,6 +67,7 @@
 - [x] Fix: Debug Set Day works on GH Pages.
 - [x] Fix: Save validation allowlist includes all actual top-level keys (prevents resets on reload / GH Pages).
 - [x] Fix: Save validation day range uses CONFIG.game.max_day (supports Act 2/3 testing).
+- [x] Debug: Dev-only stat setters (cash/rep/followers/subs) for milestone testing.
 
 ---
 
@@ -92,9 +93,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 16/16 | 0 |
+| Fixes/QoL | 17/17 | 0 |
 | Act 3 | 7/9 | 2 |
-| **Total** | **57/59** | **2** |
+| **Total** | **58/60** | **2** |
 
 ---
 

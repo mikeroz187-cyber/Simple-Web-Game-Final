@@ -386,6 +386,7 @@ function renderHub(gameState) {
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
   const debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
+  const debugMaxShoots = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
   const debugPanel = isDebugEnabled()
     ? "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
@@ -397,6 +398,36 @@ function renderHub(gameState) {
       "<div class=\"button-row\">" +
       "<button class=\"button\" type=\"button\" data-action=\"debug-set-day-reload\">Set Day + Reload</button>" +
       "</div>" +
+      "<h4 class=\"panel-title\">Set Stats (Dev Only)</h4>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-cash-input\">Cash</label>" +
+      "<input id=\"debug-cash-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.cash + "\" />" +
+      "</div>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-reputation-input\">Reputation</label>" +
+      "<input id=\"debug-reputation-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.reputation + "\" />" +
+      "</div>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-followers-input\">Social Followers</label>" +
+      "<input id=\"debug-followers-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.socialFollowers + "\" />" +
+      "</div>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-social-subs-input\">Social Subs</label>" +
+      "<input id=\"debug-social-subs-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.socialSubscribers + "\" />" +
+      "</div>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-of-subs-input\">OF Subs</label>" +
+      "<input id=\"debug-of-subs-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.onlyFansSubscribers + "\" />" +
+      "</div>" +
+      "<div class=\"field-row\">" +
+      "<label class=\"field-label\" for=\"debug-shoots-today-input\">Shoots Today</label>" +
+      "<input id=\"debug-shoots-today-input\" class=\"input-control\" type=\"number\" min=\"0\" max=\"" + debugMaxShoots +
+      "\" step=\"1\" value=\"" + gameState.player.shootsToday + "\" />" +
+      "</div>" +
+      "<div class=\"button-row\">" +
+      "<button class=\"button\" type=\"button\" data-action=\"debug-apply-stats\">Apply Stats (No Reload)</button>" +
+      "</div>" +
+      "<p class=\"helper-text\">Applies immediately and autosaves.</p>" +
       "<div id=\"debug-day-status\" class=\"muted\">" + debugStatus + "</div>" +
       "<p class=\"helper-text\">Current day: " + gameState.player.day +
       ". Debug mode is enabled via ?" + CONFIG.debug.queryParam + "=" + CONFIG.debug.queryValue + ".</p>" +
