@@ -666,7 +666,13 @@ const CONFIG = {
         { id: "act3_market_shift_day225", triggerDay: 225 },
         { id: "act3_mentorship_day245", triggerDay: 245 },
         { id: "act3_exit_strategy_day270", triggerDay: 270 }
-      ]
+      ],
+      effects: {
+        act3_brand_legacy_day200: { reputationDelta: 2, socialFollowersDelta: 200 },
+        act3_market_shift_day225: { cashDelta: 1500 },
+        act3_mentorship_day245: { fatigueAllPerformersDelta: -1 },
+        act3_exit_strategy_day270: { cashDelta: 3000, reputationDelta: 1 }
+      }
     }
   }
 };
