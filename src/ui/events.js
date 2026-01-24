@@ -79,6 +79,12 @@ function buildMilestoneEventCards(events) {
     return [];
   }
   return events.map(function (event) {
+    if (event && event.kind === "legacy" && event.message) {
+      return {
+        title: "🏆 Legacy Milestone Achieved",
+        message: event.message
+      };
+    }
     return {
       title: "🏆 Milestone Reached",
       message: event.title + " — " + (event.rewardSummary || "Rewards: none.")

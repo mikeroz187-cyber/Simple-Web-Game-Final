@@ -307,7 +307,7 @@ function renderHub(gameState) {
       : 0;
     const threshold = Number.isFinite(definition.threshold) ? definition.threshold : 0;
     const currentValue = Number.isFinite(metricValue) ? metricValue : 0;
-    const isComplete = existing && existing.completed;
+    const isComplete = Boolean(existing);
     const label = definition.type === "storyComplete"
       ? "Complete Act 3 Story (Day 270 event)"
       : definition.label;
