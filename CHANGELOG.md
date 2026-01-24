@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Auto-enable competition from Day 181 and adjust Hub/Analytics competition copy before activation.
+  - Why: Ensure Act 3 competition behavior follows the configured start day with clean UI gating.
+  - Files touched: src/config.js, src/systems/competition.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added Act 3 competition baseline with rivals, market shifts, weekly checks, and minimal Hub/Analytics readouts.
   - Why: Deliver A3.1 rival pressure mechanics with safe defaults and opt-in modifiers.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/competition.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, src/ui/events.js, src/main.js, index.html, docs/task-checklist.md, CHANGELOG.md.
