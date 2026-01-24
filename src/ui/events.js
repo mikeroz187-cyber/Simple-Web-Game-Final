@@ -497,6 +497,53 @@ function setupEventHandlers() {
       }
     }
 
+    if (action === "debug-apply-stats") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!isDebugEnabled()) {
+        return;
+      }
+      const player = window.gameState.player;
+      const statInputs = [
+        { selector: "#debug-cash-input", field: "cash" },
+        { selector: "#debug-reputation-input", field: "reputation" },
+        { selector: "#debug-followers-input", field: "socialFollowers" },
+        { selector: "#debug-social-subs-input", field: "socialSubscribers" },
+        { selector: "#debug-of-subs-input", field: "onlyFansSubscribers" }
+      ];
+      statInputs.forEach(function (entry) {
+        const input = qs(entry.selector);
+        if (!input) {
+          return;
+        }
+        const rawValue = input.valueAsNumber;
+        if (!Number.isFinite(rawValue)) {
+          return;
+        }
+        player[entry.field] = Math.max(0, Math.floor(rawValue));
+      });
+
+      const shootsInput = qs("#debug-shoots-today-input");
+      if (shootsInput) {
+        const rawShoots = shootsInput.valueAsNumber;
+        if (Number.isFinite(rawShoots)) {
+          const maxShoots = Number.isFinite(CONFIG.game.shoots_per_day)
+            ? CONFIG.game.shoots_per_day
+            : 5;
+          player.shootsToday = clamp(Math.floor(rawShoots), 0, maxShoots);
+        }
+      }
+
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (saveResult.ok) {
+        setDebugDayStatus("Applied stats and autosaved.");
+      } else {
+        setDebugDayStatus("Applied stats but failed to autosave. " + (saveResult.message || ""));
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "advance-day") {
       ensureAutomationState(window.gameState);
       const storyEvents = advanceDay(window.gameState);
