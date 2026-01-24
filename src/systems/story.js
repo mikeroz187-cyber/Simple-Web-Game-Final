@@ -63,6 +63,7 @@ function checkStoryEvents(gameState) {
       if (gameState.story.act3.eventsShown.indexOf(entry.id) !== -1) {
         return;
       }
+      applyAct3EventEffects(gameState, entry.id);
       gameState.story.act3.eventsShown.push(entry.id);
       gameState.story.act3.lastEventId = entry.id;
       events.push({ id: entry.id, day: currentDay });
@@ -199,11 +200,109 @@ const STORY_EVENT_COPY = {
   }
 };
 
+function getAct3EventEffects(eventId) {
+  if (!eventId || !CONFIG.story || !CONFIG.story.act3 || !CONFIG.story.act3.effects) {
+    return null;
+  }
+  const effects = CONFIG.story.act3.effects[eventId];
+  if (!effects || typeof effects !== "object") {
+    return null;
+  }
+  return effects;
+}
+
+function formatSignedNumber(value) {
+  if (!Number.isFinite(value) || value === 0) {
+    return "";
+  }
+  return (value > 0 ? "+" : "") + value;
+}
+
+function formatCashDelta(value) {
+  if (!Number.isFinite(value) || value === 0) {
+    return "";
+  }
+  const sign = value > 0 ? "+" : "-";
+  return sign + "$" + Math.abs(value);
+}
+
+function buildAct3EffectSummaryParts(effects) {
+  if (!effects) {
+    return [];
+  }
+  const parts = [];
+  if (Number.isFinite(effects.cashDelta) && effects.cashDelta !== 0) {
+    parts.push(formatCashDelta(effects.cashDelta) + " cash");
+  }
+  if (Number.isFinite(effects.reputationDelta) && effects.reputationDelta !== 0) {
+    parts.push(formatSignedNumber(effects.reputationDelta) + " reputation");
+  }
+  if (Number.isFinite(effects.socialFollowersDelta) && effects.socialFollowersDelta !== 0) {
+    parts.push(formatSignedNumber(effects.socialFollowersDelta) + " social followers");
+  }
+  if (Number.isFinite(effects.fatigueAllPerformersDelta) && effects.fatigueAllPerformersDelta !== 0) {
+    parts.push(formatSignedNumber(effects.fatigueAllPerformersDelta) + " fatigue (all performers)");
+  }
+  return parts;
+}
+
+function buildEffectSummaryText(summaryParts) {
+  if (!Array.isArray(summaryParts) || summaryParts.length === 0) {
+    return "";
+  }
+  return "Effect: " + summaryParts.join(", ");
+}
+
+function applyAct3EventEffects(gameState, eventId) {
+  if (!gameState || !gameState.player) {
+    return "";
+  }
+  const effects = getAct3EventEffects(eventId);
+  if (!effects) {
+    return "";
+  }
+  if (Number.isFinite(effects.cashDelta) && effects.cashDelta !== 0) {
+    gameState.player.cash = Math.max(0, gameState.player.cash + effects.cashDelta);
+  }
+  if (Number.isFinite(effects.reputationDelta) && effects.reputationDelta !== 0) {
+    if (!Number.isFinite(gameState.player.reputation)) {
+      gameState.player.reputation = 0;
+    }
+    gameState.player.reputation = Math.max(0, gameState.player.reputation + effects.reputationDelta);
+  }
+  if (Number.isFinite(effects.socialFollowersDelta) && effects.socialFollowersDelta !== 0) {
+    if (!Number.isFinite(gameState.player.socialFollowers)) {
+      gameState.player.socialFollowers = 0;
+    }
+    gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + effects.socialFollowersDelta);
+  }
+  if (Number.isFinite(effects.fatigueAllPerformersDelta) && effects.fatigueAllPerformersDelta !== 0) {
+    if (gameState.roster && Array.isArray(gameState.roster.performers)) {
+      gameState.roster.performers.forEach(function (performer) {
+        if (!performer || !Number.isFinite(performer.fatigue)) {
+          return;
+        }
+        performer.fatigue = Math.max(0, performer.fatigue + effects.fatigueAllPerformersDelta);
+      });
+    }
+  }
+  const summaryParts = buildAct3EffectSummaryParts(effects);
+  return buildEffectSummaryText(summaryParts);
+}
+
 function getStoryEventCopy(eventId) {
   if (!eventId || !STORY_EVENT_COPY[eventId]) {
     return { title: "Story Update", message: "A story event occurred." };
   }
-  return STORY_EVENT_COPY[eventId];
+  const baseCopy = STORY_EVENT_COPY[eventId];
+  const summaryText = buildEffectSummaryText(buildAct3EffectSummaryParts(getAct3EventEffects(eventId)));
+  if (!summaryText) {
+    return baseCopy;
+  }
+  return {
+    title: baseCopy.title,
+    message: baseCopy.message + "\n\n" + summaryText
+  };
 }
 
 function appendStoryLogEntries(gameState, events) {

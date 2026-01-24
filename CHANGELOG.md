@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added deterministic Act 3 story event effects with config-driven summaries in the story modal and log.
+  - Why: Ensure Days 200/225/245/270 apply once-only impact deltas and communicate outcomes clearly.
+  - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Auto-enable competition from Day 181 and adjust Hub/Analytics competition copy before activation.
   - Why: Ensure Act 3 competition behavior follows the configured start day with clean UI gating.
   - Files touched: src/config.js, src/systems/competition.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
