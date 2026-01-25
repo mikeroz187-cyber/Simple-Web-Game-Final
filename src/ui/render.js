@@ -578,6 +578,9 @@ function renderBooking(gameState) {
   }).join("");
 
   const themeIds = CONFIG.themes.mvp.theme_ids.concat(CONFIG.themes.act2 ? CONFIG.themes.act2.theme_ids : []);
+  if (themeIds.length && uiState.booking.themeId && themeIds.indexOf(uiState.booking.themeId) === -1) {
+    uiState.booking.themeId = themeIds[0];
+  }
   const themeRows = themeIds.map(function (themeId) {
     const theme = getThemeById(themeId);
     if (!theme) {
@@ -1278,7 +1281,7 @@ function getThemeById(themeId) {
 
 function getThemeName(themeId) {
   const theme = getThemeById(themeId);
-  return theme ? theme.name : (themeId || "Unknown");
+  return theme ? theme.name : "Unknown Theme";
 }
 
 function getNextActionLabel(gameState) {

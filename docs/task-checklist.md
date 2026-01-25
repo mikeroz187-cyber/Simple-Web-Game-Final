@@ -18,7 +18,7 @@
 - [x] Performer stats (starPower, fatigue, loyalty)
 - [x] Locations Tier 0 (3 starter locations)
 - [x] Locations Tier 1 unlock
-- [x] MVP themes (5 themes)
+- [x] MVP themes (4 locked themes: Lingerie, Office, Uniform, Interracial)
 - [x] Social posting (Instagram and X)
 - [x] Act 1 story events (intro + debt reminders)
 - [x] Win/Loss conditions (Day 90 debt check)
@@ -34,7 +34,6 @@
 - [x] A2.2 — Advanced Analytics (7/30 day rollups, snapshots)
 - [x] A2.3 — Location Tier 2 (reputation-gated unlock)
 - [x] A2.4 — Equipment Upgrades (Lighting, Camera, Set Dressing)
-- [x] A2.5 — Additional Content Themes (5 Act 2 themes)
 - [x] A2.6 — Act 2 Story Events (Days 95/120/145/170)
 - [x] A2.7 — Expanded Roster Depth (4 new performers with roles)
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
@@ -50,6 +49,7 @@
 
 ### De-scoped / Cut
 - Two-performer booking (Slot B) + immediate combo effects — CUT for scope reduction (single-performer only).
+- CUT: Additional Content Themes (Act 2 theme pack) — replaced by locked 4-theme set.
 
 ---
 
@@ -102,10 +102,10 @@
 | Phase | Complete | Remaining |
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
-| Act 2 | 17/17 | 0 |
+| Act 2 | 16/16 | 0 |
 | Fixes/QoL | 18/18 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **59/59** | **0** |
+| **Total** | **58/58** | **0** |
 
 ---
 

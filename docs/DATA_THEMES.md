@@ -4,43 +4,16 @@ This document defines the **content themes catalog** used by the booking system.
 
 ---
 
-## MVP Themes (Act 1 — Available at Game Start)
+## Theme Catalog (Locked)
 
-> These themes are **in scope for MVP** and should be selectable during booking.
+> These themes are **in scope** and should be selectable during booking.
 
 | id | name | description (one line) | modifiers (placeholder) |
 | --- | --- | --- | --- |
-| `theme_casual` | Casual | Everyday, approachable vibes that feel natural and low-pressure. | `followersMult: 1.05`, `revenueMult: 0.90` |
-| `theme_glamour` | Glamour | High-polish styling with bold poses and premium presentation. | `followersMult: 0.95`, `revenueMult: 1.10` |
-| `theme_fitness` | Fitness | Athletic energy with clean lighting and motion-focused shots. | `followersMult: 1.10`, `revenueMult: 0.95` |
-| `theme_boudoir` | Boudoir | Intimate, classy sets with warm lighting and confident framing. | `followersMult: 0.90`, `revenueMult: 1.15` |
-| `theme_nightlife` | Nightlife | Club-style ambiance with neon accents and late-night mood. | `followersMult: 1.00`, `revenueMult: 1.00` |
-
----
-
-## NOT IN MVP — Act 2 Only (Vision Definitions)
-
-> These themes are **NOT IN MVP** and are introduced during Act 2.
-
-| id | name | description (one line) | modifiers |
-| --- | --- | --- | --- |
-| `theme_luxury_retreat` | Luxury Retreat | Resort-grade spaces with a relaxed, high-end atmosphere. | `followersMult: 0.95`, `revenueMult: 1.20` |
-| `theme_editorial` | Editorial | Magazine-style staging with bold angles and fashion emphasis. | `followersMult: 1.05`, `revenueMult: 1.05` |
-| `theme_downtown_chic` | Downtown Chic | Urban interiors with a sleek, modern aesthetic. | `followersMult: 1.00`, `revenueMult: 1.10` |
-| `theme_sunlit_getaway` | Sunlit Getaway | Bright, airy sets with soft daylight and beachy calm. | `followersMult: 1.10`, `revenueMult: 0.95` |
-| `theme_afterhours` | After Hours | Late-night ambience with moody shadows and intimate lighting. | `followersMult: 0.90`, `revenueMult: 1.20` |
-
-## NOT IN MVP — Act 3 Only (Vision Definitions)
-
-> These themes are **NOT IN MVP** and are introduced during Act 3.
-
-| id | name | description (one line) | modifiers |
-| --- | --- | --- | --- |
-| `theme_legacy_gala` | Legacy Gala | Formal, prestige-forward sets with ceremonial flair. | `followersMult: 0.95`, `revenueMult: 1.30` |
-| `theme_power_play` | Power Play | Bold, high-stakes visuals with confident framing. | `followersMult: 1.00`, `revenueMult: 1.20` |
-| `theme_afterglow` | Afterglow | Soft, intimate styling that sustains loyal subscribers. | `followersMult: 0.90`, `revenueMult: 1.15` |
-| `theme_urban_luxe` | Urban Luxe | Sleek modern interiors emphasizing sophistication. | `followersMult: 1.05`, `revenueMult: 1.10` |
-| `theme_cinematic` | Cinematic | Dramatic lighting and framing built for standout showcases. | `followersMult: 1.00`, `revenueMult: 1.25` |
+| `lingerie` | Lingerie | Your signature premium look — lace, heels, and zero subtlety. | `followersMult: 1.00`, `revenueMult: 1.00` |
+| `office` | Office | After-hours authority — desks, suits, and someone ‘breaking rules.’ | `followersMult: 1.00`, `revenueMult: 1.00` |
+| `uniform` | Uniform | Roleplay on demand — maid, nurse, teacher vibes, you call the shots. | `followersMult: 1.00`, `revenueMult: 1.00` |
+| `interracial` | Interracial | A bold, high-click category flex — instantly legible, instantly addictive. | `followersMult: 1.00`, `revenueMult: 1.00` |
 
 ---
 
@@ -53,37 +26,29 @@ const CONFIG = {
   themes: {
     mvp: {
       themeIds: [
-        "theme_casual",
-        "theme_glamour",
-        "theme_fitness",
-        "theme_boudoir",
-        "theme_nightlife"
+        "lingerie",
+        "office",
+        "uniform",
+        "interracial"
       ],
       themes: {
-        theme_casual: {
-          id: "theme_casual",
-          name: "Casual",
-          description: "Everyday, approachable vibes that feel natural and low-pressure.",
-          modifiers: { followersMult: 1.05, revenueMult: 0.90 }
+        lingerie: {
+          id: "lingerie",
+          name: "Lingerie",
+          description: "Your signature premium look — lace, heels, and zero subtlety.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         },
-        theme_glamour: {
-          id: "theme_glamour",
-          name: "Glamour",
-          description: "High-polish styling with bold poses and premium presentation.",
-          modifiers: { followersMult: 0.95, revenueMult: 1.10 }
+        office: {
+          id: "office",
+          name: "Office",
+          description: "After-hours authority — desks, suits, and someone ‘breaking rules.’",
+          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         }
       }
     },
     act2: {
-      themeIds: ["theme_luxury_retreat", "theme_editorial"],
-      themes: {
-        theme_luxury_retreat: {
-          id: "theme_luxury_retreat",
-          name: "Luxury Retreat",
-          description: "Resort-grade spaces with a relaxed, high-end atmosphere.",
-          modifiers: { followersMult: 0.95, revenueMult: 1.20 }
-        }
-      }
+      themeIds: [],
+      themes: {}
     }
   }
 };

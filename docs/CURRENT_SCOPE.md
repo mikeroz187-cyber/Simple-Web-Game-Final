@@ -10,6 +10,7 @@
 - **Act 2 complete**: expanded performer management, advanced analytics rollups, location tier 2, equipment upgrades, Act 2 themes, story events, expanded roster depth, social strategies (manual + daily budget), milestones, automation tier 1, Story Log, portrait/thumbnail placeholders, gallery output cards, save v2 schema.
 - **Post-MVP Fixes/QoL complete**: promo posting fixes, analytics clarity, freelancer rerolls, metrics split, booking UI/validation fixes, promo platform posting rules, daily cap behavior, promo conversion tuning, booking role restrictions removed.
 - **Booking scope update**: booking is single-performer only; Slot B and combo effects were cut for scope reduction.
+- **Theme scope update**: booking themes are locked to 4 (Lingerie, Office, Uniform, Interracial).
 - **Act 3 complete**: Save v3 schema + migration; A3.1 Rival Studios; A3.2 High-Impact Events; A3.3 Reputation Branches; A3.4 Act 3 Story Arc; A3.5 Optional Automation (expanded); A3.6 Content Performance Variance; A3.8 Legacy Milestones.
 - **Debug tooling**: dev-only Set Day panel gated by `?debug=1`, dev-only stat setters, and the “Run Checks Now” milestone helper.
 

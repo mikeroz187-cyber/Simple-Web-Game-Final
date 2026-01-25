@@ -258,45 +258,37 @@ description = "A larger, flexible space suited for varied set dressing."
 
 [themes.mvp]
 theme_ids = [
-  "theme_casual",
-  "theme_glamour",
-  "theme_fitness",
-  "theme_boudoir",
-  "theme_nightlife"
+  "lingerie",
+  "office",
+  "uniform",
+  "interracial"
 ]
 
-[themes.mvp.theme_casual]
-id = "theme_casual"
-name = "Casual"
-description = "Everyday, approachable vibes that feel natural and low-pressure."
-followers_mult = 1.05
-revenue_mult = 0.90
+[themes.mvp.theme_lingerie]
+id = "lingerie"
+name = "Lingerie"
+description = "Your signature premium look — lace, heels, and zero subtlety."
+followers_mult = 1.00
+revenue_mult = 1.00
 
-[themes.mvp.theme_glamour]
-id = "theme_glamour"
-name = "Glamour"
-description = "High-polish styling with bold poses and premium presentation."
-followers_mult = 0.95
-revenue_mult = 1.10
+[themes.mvp.theme_office]
+id = "office"
+name = "Office"
+description = "After-hours authority — desks, suits, and someone ‘breaking rules.’"
+followers_mult = 1.00
+revenue_mult = 1.00
 
-[themes.mvp.theme_fitness]
-id = "theme_fitness"
-name = "Fitness"
-description = "Athletic energy with clean lighting and motion-focused shots."
-followers_mult = 1.10
-revenue_mult = 0.95
+[themes.mvp.theme_uniform]
+id = "uniform"
+name = "Uniform"
+description = "Roleplay on demand — maid, nurse, teacher vibes, you call the shots."
+followers_mult = 1.00
+revenue_mult = 1.00
 
-[themes.mvp.theme_boudoir]
-id = "theme_boudoir"
-name = "Boudoir"
-description = "Intimate, classy sets with warm lighting and confident framing."
-followers_mult = 0.90
-revenue_mult = 1.15
-
-[themes.mvp.theme_nightlife]
-id = "theme_nightlife"
-name = "Nightlife"
-description = "Club-style ambiance with neon accents and late-night mood."
+[themes.mvp.theme_interracial]
+id = "interracial"
+name = "Interracial"
+description = "A bold, high-click category flex — instantly legible, instantly addictive."
 followers_mult = 1.00
 revenue_mult = 1.00
 
@@ -346,48 +338,7 @@ followersMultPerLevel = 0.03
 revenueMultPerLevel = 0.03
 
 [themes.act2]
-theme_ids = [
-  "theme_luxury_retreat",
-  "theme_editorial",
-  "theme_downtown_chic",
-  "theme_sunlit_getaway",
-  "theme_afterhours"
-]
-
-[themes.act2.theme_luxury_retreat]
-id = "theme_luxury_retreat"
-name = "Luxury Retreat"
-description = "Resort-grade spaces with a relaxed, high-end atmosphere."
-followers_mult = 0.95
-revenue_mult = 1.20
-
-[themes.act2.theme_editorial]
-id = "theme_editorial"
-name = "Editorial"
-description = "Magazine-style staging with bold angles and fashion emphasis."
-followers_mult = 1.05
-revenue_mult = 1.05
-
-[themes.act2.theme_downtown_chic]
-id = "theme_downtown_chic"
-name = "Downtown Chic"
-description = "Urban interiors with a sleek, modern aesthetic."
-followers_mult = 1.00
-revenue_mult = 1.10
-
-[themes.act2.theme_sunlit_getaway]
-id = "theme_sunlit_getaway"
-name = "Sunlit Getaway"
-description = "Bright, airy sets with soft daylight and beachy calm."
-followers_mult = 1.10
-revenue_mult = 0.95
-
-[themes.act2.theme_afterhours]
-id = "theme_afterhours"
-name = "After Hours"
-description = "Late-night ambience with moody shadows and intimate lighting."
-followers_mult = 0.90
-revenue_mult = 1.20
+theme_ids = []
 
 [story.act2]
 startDay = 91
