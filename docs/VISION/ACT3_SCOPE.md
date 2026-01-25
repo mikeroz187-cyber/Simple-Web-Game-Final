@@ -157,29 +157,6 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 - Out of Scope Notes (what this feature explicitly does not include)
   - No loot-box mechanics or gambling-style rewards.
 
-### A3.7 — Advanced Scheduling
-- Summary (1–2 sentences)
-  - Add a booking queue (max 3 entries) resolved one per day on day advance.
-- Player Value (why it matters late-game)
-  - Enables long-horizon planning and improved resource utilization.
-- Dependencies (MVP + Act 2 prerequisites)
-  - MVP booking flow and day progression; Act 2 expanded roster availability.
-- New State Needed (high level keys; no deep schema yet)
-  - `schedule` with `queue`, `maxQueueSize`, and `enabled`.
-- New/Updated Systems (which /src/systems/* it affects)
-  - `systems/booking.js` (extended) and possibly `systems/time.js` (if present).
-- UI Surfaces (which screens/panels)
-  - Booking screen (schedule panel), Hub (schedule summary).
-- Config Additions (new tunables required)
-  - Scheduling limits, queue size, and resolution rules.
-- Save/Load Considerations (versioning/migration notes)
-  - v3 migration initializes schedule state as empty.
-- Acceptance Criteria (specific + testable)
-  - Scheduling options are available only when enabled by config.
-  - The day progression rules remain deterministic and do not introduce passive time.
-- Out of Scope Notes (what this feature explicitly does not include)
-  - No real-time timers or background scheduling.
-
 ### A3.8 — Legacy / Recognition Milestones
 - Summary (1–2 sentences)
   - Add legacy milestones tied to high-end thresholds (revenue, reputation, subscribers, and story completion).
@@ -211,13 +188,15 @@ Act 3’s endgame loop is the repeated cycle of planning high-stakes bookings an
   - None by default; Act 3 additions must be embedded in existing screens unless scope explicitly adds a new screen.
 - Updated Screens
   - Hub: rivalry/market status, legacy milestones, Act 3 story status.
-  - Booking: advanced scheduling panel and queue indicators.
   - Analytics: variance summaries and event impacts.
   - Roster: reputation branch effects and high-value talent indicators.
 - UI Rules (Act 3)
   - No routing frameworks or sub-apps.
   - All additions must fit into existing screen containers.
   - Avoid new UI complexity unless explicitly documented in scope.
+
+## De-scoped Note
+- Advanced scheduling (booking queue) was intentionally cut from Act 3 scope.
 
 ## 6) Act 3 Economy & Scaling Strategy (High Level)
 - All scaling and soft caps must be config-driven with conservative defaults.
@@ -232,7 +211,6 @@ Act 3’s endgame loop is the repeated cycle of planning high-stakes bookings an
 - Act 3 story arc event list and triggers (Days 200/225/245/270).
 - Automation rules, limits, and safety caps (max 1 action/day; min cash reserve).
 - Content performance variance ranges and caps (±15%).
-- Advanced scheduling limits and rules (queue size 3, resolve 1/day).
 - Legacy milestone definitions and thresholds (see ACT3_SYSTEMS.md).
 
 ## 8) Act 3 Completion Checklist (Definition of Done)

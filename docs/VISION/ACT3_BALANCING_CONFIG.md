@@ -64,17 +64,6 @@
 | maxActionsPerDay | number | Max automated actions per day | `1` |
 | minCashReserve | number | Minimum cash to keep before auto-booking | `1000` |
 
-### CONFIG.schedule
-- Purpose
-  - Define scheduling queue limits and behavior.
-- Values
-
-| key | type | meaning | default value |
-| --- | --- | --- | --- |
-| enabled | boolean | Enable advanced scheduling | `false` |
-| maxQueueSize | number | Maximum queued bookings | `3` |
-| resolvePerDay | number | Number of queued bookings resolved per day | `1` |
-
 ### CONFIG.content.variance
 - Purpose
   - Define bounded variance rules for content results.
@@ -111,9 +100,6 @@
 - `CONFIG.automation.enabled`
 - `CONFIG.automation.maxActionsPerDay`
 - `CONFIG.automation.minCashReserve`
-- `CONFIG.schedule.enabled`
-- `CONFIG.schedule.maxQueueSize`
-- `CONFIG.schedule.resolvePerDay`
 - `CONFIG.content.variance.enabled`
 - `CONFIG.content.variance.maxVariancePct`
 - `CONFIG.content.variance.seedPolicy`

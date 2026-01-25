@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 25, 2026 (A3.8 — Legacy Milestones)
+**Last Updated:** January 25, 2026 (A3.7 de-scoped; Act 3 complete)
 
 ---
 
@@ -75,19 +75,19 @@
 
 ## Act 3 — Days 181-270
 
-### In Progress (7/9 complete)
+### Complete (8/8 complete)
 - [x] Save v3 schema + migration (v2 → v3)
 - [x] A3.1 — Rival Studios / Competitive Pressure
   - [x] Auto-enable competition at Day 181.
 - [x] A3.2 — Structured High-Impact Events
 - [x] A3.3 — Reputation Branches (Prestige, Volume, Boutique)
 - [x] A3.4 — Act 3 Story Arc (Days 200/225/245/270)
+- [x] A3.5 — Optional Automation (expanded)
 - [x] A3.6 — Content Performance Variance (±15%)
 - [x] A3.8 — Legacy Milestones
 
-### Remaining
-- [x] A3.5 — Optional Automation (expanded)
-- [ ] A3.7 — Advanced Scheduling (booking queue)
+### De-scoped / Cut
+- A3.7 — Advanced Scheduling (booking queue) — CUT (not needed).
 
 ---
 
@@ -98,8 +98,8 @@
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
 | Fixes/QoL | 18/18 | 0 |
-| Act 3 | 8/9 | 1 |
-| **Total** | **60/61** | **1** |
+| Act 3 | 8/8 | 0 |
+| **Total** | **60/60** | **0** |
 
 ---
 

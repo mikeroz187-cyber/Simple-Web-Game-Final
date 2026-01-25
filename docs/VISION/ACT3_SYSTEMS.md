@@ -31,9 +31,8 @@ Rival studios / competitive pressure | `/src/systems/competition.js` (new) | `ri
 Structured high-impact events (Act 3) | `/src/systems/story.js` (extended) | `story.act3`, `player.day` | `story.act3` | `CONFIG.story.act3.*` | Expanded
 Reputation branches (studio identity paths) | `/src/systems/progression.js` (extended) | `reputation`, `player.reputation`, `legacyMilestones` | `reputation`, `legacyMilestones` | `CONFIG.reputation.branches.*`, `CONFIG.legacyMilestones.*` | Expanded
 Act 3 story arc progression | `/src/systems/story.js` (extended) | `story.act3`, `player.day` | `story.act3` | `CONFIG.story.act3.*` | Expanded
-Optional automation (late-game QoL) | `/src/systems/automation.js` (new) | `automation`, `schedule`, `player`, `roster` | `automation`, `schedule` | `CONFIG.automation.*` | New
+Optional automation (late-game QoL) | `/src/systems/automation.js` (new) | `automation`, `player`, `roster` | `automation` | `CONFIG.automation.*` | New
 Content performance variance | `/src/systems/content.js` (new) + `/src/systems/analytics.js` (extended) | `content.entries`, `content.variance`, `analyticsHistory` | `content.entries`, `content.variance`, `analyticsHistory` | `CONFIG.content.variance.*`, `CONFIG.analytics.*` | New/Expanded
-Advanced scheduling | `/src/systems/booking.js` (extended) | `schedule`, `roster`, `player` | `schedule`, `player.day` | `CONFIG.schedule.*` | Expanded
 Legacy / recognition milestones | `/src/systems/milestones.js` (new) | `legacyMilestones`, `player`, `milestones` | `legacyMilestones` | `CONFIG.legacyMilestones.*` | New
 
 Notes:
@@ -109,8 +108,8 @@ Notes:
   - setAutomationRules(gameState, automationPayload) -> Result
   - runAutomationStep(gameState, context) -> Result
 - State touched (explicit v3 paths)
-  - Reads: `automation`, `schedule`, `player`, `roster`.
-  - Writes: `automation`, `schedule`.
+  - Reads: `automation`, `player`, `roster`.
+  - Writes: `automation`.
 - Config dependencies (explicit CONFIG paths)
   - `CONFIG.automation.*`
 - Edge cases / failure modes
@@ -155,25 +154,6 @@ Notes:
 - Acceptance criteria
   - Variance is bounded and deterministic based on config and stored rolls.
   - Existing content history remains valid after migration.
-
-### /src/systems/booking.js (Act 3 additions)
-- Purpose (Act 3)
-  - Add advanced scheduling and queue handling without introducing passive time.
-- New or expanded public functions (names + params + returns)
-  - queueBooking(gameState, bookingPayload) -> Result
-  - resolveScheduledBookings(gameState, context) -> Result
-- State touched (explicit v3 paths)
-  - Reads: `schedule`, `roster`, `player`, `unlocks`.
-  - Writes: `schedule`, `player.day`, `content.entries` (if resolution occurs).
-- Config dependencies (explicit CONFIG paths)
-  - `CONFIG.schedule.*`
-  - `CONFIG.booking.*`
-- Edge cases / failure modes
-  - Queue full → `{ ok:false, code:"schedule_full" }`.
-  - Booking invalid → `{ ok:false, code:"invalid_booking" }`.
-- Acceptance criteria
-  - Scheduling is optional and only active when enabled in config.
-  - Day progression remains deterministic and player-driven.
 
 ### /src/systems/milestones.js (Act 3 additions)
 - Purpose (Act 3)

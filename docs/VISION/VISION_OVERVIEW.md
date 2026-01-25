@@ -114,12 +114,6 @@ Based strictly on `docs/SCOPE_VISION.md`:
 - Act: Act 3
 - Dependencies: MVP content result generation and analytics.
 
-### Theme: Advanced scheduling
-- Summary: Queue up to 3 bookings with deterministic resolution on day advance.
-- What it touches: State (schedule), systems (booking/time), UI (booking), save (schema extension).
-- Act: Act 3
-- Dependencies: MVP booking flow and day advancement.
-
 ## 6) Required Vision Documentation Set (What Files We Will Create Next)
 ```
 /docs/VISION/

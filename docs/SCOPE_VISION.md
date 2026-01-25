@@ -101,7 +101,6 @@ Studio Empire’s ultimate form is a strategic studio‑management experience wh
 - ⭐ Studio milestones — visible achievements that mark progress.
 - ⭐ Optional automation — late‑game tools that reduce repetitive actions.
 - ⭐ Content performance variance — greater risk/reward in output results.
-- ⭐ Advanced scheduling — balancing multiple shoots or parallel planning.
 
 ---
 

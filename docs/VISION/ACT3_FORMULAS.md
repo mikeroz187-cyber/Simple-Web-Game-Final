@@ -79,32 +79,7 @@ const revenueAfterBranch = Math.round(baseRevenue * branch.revenueMult);
 
 ---
 
-## 4) Scheduling Queue Rules (Act 3)
-
-**Plain English**
-- Scheduling is optional and only works if `CONFIG.schedule.enabled` is true.
-- Queue size is capped by `maxQueueSize`.
-- Resolve oldest bookings first, up to `resolvePerDay` each day.
-
-**Code-ready expression**
-```js
-const canQueue = CONFIG.schedule.enabled &&
-  gameState.schedule.queue.length < CONFIG.schedule.maxQueueSize;
-
-const sortedQueue = [...gameState.schedule.queue]
-  .sort((a, b) => a.dayQueued - b.dayQueued);
-
-const toResolve = sortedQueue.slice(0, CONFIG.schedule.resolvePerDay);
-```
-
-**Config values used**
-- `CONFIG.schedule.enabled`
-- `CONFIG.schedule.maxQueueSize`
-- `CONFIG.schedule.resolvePerDay`
-
----
-
-## 5) Automation Safety Rules (Act 3)
+## 4) Automation Safety Rules (Act 3)
 
 **Plain English**
 - Automation never runs if disabled.
@@ -119,9 +94,8 @@ const hasCashBuffer = gameState.player.cash >= CONFIG.automation.minCashReserve;
 ```
 
 **Deterministic action ordering**
-1) Resolve scheduled bookings (oldest first), if any.
-2) Post Promo content (latest Promo content not yet posted), if any.
-3) Stop if no valid action remains.
+1) Post Promo content (latest Promo content not yet posted), if any.
+2) Stop if no valid action remains.
 
 **Config values used**
 - `CONFIG.automation.enabled`
@@ -130,7 +104,7 @@ const hasCashBuffer = gameState.player.cash >= CONFIG.automation.minCashReserve;
 
 ---
 
-## 6) Content Performance Variance (Act 3)
+## 5) Content Performance Variance (Act 3)
 
 **Plain English**
 - Apply a bounded variance roll to Promo followers or Premium revenue.
@@ -154,7 +128,7 @@ const adjustedRevenue = Math.round(baseRevenue * varianceMult);
 
 ---
 
-## 7) Legacy Milestone Evaluation (Act 3)
+## 6) Legacy Milestone Evaluation (Act 3)
 
 **Plain English**
 - Legacy milestones complete when their tracked metric meets the configured threshold.
@@ -178,7 +152,7 @@ const isComplete = metricValueByType[milestone.type] >= milestone.threshold;
 
 ---
 
-## 8) Act 3 Story Triggers (Act 3)
+## 7) Act 3 Story Triggers (Act 3)
 
 **Plain English**
 - Events trigger on day start when `player.day >= triggerDay` and the event has not been shown.
