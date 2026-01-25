@@ -360,18 +360,39 @@ function renderHub(gameState) {
     "<p class=\"helper-text\">Save Now and Load Save use the selected slot. Autosave writes to the Autosave slot.</p>" +
     "</div>";
 
-  const autoBookCount = CONFIG.AUTOMATION_AUTO_BOOK_PER_DAY;
+  const automationConfig = CONFIG.automation || {};
+  const autoBookCount = Number.isFinite(automationConfig.maxActionsPerDay)
+    ? automationConfig.maxActionsPerDay
+    : 1;
+  const automationEnabled = Boolean(gameState.automation && gameState.automation.enabled);
+  const automationChecked = automationEnabled ? " checked" : "";
   const autoBookEnabled = Boolean(gameState.automation && gameState.automation.autoBookEnabled);
   const autoBookChecked = autoBookEnabled ? " checked" : "";
-  const autoBookLabel = "Automation: Auto-Book (" + autoBookCount + "/day)";
-  const autoBookUnit = autoBookCount === 1 ? "shoot" : "shoots";
+  const autoPostEnabled = Boolean(gameState.automation && gameState.automation.autoPostEnabled);
+  const autoPostChecked = autoPostEnabled ? " checked" : "";
+  const autoBookLabel = "Auto-Book (" + autoBookCount + "/day)";
+  const autoPostLabel = "Auto-Post (" + autoBookCount + "/day)";
+  const automationCapLabel = autoBookCount === 1
+    ? "1 automated action"
+    : autoBookCount + " automated actions";
   const automationPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Automation</h3>" +
     "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"auto-book-toggle\">" + autoBookLabel + "</label>" +
-    "<input id=\"auto-book-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-book\"" + autoBookChecked + " />" +
+    "<label class=\"field-label\" for=\"automation-enabled-toggle\">Automation Enabled</label>" +
+    "<input id=\"automation-enabled-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-automation-enabled\"" +
+    automationChecked + " />" +
     "</div>" +
-    "<p class=\"helper-text\">When enabled, the studio tries to book " + autoBookCount + " " + autoBookUnit + " automatically each day (only when you click Advance Day).</p>" +
+    "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"auto-book-toggle\">" + autoBookLabel + "</label>" +
+    "<input id=\"auto-book-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-book\"" +
+    autoBookChecked + " />" +
+    "</div>" +
+    "<div class=\"field-row\">" +
+    "<label class=\"field-label\" for=\"auto-post-toggle\">" + autoPostLabel + "</label>" +
+    "<input id=\"auto-post-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-post\"" +
+    autoPostChecked + " />" +
+    "</div>" +
+    "<p class=\"helper-text\">Runs only when you click Advance Day. Max " + automationCapLabel + " per day.</p>" +
     "</div>";
 
   const advanceDayButton = "<button class=\"button\" data-action=\"advance-day\" title=\"Manually advance to the next day.\">Advance Day</button>";

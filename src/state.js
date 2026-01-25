@@ -74,6 +74,17 @@ function buildDefaultReputationState() {
   };
 }
 
+function buildDefaultAutomationState() {
+  const automationConfig = CONFIG.automation || {};
+  return {
+    enabled: Boolean(automationConfig.enabledDefault),
+    autoBookEnabled: Boolean(automationConfig.autoBookDefault),
+    autoPostEnabled: Boolean(automationConfig.autoPostDefault),
+    lastAutomationDay: null,
+    actionsTakenToday: 0
+  };
+}
+
 function getRandomFreelancerProfileId(avoidId) {
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
@@ -189,9 +200,7 @@ function newGameState() {
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
     milestones: [],
     legacyMilestones: [],
-    automation: {
-      autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
-    }
+    automation: buildDefaultAutomationState()
   };
 }
 
@@ -317,15 +326,31 @@ function ensureAutomationState(gameState) {
     return;
   }
 
+  const defaults = buildDefaultAutomationState();
   if (!gameState.automation || typeof gameState.automation !== "object") {
-    gameState.automation = {
-      autoBookEnabled: CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT
-    };
+    gameState.automation = defaults;
     return;
   }
 
+  if (typeof gameState.automation.enabled !== "boolean") {
+    gameState.automation.enabled = defaults.enabled;
+  }
+
   if (typeof gameState.automation.autoBookEnabled !== "boolean") {
-    gameState.automation.autoBookEnabled = CONFIG.AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT;
+    gameState.automation.autoBookEnabled = defaults.autoBookEnabled;
+  }
+
+  if (typeof gameState.automation.autoPostEnabled !== "boolean") {
+    gameState.automation.autoPostEnabled = defaults.autoPostEnabled;
+  }
+
+  if (gameState.automation.lastAutomationDay !== null &&
+    !Number.isFinite(gameState.automation.lastAutomationDay)) {
+    gameState.automation.lastAutomationDay = null;
+  }
+
+  if (!Number.isFinite(gameState.automation.actionsTakenToday) || gameState.automation.actionsTakenToday < 0) {
+    gameState.automation.actionsTakenToday = defaults.actionsTakenToday;
   }
 }
 

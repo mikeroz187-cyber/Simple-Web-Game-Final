@@ -271,6 +271,14 @@ function tryAutoBookOne(gameState) {
   if (gameState.player.cash < shootCostResult.value) {
     return { success: false, reason: "Not enough cash" };
   }
+  const automationConfig = CONFIG.automation || {};
+  const minReserve = Number.isFinite(automationConfig.minCashReserve) ? automationConfig.minCashReserve : 0;
+  if (minReserve > 0 && gameState.player.cash - shootCostResult.value < minReserve) {
+    return {
+      success: false,
+      reason: "Cash reserve would drop below " + formatCurrency(minReserve)
+    };
+  }
 
   const result = confirmBooking(gameState, selectionResult.selection);
   if (!result.ok) {
