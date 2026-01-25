@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Updated Act 3 checklist and scope docs to reflect completed milestones, debug helpers, and remaining Act 3 tasks.
+  - Why: Keep the docs aligned with the latest merged Act 3 work so the next tasks are unambiguous.
+  - Files touched: docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 3 legacy milestones tracking, rewards, and Hub panel status display.
   - Why: Deliver A3.8 recognition milestones with save persistence and milestone rewards.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/progression.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
