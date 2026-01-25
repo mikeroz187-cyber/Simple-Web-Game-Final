@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Cut Slot B/two-performer booking UI and disabled combo effects.
+  - Why: Reduce scope to single-performer bookings while keeping saves compatible.
+  - Files touched: src/config.js, src/ui/render.js, src/ui/events.js, src/systems/booking.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: De-scoped A3.7 Advanced Scheduling across Act 3 documentation and updated Act 3 completion status.
   - Why: A3.7 was cut from planned work and Act 3 scope is now complete with polish-only work remaining.
   - Files touched: docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/VISION/ACT3_SCOPE.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/VISION/ACT3_SYSTEMS.md, docs/VISION/ACT3_STATE_EXTENSIONS.md, docs/VISION/ACT3_BALANCING_CONFIG.md, docs/VISION/ACT3_FORMULAS.md, docs/VISION/ACT3_ENDGAME_LOOPS.md, docs/DATA_SCHEDULING.md, CHANGELOG.md.
