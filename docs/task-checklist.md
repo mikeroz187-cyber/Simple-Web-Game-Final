@@ -86,7 +86,7 @@
 - [x] A3.8 — Legacy Milestones
 
 ### Remaining
-- [ ] A3.5 — Optional Automation (expanded)
+- [x] A3.5 — Optional Automation (expanded)
 - [ ] A3.7 — Advanced Scheduling (booking queue)
 
 ---
@@ -98,8 +98,8 @@
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
 | Fixes/QoL | 18/18 | 0 |
-| Act 3 | 7/9 | 2 |
-| **Total** | **59/61** | **2** |
+| Act 3 | 8/9 | 1 |
+| **Total** | **60/61** | **1** |
 
 ---
 

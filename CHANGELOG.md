@@ -11,6 +11,15 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Act 3 automation system with auto-post support, daily caps, and cash reserve checks.
+  - Why: Deliver A3.5 optional automation behavior with deterministic rules and safety limits.
+  - Files touched: src/config.js, src/state.js, src/systems/automation.js, src/systems/booking.js, index.html.
+- What: Updated the Hub Automation panel and Advance Day flow for new automation toggles and results.
+  - Why: Let players opt in to automation controls and see automation outcomes on day advance.
+  - Files touched: src/ui/render.js, src/ui/events.js.
+- What: Marked A3.5 Optional Automation as complete in the task checklist.
+  - Why: Keep Act 3 progress tracking in sync with the delivered automation expansion.
+  - Files touched: docs/task-checklist.md, CHANGELOG.md.
 - What: Updated Act 3 checklist and scope docs to reflect completed milestones, debug helpers, and remaining Act 3 tasks.
   - Why: Keep the docs aligned with the latest merged Act 3 work so the next tasks are unambiguous.
   - Files touched: docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

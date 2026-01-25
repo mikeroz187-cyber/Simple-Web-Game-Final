@@ -12,6 +12,9 @@ const SHOOT_OUTPUT_PLACEHOLDER_SVG = [
 
 const LOCATION_PLACEHOLDER_THUMB_PATH = "assets/images/placeholders/location_placeholder.svg";
 
+const AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT = false;
+const AUTOMATION_AUTO_BOOK_PER_DAY = 1;
+
 const CONFIG = {
   project: {
     name: "Studio Empire",
@@ -37,8 +40,17 @@ const CONFIG = {
     no_database: true,
     no_frameworks: true
   },
-  AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT: false,
-  AUTOMATION_AUTO_BOOK_PER_DAY: 1,
+  AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT: AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT,
+  AUTOMATION_AUTO_BOOK_PER_DAY: AUTOMATION_AUTO_BOOK_PER_DAY,
+  automation: {
+    enabledDefault: false,
+    autoBookDefault: AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT,
+    autoPostDefault: false,
+    maxActionsPerDay: 1,
+    minCashReserve: 0,
+    actionPriority: ["autoBook", "autoPost"],
+    autoPostPlatformPriority: ["Instagram", "X"]
+  },
   SHOOT_OUTPUTS_MAX_HISTORY: 50,
   LOCATION_PLACEHOLDER_THUMB_PATH: LOCATION_PLACEHOLDER_THUMB_PATH,
   SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH: "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG),

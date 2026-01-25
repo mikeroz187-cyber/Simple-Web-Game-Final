@@ -132,17 +132,6 @@ function ensureAutomationValidation() {
   validateGameState._automationPatched = true;
 }
 
-function normalizeAutomationReason(reason) {
-  if (!reason) {
-    return "Unknown issue";
-  }
-  const trimmed = String(reason).trim();
-  if (!trimmed) {
-    return "Unknown issue";
-  }
-  return trimmed.endsWith(".") ? trimmed.slice(0, -1) : trimmed;
-}
-
 function clamp(value, min, max) {
   if (!Number.isFinite(value)) {
     return min;
@@ -578,30 +567,13 @@ function setupEventHandlers() {
     if (action === "advance-day") {
       ensureAutomationState(window.gameState);
       const storyEvents = advanceDay(window.gameState);
-      const automationCards = [];
-      if (window.gameState.automation.autoBookEnabled) {
-        const maxPerDay = CONFIG.AUTOMATION_AUTO_BOOK_PER_DAY;
-        for (let i = 0; i < maxPerDay; i += 1) {
-          const result = tryAutoBookOne(window.gameState);
-          if (result.success) {
-            automationCards.push({
-              title: "Automation",
-              message: "Automation booked 1 shoot."
-            });
-          } else {
-            automationCards.push({
-              title: "Automation",
-              message: "Automation couldn’t book a shoot: " + normalizeAutomationReason(result.reason) + "."
-            });
-          }
-        }
-      }
+      const automationResult = runAutomationOnDayAdvance(window.gameState);
       appendStoryLogEntries(window.gameState, storyEvents);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
       }
-      const eventCards = buildStoryEventCards(storyEvents).concat(automationCards);
+      const eventCards = buildStoryEventCards(storyEvents).concat(automationResult.cards);
       if (eventCards.length) {
         showEventCards(eventCards);
       }
@@ -757,11 +729,30 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "toggle-automation-enabled") {
+      ensureAutomationState(window.gameState);
+      window.gameState.automation.enabled = Boolean(target.checked);
+      const message = window.gameState.automation.enabled
+        ? "Automation enabled."
+        : "Automation disabled.";
+      setUiMessage(message);
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message || "");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "toggle-auto-book") {
       ensureAutomationState(window.gameState);
+      const automationConfig = CONFIG.automation || {};
+      const maxActions = Number.isFinite(automationConfig.maxActionsPerDay)
+        ? automationConfig.maxActionsPerDay
+        : 1;
       window.gameState.automation.autoBookEnabled = Boolean(target.checked);
       const message = window.gameState.automation.autoBookEnabled
-        ? "Automation enabled: Auto-Book (1/day)."
+        ? "Automation enabled: Auto-Book (" + maxActions + "/day)."
         : "Automation disabled: Auto-Book.";
       setUiMessage(message);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
@@ -769,6 +760,26 @@ function setupEventHandlers() {
         setUiMessage(saveResult.message || "");
       }
       renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "toggle-auto-post") {
+      ensureAutomationState(window.gameState);
+      const automationConfig = CONFIG.automation || {};
+      const maxActions = Number.isFinite(automationConfig.maxActionsPerDay)
+        ? automationConfig.maxActionsPerDay
+        : 1;
+      window.gameState.automation.autoPostEnabled = Boolean(target.checked);
+      const message = window.gameState.automation.autoPostEnabled
+        ? "Automation enabled: Auto-Post (" + maxActions + "/day)."
+        : "Automation disabled: Auto-Post.";
+      setUiMessage(message);
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message || "");
+      }
+      renderApp(window.gameState);
+      return;
     }
   });
 }
