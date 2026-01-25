@@ -32,6 +32,7 @@ Studio Empire’s ultimate form is a strategic studio‑management experience wh
 - Choose between Promo growth and Premium revenue.
 - Build early reputation and unlock a limited location upgrade.
 - Manage a small roster of performers with basic stats.
+  - Current scope note: the location list is reduced to Bedroom (Tier 0), Shower (Tier 1), and Office (Tier 2), using the existing tier unlock flow.
 
 ### Act 2 — Expansion
 **New gameplay depth**

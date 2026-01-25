@@ -500,19 +500,13 @@ const CONFIG = {
   },
   locations: {
     tier0_ids: [
-      "location_basic_bedroom",
-      "location_shared_apartment",
-      "location_spare_office"
+      "bedroom"
     ],
     tier1_ids: [
-      "location_studio_loft",
-      "location_city_apartment",
-      "location_small_warehouse"
+      "shower"
     ],
     tier2_ids: [
-      "location_downtown_penthouse",
-      "location_suburban_house",
-      "location_private_studio"
+      "office"
     ],
     tier1UnlockCost: 2000,
     tier1Name: "Tier 1 — Downtown Studio",
@@ -520,9 +514,9 @@ const CONFIG = {
     tier2Name: "Tier 2 — High-End Sets",
     tier2ReputationRequirement: 25,
     catalog: {
-      location_basic_bedroom: {
-        id: "location_basic_bedroom",
-        name: "Basic Bedroom",
+      bedroom: {
+        id: "bedroom",
+        name: "Bedroom (Tier 0)",
         tier: 0,
         cost: 50,
         unlockCost: 0,
@@ -530,85 +524,25 @@ const CONFIG = {
         thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
         description: "A simple, familiar space for low-stakes starter shoots."
       },
-      location_shared_apartment: {
-        id: "location_shared_apartment",
-        name: "Shared Apartment",
-        tier: 0,
-        cost: 80,
-        unlockCost: 0,
-        unlockRequirements: [],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A modest room with everyday clutter and casual vibes."
-      },
-      location_spare_office: {
-        id: "location_spare_office",
-        name: "Spare Office",
-        tier: 0,
-        cost: 120,
-        unlockCost: 0,
-        unlockRequirements: [],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A quiet corner with a desk setup for clean, focused content."
-      },
-      location_studio_loft: {
-        id: "location_studio_loft",
-        name: "Studio Loft",
+      shower: {
+        id: "shower",
+        name: "Shower (Tier 1)",
         tier: 1,
         cost: 300,
         unlockCost: 750,
         unlockRequirements: [],
         thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A compact loft with improved lighting and a cleaner backdrop."
+        description: "A tiled set with steamy ambiance and higher production value."
       },
-      location_city_apartment: {
-        id: "location_city_apartment",
-        name: "City Apartment",
-        tier: 1,
-        cost: 450,
-        unlockCost: 1100,
-        unlockRequirements: [],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A tidy urban space that feels more professional and polished."
-      },
-      location_small_warehouse: {
-        id: "location_small_warehouse",
-        name: "Small Warehouse",
-        tier: 1,
-        cost: 600,
-        unlockCost: 1500,
-        unlockRequirements: [],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A larger, flexible space suited for varied set dressing."
-      },
-      location_downtown_penthouse: {
-        id: "location_downtown_penthouse",
-        name: "Downtown Penthouse",
+      office: {
+        id: "office",
+        name: "Office (Tier 2)",
         tier: 2,
         cost: 1800,
-        unlockCost: 4000,
-        unlockRequirements: ["Reputation ≥ 20"],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A sleek high-rise space that signals serious growth."
-      },
-      location_suburban_house: {
-        id: "location_suburban_house",
-        name: "Suburban House",
-        tier: 2,
-        cost: 2200,
         unlockCost: 5000,
         unlockRequirements: ["Reputation ≥ 25"],
         thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A full home set that unlocks richer lifestyle shoots."
-      },
-      location_private_studio: {
-        id: "location_private_studio",
-        name: "Private Studio",
-        tier: 2,
-        cost: 2600,
-        unlockCost: 6000,
-        unlockRequirements: ["Reputation ≥ 30"],
-        thumbnailPath: LOCATION_PLACEHOLDER_THUMB_PATH,
-        description: "A dedicated studio with controlled lighting and props."
+        description: "A clean corporate space that signals serious growth."
       }
     }
   },

@@ -484,6 +484,14 @@ function renderBooking(gameState) {
   const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
+  const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
+  const locationIds = CONFIG.locations.tier0_ids
+    .concat(CONFIG.locations.tier1_ids)
+    .concat(tier2Ids);
+  if (uiState.booking.locationId && locationIds.indexOf(uiState.booking.locationId) === -1) {
+    uiState.booking.locationId = locationIds.length ? locationIds[0] : null;
+  }
+
   const performerOptions = hasPerformers
     ? performers.map(function (performer) {
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
@@ -543,11 +551,7 @@ function renderBooking(gameState) {
     ? "<div class=\"panel-row\" style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
     : "<p class=\"helper-text\">Select a performer to preview their portrait.</p>";
 
-  const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
-  const locations = CONFIG.locations.tier0_ids
-    .concat(CONFIG.locations.tier1_ids)
-    .concat(tier2Ids);
-  const locationRows = locations.map(function (locationId) {
+  const locationRows = locationIds.map(function (locationId) {
     const location = CONFIG.locations.catalog[locationId];
     const isSelected = location.id === uiState.booking.locationId;
     const tier2RepRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
@@ -557,7 +561,7 @@ function renderBooking(gameState) {
     const tier2Locked = location.tier === 2 && !isLocationTierUnlocked(gameState, "tier2");
     const tier2RepLocked = location.tier === 2 && gameState.player.reputation < tier2RepRequirement;
     const isLocked = tier1Locked || tier2Locked || tier2RepLocked;
-    const label = location.name + " (Tier " + location.tier + ")";
+    const label = location.name;
     let lockNote = "";
     if (tier1Locked || tier2Locked) {
       lockNote = "Locked";
@@ -1263,7 +1267,7 @@ function getContentEntryPerformerLabel(gameState, entry) {
 
 function getLocationName(locationId) {
   const location = CONFIG.locations.catalog[locationId];
-  return location ? location.name : "Unknown";
+  return location ? location.name : "Legacy Location";
 }
 
 function getThemeById(themeId) {

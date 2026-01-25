@@ -22,7 +22,7 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 
 **Given** a Promo booking with:
 - Performer: **Lena Watts** (`starPower = 3`)
-- Location: **Basic Bedroom** (`location cost = 50`)
+- Location: **Bedroom (Tier 0)** (`location cost = 50`)
 - Theme: **Nightlife** (`followersMult = 1.00`)
 
 **Expect**:
