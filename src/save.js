@@ -631,7 +631,7 @@ function validateGameState(candidate) {
     if (performerIds.indexOf(entry.performerId) === -1) {
       return { ok: false, message: "Content performer invalid." };
     }
-    if (!CONFIG.locations.catalog[entry.locationId]) {
+    if (typeof entry.locationId !== "string" || entry.locationId.length === 0) {
       return { ok: false, message: "Content location invalid." };
     }
     if (entry.themeId !== null && typeof entry.themeId !== "string") {

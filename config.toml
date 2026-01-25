@@ -190,71 +190,46 @@ location_tier_1_unlock_cost = 2000 # Placeholder
 
 [locations]
 tier0_ids = [
-  "location_basic_bedroom",
-  "location_shared_apartment",
-  "location_spare_office"
+  "bedroom"
 ]
 tier1_ids = [
-  "location_studio_loft",
-  "location_city_apartment",
-  "location_small_warehouse"
+  "shower"
+]
+tier2_ids = [
+  "office"
 ]
 tier1UnlockCost = 2000 # Placeholder
 tier1Name = "Tier 1 — Downtown Studio"
+tier2UnlockCost = 5000 # Placeholder
+tier2Name = "Tier 2 — High-End Sets"
+tier2ReputationRequirement = 25 # Placeholder
 
-[locations.catalog.location_basic_bedroom]
-id = "location_basic_bedroom"
-name = "Basic Bedroom"
+[locations.catalog.bedroom]
+id = "bedroom"
+name = "Bedroom (Tier 0)"
 tier = 0
 cost = 50
 unlock_cost = 0
 unlock_requirements = []
 description = "A simple, familiar space for low-stakes starter shoots."
 
-[locations.catalog.location_shared_apartment]
-id = "location_shared_apartment"
-name = "Shared Apartment"
-tier = 0
-cost = 80
-unlock_cost = 0
-unlock_requirements = []
-description = "A modest room with everyday clutter and casual vibes."
-
-[locations.catalog.location_spare_office]
-id = "location_spare_office"
-name = "Spare Office"
-tier = 0
-cost = 120
-unlock_cost = 0
-unlock_requirements = []
-description = "A quiet corner with a desk setup for clean, focused content."
-
-[locations.catalog.location_studio_loft]
-id = "location_studio_loft"
-name = "Studio Loft"
+[locations.catalog.shower]
+id = "shower"
+name = "Shower (Tier 1)"
 tier = 1
 cost = 300
 unlock_cost = 0
 unlock_requirements = []
-description = "A compact loft with improved lighting and a cleaner backdrop."
+description = "A tiled set with steamy ambiance and higher production value."
 
-[locations.catalog.location_city_apartment]
-id = "location_city_apartment"
-name = "City Apartment"
-tier = 1
-cost = 450
+[locations.catalog.office]
+id = "office"
+name = "Office (Tier 2)"
+tier = 2
+cost = 1800
 unlock_cost = 0
-unlock_requirements = []
-description = "A tidy urban space that feels more professional and polished."
-
-[locations.catalog.location_small_warehouse]
-id = "location_small_warehouse"
-name = "Small Warehouse"
-tier = 1
-cost = 600
-unlock_cost = 0
-unlock_requirements = []
-description = "A larger, flexible space suited for varied set dressing."
+unlock_requirements = ["Reputation ≥ 25"]
+description = "A clean corporate space that signals serious growth."
 
 [themes.mvp]
 theme_ids = [

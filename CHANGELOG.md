@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Reduced booking locations to Bedroom (Tier 0), Shower (Tier 1), and Office (Tier 2) with legacy-safe fallbacks.
+  - Why: Align the location scope with the new three-location tiered unlock plan without breaking older saves.
+  - Files touched: src/config.js, src/ui/render.js, src/save.js, config.toml, docs/DATA_LOCATIONS.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/SCOPE_VISION.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.
 - What: Reduced booking themes to four locked options and added safe fallbacks for legacy theme IDs.
   - Why: Align booking themes with the new scope while keeping older saves and UI selections stable.
   - Files touched: src/config.js, config.toml, src/ui/render.js, src/save.js, docs/DATA_THEMES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

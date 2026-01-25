@@ -16,7 +16,7 @@
 - [x] Content types (Promo and Premium)
 - [x] Performer roster (3 core + 5 freelance)
 - [x] Performer stats (starPower, fatigue, loyalty)
-- [x] Locations Tier 0 (3 starter locations)
+- [x] Locations Tier 0 (Bedroom starter location)
 - [x] Locations Tier 1 unlock
 - [x] MVP themes (4 locked themes: Lingerie, Office, Uniform, Interracial)
 - [x] Social posting (Instagram and X)
@@ -66,6 +66,7 @@
 - [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
 - [x] Social: Promo OF conversion tuned to ~1 per 20 posts + fractional carry implemented.
 - [x] CUT: Booking any two performers regardless of roles (two-performer booking removed).
+- [x] CUT: Reduced booking locations to 3 (Bedroom Tier 0, Shower Tier 1, Office Tier 2).
 - [x] Debug: Dev-only Set Day panel (?debug=1) for iOS testing.
   - Fix: debug Set Day persists correctly.
 - [x] Fix: Debug Set Day works on GH Pages.
@@ -103,9 +104,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 16/16 | 0 |
-| Fixes/QoL | 18/18 | 0 |
+| Fixes/QoL | 19/19 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **58/58** | **0** |
+| **Total** | **59/59** | **0** |
 
 ---
 
