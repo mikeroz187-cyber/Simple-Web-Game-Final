@@ -1,25 +1,24 @@
 # CURRENT SCOPE (Authoritative)
 
-**Last Updated:** January 24, 2026
+**Last Updated:** January 25, 2026
 
 ## Current Phase
-- **Act 3 (Days 181-270) — Foundation kickoff**: Act 3 work starts now, focused on foundational systems and story arc prep as defined below.
+- **Act 3 (Days 181-270) — In progress**: Act 3 foundations, story arc, and progression systems are live; remaining scope is the optional automation expansion and advanced scheduling.
 
 ## Completed (Confirmed)
 - **Act 1 (MVP) complete**: core loop, all screens, save/load with slots + autosave, export/import, day advancement, economy basics, content types, starter roster, tiers/themes, social posting, story events, win/loss conditions.
 - **Act 2 complete**: expanded performer management, advanced analytics rollups, location tier 2, equipment upgrades, Act 2 themes, story events, expanded roster depth, social strategies (manual + daily budget), milestones, automation tier 1, Story Log, portrait/thumbnail placeholders, gallery output cards, save v2 schema.
 - **Post-MVP Fixes/QoL complete**: promo posting fixes, analytics clarity, freelancer rerolls, metrics split, booking UI/validation fixes, promo platform posting rules, daily cap behavior, promo conversion tuning, booking role restrictions removed.
-- **Act 3 complete**: A3.4 Act 3 Story Arc (Days 200/225/245/270).
-- **Debug tooling**: dev-only Set Day panel gated by `?debug=1` for testing.
+- **Act 3 complete**: Save v3 schema + migration; A3.1 Rival Studios; A3.2 High-Impact Events; A3.3 Reputation Branches; A3.4 Act 3 Story Arc; A3.6 Content Performance Variance; A3.8 Legacy Milestones.
+- **Debug tooling**: dev-only Set Day panel gated by `?debug=1`, dev-only stat setters, and the “Run Checks Now” milestone helper.
 
 ## Completed / Previous Phases (Archived Scope)
 - The prior **Act 2 Phase 1 / Option A slice** scope items are fully delivered and no longer active.
 - Ongoing work is restricted to Act 3 items listed in `docs/task-checklist.md`.
 
-## Next 3 Codex-sized Steps (Act 3 — Start Here)
-1. **Save v3 schema + migration (v2 → v3)** — add schema updates and a safe migration path.
-2. **A3.1 — Rival Studios / Competitive Pressure** — introduce the baseline rival system.
-3. **A3.2 — Structured High-Impact Events** — implement the first Act 3 event structure.
+## Next Steps (Act 3 — Start Here)
+1. **A3.5 — Optional Automation (expanded)** — add the Act 3 automation slice only as defined.
+2. **A3.7 — Advanced Scheduling (booking queue)** — implement the queue system per scope.
 
 ## Act 1 Time Control (Locked)
 - **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.
