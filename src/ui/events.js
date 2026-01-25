@@ -550,6 +550,31 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "debug-run-milestone-checks") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!isDebugEnabled()) {
+        return;
+      }
+      const legacyEvents = checkLegacyMilestones(window.gameState);
+      const milestoneEvents = checkMilestones(window.gameState).concat(legacyEvents);
+      const triggeredCount = milestoneEvents.length;
+      const countLabel = triggeredCount === 1 ? "milestone" : "milestones";
+      let statusMessage = "Triggered " + triggeredCount + " " + countLabel + ".";
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (saveResult.ok) {
+        statusMessage += " Autosaved.";
+      } else {
+        statusMessage += " Autosave failed. " + (saveResult.message || "");
+      }
+      if (milestoneEvents.length) {
+        showEventCards(buildMilestoneEventCards(milestoneEvents));
+      }
+      setDebugDayStatus(statusMessage);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "advance-day") {
       ensureAutomationState(window.gameState);
       const storyEvents = advanceDay(window.gameState);

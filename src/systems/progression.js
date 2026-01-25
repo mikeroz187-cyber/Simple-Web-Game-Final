@@ -192,6 +192,9 @@ function checkMilestones(gameState) {
       return entry.id === milestoneId;
     });
     if (existing && existing.completed) {
+      if (!Number.isFinite(existing.completedDay)) {
+        existing.completedDay = gameState.player.day;
+      }
       return;
     }
     const metricValue = getMilestoneMetricValue(gameState, definition);
@@ -202,6 +205,7 @@ function checkMilestones(gameState) {
     const rewardSummary = applyMilestoneRewards(gameState, definition);
     const record = existing || { id: milestoneId };
     record.completed = true;
+    record.completedDay = gameState.player.day;
     if (!existing) {
       gameState.milestones.push(record);
     }
@@ -240,9 +244,6 @@ function checkLegacyMilestones(gameState) {
       if (!Number.isFinite(existing.completedDay)) {
         existing.completedDay = gameState.player.day;
       }
-      if (existing.rewardPaid !== true) {
-        existing.rewardPaid = true;
-      }
       return;
     }
     const metricValue = getLegacyMilestoneMetricValue(gameState, definition);
@@ -253,8 +254,7 @@ function checkLegacyMilestones(gameState) {
     const rewardSummary = applyMilestoneRewards(gameState, definition);
     const record = {
       id: milestoneId,
-      completedDay: gameState.player.day,
-      rewardPaid: true
+      completedDay: gameState.player.day
     };
     gameState.legacyMilestones.push(record);
     const cashReward = Number.isFinite(definition.rewardCash) ? definition.rewardCash : 0;
