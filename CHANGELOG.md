@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Reduced booking themes to four locked options and added safe fallbacks for legacy theme IDs.
+  - Why: Align booking themes with the new scope while keeping older saves and UI selections stable.
+  - Files touched: src/config.js, config.toml, src/ui/render.js, src/save.js, docs/DATA_THEMES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Cut Slot B/two-performer booking UI and disabled combo effects.
   - Why: Reduce scope to single-performer bookings while keeping saves compatible.
   - Files touched: src/config.js, src/ui/render.js, src/ui/events.js, src/systems/booking.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

@@ -615,85 +615,41 @@ const CONFIG = {
   themes: {
     mvp: {
       theme_ids: [
-        "theme_casual",
-        "theme_glamour",
-        "theme_fitness",
-        "theme_boudoir",
-        "theme_nightlife"
+        "lingerie",
+        "office",
+        "uniform",
+        "interracial"
       ],
       themes: {
-        theme_casual: {
-          id: "theme_casual",
-          name: "Casual",
-          description: "Everyday, approachable vibes that feel natural and low-pressure.",
-          modifiers: { followersMult: 1.05, revenueMult: 0.90 }
+        lingerie: {
+          id: "lingerie",
+          name: "Lingerie",
+          description: "Your signature premium look — lace, heels, and zero subtlety.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         },
-        theme_glamour: {
-          id: "theme_glamour",
-          name: "Glamour",
-          description: "High-polish styling with bold poses and premium presentation.",
-          modifiers: { followersMult: 0.95, revenueMult: 1.10 }
+        office: {
+          id: "office",
+          name: "Office",
+          description: "After-hours authority — desks, suits, and someone ‘breaking rules.’",
+          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         },
-        theme_fitness: {
-          id: "theme_fitness",
-          name: "Fitness",
-          description: "Athletic energy with clean lighting and motion-focused shots.",
-          modifiers: { followersMult: 1.10, revenueMult: 0.95 }
+        uniform: {
+          id: "uniform",
+          name: "Uniform",
+          description: "Roleplay on demand — maid, nurse, teacher vibes, you call the shots.",
+          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         },
-        theme_boudoir: {
-          id: "theme_boudoir",
-          name: "Boudoir",
-          description: "Intimate, classy sets with warm lighting and confident framing.",
-          modifiers: { followersMult: 0.90, revenueMult: 1.15 }
-        },
-        theme_nightlife: {
-          id: "theme_nightlife",
-          name: "Nightlife",
-          description: "Club-style ambiance with neon accents and late-night mood.",
+        interracial: {
+          id: "interracial",
+          name: "Interracial",
+          description: "A bold, high-click category flex — instantly legible, instantly addictive.",
           modifiers: { followersMult: 1.00, revenueMult: 1.00 }
         }
       }
     },
     act2: {
-      theme_ids: [
-        "theme_luxury_retreat",
-        "theme_editorial",
-        "theme_downtown_chic",
-        "theme_sunlit_getaway",
-        "theme_afterhours"
-      ],
-      themes: {
-        theme_luxury_retreat: {
-          id: "theme_luxury_retreat",
-          name: "Luxury Retreat",
-          description: "Resort-grade spaces with a relaxed, high-end atmosphere.",
-          modifiers: { followersMult: 0.95, revenueMult: 1.20 }
-        },
-        theme_editorial: {
-          id: "theme_editorial",
-          name: "Editorial",
-          description: "Magazine-style staging with bold angles and fashion emphasis.",
-          modifiers: { followersMult: 1.05, revenueMult: 1.05 }
-        },
-        theme_downtown_chic: {
-          id: "theme_downtown_chic",
-          name: "Downtown Chic",
-          description: "Urban interiors with a sleek, modern aesthetic.",
-          modifiers: { followersMult: 1.00, revenueMult: 1.10 }
-        },
-        theme_sunlit_getaway: {
-          id: "theme_sunlit_getaway",
-          name: "Sunlit Getaway",
-          description: "Bright, airy sets with soft daylight and beachy calm.",
-          modifiers: { followersMult: 1.10, revenueMult: 0.95 }
-        },
-        theme_afterhours: {
-          id: "theme_afterhours",
-          name: "After Hours",
-          description: "Late-night ambience with moody shadows and intimate lighting.",
-          modifiers: { followersMult: 0.90, revenueMult: 1.20 }
-        }
-      }
+      theme_ids: [],
+      themes: {}
     }
   },
   story: {

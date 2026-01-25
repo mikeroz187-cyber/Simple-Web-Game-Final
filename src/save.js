@@ -634,7 +634,7 @@ function validateGameState(candidate) {
     if (!CONFIG.locations.catalog[entry.locationId]) {
       return { ok: false, message: "Content location invalid." };
     }
-    if (!getThemeById(entry.themeId)) {
+    if (entry.themeId !== null && typeof entry.themeId !== "string") {
       return { ok: false, message: "Content theme invalid." };
     }
     if (CONFIG.content_types.available.indexOf(entry.contentType) === -1) {
