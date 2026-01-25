@@ -69,6 +69,7 @@
 - [x] Fix: Save validation day range uses CONFIG.game.max_day (supports Act 2/3 testing).
 - [x] Debug: Dev-only stat setters (cash/rep/followers/subs) for milestone testing.
 - [x] Fix: Legacy milestones now mark Complete and pay reward cash once (status + rewards).
+- [x] Fix: milestone completion now flips status to Complete and pays rewards (added debug “Run Checks Now”).
 
 ---
 
@@ -94,9 +95,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 18/18 | 0 |
-| Fixes/QoL | 17/17 | 0 |
+| Fixes/QoL | 18/18 | 0 |
 | Act 3 | 7/9 | 2 |
-| **Total** | **58/60** | **2** |
+| **Total** | **59/61** | **2** |
 
 ---
 

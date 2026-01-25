@@ -427,6 +427,9 @@ function renderHub(gameState) {
       "<div class=\"button-row\">" +
       "<button class=\"button\" type=\"button\" data-action=\"debug-apply-stats\">Apply Stats (No Reload)</button>" +
       "</div>" +
+      "<div class=\"button-row\">" +
+      "<button class=\"button\" type=\"button\" data-action=\"debug-run-milestone-checks\">Run Milestone Checks Now</button>" +
+      "</div>" +
       "<p class=\"helper-text\">Applies immediately and autosaves.</p>" +
       "<div id=\"debug-day-status\" class=\"muted\">" + debugStatus + "</div>" +
       "<p class=\"helper-text\">Current day: " + gameState.player.day +
