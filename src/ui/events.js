@@ -23,7 +23,6 @@ function resetBookingSelection() {
   const uiState = getUiState();
   uiState.booking = {
     performerIdA: null,
-    performerIdB: null,
     locationId: null,
     themeId: null,
     contentType: null
@@ -716,14 +715,6 @@ function setupEventHandlers() {
     if (action === "select-performer-a") {
       const uiState = getUiState();
       uiState.booking.performerIdA = target.value || null;
-      setUiMessage("");
-      renderApp(window.gameState);
-      return;
-    }
-
-    if (action === "select-performer-b") {
-      const uiState = getUiState();
-      uiState.booking.performerIdB = target.value || null;
       setUiMessage("");
       renderApp(window.gameState);
       return;

@@ -123,7 +123,6 @@ function getBookingPerformerSelection(gameState, selection) {
     return { ok: false, message: "Roster data missing." };
   }
   const performerIdA = selection.performerIdA || selection.performerId;
-  const performerIdB = selection.performerIdB || null;
   if (!performerIdA) {
     return { ok: false, message: "Select a performer." };
   }
@@ -133,34 +132,9 @@ function getBookingPerformerSelection(gameState, selection) {
   if (!performerA) {
     return { ok: false, message: "Select a performer." };
   }
-  if (performerIdB && performerIdB === performerIdA) {
-    return { ok: false, message: "Select two different performers." };
-  }
   const performerStatusA = isPerformerBookable(gameState, performerA);
   if (!performerStatusA.ok) {
     return { ok: false, message: performerStatusA.reason || "Performer is unavailable." };
-  }
-  let performerB = null;
-  if (performerIdB) {
-    performerB = gameState.roster.performers.find(function (entry) {
-      return entry.id === performerIdB;
-    });
-    if (!performerB) {
-      return { ok: false, message: "Second performer not found." };
-    }
-    const performerStatusB = isPerformerBookable(gameState, performerB);
-    if (!performerStatusB.ok) {
-      return { ok: false, message: performerStatusB.reason || "Performer is unavailable." };
-    }
-    const roleA = getPerformerRoleIdForBooking(gameState, performerA.id);
-    const roleB = getPerformerRoleIdForBooking(gameState, performerB.id);
-    return {
-      ok: true,
-      performerA: performerA,
-      performerB: performerB,
-      performerIds: [performerA.id, performerB.id],
-      roleKey: getBookingComboRoleKey(roleA, roleB)
-    };
   }
   return {
     ok: true,
@@ -228,7 +202,6 @@ function getAutoBookingSelection(gameState) {
     ok: true,
     selection: {
       performerIdA: performer.id,
-      performerIdB: null,
       locationId: location.id,
       themeId: theme.id,
       contentType: contentType
@@ -311,7 +284,6 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: performerSelection.message || "Select valid performers." };
   }
   const performer = performerSelection.performerA;
-  const performerB = performerSelection.performerB;
 
   const location = CONFIG.locations.catalog[selection.locationId];
   if (!location) {
@@ -451,10 +423,6 @@ function confirmBooking(gameState, selection) {
     : 1;
   updatePerformerStats(gameState, performer.id, fatigueMultiplier);
   updatePerformerAvailabilityAfterBooking(gameState, performer);
-  if (performerB) {
-    updatePerformerStats(gameState, performerB.id, fatigueMultiplier);
-    updatePerformerAvailabilityAfterBooking(gameState, performerB);
-  }
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
 

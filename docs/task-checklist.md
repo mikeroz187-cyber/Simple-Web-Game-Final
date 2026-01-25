@@ -23,6 +23,8 @@
 - [x] Act 1 story events (intro + debt reminders)
 - [x] Win/Loss conditions (Day 90 debt check)
 
+**Note:** Two-performer booking (Slot B) + combo effects were CUT for scope reduction (single-performer only).
+
 ---
 
 ## Act 2 — Days 91-180
@@ -38,7 +40,6 @@
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
 - [x] A2.9 — Studio Milestones (5 milestone triggers)
 - [x] Freelancer Differentiation: daily persona reroll + One-Off Buzz + Roster Freelancer Pool
-- [x] Two-performer booking slots + immediate combo effects (role-gated).
 - [x] Manual Social Strategy (daily budget allocation)
 - [x] Automation Tier 1 (Auto-Book toggle)
 - [x] Story Log screen
@@ -46,6 +47,9 @@
 - [x] Location thumbnail placeholders
 - [x] Shoot output cards in Gallery
 - [x] Save v2 schema
+
+### De-scoped / Cut
+- Two-performer booking (Slot B) + immediate combo effects — CUT for scope reduction (single-performer only).
 
 ---
 
@@ -55,13 +59,13 @@
 - [x] Analytics: Today (Day X) Totals panel + clarify Latest Shoot Results.
 - [x] Freelancers reroll personas each day; removed manual rotation UI.
 - [x] v3 Metrics Split + MRR-only (Social Followers/Social Subs/OF Subs; Premium stronger)
-- [x] Booking: performer preview cards align correctly when two performers are selected.
-- [x] Bugfix: Booking confirm works with 2 performers when combo is disabled (combo-gated lead rule).
+- [x] CUT: Booking performer preview cards for two-performer selection (removed with single-performer scope).
+- [x] CUT: Booking confirm with 2 performers when combo is disabled (two-performer booking removed).
 - [x] Social: Promo content can be posted to both Instagram and X (once per platform).
 - [x] Social: Promo list hides fully-posted promos; Recent Posts capped at 5.
 - [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
 - [x] Social: Promo OF conversion tuned to ~1 per 20 posts + fractional carry implemented.
-- [x] Booking: any two performers can be booked; roles do not restrict booking.
+- [x] CUT: Booking any two performers regardless of roles (two-performer booking removed).
 - [x] Debug: Dev-only Set Day panel (?debug=1) for iOS testing.
   - Fix: debug Set Day persists correctly.
 - [x] Fix: Debug Set Day works on GH Pages.
@@ -86,6 +90,8 @@
 - [x] A3.6 — Content Performance Variance (±15%)
 - [x] A3.8 — Legacy Milestones
 
+**Note:** Two-performer booking (Slot B) + combo effects were CUT for scope reduction (single-performer only).
+
 ### De-scoped / Cut
 - A3.7 — Advanced Scheduling (booking queue) — CUT (not needed).
 
@@ -96,10 +102,10 @@
 | Phase | Complete | Remaining |
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
-| Act 2 | 18/18 | 0 |
+| Act 2 | 17/17 | 0 |
 | Fixes/QoL | 18/18 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **60/60** | **0** |
+| **Total** | **59/59** | **0** |
 
 ---
 

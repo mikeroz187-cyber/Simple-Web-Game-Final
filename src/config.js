@@ -184,7 +184,7 @@ const CONFIG = {
   },
   booking: {
     combo: {
-      enabled: true,
+      enabled: false,
       costMultiplier: 1.6,
       fatigueMultiplierEach: 0.85,
       revenueMultiplierByRoles: {

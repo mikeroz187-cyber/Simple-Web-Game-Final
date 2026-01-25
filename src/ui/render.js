@@ -4,7 +4,6 @@ function getUiState() {
       message: "",
       booking: {
         performerIdA: null,
-        performerIdB: null,
         locationId: null,
         themeId: null,
         contentType: null
@@ -492,33 +491,21 @@ function renderBooking(gameState) {
       const typeLabel = getPerformerTypeLabel(performer.type);
       const optionLabel = "[" + typeLabel + "][" + roleLabel + "] " + displayProfile.name;
       const selectedA = performer.id === uiState.booking.performerIdA ? " selected" : "";
-      const selectedB = performer.id === uiState.booking.performerIdB ? " selected" : "";
       return {
         id: performer.id,
         label: optionLabel,
-        selectedA: selectedA,
-        selectedB: selectedB
+        selectedA: selectedA
       };
     })
     : [];
   const performerOptionsA = performerOptions.map(function (option) {
     return "<option value=\"" + option.id + "\"" + option.selectedA + ">" + option.label + "</option>";
   }).join("");
-  const performerOptionsB = performerOptions.map(function (option) {
-    return "<option value=\"" + option.id + "\"" + option.selectedB + ">" + option.label + "</option>";
-  }).join("");
   const performerSelectA = "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"performer-slot-a\">Slot A (Required)</label>" +
+    "<label class=\"field-label\" for=\"performer-slot-a\">Performer (Required)</label>" +
     "<select id=\"performer-slot-a\" class=\"select-control\" data-action=\"select-performer-a\">" +
     "<option value=\"\"" + (uiState.booking.performerIdA ? "" : " selected") + ">Select performer...</option>" +
     performerOptionsA +
-    "</select>" +
-    "</div>";
-  const performerSelectB = "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"performer-slot-b\">Slot B (Optional)</label>" +
-    "<select id=\"performer-slot-b\" class=\"select-control\" data-action=\"select-performer-b\">" +
-    "<option value=\"\"" + (uiState.booking.performerIdB ? "" : " selected") + ">None</option>" +
-    performerOptionsB +
     "</select>" +
     "</div>";
 
@@ -527,13 +514,8 @@ function renderBooking(gameState) {
       return performer.id === uiState.booking.performerIdA;
     })
     : null;
-  const selectedPerformerB = uiState.booking.performerIdB
-    ? performers.find(function (performer) {
-      return performer.id === uiState.booking.performerIdB;
-    })
-    : null;
   const performerCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
-  const performerCards = [selectedPerformerA, selectedPerformerB].filter(Boolean).map(function (performer) {
+  const performerCards = [selectedPerformerA].filter(Boolean).map(function (performer) {
     const displayProfile = getPerformerDisplayProfile(gameState, performer);
     const roleLabel = getPerformerRoleLabel(gameState, performer.id);
     const typeLabel = getPerformerTypeLabel(performer.type);
@@ -559,7 +541,7 @@ function renderBooking(gameState) {
   }).join("");
   const performerCardsRow = performerCards
     ? "<div class=\"panel-row\" style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
-    : "<p class=\"helper-text\">Select performers to preview their portraits.</p>";
+    : "<p class=\"helper-text\">Select a performer to preview their portrait.</p>";
 
   const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
   const locations = CONFIG.locations.tier0_ids
@@ -614,8 +596,7 @@ function renderBooking(gameState) {
   }).join("");
 
   const performerSelection = getBookingPerformerSelection(gameState, {
-    performerIdA: uiState.booking.performerIdA,
-    performerIdB: uiState.booking.performerIdB
+    performerIdA: uiState.booking.performerIdA
   });
   const performerSelectionOk = performerSelection.ok;
   const selectedLocation = uiState.booking.locationId
@@ -643,7 +624,6 @@ function renderBooking(gameState) {
 
   const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" +
     performerSelectA +
-    performerSelectB +
     performerCardsRow +
     "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
