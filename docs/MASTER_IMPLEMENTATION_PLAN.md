@@ -334,7 +334,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 - `src/state.js`
 
 **Steps:**
-1. Add Act 3 keys: metaProgression, rivals, market, automation, schedule, legacyMilestones, reputation, story.act3, content.variance.
+1. Add Act 3 keys: metaProgression, rivals, market, automation, legacyMilestones, reputation, story.act3, content.variance.
 2. Keep MVP + Act 2 keys intact.
 
 **Done when…**

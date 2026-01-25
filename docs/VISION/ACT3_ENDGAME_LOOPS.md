@@ -7,7 +7,7 @@ Endgame in Act 3 is **not** infinite numbers or endless scaling. It is a structu
 The Act 3 endgame loop is a repeatable cycle that builds on the MVP booking loop and Act 2 systems, without altering them. Based on Act 3 scope, the loop is:
 1) Review late-game status (rivals/market, Act 3 story/events, reputation branch, legacy milestones).
 2) Identify the next configured legacy milestone or Act 3 story objective.
-3) Plan high-stakes bookings or queued schedules (if advanced scheduling is enabled) to target that objective.
+3) Plan high-stakes bookings to target that objective.
 4) Respond to any Act 3 event or rival/market shift using the configured system actions.
 5) Complete the booking loop (shoot → content → analytics) and capture variance or impact summaries if configured.
 6) Evaluate milestone/branch progress and claim eligible rewards.
@@ -73,7 +73,7 @@ Endgame loop status must be visible without new screens:
 All UI additions must fit existing screen containers and remain desktop-only.
 
 ## 9) Save & Migration Requirements
-- Endgame progress must serialize in the v3 state additions (`legacyMilestones`, `reputation`, `rivals`, `market`, `story.act3`, `content.variance`, `automation`, `schedule`, `metaProgression`).
+- Endgame progress must serialize in the v3 state additions (`legacyMilestones`, `reputation`, `rivals`, `market`, `story.act3`, `content.variance`, `automation`, `metaProgression`).
 - Migrations must preserve milestone states and add safe defaults for new keys.
 - Export/import must remain safe and deterministic.
 - Failed import must not corrupt the existing save.

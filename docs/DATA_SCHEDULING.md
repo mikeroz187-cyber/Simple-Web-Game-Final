@@ -1,6 +1,8 @@
-# Data — Scheduling Rules (Act 3)
+# DEPRECATED — Scheduling Rules (Cut Feature)
 
-This catalog defines Act 3 scheduling rules. Values mirror `config.toml` and are read-only until Act 3 is in scope.
+> A3.7 Advanced Scheduling was cut; this file is archival only and not implemented.
+
+This catalog preserves the original Act 3 scheduling rules. Values are archival and read-only.
 
 ---
 
@@ -8,12 +10,11 @@ This catalog defines Act 3 scheduling rules. Values mirror `config.toml` and are
 
 | key | value | meaning |
 | --- | --- | --- |
-| enabled | false | Enable advanced scheduling queue. |
+| enabled | false | Enable scheduling queue (archival only). |
 | maxQueueSize | 3 | Maximum queued bookings. |
 | resolvePerDay | 1 | Bookings resolved per day. |
 
 ---
 
 ## Config Mapping
-Values map to:
-- `CONFIG.schedule.*`
+Former config mappings are no longer active; values above are preserved only for archival reference.

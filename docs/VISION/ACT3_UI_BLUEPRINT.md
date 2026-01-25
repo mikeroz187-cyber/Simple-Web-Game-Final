@@ -17,7 +17,7 @@
 | Screen ID | Screen Name | Act | Purpose | Primary Actions |
 | --- | --- | --- | --- | --- |
 | screen-hub | Hub | MVP + Act2 + Act3 | Status overview + navigation + save/load + late-game summaries | Navigate to MVP screens; Act 3 panels are read-only or trigger Act 3 systems |
-| screen-booking | Booking | MVP + Act2 + Act3 | Plan and confirm a shoot + advanced scheduling (Act 3) | Confirm Shoot (MVP); Queue Booking (Act 3) |
+| screen-booking | Booking | MVP + Act2 + Act3 | Plan and confirm a shoot | Confirm Shoot (MVP) |
 | screen-content | Content | MVP + Act3 | Show latest content summary + variance notes | View Analytics; Back to Hub |
 | screen-analytics | Analytics | MVP + Act2 + Act3 | Show latest results + advanced summaries + Act 3 impact notes | Book Next Shoot; Back to Hub |
 | screen-roster | Roster | MVP + Act2 + Act3 | View performer stats + branch effects summary | Back to Hub |
@@ -88,16 +88,6 @@ Surface Act 3 late-game status at a glance without changing MVP navigation.
     - Result handling: toast/message from result.message
   - Empty/edge states: “Automation disabled.”
 
-- **Panel Name:** Schedule Summary (Advanced Scheduling)
-  - Reads from gameState: `schedule`
-  - Displays: queued bookings count and next scheduled slot
-  - Actions (buttons/controls):
-    - Label: “Resolve Schedule”
-    - Enabled/disabled rules: enabled only if schedule queue has entries
-    - On click: calls `booking.resolveScheduledBookings(gameState, context)`
-    - Result handling: toast/message from result.message
-  - Empty/edge states: “No scheduled bookings.”
-
 #### Notes
 - Out of scope items: new navigation screens, prestige/reset controls, or live competition data.
 
@@ -105,24 +95,13 @@ Surface Act 3 late-game status at a glance without changing MVP navigation.
 
 ### Screen: Booking (screen-booking)
 #### Purpose
-Add advanced scheduling controls while keeping MVP booking intact.
+Keep MVP booking intact with Act 3 context displayed elsewhere.
 
 #### Layout (Desktop)
 - left column: performer + availability selection (MVP/Act 2)
-- right column: location + theme + scheduling panel
+- right column: location + theme selections
 - header row: “Booking” title
-- footer row: Confirm Shoot; Back to Hub; Queue Booking (Act 3, if enabled)
-
-#### Panels / Sections
-- **Panel Name:** Advanced Scheduling
-  - Reads from gameState: `schedule`
-  - Displays: queue slots, current queue length, schedule rules (max 3, resolve 1/day)
-  - Actions (buttons/controls):
-    - Label: “Queue Booking”
-    - Enabled/disabled rules: enabled only if scheduling enabled and queue not full
-    - On click: calls `booking.queueBooking(gameState, bookingPayload)`
-    - Result handling: toast/message from result.message
-  - Empty/edge states: “Scheduling not enabled.”
+- footer row: Confirm Shoot; Back to Hub
 
 #### Notes
 - Out of scope items: passive time advancement, background timers, or multi-performer shoots.
@@ -258,7 +237,6 @@ Example action mappings (pseudocode):
 - `data-action="select-branch" data-id="branch-id"` → `progression.selectReputationBranch(gameState, branchId)`
 - `data-action="claim-legacy" data-id="milestone-id"` → `progression.claimLegacyMilestone(gameState, milestoneId)`
 - `data-action="evaluate-rivals"` → `competition.evaluateRivalStandings(gameState, context)`
-- `data-action="queue-booking"` → `booking.queueBooking(gameState, bookingPayload)`
 - `data-action="apply-act3-event" data-id="event-id"` → `story.applyAct3StoryEvent(gameState, eventId)`
 
 ## 9) Act 3 UI Acceptance Criteria

@@ -28,7 +28,6 @@ List ONLY the new keys introduced by Act 3.
 - rivals: object — rival studio metadata/standings — default: `{ studios: [], lastCheckDay: 0 }`
 - market: object — market shift flags/modifiers — default: `{ activeShiftId: null, shiftHistory: [] }`
 - automation: object — optional automation settings — default: `{ enabled: false, autoBookEnabled: false, autoPostEnabled: false, minCashReserve: 1000, maxActionsPerDay: 1 }`
-- schedule: object — advanced scheduling/queue state — default: `{ enabled: false, maxQueueSize: 3, queue: [] }`
 - legacyMilestones: array — legacy milestone tracking list — default: `[]`
 - reputation: object — Act 3 reputation branch tracking — default: `{ branchId: null, branchProgress: 0 }`
 
@@ -64,20 +63,6 @@ Notes:
 }
 ```
 
-### schedule.queue entry
-```json
-{
-  "id": "scheduled_booking_001",
-  "dayQueued": 186,
-  "bookingPayload": {
-    "performerId": "core_lena_watts",
-    "locationId": "location_studio_loft",
-    "themeId": "theme_cinematic",
-    "contentType": "Premium"
-  }
-}
-```
-
 ### legacyMilestones entry
 ```json
 {
@@ -105,7 +90,6 @@ function migrateV2ToV3(v2):
   if v3.rivals is missing: v3.rivals = {}
   if v3.market is missing: v3.market = {}
   if v3.automation is missing: v3.automation = {}
-  if v3.schedule is missing: v3.schedule = {}
   if v3.legacyMilestones is missing: v3.legacyMilestones = []
   if v3.reputation is missing: v3.reputation = {}
   if v3.story.act3 is missing: v3.story.act3 = {}
@@ -137,7 +121,7 @@ Reinforce module boundaries:
 - UI only triggers and renders.
 
 ## 10) State Diff Summary
-- Added in v3: metaProgression, rivals, market, automation, schedule, legacyMilestones, reputation, story.act3, content.variance.
+- Added in v3: metaProgression, rivals, market, automation, legacyMilestones, reputation, story.act3, content.variance.
 - Unchanged: MVP + Act 2.
 - Removed: none.
 

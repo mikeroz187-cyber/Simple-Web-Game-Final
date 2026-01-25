@@ -3,13 +3,13 @@
 **Last Updated:** January 25, 2026
 
 ## Current Phase
-- **Act 3 (Days 181-270) — In progress**: Act 3 foundations, story arc, and progression systems are live; remaining scope is the optional automation expansion and advanced scheduling.
+- **Act 3 (Days 181-270) — Complete**: Act 3 foundations, story arc, progression systems, optional automation expansion, and legacy milestones are delivered. Current work is polish/bugfix only.
 
 ## Completed (Confirmed)
 - **Act 1 (MVP) complete**: core loop, all screens, save/load with slots + autosave, export/import, day advancement, economy basics, content types, starter roster, tiers/themes, social posting, story events, win/loss conditions.
 - **Act 2 complete**: expanded performer management, advanced analytics rollups, location tier 2, equipment upgrades, Act 2 themes, story events, expanded roster depth, social strategies (manual + daily budget), milestones, automation tier 1, Story Log, portrait/thumbnail placeholders, gallery output cards, save v2 schema.
 - **Post-MVP Fixes/QoL complete**: promo posting fixes, analytics clarity, freelancer rerolls, metrics split, booking UI/validation fixes, promo platform posting rules, daily cap behavior, promo conversion tuning, booking role restrictions removed.
-- **Act 3 complete**: Save v3 schema + migration; A3.1 Rival Studios; A3.2 High-Impact Events; A3.3 Reputation Branches; A3.4 Act 3 Story Arc; A3.6 Content Performance Variance; A3.8 Legacy Milestones.
+- **Act 3 complete**: Save v3 schema + migration; A3.1 Rival Studios; A3.2 High-Impact Events; A3.3 Reputation Branches; A3.4 Act 3 Story Arc; A3.5 Optional Automation (expanded); A3.6 Content Performance Variance; A3.8 Legacy Milestones.
 - **Debug tooling**: dev-only Set Day panel gated by `?debug=1`, dev-only stat setters, and the “Run Checks Now” milestone helper.
 
 ## Completed / Previous Phases (Archived Scope)
@@ -17,8 +17,7 @@
 - Ongoing work is restricted to Act 3 items listed in `docs/task-checklist.md`.
 
 ## Next Steps (Act 3 — Start Here)
-1. **A3.5 — Optional Automation (expanded)** — add the Act 3 automation slice only as defined.
-2. **A3.7 — Advanced Scheduling (booking queue)** — implement the queue system per scope.
+1. **Act 3 scope complete** — move into polish/bugfix-only mode.
 
 ## Act 1 Time Control (Locked)
 - **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.
