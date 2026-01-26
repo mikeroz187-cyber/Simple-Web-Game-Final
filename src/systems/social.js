@@ -336,20 +336,6 @@ function postPromoContent(gameState, platform, contentId) {
   const source = entry.source || "core";
   const isAgencyPack = source === "agency_pack";
   const performerIds = getEntryPerformerIds(entry);
-  const comboConfig = getBookingComboConfig();
-  const hasCombo = comboConfig.enabled && performerIds.length === 2;
-  if (hasCombo) {
-    const roleKey = getBookingComboRoleKey(
-      getPerformerRoleIdForBooking(gameState, performerIds[0]),
-      getPerformerRoleIdForBooking(gameState, performerIds[1])
-    );
-    const promoMultiplier = getBookingComboMultiplier(
-      comboConfig,
-      roleKey,
-      comboConfig.promoFollowersMultiplierByRoles
-    );
-    socialFollowersGained = Math.round(socialFollowersGained * promoMultiplier);
-  }
   if (isAgencyPack) {
     const agencyConfig = CONFIG.agencyPacks && typeof CONFIG.agencyPacks === "object" ? CONFIG.agencyPacks : {};
     const promoFollowersMult = Number.isFinite(agencyConfig.promoFollowersMult)

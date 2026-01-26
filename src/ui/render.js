@@ -77,20 +77,6 @@ function formatCompetitionMultiplier(value) {
   return "x" + numeric.toFixed(2);
 }
 
-function getPerformerRoleLabel(gameState, performerId) {
-  const roster = gameState && gameState.roster ? gameState.roster : {};
-  const roleMap = roster.performerRoles || {};
-  const roleId = roleMap[performerId];
-  const labels = CONFIG.performers.role_labels || {};
-  if (roleId && labels[roleId]) {
-    return labels[roleId];
-  }
-  if (labels.support) {
-    return labels.support;
-  }
-  return "Support";
-}
-
 function getPerformerTypeLabel(type) {
   if (type === "freelance") {
     return "Freelance";
@@ -522,9 +508,7 @@ function renderBooking(gameState) {
   const performerOptions = hasPerformers
     ? performers.map(function (performer) {
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
-      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
-      const typeLabel = getPerformerTypeLabel(performer.type);
-      const optionLabel = "[" + typeLabel + "][" + roleLabel + "] " + displayProfile.name;
+      const optionLabel = displayProfile.name;
       const selectedA = performer.id === uiState.booking.performerIdA ? " selected" : "";
       return {
         id: performer.id,
@@ -552,11 +536,10 @@ function renderBooking(gameState) {
   const performerCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
   const performerCards = [selectedPerformerA].filter(Boolean).map(function (performer) {
     const displayProfile = getPerformerDisplayProfile(gameState, performer);
-    const roleLabel = getPerformerRoleLabel(gameState, performer.id);
     const typeLabel = getPerformerTypeLabel(performer.type);
     const contractSummary = getContractSummary(gameState, performer.id);
     const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
-    const detail = "Role: " + roleLabel + " | Star Power: " + performer.starPower +
+    const detail = "Star Power: " + performer.starPower +
       " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
       " | " + contractSummary.label +
       " | " + availabilitySummary.label;
@@ -568,7 +551,7 @@ function renderBooking(gameState) {
       "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
       "<div>" +
       "<p><strong>" + displayProfile.name + "</strong></p>" +
-      "<p class=\"helper-text\">" + typeLabel + " | " + roleLabel + "</p>" +
+      "<p class=\"helper-text\">" + typeLabel + "</p>" +
       "<p class=\"helper-text\">" + detail + "</p>" +
       "<p class=\"helper-text\">" + availabilityNote + "</p>" +
       "</div>" +
@@ -850,7 +833,6 @@ function renderRoster(gameState) {
       const portraitPath = getPerformerPortraitPath(performer);
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
       const portraitAlt = "Portrait of " + displayProfile.name;
-      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
       const contractSummary = getContractSummary(gameState, performer.id);
       const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
       const renewalCost = getRenewalCostByType(performer.type);
@@ -864,7 +846,6 @@ function renderRoster(gameState) {
         "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
         "<div>" +
         "<p><strong>" + displayProfile.name + "</strong> (" + performer.type + ")</p>" +
-        "<p>Role: " + roleLabel + "</p>" +
         "<p>Star Power: " + performer.starPower + "</p>" +
         "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
         "<p>Loyalty: " + performer.loyalty + "</p>" +

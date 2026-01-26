@@ -35,7 +35,7 @@
 - [x] A2.3 — Location Tier 2 (reputation-gated unlock)
 - [x] A2.4 — Equipment Upgrades (Lighting, Camera, Set Dressing)
 - [x] A2.6 — Act 2 Story Events (Days 95/120/145/170)
-- [x] A2.7 — Expanded Roster Depth (4 new performers with roles)
+- [x] A2.7 — Expanded Roster Depth (4 new performers)
 - [x] A2.8 — Social Strategy Selection (Balanced, Growth Focus, Revenue Focus)
 - [x] A2.9 — Studio Milestones (5 milestone triggers)
 - [x] Freelancer Differentiation: daily persona reroll + One-Off Buzz + Roster Freelancer Pool
@@ -76,6 +76,7 @@
 - [x] Fix: Legacy milestones now mark Complete and pay reward cash once (status + rewards).
 - [x] Fix: milestone completion now flips status to Complete and pays rewards (added debug “Run Checks Now”).
 - [x] Replace Freelancers with Agency Sample Packs (bundle posting; 5-image sets; promo-strong / premium-weak)
+- [x] Remove performer roles (Lead/Support/Specialist) and role-based bonuses; UI shows performer names only.
 
 ---
 
@@ -105,9 +106,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 16/16 | 0 |
-| Fixes/QoL | 20/20 | 0 |
+| Fixes/QoL | 21/21 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **60/60** | **0** |
+| **Total** | **61/61** | **0** |
 
 ---
 
