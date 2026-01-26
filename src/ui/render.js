@@ -809,6 +809,14 @@ function renderAnalytics(gameState) {
       ? entry.results.onlyFansSubscribersGained
       : 0;
     const latestMrrDelta = getMRRDeltaForSubs(latestOnlyFansSubs);
+    let socialBonusLine = "";
+    if (entry.contentType === "Premium" && Number.isFinite(entry.results.socialFootprintMult)) {
+      const socialPercent = Math.round((entry.results.socialFootprintMult - 1) * 100);
+      socialBonusLine = "<p><strong>Social bonus:</strong> +" + socialPercent + "% (followers-based)</p>";
+      if (entry.results.socialFootprintDetail) {
+        socialBonusLine += "<p class=\"helper-text\">" + entry.results.socialFootprintDetail + "</p>";
+      }
+    }
     let saturationLine = "";
     if (entry.contentType === "Premium" && Number.isFinite(entry.results.saturationMult)) {
       const saturationLabel = entry.results.saturationTierLabel || "Saturation tier";
@@ -819,6 +827,7 @@ function renderAnalytics(gameState) {
       "<p><strong>Social Followers Gained:</strong> " + entry.results.socialFollowersGained + "</p>" +
       "<p><strong>Social Subscribers Gained:</strong> " + entry.results.socialSubscribersGained + "</p>" +
       "<p><strong>OnlyFans Subscribers Gained:</strong> " + latestOnlyFansSubs + "</p>" +
+      socialBonusLine +
       saturationLine +
       "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>";
   }

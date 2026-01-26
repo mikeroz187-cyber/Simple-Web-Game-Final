@@ -108,6 +108,50 @@ function getMarketSaturationConfig() {
   return null;
 }
 
+function getSocialFootprintConfig() {
+  if (CONFIG.market && CONFIG.market.socialFootprintBonus && typeof CONFIG.market.socialFootprintBonus === "object") {
+    return CONFIG.market.socialFootprintBonus;
+  }
+  return { enabled: false };
+}
+
+function getSocialFootprintMult(gameState, config) {
+  const safeConfig = config && typeof config === "object" ? config : {};
+  const label = typeof safeConfig.label === "string" ? safeConfig.label : "Social bonus";
+  if (!safeConfig.enabled) {
+    return { mult: 1, label: label, detail: "" };
+  }
+  if (!gameState || !gameState.player) {
+    return { mult: 1, label: label, detail: "" };
+  }
+  const source = typeof safeConfig.source === "string" ? safeConfig.source : "socialFollowers";
+  const followers = source === "socialSubscribers"
+    ? Number.isFinite(gameState.player.socialSubscribers) ? gameState.player.socialSubscribers : 0
+    : Number.isFinite(gameState.player.socialFollowers) ? gameState.player.socialFollowers : 0;
+  const minFollowers = Number.isFinite(safeConfig.minFollowersToStart) ? safeConfig.minFollowersToStart : 0;
+  const perFollowers = Number.isFinite(safeConfig.perFollowers) ? safeConfig.perFollowers : 0;
+  const bonusPerUnit = Number.isFinite(safeConfig.bonusPerUnit) ? safeConfig.bonusPerUnit : 0;
+  const maxBonusMult = Number.isFinite(safeConfig.maxBonusMult) ? safeConfig.maxBonusMult : 1;
+  if (perFollowers <= 0 || bonusPerUnit <= 0 || maxBonusMult <= 1) {
+    return { mult: 1, label: label, detail: "" };
+  }
+  const eligibleFollowers = followers - minFollowers;
+  if (eligibleFollowers < perFollowers) {
+    return { mult: 1, label: label, detail: "" };
+  }
+  const units = Math.floor(eligibleFollowers / perFollowers);
+  let mult = 1 + units * bonusPerUnit;
+  mult = Math.min(mult, maxBonusMult);
+  if (mult <= 1) {
+    return { mult: 1, label: label, detail: "" };
+  }
+  const bonusPct = Math.round((mult - 1) * 100);
+  const capPct = Math.round((maxBonusMult - 1) * 100);
+  const sourceLabel = source === "socialSubscribers" ? "Social subs" : "Followers";
+  const detail = sourceLabel + " " + followers + " \u2192 +" + bonusPct + "% (cap " + capPct + "%)";
+  return { mult: mult, label: label, detail: detail };
+}
+
 function getMarketSaturationTier(config, currentSubs) {
   if (!config || !Array.isArray(config.tiers)) {
     return null;
@@ -411,6 +455,8 @@ function confirmBooking(gameState, selection) {
   let varianceApplied = false;
   let variancePct = 0;
   let varianceRoll = null;
+  let socialFootprintMult = null;
+  let socialFootprintDetail = null;
   let saturationMult = null;
   let saturationTierLabel = null;
   if (selection.contentType === "Premium") {
@@ -444,6 +490,16 @@ function confirmBooking(gameState, selection) {
         : 1;
       adjustedOfSubs = Math.round(adjustedOfSubs * premiumOfSubsMult);
       onlyFansSubscribersGained = Math.max(0, Math.floor(adjustedOfSubs * premiumSubsMult));
+    }
+    const socialFootprintConfig = getSocialFootprintConfig();
+    const socialFootprintResult = getSocialFootprintMult(gameState, socialFootprintConfig);
+    if (socialFootprintResult.mult > 1) {
+      onlyFansSubscribersGained = Math.max(
+        0,
+        Math.floor(onlyFansSubscribersGained * socialFootprintResult.mult)
+      );
+      socialFootprintMult = socialFootprintResult.mult;
+      socialFootprintDetail = socialFootprintResult.detail;
     }
   }
 
@@ -493,6 +549,10 @@ function confirmBooking(gameState, selection) {
 
   if (selection.contentType === "Premium") {
     entry.results.variancePct = variancePct;
+  }
+  if (selection.contentType === "Premium" && Number.isFinite(socialFootprintMult)) {
+    entry.results.socialFootprintMult = socialFootprintMult;
+    entry.results.socialFootprintDetail = socialFootprintDetail;
   }
   if (selection.contentType === "Premium" && Number.isFinite(saturationMult)) {
     entry.results.saturationMult = saturationMult;
