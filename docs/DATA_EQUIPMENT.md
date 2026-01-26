@@ -1,10 +1,8 @@
-# Data — Equipment Upgrades (Act 2)
+# Data — Equipment Upgrades (Current)
 
-This catalog defines Act 2 equipment upgrades. Values mirror `config.toml` and are read-only until Act 2 is in scope.
+This catalog defines the equipment upgrades used in the Shop screen. Values mirror `src/config.js`.
 
----
-
-## Act 2 Equipment (Lighting, Camera, Set Dressing)
+## Equipment Upgrades
 
 | id | maxLevel | levelCosts | followersMultPerLevel | ofSubsMultPerLevel | notes |
 | --- | --- | --- | --- | --- | --- |
@@ -12,7 +10,9 @@ This catalog defines Act 2 equipment upgrades. Values mirror `config.toml` and a
 | camera | 3 | [800, 1200, 1600] | 0.00 | 0.05 | Boosts Premium OF subscriber output. |
 | set_dressing | 3 | [500, 800, 1100] | 0.03 | 0.03 | Small boosts to both outputs. |
 
----
+## Behavior Notes
+- Equipment bonuses apply to Promo followers (lighting, set dressing) and Premium OF subs (camera, set dressing).
+- Upgrades cap at `maxLevel` and are purchased sequentially.
 
 ## Config Mapping
 Values map to:

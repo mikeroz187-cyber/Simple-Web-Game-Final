@@ -1,10 +1,10 @@
 # Studio Empire — Vision Scope (Act 2 + Act 3)
 
-## Why This Document Exists
-This document describes the longer-term direction of Studio Empire beyond the MVP.
-It helps guide future development without contaminating MVP scope.
+> **Status:** Vision reference only. This document is **not** a constraint on current work.
+> Current behavior is documented in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
 
-This document does NOT authorize building features unless approved in `docs/CURRENT_SCOPE.md`.
+## Why This Document Exists
+This document captures long‑term direction beyond the MVP. It is **aspirational** and may not match the current build.
 
 ---
 
@@ -128,5 +128,5 @@ Studio Empire’s ultimate form is a strategic studio‑management experience wh
 ---
 
 ## Vision is Not a License to Build
-- If a feature is not in `docs/CURRENT_SCOPE.md` or MVP docs, it is out of scope.
+- In this vision doc, features listed here are aspirational and may or may not be present in the current build.
 - Vision content must be treated as read‑only inspiration until promoted into scope.

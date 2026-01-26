@@ -1,12 +1,8 @@
-# DEPRECATED — Scheduling Rules (Cut Feature)
+# Data — Scheduling Rules (Archived)
 
-> A3.7 Advanced Scheduling was cut; this file is archival only and not implemented.
+The advanced scheduling queue (A3.7) is **not implemented** in the current build. This file is retained for historical context only.
 
-This catalog preserves the original Act 3 scheduling rules. Values are archival and read-only.
-
----
-
-## Act 3 Scheduling Defaults
+## Archived Scheduling Defaults
 
 | key | value | meaning |
 | --- | --- | --- |
@@ -14,7 +10,4 @@ This catalog preserves the original Act 3 scheduling rules. Values are archival 
 | maxQueueSize | 3 | Maximum queued bookings. |
 | resolvePerDay | 1 | Bookings resolved per day. |
 
----
-
-## Config Mapping
-Former config mappings are no longer active; values above are preserved only for archival reference.
+No active config mapping exists for scheduling in the current codebase.

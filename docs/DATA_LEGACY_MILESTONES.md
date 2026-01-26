@@ -1,10 +1,8 @@
-# Data — Legacy Milestones (Act 3)
+# Data — Legacy Milestones (Current)
 
-This catalog defines Act 3 legacy milestones. Values mirror `config.toml` and are read-only until Act 3 is in scope.
+This catalog defines legacy milestone targets and cash rewards. Values mirror `src/config.js`.
 
----
-
-## Act 3 Legacy Milestones
+## Legacy Milestones
 
 | id | label | type | threshold | rewardCash |
 | --- | --- | --- | --- | --- |
@@ -13,7 +11,9 @@ This catalog defines Act 3 legacy milestones. Values mirror `config.toml` and ar
 | legacy_reputation_80 | Reputation 80 | reputation | 80 | 6000 |
 | legacy_story_complete | Complete Act 3 Story | storyComplete | 1 | 8000 |
 
----
+## Behavior Notes
+- Legacy milestones auto‑complete once thresholds are met and pay rewards once.
+- Story completion triggers when the Day 270 Act 3 event fires.
 
 ## Config Mapping
 Values map to:

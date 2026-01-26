@@ -1,82 +1,46 @@
 # Project Documentation
 
-This folder contains all planning and design documentation for **Studio Empire**, including the frozen MVP reference docs, post-MVP scope guidance, and the long-term design vision.
+This folder contains all documentation for **Studio Empire**. The **current behavior** is documented in the current-reference docs and the data catalogs below.
 
-## Documentation Authority
-- **Current scope is governed by `CURRENT_SCOPE.md`.** MVP is complete and frozen; MVP docs are historical references for the baseline implementation.
-- Primary MVP docs (historical reference):
-  - **CURRENT_SCOPE.md** – Single source of truth for current scope/features.
-  - **SCOPE_MVP.md** – Frozen MVP feature set and boundaries (historical reference).
-  - **MVP/MVP_TECH_GUARDRAILS.md** – Technical rules and limitations for the MVP baseline.
-  - **MVP/MVP_FILE_STRUCTURE.md** – Expected project structure and file organization for the MVP baseline.
-  - **MVP/MVP_BUILD_ORDER.md** – Original MVP implementation order (historical).
-  - **MVP/MVP_UI_BLUEPRINT.md** – UI components and layout guidelines for the MVP interface.
-  - **MVP/MVP_STATE_MODEL.md** – Authoritative definition of game state and flow for the MVP baseline.
-- If something is described in older vision docs but not in `CURRENT_SCOPE.md`, treat it as **out of scope** for now.
-
-## Post-MVP UI Additions (Current)
-MVP UI docs remain **historical references**; current UI additions are documented here when approved by `CURRENT_SCOPE.md`.
-
-### Manual Advance Day Button
-- **Location**: Place in the existing top bar / header area where global controls live. If the UI lists global actions in a single row (Save/Export/Import/etc.), add **Advance Day** in that same row.
-- **Behavior**: One click triggers the **existing day-advance flow**. One click = one day advance. The action follows existing save rules (state persists exactly as other actions do).
-- **Guardrails**: No new mechanics. No new `gameState` keys. No changes to posting rules, per-item posted flags, or social logic. Do not change or disable existing timers/auto-advance behavior.
-- **Label**: **Advance Day**
-- **Tooltip/Help Text**: “Manually advance to the next day.”
+## Documentation Guide
+- **Current behavior (authoritative):**
+  - **CORE_GAMEPLAY_LOOP.md** — includes the **Current Game Rules** section.
+  - **GAMESTATE_DATA_MODEL.md** — current `gameState` structure and persisted fields.
+  - **UI_LAYOUT_AND_INTERACTION_MODEL.md** — current screens and UI interactions.
+  - **Data catalogs (DATA_*.md)** — mirror `src/config.js` values and system behavior.
+- **Status snapshot:**
+  - **CURRENT_SCOPE.md** — current focus only (not a constraint on new work).
+- **Historical / Vision references:**
+  - MVP and Vision documents remain for context, but **do not describe the current implementation**.
 
 ## Documentation Index
 
-**Current / Post-MVP Docs:**
-- **CORE_GAMEPLAY_LOOP.md** – **(Current)** Gameplay loop and daily pacing rules for the post-MVP phase.
-- **UI_LAYOUT_AND_INTERACTION_MODEL.md** – **(Current)** UI layout/interaction updates for recruitment and slideshows.
-- **GAMESTATE_DATA_MODEL.md** – **(Current)** Additive gameState fields introduced post-MVP.
+**Current / Active Reference Docs**
+- **CORE_GAMEPLAY_LOOP.md** – Current gameplay loop + rules of play.
+- **UI_LAYOUT_AND_INTERACTION_MODEL.md** – Current UI layout and interactions.
+- **GAMESTATE_DATA_MODEL.md** – Current `gameState` fields and persistence notes.
+- **CURRENT_SCOPE.md** – Current focus snapshot (not a constraint).
 
-**MVP / Implementation Docs (Historical Reference):**
-- **CURRENT_SCOPE.md** – **(Current)** Authoritative current scope document (what features are in/out for the current phase).
-- **SCOPE_MVP.md** – **(MVP, Historical)** Detailed MVP scope and early access plan, listing features included in MVP and which are deferred.
-- **MVP/MVP_TECH_GUARDRAILS.md** – **(MVP, Historical)** Technical rules and restrictions for coding the MVP (tech stack, data rules, UI rules, etc).
-- **MVP/MVP_FILE_STRUCTURE.md** – **(MVP, Historical)** Expected file/folder structure for the MVP source code.
-- **MVP/MVP_BUILD_ORDER.md** – **(MVP, Historical)** Suggested sequence of development steps/milestones to build the MVP.
-- **MVP/MVP_UI_BLUEPRINT.md** – **(MVP, Historical)** Blueprint for the MVP user interface (layout patterns, common UI components, style guide).
-- **MVP/MVP_STATE_MODEL.md** – **(MVP, Historical)** Definition of the MVP game state structure and game flow logic.
-- **MVP/MVP_OVERVIEW.md** – **(MVP, Historical)** Narrative overview of the MVP loop and player goals.
-- **MVP/MVP_FORMULAS.md** – **(MVP, Historical)** Formula reference for economics, followers, and conversions.
-- **MVP/MVP_TEST_SCENARIOS.md** – **(MVP, Historical)** Manual testing scenarios for validating MVP features.
+**Data Catalogs (Config Mirrors)**
+- **DATA_PERFORMERS.md** – Performer catalog, recruitment, and freelancer personas.
+- **DATA_LOCATIONS.md** – Location tiers, unlock costs, and requirements.
+- **DATA_THEMES.md** – Theme catalog (current locked set).
+- **DATA_STORY_EVENTS.md** – Story events for Acts 1–3.
+- **DATA_UI_COPY.md** – Current UI labels and helper text summary.
+- **DATA_EQUIPMENT.md** – Equipment upgrade catalog.
+- **DATA_MILESTONES.md** – Studio milestone catalog.
+- **DATA_SOCIAL_STRATEGIES.md** – Social strategies + manual strategy config.
+- **DATA_RIVALS.md** – Rival studio catalog.
+- **DATA_MARKET_SHIFTS.md** – Market shift timing and multipliers.
+- **DATA_REPUTATION_BRANCHES.md** – Studio identity branches and modifiers.
+- **DATA_AUTOMATION.md** – Automation rules and defaults.
+- **DATA_VARIANCE.md** – Premium variance settings.
+- **DATA_LEGACY_MILESTONES.md** – Legacy milestone catalog.
+- **DATA_SCHEDULING.md** – Archived (not implemented).
 
-**Vision / Future Docs:**
-- **VISION/VISION_OVERVIEW.md** – **(Vision)** High-level overview of long-term plans beyond the MVP.
-- **VISION/ACT2_SCOPE.md** – **(Vision)** Act 2 scope and narrative expansion plan.
-- **VISION/ACT2_SYSTEMS.md** – **(Vision)** Act 2 systems and mechanics beyond the MVP.
-- **VISION/ACT2_STATE_EXTENSIONS.md** – **(Vision)** State model extensions for Act 2.
-- **VISION/ACT2_UI_BLUEPRINT.md** – **(Vision)** UI layout concepts for Act 2.
-- **VISION/ACT2_BALANCING_CONFIG.md** – **(Vision)** Balancing notes and config guidance for Act 2.
-- **VISION/ACT3_SCOPE.md** – **(Vision)** Act 3 scope and narrative expansion plan.
-- **VISION/ACT3_SYSTEMS.md** – **(Vision)** Act 3 systems and mechanics beyond the MVP.
-- **VISION/ACT3_STATE_EXTENSIONS.md** – **(Vision)** State model extensions for Act 3.
-- **VISION/ACT3_UI_BLUEPRINT.md** – **(Vision)** UI layout concepts for Act 3.
-- **VISION/ACT3_ENDGAME_LOOPS.md** – **(Vision)** Endgame loop concepts for Act 3.
-- **VISION/ACT3_BALANCING_CONFIG.md** – **(Vision)** Act 3 balancing notes and config guidance.
+**Historical / Vision Docs (Reference Only)**
+- **SCOPE_MVP.md**, **MVP/** — MVP planning artifacts.
+- **SCOPE_VISION.md**, **VISION/** — long‑term vision and planning artifacts.
+- **MASTER_IMPLEMENTATION_PLAN.md** — historical build plan.
 
-**Data Catalogs (Config Mirrors):**
-- **DATA_PERFORMERS.md** – Performer roster catalog (MVP + Vision placeholders).
-- **DATA_LOCATIONS.md** – Location catalog (MVP + Vision placeholders).
-- **DATA_THEMES.md** – Theme catalog (MVP + Vision placeholders).
-- **DATA_STORY_EVENTS.md** – Story event catalog (MVP + Vision placeholders).
-- **DATA_UI_COPY.md** – UI copy reference (MVP + Act 2/3 labels).
-- **DATA_EQUIPMENT.md** – Act 2 equipment catalog.
-- **DATA_MILESTONES.md** – Act 2 milestone catalog.
-- **DATA_SOCIAL_STRATEGIES.md** – Act 2 social strategy catalog.
-- **DATA_RIVALS.md** – Act 3 rival studio catalog.
-- **DATA_MARKET_SHIFTS.md** – Act 3 market shift catalog.
-- **DATA_REPUTATION_BRANCHES.md** – Act 3 reputation branch catalog.
-- **DATA_AUTOMATION.md** – Act 3 automation rules catalog.
-- **DATA_SCHEDULING.md** – Act 3 scheduling rules catalog.
-- **DATA_VARIANCE.md** – Act 3 content variance catalog.
-- **DATA_LEGACY_MILESTONES.md** – Act 3 legacy milestone catalog.
-
-Refer to `../README.md` in the repository root for a general introduction and setup instructions.
-
-## Implementation Layout (MVP Baseline)
-- JavaScript source lives in `/src`.
-- Main stylesheet is `/styles.css` in the repo root.
-- This layout is authoritative per `docs/MVP/MVP_FILE_STRUCTURE.md` and must not drift.
+Refer to `../README.md` in the repository root for setup instructions and repo overview.

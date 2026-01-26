@@ -1,8 +1,6 @@
-# Data — Studio Milestones (Post-MVP)
+# Data — Studio Milestones (Current)
 
-This catalog defines milestone targets and their reputation rewards. Values mirror `src/config.js`.
-
----
+This catalog defines milestone targets and reputation rewards. Values mirror `src/config.js`.
 
 ## Milestones
 
@@ -21,7 +19,9 @@ This catalog defines milestone targets and their reputation rewards. Values mirr
 | ms_reputation_25 | Reputation 25 | reputation | 25 | — |
 | ms_reputation_50 | Reputation 50 | reputation | 50 | — |
 
----
+## Behavior Notes
+- Milestones auto‑complete when thresholds are met; rewards are applied immediately.
+- Reputation‑type milestones are tracking only (no reward value is configured).
 
 ## Config Mapping
 Values map to:

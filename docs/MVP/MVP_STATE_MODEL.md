@@ -1,20 +1,22 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
+Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
 
 # MVP State Model (Authoritative gameState Spec)
 
-## 1) Purpose
-This document is the **single source of truth** for the MVP `gameState` shape. Any code that **creates, reads, or writes** state must follow this model **exactly**. If a field is not documented here, it must not be used in MVP code. The goal is to keep the game stable, predictable, and easy to save/load.
+## 1) Purpose (Historical)
+This document was the **single source of truth** for the MVP `gameState` shape during the original MVP build. It is no longer authoritative for the current implementation.
 
 ## 2) Authority & Scope Lock
-**Authority order (highest → lowest):**
-1) `docs/CURRENT_SCOPE.md`
-2) `docs/SCOPE_MVP.md`
-3) `docs/MVP/` (including this doc)
-4) `docs/VISION/` (read-only inspiration)
+**Authority order (historical, MVP only):**
+1) `docs/SCOPE_MVP.md`
+2) `docs/MVP/` (including this doc)
+3) `docs/VISION/` (read-only inspiration)
 
-**Bold rules (non-negotiable):**
-- **No extra fields may be added without updating this doc *and* `CHANGELOG.md`.**
-- **Anything from Act 2/Act 3 (Vision) is forbidden in the MVP state model.**
+**Bold rules (historical, MVP only):**
+- **No extra fields were added without updating this doc and `CHANGELOG.md`.**
+- **Act 2/Act 3 fields were not part of the MVP state model.**
 
 ## 3) State Design Principles (MVP)
 - `gameState` is the **only authoritative runtime state**.

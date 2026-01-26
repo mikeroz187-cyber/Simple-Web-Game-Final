@@ -1,4 +1,13 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+
+**Current behavior lives in:** `docs/CORE_GAMEPLAY_LOOP.md` (Current Game Rules) and `docs/GAMESTATE_DATA_MODEL.md`.
+
+## Current Build Notes (Summary)
+- The live build uses **manual Advance Day** with **per‑performer daily caps** (no global 5‑shoot cap).
+- Booking uses **Core Performers** or the **Agency Sample Pack** (freelance booking is not active).
+- Recruitment, automation, competition, and legacy milestones are implemented beyond the MVP baseline.
+
+## Archived MVP Baseline (Historical)
 
 # Studio Empire — MVP Scope
 

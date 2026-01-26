@@ -1,4 +1,7 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
+Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
 
 # MVP Test Scenarios
 

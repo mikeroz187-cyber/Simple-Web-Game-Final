@@ -1,3 +1,8 @@
+> **Status:** Vision reference only. This document is not authoritative for the current build.
+> Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+
+> Note: Current runtime config lives in `src/config.js`; `config.toml` is legacy.
+
 # Act 2 UI Blueprint (Additive to MVP)
 
 ## 1) UI Principles (Same as MVP)
@@ -254,7 +259,7 @@ Example action mappings (pseudocode):
 ## 7) UI Copy Rules (Minimal but Consistent)
 - UI text can live inline in render functions; keep labels consistent with MVP.
 - Prefer using `result.message` from systems for user feedback.
-- Do not create a localization system (out of scope).
+- Do not create a localization system in this historical blueprint (not part of the original Act 2 plan).
 
 ## 8) Act 2 UI Acceptance Criteria
 - [ ] All new/updated screens render without errors.
@@ -264,4 +269,4 @@ Example action mappings (pseudocode):
 - [ ] Save/export/import still works.
 - [ ] No Act 3 elements present.
 
-This doc defines only Act 2 UI changes. Act 3 UI and endgame flows are explicitly out of scope here.
+This doc defines only Act 2 UI changes as originally envisioned. Act 3 UI and endgame flows were not part of this historical plan.

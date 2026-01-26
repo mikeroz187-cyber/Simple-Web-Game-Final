@@ -1,162 +1,73 @@
-# Data — UI Copy (Full Game)
+# Data — UI Copy (Current)
 
-This document defines **standard UI text, messages, and labels** for Studio Empire. Use these exact strings in UI so copy stays consistent. Keep tone concise and direct. No lore or fluff.
+UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the system modules. This document lists the **current, visible labels** and key helper text to keep terminology consistent.
 
----
+## Screen Titles
+- Hub
+- Booking
+- Content
+- Analytics
+- Roster
+- Social
+- Gallery
+- Story Log
+- Shop
+- Slideshow / Shoot Photos / Meet Recruit
 
-## Screen Titles (MVP)
+## Primary Navigation (Hub)
+- Booking
+- Analytics
+- Social
+- Gallery
+- Story Log
+- Roster
+- Shop
+- Pay Debt
 
-| Screen | Title Text |
-| --- | --- |
-| Hub | Hub |
-| Booking | Booking |
-| Content | Content |
-| Analytics | Analytics |
-| Roster | Roster |
-| Social | Social |
-| Gallery | Gallery |
-| Shop | Shop |
+## Global Actions
+- Save Now
+- Load Save
+- Export Save
+- Import Save
+- Advance Day
 
----
+## Booking
+- Booking Mode: **Core Performer**, **Agency Sample Pack**
+- Confirm Shoot
+- Back to Hub
 
-## Button Labels (MVP)
+## Content / Analytics
+- View Analytics
+- Book Next Shoot
+- Back to Hub
 
-### Global
-- Primary: "Confirm"
-- Secondary: "Cancel"
-- Close: "Close"
-- Back: "Back"
-- Back to Hub: "Back to Hub"
-- Save Now: "Save Now"
-- Load Save: "Load Save"
-- Export Save: "Export Save"
-- Import Save: "Import Save"
+## Roster / Recruitment
+- Meet
+- Decline
+- Hire (cost shown on final slide)
+- Renew Contract (cost shown)
 
-### Hub
-- Booking: "Booking"
-- Analytics: "Analytics"
-- Social: "Social"
-- Gallery: "Gallery"
-- Roster: "Roster"
-- Shop: "Shop"
-- Pay Debt: "Pay Debt"
+## Social
+- Select Strategy / Active Strategy
+- Manual Social Strategy: Apply Strategy, Auto‑normalize
+- Post to Instagram
+- Post to X
 
-### Booking
-- Confirm Shoot: "Confirm Shoot"
+## Gallery / Slideshow
+- View Shoot Photos
+- Prev / Next / Close
+- Back to Roster (recruit slideshow)
 
-### Content
-- View Analytics: "View Analytics"
+## Shop
+- Unlock (for tier unlocks)
+- Upgrade (for equipment)
 
-### Analytics
-- Book Next Shoot: "Book Next Shoot"
+## Common Status Messages
+- Save complete.
+- Export complete.
+- Import complete.
+- Debt paid in full.
+- Not enough cash for this shoot.
+- Select a performer / location / theme / content type.
 
-### Roster
-- (Roster is read-only in MVP.)
-
-### Social
-- Post to Instagram: "Post to Instagram"
-- Post to X: "Post to X"
-
-### Gallery
-- (No Gallery-specific action buttons beyond navigation.)
-
-### Shop
-- Buy Unlock: "Buy Unlock"
-
-## Button Labels (Act 2)
-
-### Social
-- Apply Strategy: "Apply Strategy"
-
-### Shop
-- Unlock Tier: "Unlock Tier"
-- Buy Upgrade: "Buy Upgrade"
-
-## Button Labels (Act 3)
-
-### Hub
-- Evaluate Rivals: "Evaluate Rivals"
-- Resolve Event: "Resolve Event"
-- Select Branch: "Select Branch"
-- Claim Reward: "Claim Reward"
-- Configure Automation: "Configure Automation"
-- Resolve Schedule: "Resolve Schedule"
-
-### Booking
-- Queue Booking: "Queue Booking"
-
----
-
-## Success Messages (MVP)
-
-- "Shoot completed."
-- "Content created."
-- "Posted to Instagram. +{followers} followers."
-- "Posted to X. +{followers} followers."
-- "Upgrade purchased."
-- "Save complete."
-- "Export complete."
-- "Import complete."
-- "Debt paid in full."
-
----
-
-## Error Messages (MVP)
-
-- "Not enough cash."
-- "Performer unavailable."
-- "Select all fields to continue."
-- "No available performers."
-- "No available locations."
-- "No available themes."
-- "Invalid save file."
-- "Save failed."
-- "Import failed."
-- "Debt already paid."
-- "Not enough cash to pay the debt."
-
----
-
-## Empty State Messages (MVP)
-
-- "No content yet. Book a shoot first."
-- "No analytics yet. Publish content first."
-- "No performers available."
-- "No social posts yet."
-- "No gallery items yet."
-- "No upgrades available."
-
----
-
-## Feedback Summaries (MVP)
-
-Use these as short, one-line summaries for content results.
-
-- "Excellent promo reach!"
-- "Great promo reach!"
-- "Solid promo performance."
-- "Weak promo performance."
-- "Excellent premium performance!"
-- "Great premium performance!"
-- "Solid premium performance."
-- "Weak premium performance."
-
----
-
-## Vision UI Copy (Act 2/Act 3)
-
-> NOT IN MVP — placeholders for later expansion.
-
-### Milestone Messages
-- "Milestone reached: {milestoneName}."
-- "Tier unlocked: {tierName}."
-- "New feature unlocked."
-
-### Rival Alerts
-- "Rival activity detected."
-- "Rival gained {followers} followers this week."
-- "Rival released a premium drop."
-
-### Event Prompts
-- "Special event available."
-- "Limited-time offer available."
+For exact phrasing of system messages (booking results, automation, recruitment, etc.), reference the relevant system module under `src/systems/`.

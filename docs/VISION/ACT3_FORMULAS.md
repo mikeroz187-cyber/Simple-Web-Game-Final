@@ -1,3 +1,8 @@
+> **Status:** Vision reference only. This document is not authoritative for the current build.
+> Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+
+> Note: Current runtime config lives in `src/config.js`; `config.toml` is legacy.
+
 # Act 3 Gameplay Formulas (Additive to MVP + Act 2)
 
 This document defines **exact Act 3 calculations** to avoid guessing. Act 3 formulas are **additive** and must not alter MVP or Act 2 behavior unless explicitly stated.

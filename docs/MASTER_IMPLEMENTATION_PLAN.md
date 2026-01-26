@@ -1,4 +1,5 @@
-STATUS: Historical planning reference. MVP is complete and frozen. Current scope is Post-MVP (Act 1+) content-only; see `docs/CURRENT_SCOPE.md`.
+**Status:** Historical planning reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
 
 # Master Implementation Plan (MVP → Act 2 → Act 3)
 

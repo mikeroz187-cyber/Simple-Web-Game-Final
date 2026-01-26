@@ -1,48 +1,25 @@
-# CURRENT SCOPE (Authoritative)
+# Current Focus (Not a Constraint)
 
-**Last Updated:** January 26, 2026
+This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-## Current Phase
-- **Post-MVP (Act 1+ Content Expansion) — Approved**: Tie reputation to milestone rewards (followers, OF subs, MRR), add a roster Recruitment panel with rep-gated candidates and a meet slideshow leading to hire/decline, replace the global 5/day booking cap with per-performer daily caps plus a once-per-day agency pack, and add a slideshow viewer for recruit meets and shoot photos.
-- **Act 3 (Days 181-270) — Complete**: Act 3 foundations, story arc, progression systems, optional automation expansion, and legacy milestones are delivered. Current work is polish/bugfix only.
-- **Codex scope update (approved)**: Implement Star Power progression, apply Star Power to promo social gains, and refactor revenue mechanics into OF subs + MRR income (no new screens).
+**Last Updated:** March 2, 2026
 
-## Completed (Confirmed)
-- **Act 1 (MVP) complete**: core loop, all screens, save/load with slots + autosave, export/import, day advancement, economy basics, content types, starter roster, tiers/themes, social posting, story events, win/loss conditions.
-- **Act 2 complete**: expanded performer management, advanced analytics rollups, location tier 2, equipment upgrades, Act 2 themes, story events, expanded roster depth, social strategies (manual + daily budget), milestones, automation tier 1, Story Log, portrait/thumbnail placeholders, gallery output cards, save v2 schema.
-- **Post-MVP Fixes/QoL complete**: promo posting fixes, analytics clarity, freelancer rerolls, metrics split, booking UI/validation fixes, promo platform posting rules, daily cap behavior, promo conversion tuning, booking role restrictions removed.
-- **Booking scope update**: booking is single-performer only; Slot B and combo effects were cut for scope reduction.
-- **Theme scope update**: booking themes are locked to 4 (Lingerie, Office, Uniform, Interracial).
-- **Location scope update**: booking locations reduced to 3 (Bedroom Tier 0, Shower Tier 1, Office Tier 2), using existing tier locks.
-- **Act 3 complete**: Save v3 schema + migration; A3.1 Rival Studios; A3.2 High-Impact Events; A3.3 Reputation Branches; A3.4 Act 3 Story Arc; A3.5 Optional Automation (expanded); A3.6 Content Performance Variance; A3.8 Legacy Milestones.
-- **Debug tooling**: dev-only Set Day panel gated by `?debug=1`, dev-only stat setters, and the “Run Checks Now” milestone helper.
+## Recently Completed
+- Recruitment flow with rep-gated candidates, meet slideshow, and hire/decline outcomes.
+- Agency Sample Pack booking mode with daily limit and five-image bundle output.
+- Manual social strategy (budget + channel allocation) and social strategy selection.
+- Competition system, market shifts, and Studio Identity (reputation branches).
+- Act 2 and Act 3 story events, Story Log screen, and legacy milestones.
+- Premium variance rolls, equipment upgrades, Tier 2 locations, and analytics rollups.
 
-## Completed / Previous Phases (Archived Scope)
-- The prior **Act 2 Phase 1 / Option A slice** scope items are fully delivered and no longer active.
-- Ongoing work is restricted to Act 3 items listed in `docs/task-checklist.md`.
+## Currently Working On
+- Documentation reconciliation so every doc matches the current implementation.
+- Clarifying UI copy, labels, and data catalogs to mirror in-game behavior.
 
-## Next Steps (Act 3 — Start Here)
-1. **Implement Act 1+ content expansion** — reputation milestone rewards, recruitment/hiring flow, per-performer daily caps + agency pack once/day, and shared slideshow viewer for recruit meets and shoot photos.
-
-## Act 1 Time Control (Locked)
-- **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.
-- **Primary time progression for Act 1**: time advances only when the player triggers Advance Day after the required shoots; this is the canonical pacing/testing mechanism for Act 1.
-- **No automation yet**: automated/background day progression is explicitly out of scope until a later Act.
-
-## Authority Order (Documentation to Follow)
-Repo layout is authoritative here to prevent drift across MVP docs.
-When building or reviewing features, **follow these documents in order**:
-1. **docs/CURRENT_SCOPE.md** (this file – latest scope definition)
-2. **docs/SCOPE_MVP.md** (historical MVP feature list and plan)
-3. **docs/MVP/MVP_TECH_GUARDRAILS.md** (historical MVP guardrails)
-4. **docs/MVP/MVP_FILE_STRUCTURE.md** (historical MVP file map)
-5. **docs/MVP/MVP_BUILD_ORDER.md** (historical MVP build order)
-6. **docs/MVP/MVP_UI_BLUEPRINT.md** (historical MVP UI blueprint)
-7. **docs/MVP/MVP_STATE_MODEL.md** (historical MVP state model)
-
-*(If any discrepancy arises, the CURRENT_SCOPE.md has the final say.)*
-
-## How to Use This File
-- **Scope changes post-MVP**: When new features are approved after MVP, update *only* this `CURRENT_SCOPE.md` to expand scope. This file “unlocks” new features for development.
-- **Do not retroactively edit older Vision docs** for scope changes. The vision docs remain as historical reference designs, even if the scope evolves. Always refer back here for the official current scope.
-- **Implementation status**: Progress tracking lives outside this file (use a separate progress/status document if needed).
+## Next 3–7 Candidate Tasks
+- Add real artwork for performer portraits, location thumbnails, and slideshow images.
+- Tune economy values in `src/config.js` (MRR pacing, costs, conversions).
+- Expand theme catalog once art + balance targets are defined.
+- Surface freelancer personas more explicitly in the Roster UI.
+- Add QA notes for save migration edge cases and debug workflows.
+- Review automation balance (auto-book vs auto-post priority) for late-game pacing.

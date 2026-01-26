@@ -1,3 +1,8 @@
+> **Status:** Vision reference only. This document is not authoritative for the current build.
+> Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+
+> Note: Current runtime config lives in `src/config.js`; `config.toml` is legacy.
+
 # Act 3 Scope (Late Game + Endgame)
 
 ## 1) Act 3 Goal Statement
