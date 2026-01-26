@@ -353,12 +353,17 @@ function tryAutoBookOne(gameState) {
   if (!shootCostResult.ok) {
     return { success: false, reason: "Unable to calculate shoot cost" };
   }
-  if (gameState.player.cash < shootCostResult.value) {
+  const adjustedCost = applyContentTypeCostMultiplier(
+    shootCostResult.value,
+    selectionResult.selection.contentType
+  );
+  const finalShootCost = adjustedCost.finalCost;
+  if (gameState.player.cash < finalShootCost) {
     return { success: false, reason: "Not enough cash" };
   }
   const automationConfig = CONFIG.automation || {};
   const minReserve = Number.isFinite(automationConfig.minCashReserve) ? automationConfig.minCashReserve : 0;
-  if (minReserve > 0 && gameState.player.cash - shootCostResult.value < minReserve) {
+  if (minReserve > 0 && gameState.player.cash - finalShootCost < minReserve) {
     return {
       success: false,
       reason: "Cash reserve would drop below " + formatCurrency(minReserve)
@@ -445,9 +450,11 @@ function confirmBooking(gameState, selection) {
   const comboConfig = getBookingComboConfig();
   const hasCombo = !isAgencyPack && comboConfig.enabled && performerSelection.performerIds.length === 2;
   const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
-  const shootCost = hasCombo
+  const baseShootCost = hasCombo
     ? Math.floor(shootCostResult.value * costMultiplier)
     : shootCostResult.value;
+  const adjustedCost = applyContentTypeCostMultiplier(baseShootCost, selection.contentType);
+  const shootCost = adjustedCost.finalCost;
   if (gameState.player.cash < shootCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
@@ -545,6 +552,8 @@ function confirmBooking(gameState, selection) {
     shootCost: shootCost,
     photoPaths: buildShootPhotoPaths(),
     results: {
+      baseShootCost: baseShootCost,
+      costMult: adjustedCost.mult,
       socialFollowersGained: socialFollowersGained,
       socialSubscribersGained: socialSubscribersGained,
       onlyFansSubscribersGained: onlyFansSubscribersGained,

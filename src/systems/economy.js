@@ -18,6 +18,26 @@ function calculateAgencyPackCost(location) {
   return { ok: true, value: Math.max(0, Math.round(cost)) };
 }
 
+function getContentTypeCostMultiplier(contentType) {
+  const economyConfig = CONFIG.economy && typeof CONFIG.economy === "object" ? CONFIG.economy : {};
+  const multConfig = economyConfig.contentTypeCostMult && typeof economyConfig.contentTypeCostMult === "object"
+    ? economyConfig.contentTypeCostMult
+    : {};
+  const typeKey = (contentType || "").toLowerCase();
+  const mult = Number.isFinite(multConfig[typeKey]) ? multConfig[typeKey] : 1;
+  return mult;
+}
+
+function applyContentTypeCostMultiplier(baseCost, contentType) {
+  const safeBase = Number.isFinite(baseCost) ? baseCost : 0;
+  const mult = getContentTypeCostMultiplier(contentType);
+  return {
+    baseCost: safeBase,
+    mult: mult,
+    finalCost: Math.round(safeBase * mult)
+  };
+}
+
 function getEquipmentLevel(gameState, levelKey) {
   if (!gameState || !gameState.equipment) {
     return 0;
