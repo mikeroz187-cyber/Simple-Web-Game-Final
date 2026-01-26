@@ -33,11 +33,11 @@ function getEquipmentFollowersMultiplier(gameState) {
     (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.followersMultPerLevel);
 }
 
-function getEquipmentRevenueMultiplier(gameState) {
+function getEquipmentOfSubsMultiplier(gameState) {
   const cameraLevel = getEquipmentLevel(gameState, "cameraLevel");
   const setDressingLevel = getEquipmentLevel(gameState, "setDressingLevel");
-  return (cameraLevel * CONFIG.equipment.upgrades.camera.revenueMultPerLevel) +
-    (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.revenueMultPerLevel);
+  return (cameraLevel * CONFIG.equipment.upgrades.camera.ofSubsMultPerLevel) +
+    (setDressingLevel * CONFIG.equipment.upgrades.set_dressing.ofSubsMultPerLevel);
 }
 
 function getMRR(gameState) {
@@ -67,10 +67,10 @@ function applyEquipmentFollowersMultiplier(baseFollowers, gameState) {
   return Math.round(safeFollowers * (1 + multiplier));
 }
 
-function applyEquipmentRevenueMultiplier(baseRevenue, gameState) {
-  const safeRevenue = Number.isFinite(baseRevenue) ? baseRevenue : 0;
-  const multiplier = getEquipmentRevenueMultiplier(gameState);
-  return Math.round(safeRevenue * (1 + multiplier));
+function applyEquipmentOfSubsMultiplier(baseOfSubs, gameState) {
+  const safeOfSubs = Number.isFinite(baseOfSubs) ? baseOfSubs : 0;
+  const multiplier = getEquipmentOfSubsMultiplier(gameState);
+  return Math.round(safeOfSubs * (1 + multiplier));
 }
 
 function calculatePromoFollowers(performer, theme) {
@@ -85,16 +85,16 @@ function calculatePromoFollowers(performer, theme) {
   return { ok: true, value: Math.max(0, followersGained) };
 }
 
-function calculatePremiumRevenue(performer, theme) {
+function calculatePremiumOfSubs(performer, theme) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };
   }
-  const revenue = Math.round(
-    CONFIG.economy.premium_base_revenue *
-    theme.modifiers.revenueMult *
+  const ofSubs = Math.round(
+    CONFIG.economy.premium_base_of_subs *
+    theme.modifiers.ofSubsMult *
     performer.starPower
   );
-  return { ok: true, value: Math.max(0, revenue) };
+  return { ok: true, value: Math.max(0, ofSubs) };
 }
 
 function calculateSubscribersGained(followersGained) {

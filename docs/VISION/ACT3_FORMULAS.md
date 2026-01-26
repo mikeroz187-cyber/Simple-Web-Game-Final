@@ -40,9 +40,9 @@ const nextScore = rival.baseScore * Math.pow(rival.weeklyGrowthRate, windowsElap
 **Code-ready expression**
 ```js
 const shift = CONFIG.market.shifts[shiftId];
-const revenueMult = Math.min(
+const ofSubsMult = Math.min(
   CONFIG.market.multiplierCeiling,
-  Math.max(CONFIG.market.multiplierFloor, shift.revenueMult)
+  Math.max(CONFIG.market.multiplierFloor, shift.ofSubsMult)
 );
 
 const followersMult = Math.min(
@@ -62,7 +62,7 @@ const followersMult = Math.min(
 ## 3) Reputation Branch Modifiers (Act 3)
 
 **Plain English**
-- Once a branch is selected, apply its modifiers to Promo followers and Premium revenue.
+- Once a branch is selected, apply its modifiers to Promo followers and Premium OF subs.
 - Branch selection requires the configured reputation threshold.
 
 **Code-ready expression**
@@ -71,7 +71,7 @@ const branch = CONFIG.reputation.branches.branches.find(b => b.id === branchId);
 const canSelect = gameState.player.reputation >= branch.requiredReputation;
 
 const followersAfterBranch = Math.round(baseFollowers * branch.followersMult);
-const revenueAfterBranch = Math.round(baseRevenue * branch.revenueMult);
+const ofSubsAfterBranch = Math.round(baseOfSubs * branch.ofSubsMult);
 ```
 
 **Config values used**
@@ -107,7 +107,7 @@ const hasCashBuffer = gameState.player.cash >= CONFIG.automation.minCashReserve;
 ## 5) Content Performance Variance (Act 3)
 
 **Plain English**
-- Apply a bounded variance roll to Promo followers or Premium revenue.
+- Apply a bounded variance roll to Promo followers or Premium OF subs.
 - Variance is deterministic: use stored seed and log the roll in `content.variance.rollLog`.
 
 **Code-ready expression**
@@ -118,7 +118,7 @@ const variance = (roll * 2 * maxVariance) - maxVariance; // [-max, +max]
 
 const varianceMult = 1 + variance;
 const adjustedFollowers = Math.round(baseFollowers * varianceMult);
-const adjustedRevenue = Math.round(baseRevenue * varianceMult);
+const adjustedOfSubs = Math.round(baseOfSubs * varianceMult);
 ```
 
 **Config values used**
@@ -132,7 +132,7 @@ const adjustedRevenue = Math.round(baseRevenue * varianceMult);
 
 **Plain English**
 - Legacy milestones complete when their tracked metric meets the configured threshold.
-- Supported types: `followers`, `subscribers`, `reputation`, `lifetimeRevenue`, `storyComplete`.
+- Supported types: `followers`, `subscribers`, `reputation`, `mrr`, `storyComplete`.
 
 **Code-ready expression**
 ```js
@@ -140,7 +140,7 @@ const metricValueByType = {
   followers: gameState.player.followers,
   subscribers: gameState.player.subscribers,
   reputation: gameState.player.reputation,
-  lifetimeRevenue: gameState.player.lifetimeRevenue || 0,
+  mrr: getMRR(gameState),
   storyComplete: gameState.story.act3.eventsShown.length > 0 ? 1 : 0
 };
 

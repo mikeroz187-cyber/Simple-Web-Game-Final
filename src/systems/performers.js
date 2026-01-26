@@ -323,6 +323,47 @@ function recoverAllPerformers(gameState) {
   });
 }
 
+function getStarPowerProgressionConfig() {
+  if (CONFIG.performers && CONFIG.performers.starPowerProgression && typeof CONFIG.performers.starPowerProgression === "object") {
+    return CONFIG.performers.starPowerProgression;
+  }
+  return { enabled: false };
+}
+
+function applyStarPowerProgression(performer) {
+  if (!performer) {
+    return { leveledUp: false };
+  }
+  const config = getStarPowerProgressionConfig();
+  if (!config.enabled) {
+    return { leveledUp: false };
+  }
+  const shootsPerIncrease = Number.isFinite(config.shootsPerIncrease) ? config.shootsPerIncrease : 0;
+  if (shootsPerIncrease <= 0) {
+    return { leveledUp: false };
+  }
+  if (!Number.isFinite(performer.starPowerShoots) || performer.starPowerShoots < 0) {
+    performer.starPowerShoots = 0;
+  }
+  performer.starPowerShoots += 1;
+  if (performer.starPowerShoots < shootsPerIncrease) {
+    return { leveledUp: false };
+  }
+  const maxStarPower = Number.isFinite(config.maxStarPower) ? config.maxStarPower : null;
+  const currentStarPower = Number.isFinite(performer.starPower)
+    ? performer.starPower
+    : (Number.isFinite(CONFIG.performers.default_star_power) ? CONFIG.performers.default_star_power : 1);
+  let leveledUp = false;
+  let nextStarPower = currentStarPower;
+  if (!Number.isFinite(maxStarPower) || currentStarPower < maxStarPower) {
+    nextStarPower = currentStarPower + 1;
+    performer.starPower = nextStarPower;
+    leveledUp = true;
+  }
+  performer.starPowerShoots = Math.max(0, performer.starPowerShoots - shootsPerIncrease);
+  return { leveledUp: leveledUp, newStarPower: nextStarPower };
+}
+
 function updatePerformerStats(gameState, performerId, fatigueMultiplier) {
   if (!gameState || !performerId) {
     return { ok: false, message: "Missing performer selection." };
@@ -336,5 +377,6 @@ function updatePerformerStats(gameState, performerId, fatigueMultiplier) {
   }
 
   applyShootFatigue(performer, fatigueMultiplier);
-  return { ok: true };
+  const starPowerResult = applyStarPowerProgression(performer);
+  return { ok: true, starPowerResult: starPowerResult, performer: performer };
 }

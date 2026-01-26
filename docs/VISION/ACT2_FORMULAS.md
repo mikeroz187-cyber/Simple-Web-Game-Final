@@ -124,19 +124,19 @@ const lightingMult = 1 +
   (equipment.lightingLevel * CONFIG.equipment.upgrades.lighting.followersMultPerLevel) +
   (equipment.setDressingLevel * CONFIG.equipment.upgrades.set_dressing.followersMultPerLevel);
 
-const revenueMult = 1 +
-  (equipment.cameraLevel * CONFIG.equipment.upgrades.camera.revenueMultPerLevel) +
-  (equipment.setDressingLevel * CONFIG.equipment.upgrades.set_dressing.revenueMultPerLevel);
+const ofSubsMult = 1 +
+  (equipment.cameraLevel * CONFIG.equipment.upgrades.camera.ofSubsMultPerLevel) +
+  (equipment.setDressingLevel * CONFIG.equipment.upgrades.set_dressing.ofSubsMultPerLevel);
 
 const followersAfterEquipment = Math.round(baseFollowers * lightingMult);
-const revenueAfterEquipment = Math.round(baseRevenue * revenueMult);
+const ofSubsAfterEquipment = Math.round(baseOfSubs * ofSubsMult);
 ```
 
 **Config values used**
 - `CONFIG.equipment.upgrades.lighting.followersMultPerLevel`
-- `CONFIG.equipment.upgrades.camera.revenueMultPerLevel`
+- `CONFIG.equipment.upgrades.camera.ofSubsMultPerLevel`
 - `CONFIG.equipment.upgrades.set_dressing.followersMultPerLevel`
-- `CONFIG.equipment.upgrades.set_dressing.revenueMultPerLevel`
+- `CONFIG.equipment.upgrades.set_dressing.ofSubsMultPerLevel`
 
 ---
 
@@ -190,12 +190,14 @@ const postsInWindow = gameState.social.posts.filter(post =>
   post.dayPosted >= windowStart
 );
 
-const revenue = contentInWindow.reduce((sum, entry) => sum + entry.results.revenue, 0);
-const followers = contentInWindow.reduce((sum, entry) => sum + entry.results.followersGained, 0) +
-  postsInWindow.reduce((sum, post) => sum + post.followersGained, 0);
+const socialFollowers = contentInWindow.reduce((sum, entry) => sum + entry.results.socialFollowersGained, 0) +
+  postsInWindow.reduce((sum, post) => sum + post.socialFollowersGained, 0);
 
-const subscribers = contentInWindow.reduce((sum, entry) => sum + entry.results.subscribersGained, 0) +
-  postsInWindow.reduce((sum, post) => sum + post.subscribersGained, 0);
+const socialSubscribers = contentInWindow.reduce((sum, entry) => sum + entry.results.socialSubscribersGained, 0) +
+  postsInWindow.reduce((sum, post) => sum + post.socialSubscribersGained, 0);
+
+const onlyFansSubscribers = contentInWindow.reduce((sum, entry) => sum + entry.results.onlyFansSubscribersGained, 0) +
+  postsInWindow.reduce((sum, post) => sum + post.onlyFansSubscribersGained, 0);
 
 const promoCount = contentInWindow.filter(entry => entry.contentType === "Promo").length;
 const premiumCount = contentInWindow.filter(entry => entry.contentType === "Premium").length;

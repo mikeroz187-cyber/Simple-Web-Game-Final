@@ -61,7 +61,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `subscribers` | integer | Required | `0` | Must be `>= 0`. |
 | `onlyFansSubCarry` | number | Optional | `0` | Fractional carry for OF conversion; must be finite and `>= 0`. |
 | `reputation` | integer | Required | `config.progression.starting_reputation` | Must be `>= 0` (if negatives are not defined in scope). |
-| `lifetimeRevenue` | number | Optional | `0` | Only include if MVP UI displays cumulative revenue. Must be `>= 0`. |
+| `lifetimeMRR` | number | Optional | `0` | Only include if MVP UI displays cumulative MRR. Must be `>= 0`. |
 
 **Day limit alignment rule:** If `config.game.action_day_max` exists, it must match `config.game.debt_due_day`. `player.debtDueDay` is the authoritative cap for MVP day progression.
 
@@ -101,9 +101,9 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 #### `ContentEntry.results`
 | Field | Type | Required | Default | Invariants |
 | --- | --- | --- | --- | --- |
-| `revenue` | number | Required | `0` for Promo | Must be `>= 0`. |
-| `followersGained` | integer | Required | `0` for Premium | Must be `>= 0`. |
-| `subscribersGained` | integer | Required | Derived from followers + conversion | Must be `>= 0`. |
+| `socialFollowersGained` | integer | Required | `0` for Premium | Must be `>= 0`. |
+| `socialSubscribersGained` | integer | Required | `0` for Premium | Must be `>= 0`. |
+| `onlyFansSubscribersGained` | integer | Required | Derived from Premium output | Must be `>= 0`. |
 | `feedbackSummary` | string | Required | Generated text | Non-empty if shown in UI. |
 
 ### 6.4 `social`
@@ -118,8 +118,9 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 | `postedAtDay` | integer | Required | `player.day` at posting | Must be `>= 1`. |
 | `platformId` | string | Required | Platform ID | Must match config `[social_platforms].platforms`. |
 | `contentId` | string | Required | Targeted content | Must exist in `content.entries`. Must be Promo content. |
-| `followersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
-| `subscribersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
+| `socialFollowersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
+| `socialSubscribersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
+| `onlyFansSubscribersGained` | integer | Required | Calculated impact | Must be `>= 0`. |
 
 **Per-item posted flags rule:** To answer “has this content been posted to platform X?”, **search `social.posts`** for a record with matching `contentId` + `platformId`. Do **not** add posted flags to `content.entries` or mutate content metadata.
 
@@ -169,7 +170,7 @@ This document is the **single source of truth** for the MVP `gameState` shape. A
 - Performer availability (derive from fatigue and config thresholds).
 - Per-item posted flags (derive by searching `social.posts` for `contentId` + `platformId`).
 
-If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in `player.lifetimeRevenue` and **do not duplicate** it elsewhere.
+If MVP UI **requires** a stored total (e.g., lifetime MRR), store it once in `player.lifetimeMRR` and **do not duplicate** it elsewhere.
 
 ## 9) Invariants (Must Always Be True)
 - `player.day` is an integer `>= 1` and `<= player.debtDueDay`.
@@ -398,9 +399,9 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
         "contentType": "Promo",
         "shootCost": 100,
         "results": {
-          "revenue": 0,
-          "followersGained": 100,
-          "subscribersGained": 1,
+          "socialFollowersGained": 100,
+          "socialSubscribersGained": 1,
+          "onlyFansSubscribersGained": 0,
           "feedbackSummary": "Solid promo reach."
         }
       }
@@ -414,8 +415,9 @@ If MVP UI **requires** a stored total (e.g., lifetime revenue), store it once in
         "postedAtDay": 1,
         "platformId": "Instagram",
         "contentId": "content_1",
-        "followersGained": 20,
-        "subscribersGained": 1
+        "socialFollowersGained": 20,
+        "socialSubscribersGained": 1,
+        "onlyFansSubscribersGained": 0
       }
     ]
   },

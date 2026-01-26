@@ -47,17 +47,17 @@ Hard rules:
 - Purpose
   - Apply Act 2 economic effects (costs, payouts, maintenance) without breaking MVP rules.
 - Public functions (names + parameters + returns)
-  - applyContentRevenue(gameState, contentId) -> Result
+  - applyContentOfSubs(gameState, contentId) -> Result
   - applyRecurringCosts(gameState, context) -> Result
 - State touched (explicit keys)
   - Reads: `content.entries`, `equipment` (if it modifies output), `player`.
-  - Writes: `player.cash`, `player.lifetimeRevenue` (if used in MVP).
+  - Writes: `player.cash`, `player.lifetimeMRR` (if used in MVP).
 - Config dependencies (explicit CONFIG paths)
   - `CONFIG.economy.*` (base MVP values + Act 2 equipment multipliers).
   - `CONFIG.equipment.*` (upgrade multipliers and costs).
 - Edge cases / failure modes
   - Content not found → `{ ok:false, code:"content_not_found" }`.
-  - Negative or NaN revenue → clamp or reject with `{ ok:false, code:"invalid_revenue" }`.
+  - Negative or NaN OF subs → clamp or reject with `{ ok:false, code:"invalid_of_subs" }`.
 - Acceptance criteria
   - Economic adjustments are additive to MVP calculations.
   - No MVP values are overwritten; only Act 2 additions apply when enabled.
@@ -225,7 +225,7 @@ Explicitly forbid:
 ## 9) Testability Checklist (Manual Testing)
 Per system, quick manual checks:
 - Economy
-  - Action succeeds (revenue applied after content result).
+  - Action succeeds (OF subs applied after content result).
   - Action fails safely (invalid content ID returns a blocked Result).
 - Performers
   - Action succeeds (availability updates in roster).

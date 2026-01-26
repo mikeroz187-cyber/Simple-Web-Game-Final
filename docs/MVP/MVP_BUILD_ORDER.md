@@ -217,13 +217,13 @@ A step is “done” only when:
 
 ---
 
-### Phase 7 — Analytics v1 (Revenue + Followers + Subscribers)
+### Phase 7 — Analytics v1 (MRR Change + Followers + Subscribers)
 **Goal:** Show results + reinforce loop.
 
 **Implementation checklist:**
 - Analytics screen reads last content result.
 - Applies simple deterministic formulas (from `CONFIG`) for:
-  - Revenue
+  - MRR change
   - Follower gain
   - Subscriber gain (if MVP requires it)
 

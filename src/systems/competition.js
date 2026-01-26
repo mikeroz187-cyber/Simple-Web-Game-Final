@@ -148,15 +148,15 @@ function clampMultiplier(value) {
 function getCompetitionMultipliers(gameState, day) {
   const config = getCompetitionConfig();
   if (!isCompetitionEnabled(config, day)) {
-    return { promoFollowerMult: 1, premiumRevenueMult: 1 };
+    return { promoFollowerMult: 1, premiumOfSubsMult: 1 };
   }
   const shift = getActiveMarketShift(gameState, day);
   if (!shift || !shift.multipliers) {
-    return { promoFollowerMult: 1, premiumRevenueMult: 1 };
+    return { promoFollowerMult: 1, premiumOfSubsMult: 1 };
   }
   const promoFollowerMult = clampMultiplier(shift.multipliers.promoFollowerMult);
-  const premiumRevenueMult = clampMultiplier(shift.multipliers.premiumRevenueMult);
-  return { promoFollowerMult: promoFollowerMult, premiumRevenueMult: premiumRevenueMult };
+  const premiumOfSubsMult = clampMultiplier(shift.multipliers.premiumOfSubsMult);
+  return { promoFollowerMult: promoFollowerMult, premiumOfSubsMult: premiumOfSubsMult };
 }
 
 function getCompetitionStandings(gameState) {

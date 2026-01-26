@@ -177,6 +177,7 @@ function buildRosterPerformer(performerId) {
     name: performer.name,
     type: performer.type,
     starPower: performer.starPower,
+    starPowerShoots: 0,
     portraitPath: getPerformerPortraitPath(performer),
     fatigue: 0,
     loyalty: CONFIG.performers.starting_loyalty
@@ -254,6 +255,20 @@ function ensurePerformerManagementState(candidate) {
       ensurePerformerManagementForId(candidate, performer);
     });
   }
+}
+
+function ensurePerformerStarPowerProgress(candidate) {
+  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
+    return;
+  }
+  candidate.roster.performers.forEach(function (performer) {
+    if (!performer) {
+      return;
+    }
+    if (!Number.isFinite(performer.starPowerShoots) || performer.starPowerShoots < 0) {
+      performer.starPowerShoots = 0;
+    }
+  });
 }
 
 function ensureContentVarianceState(candidate) {
@@ -375,16 +390,29 @@ function migrateGameState(candidate) {
   const currentVersion = CONFIG.save.save_schema_version;
   const candidateVersion = candidate.version;
 
-  if (!Number.isFinite(candidateVersion) || candidateVersion !== currentVersion) {
+  if (!Number.isFinite(candidateVersion)) {
     return {
       ok: true,
       gameState: newGameState(),
       didReset: true,
-      message: "Major update: resetting save for v3 metrics."
+      message: "Major update: resetting save for v4 schema."
     };
   }
 
-  // Version 3 -> 3 no-op migration. Keep explicit for future schema updates.
+  if (candidateVersion !== currentVersion) {
+    if (candidateVersion === 3 && currentVersion === 4) {
+      candidate.version = currentVersion;
+    } else {
+      return {
+        ok: true,
+        gameState: newGameState(),
+        didReset: true,
+        message: "Major update: resetting save for v4 schema."
+      };
+    }
+  }
+
+  // Version 4 migration: ensure new performer star power progression fields.
   if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
     candidate.player.shootsToday = 0;
   }
@@ -441,6 +469,7 @@ function migrateGameState(candidate) {
     candidate.storyLog = [];
   }
   ensureRosterCompleteness(candidate);
+  ensurePerformerStarPowerProgress(candidate);
   ensureFreelancerProfilesState(candidate);
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
@@ -565,11 +594,18 @@ function validateGameState(candidate) {
     if (["core", "freelance"].indexOf(performer.type) === -1) {
       return { ok: false, message: "Performer type invalid." };
     }
-    if (!Number.isFinite(performer.starPower) || !Number.isFinite(performer.fatigue) || !Number.isFinite(performer.loyalty)) {
+    if (!Number.isFinite(performer.starPower) ||
+      !Number.isFinite(performer.starPowerShoots) ||
+      !Number.isFinite(performer.fatigue) ||
+      !Number.isFinite(performer.loyalty)
+    ) {
       return { ok: false, message: "Performer stats invalid." };
     }
     if (performer.fatigue < 0 || performer.fatigue > CONFIG.performers.max_fatigue) {
       return { ok: false, message: "Performer fatigue invalid." };
+    }
+    if (performer.starPowerShoots < 0) {
+      return { ok: false, message: "Performer star power progress invalid." };
     }
   }
   if (roster.freelancerProfiles) {

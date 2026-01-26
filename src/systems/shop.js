@@ -35,7 +35,7 @@ function buildEquipmentBonusMessage(upgrade, level) {
   }
 
   const followerPerLevel = Number.isFinite(upgrade.followersMultPerLevel) ? upgrade.followersMultPerLevel : 0;
-  const revenuePerLevel = Number.isFinite(upgrade.revenueMultPerLevel) ? upgrade.revenueMultPerLevel : 0;
+  const ofSubsPerLevel = Number.isFinite(upgrade.ofSubsMultPerLevel) ? upgrade.ofSubsMultPerLevel : 0;
   const parts = [];
 
   if (followerPerLevel > 0) {
@@ -45,10 +45,10 @@ function buildEquipmentBonusMessage(upgrade, level) {
     );
   }
 
-  if (revenuePerLevel > 0) {
+  if (ofSubsPerLevel > 0) {
     parts.push(
-      "Payout bonus: +" + formatEquipmentPercent(revenuePerLevel) +
-      "% per level (you're now at +" + formatEquipmentPercent(revenuePerLevel * level) + "%)."
+      "Premium OF subs bonus: +" + formatEquipmentPercent(ofSubsPerLevel) +
+      "% per level (you're now at +" + formatEquipmentPercent(ofSubsPerLevel * level) + "%)."
     );
   }
 

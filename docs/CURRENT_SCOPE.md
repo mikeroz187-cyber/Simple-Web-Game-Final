@@ -4,6 +4,7 @@
 
 ## Current Phase
 - **Act 3 (Days 181-270) — Complete**: Act 3 foundations, story arc, progression systems, optional automation expansion, and legacy milestones are delivered. Current work is polish/bugfix only.
+- **Codex scope update (approved)**: Implement Star Power progression, apply Star Power to promo social gains, and refactor revenue mechanics into OF subs + MRR income (no new screens).
 
 ## Completed (Confirmed)
 - **Act 1 (MVP) complete**: core loop, all screens, save/load with slots + autosave, export/import, day advancement, economy basics, content types, starter roster, tiers/themes, social posting, story events, win/loss conditions.

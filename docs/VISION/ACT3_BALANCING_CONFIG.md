@@ -30,7 +30,7 @@
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
 | shiftSchedule | array | Ordered list of shift IDs with trigger days | `[{ id: "shift_premium_boom", day: 225 }, { id: "shift_promo_fatigue", day: 245 }]` |
-| shifts | object | Shift definitions with multipliers | `{ "shift_premium_boom": { "revenueMult": 1.15, "followersMult": 0.95 }, "shift_promo_fatigue": { "revenueMult": 0.95, "followersMult": 0.85 } }` |
+| shifts | object | Shift definitions with multipliers | `{ "shift_premium_boom": { "ofSubsMult": 1.15, "followersMult": 0.95 }, "shift_promo_fatigue": { "ofSubsMult": 0.95, "followersMult": 0.85 } }` |
 | multiplierFloor | number | Minimum allowed multiplier | `0.85` |
 | multiplierCeiling | number | Maximum allowed multiplier | `1.15` |
 
@@ -41,7 +41,7 @@
 
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
-| branches | array | Branch definitions | `[{ id: "prestige", label: "Prestige", requiredReputation: 60, revenueMult: 1.10, followersMult: 0.95 }, { id: "volume", label: "Volume", requiredReputation: 60, revenueMult: 0.95, followersMult: 1.10 }, { id: "boutique", label: "Boutique", requiredReputation: 60, revenueMult: 1.05, followersMult: 1.05 }]` |
+| branches | array | Branch definitions | `[{ id: "prestige", label: "Prestige", requiredReputation: 60, ofSubsMult: 1.10, followersMult: 0.95 }, { id: "volume", label: "Volume", requiredReputation: 60, ofSubsMult: 0.95, followersMult: 1.10 }, { id: "boutique", label: "Boutique", requiredReputation: 60, ofSubsMult: 1.05, followersMult: 1.05 }]` |
 
 ### CONFIG.legacyMilestones
 - Purpose
@@ -51,7 +51,7 @@
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
 | milestoneOrder | array | Ordered list of legacy milestone IDs | `["legacy_revenue_250k", "legacy_subscribers_1500", "legacy_reputation_80", "legacy_story_complete"]` |
-| milestones | object | Milestone definitions | `{ "legacy_revenue_250k": { "label": "$250k Lifetime Revenue", "type": "lifetimeRevenue", "threshold": 250000, "rewardCash": 5000 }, "legacy_subscribers_1500": { "label": "1,500 Subscribers", "type": "subscribers", "threshold": 1500, "rewardCash": 4000 }, "legacy_reputation_80": { "label": "Reputation 80", "type": "reputation", "threshold": 80, "rewardCash": 6000 }, "legacy_story_complete": { "label": "Complete Act 3 Story", "type": "storyComplete", "threshold": 1, "rewardCash": 8000 } }` |
+| milestones | object | Milestone definitions | `{ "legacy_revenue_250k": { "label": "$250k MRR", "type": "mrr", "threshold": 250000, "rewardCash": 5000 }, "legacy_subscribers_1500": { "label": "1,500 Subscribers", "type": "subscribers", "threshold": 1500, "rewardCash": 4000 }, "legacy_reputation_80": { "label": "Reputation 80", "type": "reputation", "threshold": 80, "rewardCash": 6000 }, "legacy_story_complete": { "label": "Complete Act 3 Story", "type": "storyComplete", "threshold": 1, "rewardCash": 8000 } }` |
 
 ### CONFIG.automation
 - Purpose

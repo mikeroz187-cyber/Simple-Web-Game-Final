@@ -163,7 +163,7 @@ MVP is Act 1 only. Follow the authoritative MVP scope and build order docs. Do n
 1. Booking system: select performer, location, theme, content type; confirm booking.
 2. Content creation: add content entry, set `content.lastContentId`.
 3. Analytics: compute results per config and attach to content entry.
-4. Economy: apply costs, revenue, follower/subscriber changes.
+4. Economy: apply costs, OF subs/MRR, follower/subscriber changes.
 5. Roster: fatigue changes + availability rules.
 6. Social: posting Promo content to Instagram/X only.
 7. Progression: Tier 1 location unlock only.

@@ -10,7 +10,7 @@ This catalog defines Act 2 social strategies. Values mirror `config.toml` and ar
 | --- | --- | --- | --- | --- |
 | balanced | Balanced | 1.0 | 1.0 | 1.0 |
 | growth_focus | Growth Focus | 1.2 | 0.9 | 0.9 |
-| revenue_focus | Revenue Focus | 0.9 | 1.2 | 1.1 |
+| revenue_focus | MRR Focus | 0.9 | 1.2 | 1.1 |
 
 ---
 

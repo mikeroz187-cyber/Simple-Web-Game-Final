@@ -116,7 +116,7 @@ Add advanced summaries derived from history without changing MVP results display
 #### Panels / Sections
 - **Panel Name:** Advanced Analytics Summary
   - Reads from gameState: `analyticsHistory`, `content.entries`, `social.posts`, `player`
-  - Displays: 7-day and 30-day rollups for revenue, followers, subscribers, promo/premium counts
+  - Displays: 7-day and 30-day rollups for MRR, followers, subscribers, promo/premium counts
   - Actions (buttons/controls):
     - None (read-only summary)
   - Empty/edge states: “No analytics history yet.”

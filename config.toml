@@ -34,7 +34,7 @@ no_frameworks = true
 localstorage_key = "studio_empire_save"
 autosave_enabled = true
 autosave_interval_seconds = 10 # Placeholder: adjust if MVP docs specify a safe cadence.
-save_schema_version = 2
+save_schema_version = 4
 default_slot_id = "slot_1"
 autosave_slot_id = "autosave"
 
@@ -84,8 +84,8 @@ debt_due_day = 90
 # Followers gained from a Promo shoot.
 promo_followers_gain = 100 # Placeholder
 
-# Revenue earned from a Premium shoot (before subscriber effects).
-premium_base_revenue = 250 # Placeholder
+# Base OF subscribers gained from a Premium shoot (before multipliers).
+premium_base_of_subs = 25 # Placeholder
 
 # Fixed conversion rate from followers to subscribers.
 subscriber_conversion_rate = 0.01 # Placeholder (1%)
@@ -112,6 +112,11 @@ max_fatigue = 100      # Placeholder
 fatigue_per_shoot = 10 # Placeholder
 fatigue_recovery_per_day = 5 # Placeholder
 starting_loyalty = 50  # Placeholder
+
+[performers.star_power_progression]
+enabled = true
+shoots_per_increase = 5
+max_star_power = 6
 
 [performers.catalog.core_lena_watts]
 id = "core_lena_watts"
@@ -244,28 +249,28 @@ id = "lingerie"
 name = "Lingerie"
 description = "Your signature premium look — lace, heels, and zero subtlety."
 followers_mult = 1.00
-revenue_mult = 1.00
+of_subs_mult = 1.00
 
 [themes.mvp.theme_office]
 id = "office"
 name = "Office"
 description = "After-hours authority — desks, suits, and someone ‘breaking rules.’"
 followers_mult = 1.00
-revenue_mult = 1.00
+of_subs_mult = 1.00
 
 [themes.mvp.theme_uniform]
 id = "uniform"
 name = "Uniform"
 description = "Roleplay on demand — maid, nurse, teacher vibes, you call the shots."
 followers_mult = 1.00
-revenue_mult = 1.00
+of_subs_mult = 1.00
 
 [themes.mvp.theme_interracial]
 id = "interracial"
 name = "Interracial"
 description = "A bold, high-click category flex — instantly legible, instantly addictive."
 followers_mult = 1.00
-revenue_mult = 1.00
+of_subs_mult = 1.00
 
 [story]
 # Act 1 story event trigger days (from docs/DATA_STORY_EVENTS.md)
@@ -283,7 +288,7 @@ contractRules = { coreLengthDays = 90, freelanceLengthDays = 30, coreRenewalCost
 
 [analytics]
 rollupWindowsDays = [7, 30]
-metricKeys = ["revenue", "followers", "subscribers", "promoCount", "premiumCount"]
+metricKeys = ["mrrDelta", "followers", "subscribers", "promoCount", "premiumCount"]
 snapshotFrequencyDays = 7
 
 [locations.tiers]
@@ -298,19 +303,19 @@ upgradeOrder = ["lighting", "camera", "set_dressing"]
 maxLevel = 3
 levelCosts = [600, 900, 1200]
 followersMultPerLevel = 0.05
-revenueMultPerLevel = 0.00
+ofSubsMultPerLevel = 0.00
 
 [equipment.upgrades.camera]
 maxLevel = 3
 levelCosts = [800, 1200, 1600]
 followersMultPerLevel = 0.00
-revenueMultPerLevel = 0.05
+ofSubsMultPerLevel = 0.05
 
 [equipment.upgrades.set_dressing]
 maxLevel = 3
 levelCosts = [500, 800, 1100]
 followersMultPerLevel = 0.03
-revenueMultPerLevel = 0.03
+ofSubsMultPerLevel = 0.03
 
 [themes.act2]
 theme_ids = []
@@ -330,7 +335,7 @@ act = 2
 triggerDay = 95
 triggerCondition = "onDayStart"
 title = "Expansion Plan Drafted"
-message = "With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table."
+message = "With the debt cleared, you formalize a growth plan focused on steady MRR and brand consistency. New hires and upgrades are now on the table."
 
 [story.act2.events.act2_staffing_push_day120]
 id = "act2_staffing_push_day120"
@@ -412,8 +417,8 @@ type = "subscribers"
 threshold = 250
 
 [milestones.milestones.ms_revenue_50000]
-label = "$50k Lifetime Revenue"
-type = "lifetimeRevenue"
+label = "$50k MRR"
+type = "mrr"
 threshold = 50000
 
 [milestones.milestones.ms_reputation_25]
@@ -461,17 +466,17 @@ description = "Experimental stylist who boosts niche engagement."
 [performers.act2Roster.roles.lead]
 label = "Lead"
 followersMult = 1.05
-revenueMult = 1.05
+ofSubsMult = 1.05
 
 [performers.act2Roster.roles.specialist]
 label = "Specialist"
 followersMult = 1.10
-revenueMult = 1.00
+ofSubsMult = 1.00
 
 [performers.act2Roster.roles.support]
 label = "Support"
 followersMult = 0.95
-revenueMult = 1.00
+ofSubsMult = 1.00
 
 # --- Act 3 Config (inactive until scope expands to Act 3) ---
 
@@ -503,18 +508,18 @@ id = "shift_promo_fatigue"
 day = 245
 
 [market.shifts.shift_premium_boom]
-revenueMult = 1.15
+ofSubsMult = 1.15
 followersMult = 0.95
 
 [market.shifts.shift_promo_fatigue]
-revenueMult = 0.95
+ofSubsMult = 0.95
 followersMult = 0.85
 
 [reputation.branches]
 branches = [
-  { id = "prestige", label = "Prestige", requiredReputation = 60, revenueMult = 1.10, followersMult = 0.95 },
-  { id = "volume", label = "Volume", requiredReputation = 60, revenueMult = 0.95, followersMult = 1.10 },
-  { id = "boutique", label = "Boutique", requiredReputation = 60, revenueMult = 1.05, followersMult = 1.05 }
+  { id = "prestige", label = "Prestige", requiredReputation = 60, ofSubsMult = 1.10, followersMult = 0.95 },
+  { id = "volume", label = "Volume", requiredReputation = 60, ofSubsMult = 0.95, followersMult = 1.10 },
+  { id = "boutique", label = "Boutique", requiredReputation = 60, ofSubsMult = 1.05, followersMult = 1.05 }
 ]
 
 [legacyMilestones]
@@ -526,8 +531,8 @@ milestoneOrder = [
 ]
 
 [legacyMilestones.milestones.legacy_revenue_250k]
-label = "$250k Lifetime Revenue"
-type = "lifetimeRevenue"
+label = "$250k MRR"
+type = "mrr"
 threshold = 250000
 rewardCash = 5000
 
@@ -589,7 +594,7 @@ act = 3
 triggerDay = 225
 triggerCondition = "onDayStart"
 title = "Market Shift"
-message = "Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention."
+message = "Audience preferences pivot toward premium experiences. You adjust strategy to defend MRR and protect retention."
 
 [story.act3.events.act3_mentorship_day245]
 id = "act3_mentorship_day245"

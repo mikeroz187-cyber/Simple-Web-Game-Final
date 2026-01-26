@@ -70,7 +70,7 @@
 {
   "day": 98,
   "windowDays": 7,
-  "revenue": 4200,
+  "mrrDelta": 4200,
   "followers": 1200,
   "subscribers": 80,
   "promoCount": 4,

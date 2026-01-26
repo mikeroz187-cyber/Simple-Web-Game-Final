@@ -73,7 +73,7 @@ Based strictly on `docs/SCOPE_VISION.md`:
 - Dependencies: MVP reputation stat and unlock gating.
 
 ### Theme: Additional content themes
-- Summary: Act 2 and Act 3 theme packs with explicit follower/revenue modifiers.
+- Summary: Act 2 and Act 3 theme packs with explicit follower/OF subs modifiers.
 - What it touches: State (content catalog), systems (booking/results), UI (booking selection), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP booking flow and content history.
@@ -97,7 +97,7 @@ Based strictly on `docs/SCOPE_VISION.md`:
 - Dependencies: MVP social platforms (Instagram/X) and promo posting.
 
 ### Theme: Studio milestones
-- Summary: Milestones triggered by revenue, followers, subscribers, and reputation thresholds.
+- Summary: Milestones triggered by MRR, followers, subscribers, and reputation thresholds.
 - What it touches: State (milestones), systems (progress tracking), UI (hub/summary), save (schema extension).
 - Act: Act 2
 - Dependencies: MVP progression signals (reputation, unlocks).

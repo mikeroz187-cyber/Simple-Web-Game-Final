@@ -15,7 +15,7 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 - **triggerDay:** 1
 - **triggerCondition:** `onDayStart`
 - **title:** Loan Due, Day 90
-- **message:** You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady revenue early.
+- **message:** You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady MRR early.
 
 ### Act 1+ Content Pack 01 Events (Post-MVP)
 
@@ -68,7 +68,7 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 - **triggerDay:** 60
 - **triggerCondition:** `onDayStart`
 - **title:** Debt Check — Day 60
-- **message:** Day 60 puts you in the final stretch. The $10,000 debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep revenue predictable.
+- **message:** Day 60 puts you in the final stretch. The $10,000 debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep MRR predictable.
 
 - **id:** `act1_debt_reminder_day80`
 - **act:** 1
@@ -104,7 +104,7 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 - **triggerDay:** 95
 - **triggerCondition:** `onDayStart`
 - **title:** Expansion Plan Drafted
-- **message:** With the debt cleared, you formalize a growth plan focused on steady revenue and brand consistency. New hires and upgrades are now on the table.
+- **message:** With the debt cleared, you formalize a growth plan focused on steady MRR and brand consistency. New hires and upgrades are now on the table.
 
 - **id:** `act2_staffing_push_day120`
 - **act:** 2
@@ -145,7 +145,7 @@ This document defines **all story events** across MVP and Vision (Acts 1–3). E
 - **triggerDay:** 225
 - **triggerCondition:** `onDayStart`
 - **title:** Market Shift
-- **message:** Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention.
+- **message:** Audience preferences pivot toward premium experiences. You adjust strategy to defend MRR and protect retention.
 
 - **id:** `act3_mentorship_day245`
 - **act:** 3

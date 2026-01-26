@@ -3,10 +3,10 @@ STATUS: Historical (MVP reference). MVP is complete and frozen. For current scop
 # Studio Empire — MVP Scope
 
 ## Purpose of MVP
-The MVP lets a player run a small adult content studio for the first 90 in‑game days, focused on paying off a debt. The player books shoots, reviews the resulting content and metrics, and adjusts their strategy to grow followers and revenue. It is fun because each cycle shows clear, immediate feedback (followers, subscribers, cash) and the Day 90 debt deadline creates urgency. Success means paying the $10,000 debt by Day 90 while sustaining a steady loop of shoots, analysis, and strategy changes.
+The MVP lets a player run a small adult content studio for the first 90 in‑game days, focused on paying off a debt. The player books shoots, reviews the resulting content and metrics, and adjusts their strategy to grow followers and OF subscribers (MRR). It is fun because each cycle shows clear, immediate feedback (followers, subscribers, cash) and the Day 90 debt deadline creates urgency. Success means paying the $10,000 debt by Day 90 while sustaining a steady loop of shoots, analysis, and strategy changes.
 
 ## MVP Player Fantasy
-- Feel like a studio manager making tradeoffs between growth (Promo) and revenue (Premium).
+- Feel like a studio manager making tradeoffs between growth (Promo) and OF subs/MRR (Premium).
 - Feel the pressure of a looming debt deadline while still building a reputation.
 - Feel rewarded for smart content and platform choices through visible metric gains.
 - Feel in control of a small roster of performers and their availability.
@@ -16,7 +16,7 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 1. Book a shoot by selecting a performer, location, theme, and content type.
 2. Complete the shoot and generate a piece of content.
 3. View the content result.
-4. Review analytics (revenue, followers, subscribers, feedback).
+4. Review analytics (MRR change, followers, subscribers, feedback).
 5. Adjust strategy (next booking choices and/or platform posts).
 6. Advance the day after 5 shoots and repeat until Day 90.
 
@@ -29,11 +29,11 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 ## MVP Must-Have Features (Build These)
 - [ ] **Core loop:** Player can book a shoot → view content → see analytics → adjust strategy → repeat (verify by completing at least two consecutive loops).
 - [ ] **Act 1 story framing:** Intro event establishes the $5,000 loan and $10,000 debt due by Day 90; 2–3 debt reminder events appear before Day 90 (verify by advancing days).
-- [ ] **Content types:** Promo (SFW) and Premium (NSFW) are selectable and behave differently (Promo increases followers; Premium generates subscriber revenue) (verify via analytics changes).
+- [ ] **Content types:** Promo (SFW) and Premium (NSFW) are selectable and behave differently (Promo increases followers; Premium grows OF subscribers and MRR) (verify via analytics changes).
 - [ ] **Booking system:** Player selects performer, location, theme, and content type for each shoot (verify all inputs affect the generated content/metrics).
 - [ ] **Performers (MVP size):** 3 core performers and 5 freelance performers are available; freelancers can be hired per shoot (verify roster list and selection options).
 - [ ] **Performer stats:** starPower, fatigue, and loyalty are displayed; fatigue increases after shoots and recovers over time (verify stat changes across days).
-- [ ] **Economy basics:** Starting cash is $5,000; each shoot has a location cost; Premium content produces revenue; Promo content grows followers that convert to subscribers at a fixed rate (verify cash changes and conversion behavior).
+- [ ] **Economy basics:** Starting cash is $5,000; each shoot has a location cost; Premium content grows OF subscribers (MRR earned daily); Promo content grows followers that convert to subscribers at a fixed rate (verify cash changes and conversion behavior).
 - [ ] **Day counter:** Day advances after every 5 completed shoots; the game ends at Day 90 (verify day increments and end condition).
 - [ ] **Debt payoff:** A Pay Debt button is disabled until cash is at least the remaining debt; paying clears the full debt (verify button state and debt reaches 0).
 - [ ] **Social platforms (MVP):** Instagram and X are available; posting Promo content affects reach/conversion differently per platform (verify platform selection changes outcomes).
@@ -68,7 +68,7 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
    - **Actions:** Proceed to analytics.
    - **Buttons:** View Analytics, Back to Hub.
 4. **Analytics**
-   - **Displays:** Revenue gained, followers gained, subscribers gained, feedback summary.
+   - **Displays:** MRR change, followers gained, subscribers gained, feedback summary.
    - **Actions:** Review results; decide next move.
    - **Buttons:** Book Next Shoot, Back to Hub.
 5. **Roster**
@@ -90,7 +90,7 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 
 ## MVP Data That Must Persist (Save/Load)
 - Player progression: current day, debt remaining, debt due day (Day 90), reputation.
-- Money/resources: current cash balance, cumulative revenue (if tracked), follower count, subscriber count.
+- Money/resources: current cash balance, MRR (if tracked), follower count, subscriber count.
 - Roster data: core performers, freelance performers, each performer’s starPower, fatigue, and loyalty.
 - Content history: all created content entries with associated metadata (performer, location, theme, content type, day created, results).
 - Unlocks: Tier 1 location unlock state and any other MVP unlock flags.
