@@ -795,11 +795,23 @@ function setupEventHandlers() {
       const result = payDebt(window.gameState);
       setUiMessage(result.message || "");
       if (result.ok) {
+        const storyEvents = [];
         if (result.saturationActivated) {
-          const event = { id: "act2_saturation_activated", day: window.gameState.player.day };
+          storyEvents.push({ id: "act2_saturation_activated", day: window.gameState.player.day });
+        }
+        if (result.competitionUnlocked) {
+          const competitionConfig = CONFIG.market && CONFIG.market.competition
+            ? CONFIG.market.competition
+            : {};
+          const unlockMessageId = typeof competitionConfig.unlockMessageId === "string"
+            ? competitionConfig.unlockMessageId
+            : "act2_competition_unlocked";
+          storyEvents.push({ id: unlockMessageId, day: window.gameState.player.day });
+        }
+        if (storyEvents.length) {
           ensureStoryLogState(window.gameState);
-          appendStoryLogEntries(window.gameState, [event]);
-          showStoryEvents([event]);
+          appendStoryLogEntries(window.gameState, storyEvents);
+          showStoryEvents(storyEvents);
         }
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {

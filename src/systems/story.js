@@ -166,6 +166,10 @@ const STORY_EVENT_COPY = {
     title: "Debt Cleared — Act 2",
     message: "Debt cleared. Congrats—you’re legit now. Unfortunately, the market noticed. New Premium subs will taper as you grow (Saturation tiers are now active)."
   },
+  act2_competition_unlocked: {
+    title: "Act 2 — Rivals Wake Up",
+    message: "Debt cleared. The market noticed. Rival studios are now active—competition pressure will affect your results."
+  },
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",
     message: "The $10,000 debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."

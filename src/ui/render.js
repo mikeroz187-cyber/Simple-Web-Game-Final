@@ -203,8 +203,11 @@ function renderHub(gameState) {
   const competitionStartDay = typeof getCompetitionStartDay === "function"
     ? getCompetitionStartDay(competitionConfig)
     : null;
+  const competitionUnlocked = typeof isCompetitionUnlocked === "function"
+    ? isCompetitionUnlocked(gameState)
+    : true;
   const competitionEnabled = typeof isCompetitionEnabled === "function"
-    ? isCompetitionEnabled(competitionConfig, competitionDay)
+    ? isCompetitionEnabled(competitionConfig, competitionDay, gameState)
     : Boolean(competitionConfig.enabled);
   const standings = competitionEnabled && typeof getCompetitionStandings === "function"
     ? getCompetitionStandings(gameState)
@@ -252,6 +255,8 @@ function renderHub(gameState) {
     competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
       "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
       "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
+  } else if (!competitionUnlocked) {
+    competitionPanelBody = "<p class=\"helper-text\">Locked until debt is cleared.</p>";
   } else {
     const startDayLabel = Number.isFinite(competitionStartDay)
       ? "Competition begins Day " + competitionStartDay + "."
@@ -782,7 +787,7 @@ function renderAnalytics(gameState) {
   const todaySummary = getWindowedSummary(gameState, 1);
   const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
   const competitionEnabled = typeof isCompetitionEnabled === "function"
-    ? isCompetitionEnabled(competitionConfig, dayNumber)
+    ? isCompetitionEnabled(competitionConfig, dayNumber, gameState)
     : Boolean(competitionConfig.enabled);
   const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
     ? getActiveMarketShift(gameState, dayNumber)

@@ -127,8 +127,10 @@ function payDebt(gameState) {
   if (gameState.player.cash < gameState.player.debtRemaining) {
     return { ok: false, message: "Not enough cash to pay the debt." };
   }
+  const debtRemainingBefore = gameState.player.debtRemaining;
   gameState.player.cash = Math.max(0, gameState.player.cash - gameState.player.debtRemaining);
   gameState.player.debtRemaining = 0;
+  const competitionUnlocked = debtRemainingBefore > 0 && gameState.player.debtRemaining <= 0;
   let saturationActivated = false;
   const saturationConfig = CONFIG.market && CONFIG.market.saturation ? CONFIG.market.saturation : null;
   if (saturationConfig && saturationConfig.enabledAfterDebt === true) {
@@ -146,5 +148,10 @@ function payDebt(gameState) {
       saturationActivated = true;
     }
   }
-  return { ok: true, message: "Debt paid in full.", saturationActivated: saturationActivated };
+  return {
+    ok: true,
+    message: "Debt paid in full.",
+    saturationActivated: saturationActivated,
+    competitionUnlocked: competitionUnlocked
+  };
 }

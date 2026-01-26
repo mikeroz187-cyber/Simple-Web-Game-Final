@@ -32,6 +32,7 @@
 - [x] Manual social strategy (daily budget + channel allocation, once per day).
 - [x] Story Log screen (persistent event history).
 - [x] Placeholder portraits, thumbnails, and shoot output cards in Gallery.
+- [x] Competition unlocks after debt (Act 2), gated in Act 1, one-time unlock message shown.
 
 ---
 
