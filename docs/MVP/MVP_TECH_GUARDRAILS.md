@@ -1,9 +1,12 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
+Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
 
 # MVP Technical Guardrails (Implementation Constitution)
 
 ## 1) Purpose
-This document defines how Codex must structure MVP code to keep the game stable, shippable, and aligned with the official MVP scope. If any suggestion conflicts with this document, this document wins (except when `docs/CURRENT_SCOPE.md` says otherwise). The goal is to prevent scope creep, avoid messy architecture, and keep the MVP safe to finish.
+This document defines how Codex structured MVP code to keep the game stable, shippable, and aligned with the historical MVP scope. Any mention of `docs/CURRENT_SCOPE.md` here reflects the **original** MVP workflow and is not authoritative for the current build.
 
 ## 2) Non-Negotiable Engineering Constraints (Checklist)
 - [ ] Desktop-only web app (no mobile/responsive work)

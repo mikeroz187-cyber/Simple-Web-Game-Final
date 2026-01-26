@@ -1,9 +1,12 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
+Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
 
 # MVP Build Order (Codex Execution Plan)
 
 ## 1) Purpose
-This document exists to **prevent scope creep** and enforce a strict, sequential MVP build order. Follow each phase in order, **verify it works**, and only then proceed. If a requirement is not explicitly listed in the MVP scope sources, it is **out of scope** and must not be built.
+This document exists to preserve the **historical MVP build order**. It is **not** a constraint on current work. Any “out of scope” language here refers only to the original MVP plan.
 
 ## 2) Global MVP Rules (Non-Negotiables)
 - Desktop-only web app (no mobile/responsive work).
@@ -22,14 +25,13 @@ This document exists to **prevent scope creep** and enforce a strict, sequential
 - Must run by opening `index.html` locally (no server required).
 
 ## 3) Authority & Scope Lock
-**Authoritative sources (highest to lowest):**
-1) `docs/CURRENT_SCOPE.md` (wins all conflicts)
-2) `docs/SCOPE_MVP.md`
-3) `docs/MVP/MVP_OVERVIEW.md`
-4) `AGENTS.md`
-5) Any other existing MVP docs
+**Authoritative sources (historical, MVP only):**
+1) `docs/SCOPE_MVP.md`
+2) `docs/MVP/MVP_OVERVIEW.md`
+3) `AGENTS.md` (historical guidance)
+4) Any other existing MVP docs
 
-**Scope lock:** If a feature is not explicitly in the MVP scope sources above, it is **out of scope**. Do not guess. Do not invent systems.
+**Scope lock (historical):** If a feature is not explicitly in the MVP scope sources above, it was **out of scope** for the original MVP plan.
 
 ## 4) Definition of Done (for any step)
 A step is “done” only when:
@@ -48,8 +50,7 @@ A step is “done” only when:
 ### Phase 0 — Preflight (Read + Plan)
 **Goal:** Prevent mistakes before code changes.
 
-**Read required docs:**
-- `docs/CURRENT_SCOPE.md`
+**Read required docs (historical):**
 - `docs/SCOPE_MVP.md`
 - `docs/MVP/MVP_OVERVIEW.md`
 - `AGENTS.md`
@@ -383,15 +384,7 @@ A step is “done” only when:
 - Any new config parameter not already defined.
 - Any refactor touching many files.
 
-## 8) Explicit NOT-YET List (Hard Block)
-**From `docs/CURRENT_SCOPE.md`:**
-- Acts 2 & 3 (beyond Day 90).
-- Rival studios or competition systems.
-- POV special scenes.
-- Mobile/responsive support.
-- Online features (backend, database, accounts, payments).
-- Any framework or build tooling.
-
+## 8) Explicit NOT-YET List (Historical MVP Baseline)
 **From `docs/SCOPE_MVP.md`:**
 - Acts 2 & 3 story content.
 - Rival studios/competition systems.

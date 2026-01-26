@@ -1,30 +1,25 @@
 # Studio Empire – Web Game
 
-Studio Empire is an adult content production management simulator. It runs entirely in the browser using vanilla HTML, CSS, and JavaScript (no frameworks needed). Larger features like rival studios and later story acts are part of the long-term vision and are not yet implemented.
+Studio Empire is a desktop‑only, single‑page studio management game built with vanilla HTML/CSS/JS. It runs locally by opening `index.html`—no build tools or backend required.
 
-## Current Status (Post-MVP / Act 1+)
-- The **MVP is complete and frozen** as the Act 1 baseline (Days 1–90).
-- Current work is **content expansion only** (opportunities, unlocks, events, images) using existing systems. No new systems or refactors are allowed unless `docs/CURRENT_SCOPE.md` changes.
-- Current scope: **Act 2 Phase 1 — Save v2 (new games only; incompatible saves reset)**.
+## Current Status
+- The **core loop and Acts 1–3 systems are implemented**, including recruitment, automation, competition/market shifts, studio identity, and legacy milestones.
+- **Current rules of play** live in `docs/CORE_GAMEPLAY_LOOP.md` (see the *Current Game Rules* section).
+- `docs/CURRENT_SCOPE.md` is a **status snapshot only**—it does not restrict future work.
 
 ## Repository Structure
-- **config.toml** – central game configuration (starting cash, debt, tuning parameters).
-- **.codex/config.toml** – Codex AI configuration settings for this project.
-- **AGENTS.md** – guidelines for AI contributors (Codex/ChatGPT) on how to work within project scope.
-- **docs/** – contains all design documentation (both MVP-specific and future vision docs). `docs/README.md` contains an index of all docs.
-- **src/** – contains the game’s JavaScript source code as outlined in the technical docs (see `docs/MVP/MVP_FILE_STRUCTURE.md` for the historical baseline).
-- **styles.css** – main stylesheet in the repo root per the historical MVP file structure.
+- **src/** – JavaScript source code.
+- **src/config.js** – Authoritative game configuration (balance, catalogs, tuning).
+- **docs/** – Documentation; see `docs/README.md` for the index.
+- **index.html** – Single‑page entry point.
+- **styles.css** – Main stylesheet.
+- **config.toml** – Legacy reference (not used by the runtime).
 
 ## Getting Started
-1. **Read the docs:** Start with `docs/README.md` for an index of all documentation and to understand project scope.
-2. **Review AGENTS.md:** Especially if using AI assistance, to follow coding and design guidelines.
-3. **Use config.toml:** All game balance parameters (cash, conversion rates, fatigue, etc.) are defined in `config.toml` – avoid hard-coding values.
-4. **Run the game:** Open `index.html` in a web browser (or use a simple static server) to load the game. No build process is required.
+1. Read `docs/CORE_GAMEPLAY_LOOP.md` for current rules and flow.
+2. Open `index.html` in a browser to play.
+3. Edit values in `src/config.js` to adjust balance or catalogs.
 
-## Documentation
-- The documentation in `docs/` is the **source of truth** for design. Current scope is defined in `docs/CURRENT_SCOPE.md`. MVP docs (`docs/SCOPE_MVP.md` and files in `docs/MVP/`) are historical references for the frozen baseline. Long-term design ideas are captured in the Vision docs under `docs/VISION/`.
-- If a feature is not listed in `docs/CURRENT_SCOPE.md`, it is out of scope for the current phase.
-
-## Contributing
-- Currently, development is AI-driven using ChatGPT/Codex. Human contributors should read the docs and possibly discuss via issues before coding.
-- Please see `AGENTS.md` for guidelines on coding style, commit messages, and scope limitations. All contributions (AI or human) should adhere to the design and scope defined in documentation.
+## Documentation Notes
+- **Current behavior:** `docs/CORE_GAMEPLAY_LOOP.md`, `docs/GAMESTATE_DATA_MODEL.md`, and the `docs/DATA_*.md` catalogs.
+- **Historical references:** `docs/MVP/` and `docs/VISION/` are archival planning documents and do not reflect the current build.

@@ -1,19 +1,20 @@
-# Data — Rival Studios (Act 3)
+# Data — Rival Studios (Current)
 
-This catalog defines Act 3 rival studios. Values mirror `config.toml` and are read-only until Act 3 is in scope.
+This catalog defines rival studios used by the competition system. Values mirror `src/config.js`.
 
----
+## Rival Studios
 
-## Act 3 Rival Studios
-
-| id | name | baseScore | weeklyGrowthRate |
+| id | name | baseReputationScore | weeklyGrowthRate |
 | --- | --- | --- | --- |
-| rival_night_slate | Night Slate Media | 55 | 1.03 |
-| rival_rose_quartz | Rose Quartz Studio | 48 | 1.02 |
+| rival_night_slate | Night Slate Media | 55 | 1.2 |
+| rival_luxe_pixel | Luxe Pixel Studios | 48 | 0.9 |
 
----
+## Behavior Notes
+- Competition auto‑enables on **Day 181** (unless `CONFIG.competition.enabled` is manually set to `true`).
+- Rival scores increase every **7 days** by `weeklyGrowthRate`.
 
 ## Config Mapping
 Values map to:
-- `CONFIG.rivals.studios[]`
-- `CONFIG.rivals.evaluationCadenceDays`
+- `CONFIG.competition.rivals`
+- `CONFIG.competition.startDay`
+- `CONFIG.competition.weeklyCheckCadenceDays`

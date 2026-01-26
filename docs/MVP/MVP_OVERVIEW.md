@@ -1,14 +1,22 @@
-STATUS: Historical (MVP reference). MVP is complete and frozen. For current scope, see CURRENT_SCOPE.md.
+**Status:** Historical MVP reference. This document is not authoritative for the current build.
+Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
+Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
 
 # MVP Overview — Studio Empire
 
+## Current Build Notes (Summary)
+- The live build uses **manual Advance Day** with **per‑performer daily caps** (no global 5‑shoot cap).
+- Booking uses **Core Performers** or the **Agency Sample Pack** (freelance booking is not active).
+- Acts 2–3 systems (competition, automation, studio identity, legacy milestones) are implemented beyond the MVP baseline.
+
 ## 1) MVP Summary (Plain English)
-The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content grows OF subscribers and MRR, all under the pressure of a $10,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and MRR while watching metrics move each day. The MVP does not include Acts 2–3, rival studios, extra content types, mobile support, or online systems.
+The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content grows OF subscribers and MRR, all under the pressure of a $10,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and MRR while watching metrics move each day. The **MVP baseline** did not include Acts 2–3 systems, rival studios, extra content types, mobile support, or online systems.
 
 ---
 
 ## 2) The MVP “Golden Rule”
-Ship the smallest, stable loop that lets the player book a shoot, see results, and make the next decision with clear feedback. Favor clarity over complexity and stability over extra features. No scope creep: if it is not in CURRENT_SCOPE, it does not go in the MVP.
+Ship the smallest, stable loop that lets the player book a shoot, see results, and make the next decision with clear feedback. Favor clarity over complexity and stability over extra features. This note reflects the original MVP plan and is not a current constraint.
 
 ---
 
@@ -28,7 +36,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - **Day boundary effects:** Fatigue recovery occurs at the start of each new day before any actions. Other day-start effects (like debt reminders) trigger at day start if defined.
 - **What blocks day advancement:** The player must complete the full loop state to reach the booking confirmation. Day advancement is blocked until a valid booking is confirmed (affordability and availability checks must pass).
 - **No complex time system:** There are no partial days, hours, or time slots in the MVP.
-- **No automated time progression:** Background or passive day advancement is out of scope for MVP/Act 1.
+- **No automated time progression:** Background or passive day advancement was out of scope for the MVP baseline.
 
 ---
 
@@ -125,4 +133,4 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - All tuning values are config-driven (no magic numbers).
 - Keep functions simple and predictable; prefer pure functions where possible.
 - Save/load serializes the full `gameState` with a versioned format and migration hooks.
-- Avoid scope creep: implement only what CURRENT_SCOPE and MVP docs define.
+- Avoid scope creep in the historical MVP plan; current build work is guided by the current rules docs instead.

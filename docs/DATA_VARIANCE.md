@@ -1,18 +1,20 @@
-# Data — Content Variance (Act 3)
+# Data — Content Variance (Current)
 
-This catalog defines Act 3 content variance settings. Values mirror `config.toml` and are read-only until Act 3 is in scope.
+This catalog defines Premium content variance settings. Values mirror `src/config.js`.
 
----
-
-## Act 3 Variance Settings
+## Variance Settings
 
 | key | value | meaning |
 | --- | --- | --- |
 | enabled | true | Enable variance modifiers. |
-| maxVariancePct | 0.15 | Maximum variance magnitude. |
-| seedPolicy | stored | Use stored RNG seed for determinism. |
+| maxVariancePct | 0.15 | Maximum variance magnitude (±15%). |
+| seedPolicy | stored | Seed stored in save data for deterministic rolls. |
+| startDay | 181 | Variance begins on Day 181. |
+| maxRollLogEntries | 100 | Maximum log entries stored. |
 
----
+## Behavior Notes
+- Variance applies **only** to Premium content and rolls once per Premium shoot.
+- Roll logs are stored in `gameState.content.variance.rollLog`.
 
 ## Config Mapping
 Values map to:

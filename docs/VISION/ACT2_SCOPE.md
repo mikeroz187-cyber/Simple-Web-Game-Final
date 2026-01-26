@@ -1,3 +1,8 @@
+> **Status:** Vision reference only. This document is not authoritative for the current build.
+> Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+
+> Note: Current runtime config lives in `src/config.js`; `config.toml` is legacy.
+
 # Act 2 Scope (Post-MVP Expansion)
 
 ## 1) Act 2 Goal Statement
@@ -10,7 +15,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 - No Act 3 systems, endgame loops, prestige, or rival studios.
 - No online features, accounts, payments, backend, or database.
 - No framework or build-tool migration; still vanilla HTML/CSS/JS.
-- No features outside `docs/SCOPE_VISION.md` (anything else is out of scope).
+- This historical Act 2 plan only considered features listed in `docs/SCOPE_VISION.md`.
 
 ## 3) Act 2 Feature List (Additive Only)
 

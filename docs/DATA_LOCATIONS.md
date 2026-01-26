@@ -1,10 +1,10 @@
-# Location Catalog (Current Scope)
+# Location Catalog (Current)
 
-This document defines the current in-scope locations. Each location lists the required data fields used for configuration.
+This document defines the current in‑game locations. Values mirror `src/config.js`.
 
 ## Thumbnail Fields
-- `thumbnailPath` is a string path to the location thumbnail image used in the UI.
-- If `thumbnailPath` is missing or invalid, the UI falls back to the placeholder at `assets/images/placeholders/location_placeholder.svg`.
+- `thumbnailPath` is the image path used in the UI.
+- If the image fails to load, the UI falls back to the placeholder at `assets/images/placeholders/location_placeholder.svg`.
 
 ## Current Location List (Tier 0–2)
 
@@ -18,7 +18,7 @@ This document defines the current in-scope locations. Each location lists the re
 
 | id | name | tier | cost | unlockCost | unlockRequirements | description |
 | --- | --- | --- | --- | --- | --- | --- |
-| shower | Shower (Tier 1) | 1 | 300 | See `config.toml` | None | A tiled set with steamy ambiance and higher production value. |
+| shower | Shower (Tier 1) | 1 | 300 | 2000 | None | A tiled set with steamy ambiance and higher production value. |
 
 ### Tier 2 (Unlockable via Shop + Reputation)
 
@@ -26,36 +26,10 @@ This document defines the current in-scope locations. Each location lists the re
 | --- | --- | --- | --- | --- | --- | --- |
 | office | Office (Tier 2) | 2 | 1800 | 5000 | Reputation ≥ 25 | A clean corporate space that signals serious growth. |
 
-## JSON Example (Config Mapping)
+## Behavior Notes
+- Tier unlocks are purchased in the Shop and stored in `gameState.unlocks.locationTiers`.
+- Tier 2 usage requires **both** the unlock purchase **and** the reputation threshold.
 
-```json
-{
-  "locations": [
-    {
-      "id": "bedroom",
-      "name": "Bedroom (Tier 0)",
-      "tier": 0,
-      "cost": 50,
-      "unlockCost": 0,
-      "unlockRequirements": [],
-      "thumbnailPath": "assets/images/placeholders/location_placeholder.svg",
-      "description": "A simple, familiar space for low-stakes starter shoots."
-    },
-    {
-      "id": "shower",
-      "name": "Shower (Tier 1)",
-      "tier": 1,
-      "cost": 300,
-      "unlockCost": "See config.toml",
-      "unlockRequirements": [],
-      "thumbnailPath": "assets/images/placeholders/location_placeholder.svg",
-      "description": "A tiled set with steamy ambiance and higher production value."
-    }
-  ]
-}
-```
-
-Notes:
-- `cost` is the per-shoot cost to use the location.
-- `unlockCost` applies to Tier 1+ locations only. Tier unlocks are defined in `config.toml` (`[locations].tier1UnlockCost`, `[locations].tier2UnlockCost`).
-- `unlockRequirements` is an array for gating rules (for example, Tier 2 reputation requirements).
+## Config Mapping
+Values map to:
+- `CONFIG.locations.*`
