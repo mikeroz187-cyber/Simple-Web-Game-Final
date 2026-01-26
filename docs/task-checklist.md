@@ -49,6 +49,7 @@
 ## Post-MVP Fixes / QoL — Implemented
 - [x] Metrics split (Social Followers/Subs + OnlyFans Subs).
 - [x] MRR derived from OF subs with daily cash income.
+- [x] Net Worth stat (Cash + MRR valuationMultiple) displayed in Hub/Analytics and stored in snapshots.
 - [x] Star Power progression (per-performer shoots → Star Power).
 - [x] Promo gains apply only on posting (no double-counting).
 - [x] Promo OF conversion uses fractional carry.

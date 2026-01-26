@@ -222,6 +222,10 @@ function renderHub(gameState) {
   const selectedBranch = typeof getSelectedReputationBranch === "function"
     ? getSelectedReputationBranch(gameState)
     : null;
+  const netWorthConfig = CONFIG.economy && CONFIG.economy.netWorth ? CONFIG.economy.netWorth : null;
+  const netWorthMultiple = netWorthConfig && Number.isFinite(netWorthConfig.valuationMultiple)
+    ? netWorthConfig.valuationMultiple
+    : 0;
   const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
     ? CONFIG.legacyMilestones
     : { milestoneOrder: [], milestones: {} };
@@ -237,6 +241,8 @@ function renderHub(gameState) {
     "<p><strong>Social Subscribers:</strong> " + gameState.player.socialSubscribers + "</p>",
     "<p><strong>OnlyFans Subscribers:</strong> " + gameState.player.onlyFansSubscribers + "</p>",
     "<p><strong>MRR:</strong> " + formatCurrency(getMRR(gameState)) + "/mo</p>",
+    "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>",
+    "<p class=\"helper-text\">Cash + (MRR × " + netWorthMultiple + ")</p>",
     "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",
     "<p><strong>Next Action:</strong> " + nextAction + "</p>"
   ].join("");
@@ -787,6 +793,7 @@ function renderAnalytics(gameState) {
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
+    "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>" +
     "<p><strong>MRR Change:</strong> " + formatCurrency(todaySummary.mrrDelta) + "/mo</p>" +
     "<p><strong>Social Followers Gained:</strong> " + todaySummary.socialFollowers + "</p>" +
     "<p><strong>Social Subscribers Gained:</strong> " + todaySummary.socialSubscribers + "</p>" +
@@ -857,9 +864,14 @@ function renderAnalytics(gameState) {
       const onlyFansSubscribers = Number.isFinite(snapshot.onlyFansSubscribers) ? snapshot.onlyFansSubscribers : 0;
       const cash = Number.isFinite(snapshot.cash) ? snapshot.cash : 0;
       const mrr = Number.isFinite(snapshot.mrr) ? snapshot.mrr : 0;
+      const netWorth = Number.isFinite(snapshot.netWorth) ? snapshot.netWorth : null;
+      const netWorthLabel = Number.isFinite(netWorth)
+        ? ", Net Worth " + formatCurrency(netWorth)
+        : "";
       return "<div class=\"list-item\"><p>Day " + snapshot.dayNumber + " — Social Followers " + socialFollowers +
         ", Social Subs " + socialSubscribers + ", OF Subs " + onlyFansSubscribers +
-        ", Cash " + formatCurrency(cash) + ", MRR " + formatCurrency(mrr) + "/mo</p></div>";
+        ", Cash " + formatCurrency(cash) + ", MRR " + formatCurrency(mrr) + "/mo" +
+        netWorthLabel + "</p></div>";
     }).join("")
     : "<p class=\"helper-text\">No snapshots yet.</p>";
   const snapshotsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Snapshots</h3>" + snapshotRows + "</div>";

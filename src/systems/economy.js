@@ -53,6 +53,18 @@ function getMRR(gameState) {
   return Math.max(0, subs * price);
 }
 
+function getNetWorth(gameState) {
+  const cash = (gameState && gameState.player && Number.isFinite(gameState.player.cash))
+    ? gameState.player.cash
+    : 0;
+  const mrr = getMRR(gameState);
+  const netWorthConfig = CONFIG.economy && CONFIG.economy.netWorth ? CONFIG.economy.netWorth : null;
+  const mult = netWorthConfig && Number.isFinite(netWorthConfig.valuationMultiple)
+    ? netWorthConfig.valuationMultiple
+    : 0;
+  return Math.max(0, Math.round(cash + (mrr * mult)));
+}
+
 function getMRRDeltaForSubs(subsDelta) {
   const safeSubs = Number.isFinite(subsDelta) ? subsDelta : 0;
   const price = CONFIG.onlyfans && Number.isFinite(CONFIG.onlyfans.pricePerMonth)
