@@ -58,6 +58,7 @@
 - [x] Themes locked to 4 MVP themes.
 - [x] Themes have meaningful tradeoffs (followersMult vs ofSubsMult) + Booking UI shows effects.
 - [x] Post-debt Market Saturation tiers (Premium OF subs only) + activation story popup.
+- [x] Social footprint bonus boosts Premium gains (capped, config-driven, visible in Analytics).
 
 ---
 

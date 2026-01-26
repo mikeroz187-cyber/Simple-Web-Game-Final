@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a capped social footprint bonus to Premium OF subs with Analytics visibility.
+  - Why: Reward social growth strategy with a mild, config-driven Premium boost and clear reporting.
+  - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added MVP theme tradeoff modifiers and surfaced their effects in the Booking theme selector.
   - Why: Make theme choice strategic with clear, config-driven follower vs OF subs tradeoffs.
   - Files touched: src/config.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

@@ -176,6 +176,15 @@ const CONFIG = {
         { min: 700, max: 999, mult: 0.75, label: "700–999 subs tier" },
         { min: 1000, max: null, mult: 0.7, label: "1000+ subs tier" }
       ]
+    },
+    socialFootprintBonus: {
+      enabled: true,
+      source: "socialFollowers",
+      perFollowers: 1000,
+      bonusPerUnit: 0.01,
+      maxBonusMult: 1.15,
+      minFollowersToStart: 0,
+      label: "Social bonus"
     }
   },
   reputation: {
