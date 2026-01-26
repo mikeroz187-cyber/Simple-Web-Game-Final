@@ -31,14 +31,14 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 
 ---
 
-## 3) Premium Revenue Scenario
+## 3) Premium OF Subs Scenario
 
 **Given** a Premium booking with:
 - Performer: **Milo Park** (`starPower = 2`)
-- Theme: **Nightlife** (`revenueMult = 1.00`)
+- Theme: **Nightlife** (`ofSubsMult = 1.00`)
 
 **Expect**:
-- **Revenue** = round(`250` base revenue × `1.00` theme × `2` star power) = **500** cash added.
+- **OF subs** = round(`25` base OF subs × `1.00` theme × `2` star power) = **50** OF subs gained.
 
 ---
 

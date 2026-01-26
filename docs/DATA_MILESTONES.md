@@ -10,7 +10,7 @@ This catalog defines Act 2 milestone targets. Values mirror `config.toml` and ar
 | --- | --- | --- | --- |
 | ms_followers_1000 | First 1,000 Followers | followers | 1000 |
 | ms_subscribers_250 | First 250 Subscribers | subscribers | 250 |
-| ms_revenue_50000 | $50k Lifetime Revenue | lifetimeRevenue | 50000 |
+| ms_revenue_50000 | $50k MRR | mrr | 50000 |
 | ms_reputation_25 | Reputation 25 | reputation | 25 |
 | ms_reputation_50 | Reputation 50 | reputation | 50 |
 

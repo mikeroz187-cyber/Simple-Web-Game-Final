@@ -62,6 +62,45 @@ function getActiveSocialStrategy(gameState) {
   return getSocialStrategyById(activeId);
 }
 
+function getThemeModifiersForEntry(entry) {
+  if (!entry || !entry.themeId || typeof getThemeById !== "function") {
+    return { followersMult: 1, ofSubsMult: 1 };
+  }
+  const theme = getThemeById(entry.themeId);
+  if (!theme || !theme.modifiers) {
+    return { followersMult: 1, ofSubsMult: 1 };
+  }
+  return theme.modifiers;
+}
+
+function getAverageStarPowerForEntry(gameState, entry) {
+  if (!entry) {
+    return 1;
+  }
+  if (entry.source === "agency_pack" && typeof getAgencyPackStarPower === "function") {
+    return getAgencyPackStarPower();
+  }
+  const performerIds = typeof getEntryPerformerIds === "function" ? getEntryPerformerIds(entry) : [];
+  if (!Array.isArray(performerIds) || performerIds.length === 0 || !gameState || !gameState.roster) {
+    return 1;
+  }
+  const starPowers = performerIds.map(function (performerId) {
+    const performer = gameState.roster.performers.find(function (rosterEntry) {
+      return rosterEntry.id === performerId;
+    });
+    return performer && Number.isFinite(performer.starPower) ? performer.starPower : null;
+  }).filter(function (value) {
+    return Number.isFinite(value);
+  });
+  if (!starPowers.length) {
+    return 1;
+  }
+  const total = starPowers.reduce(function (sum, value) {
+    return sum + value;
+  }, 0);
+  return total / starPowers.length;
+}
+
 function getReputationFollowersMultiplier(gameState) {
   if (typeof getSelectedReputationBranch !== "function") {
     return 1;
@@ -329,8 +368,15 @@ function postPromoContent(gameState, platform, contentId) {
   const strategyReachMult = activeStrategy
     ? (platform === "Instagram" ? activeStrategy.instagramReachMult : activeStrategy.xReachMult)
     : 1;
+  const themeModifiers = getThemeModifiersForEntry(entry);
+  const themeFollowersMult = Number.isFinite(themeModifiers.followersMult) ? themeModifiers.followersMult : 1;
+  const averageStarPower = getAverageStarPowerForEntry(gameState, entry);
   const baseFollowers = Math.round(
-    CONFIG.economy.promo_followers_gain * platformMultiplier * strategyReachMult
+    CONFIG.economy.promo_followers_gain *
+    platformMultiplier *
+    strategyReachMult *
+    themeFollowersMult *
+    averageStarPower
   );
   let socialFollowersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
   const source = entry.source || "core";

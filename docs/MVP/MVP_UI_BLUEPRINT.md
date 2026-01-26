@@ -176,7 +176,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 
 **Layout (top-to-bottom):**
 1. Title: “Analytics”.
-2. Latest results panel: revenue gained, followers gained, subscribers gained, feedback summary.
+2. Latest results panel: MRR change, followers gained, subscribers gained, feedback summary.
 3. Primary action row: Book Next Shoot, Back to Hub.
 
 **Empty state rules:**
@@ -378,7 +378,7 @@ This document is the authoritative MVP UI blueprint. It exists to prevent UI gue
 ## 7) UI Copy & Messaging Rules (Minimal)
 - Use clear, blunt labels.
 - Avoid lore walls.
-- Use short notifications for results (e.g., “Shoot booked. +$X revenue.”).
+- Use short notifications for results (e.g., “Shoot booked. +$X MRR/mo.”).
 - No profanity required (unless explicitly required in scope).
 
 ## 8) MVP Visual Style Guidelines (Simple + Consistent)

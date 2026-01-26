@@ -254,7 +254,7 @@ function renderHub(gameState) {
       reputationPanelBody = "<p class=\"helper-text\">No identity paths available.</p>";
     } else {
       const branchCards = reputationBranches.map(function (branch) {
-        const revenueLabel = "Premium payout " + formatCompetitionMultiplier(branch.revenueMult);
+        const revenueLabel = "Premium OF subs " + formatCompetitionMultiplier(branch.ofSubsMult);
         const followersLabel = "Promo followers " + formatCompetitionMultiplier(branch.followersMult);
         return "<div class=\"list-item\">" +
           "<p><strong>" + branch.label + "</strong></p>" +
@@ -268,7 +268,7 @@ function renderHub(gameState) {
       reputationPanelBody = branchCards;
     }
   } else {
-    const revenueLabel = "Premium payout " + formatCompetitionMultiplier(selectedBranch.revenueMult);
+    const revenueLabel = "Premium OF subs " + formatCompetitionMultiplier(selectedBranch.ofSubsMult);
     const followersLabel = "Promo followers " + formatCompetitionMultiplier(selectedBranch.followersMult);
     reputationPanelBody = "<p><strong>Selected:</strong> " + selectedBranch.label + "</p>" +
       "<p class=\"helper-text\">" + revenueLabel + ", " + followersLabel + "</p>" +
@@ -298,7 +298,7 @@ function renderHub(gameState) {
       ? "Complete Act 3 Story (Day 270 event)"
       : definition.label;
     let progressLabel = currentValue + " / " + threshold;
-    if (definition.type === "lifetimeRevenue") {
+    if (definition.type === "mrr") {
       progressLabel = formatCurrency(currentValue) + " / " + formatCurrency(threshold);
     }
     if (definition.type === "storyComplete") {
@@ -737,7 +737,7 @@ function renderAnalytics(gameState) {
     : null;
   const competitionMultipliers = competitionEnabled && typeof getCompetitionMultipliers === "function"
     ? getCompetitionMultipliers(gameState, dayNumber)
-    : { promoFollowerMult: 1, premiumRevenueMult: 1 };
+    : { promoFollowerMult: 1, premiumOfSubsMult: 1 };
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
@@ -751,7 +751,7 @@ function renderAnalytics(gameState) {
   const marketShiftNote = competitionEnabled && activeMarketShift
     ? "<div class=\"panel\"><p class=\"helper-text\">Market shift active: " + activeMarketShift.name +
       " (Promo " + formatCompetitionMultiplier(competitionMultipliers.promoFollowerMult) +
-      ", Premium " + formatCompetitionMultiplier(competitionMultipliers.premiumRevenueMult) + ").</p></div>"
+      ", Premium OF subs " + formatCompetitionMultiplier(competitionMultipliers.premiumOfSubsMult) + ").</p></div>"
     : "";
 
   let latestShootBody = "<p class=\"helper-text\">No shoots yet today.</p>";

@@ -11,7 +11,7 @@ All formulas reference **`config.toml`** values via `CONFIG.*` and use only MVP 
 - The `docs/DATA_*.md` tables are **mirrors for readability** and must be kept in sync with `config.toml`.
 
 **Balancing Note**
-- Economy tuning values (promo followers, premium base revenue, subscriber conversion, base shoot cost) and theme modifiers are intentionally conservative placeholders for MVP balancing. Update them in `config.toml` first, then mirror changes into the data tables.
+- Economy tuning values (promo followers, premium base OF subs, subscriber conversion, base shoot cost) and theme modifiers are intentionally conservative placeholders for MVP balancing. Update them in `config.toml` first, then mirror changes into the data tables.
 
 ---
 
@@ -52,25 +52,25 @@ const followersGained = Math.round(
 
 ---
 
-## 3) Premium Results Formula (Revenue)
+## 3) Premium Results Formula (OF Subs)
 
 **Plain English**
-- Premium revenue starts with a **base revenue value**.
-- It is multiplied by the selected theme’s **revenue multiplier** and the performer’s **star power**.
+- Premium OF subs start with a **base OF subs value**.
+- It is multiplied by the selected theme’s **OF subs multiplier** and the performer’s **star power**.
 - The result is rounded to a whole number.
-- MVP does **not** add a separate subscriber bonus multiplier; the base revenue is the MVP proxy for subscriber revenue.
+- MVP does **not** add a separate subscriber bonus multiplier; the base OF subs value is the MVP proxy for premium performance.
 
 **Code-ready expression**
 ```js
-const revenue = Math.round(
-  CONFIG.economy.premium_base_revenue *
-  selectedTheme.modifiers.revenueMult *
+const ofSubs = Math.round(
+  CONFIG.economy.premium_base_of_subs *
+  selectedTheme.modifiers.ofSubsMult *
   performer.starPower
 );
 ```
 
 **Config values used**
-- `CONFIG.economy.premium_base_revenue`
+- `CONFIG.economy.premium_base_of_subs`
 
 ---
 

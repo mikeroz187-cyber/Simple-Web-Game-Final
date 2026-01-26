@@ -13,7 +13,7 @@ This catalog defines Act 3 market shifts and timing. Values mirror `config.toml`
 
 ## Act 3 Market Shift Effects
 
-| id | revenueMult | followersMult |
+| id | ofSubsMult | followersMult |
 | --- | --- | --- |
 | shift_premium_boom | 1.15 | 0.95 |
 | shift_promo_fatigue | 0.95 | 0.85 |

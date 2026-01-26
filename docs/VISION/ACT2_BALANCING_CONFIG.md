@@ -38,7 +38,7 @@
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
 | rollupWindowsDays | array | Time windows (in days) for rollup summaries. | `[7, 30]` |
-| metricKeys | array | Metric identifiers included in advanced summaries. | `["revenue", "followers", "subscribers", "promoCount", "premiumCount"]` |
+| metricKeys | array | Metric identifiers included in advanced summaries. | `["mrrDelta", "followers", "subscribers", "promoCount", "premiumCount"]` |
 | snapshotFrequencyDays | number | How often to capture analytics snapshots. | `7` |
 
 ### CONFIG.locations.tiers
@@ -67,7 +67,7 @@
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
 | upgradeOrder | array | Ordered list of equipment upgrade IDs. | `["lighting", "camera", "set_dressing"]` |
-| upgrades | object | Map of equipment upgrade definitions (costs, effects, caps) keyed by upgrade ID. | `{ "lighting": { "maxLevel": 3, "levelCosts": [600, 900, 1200], "followersMultPerLevel": 0.05, "revenueMultPerLevel": 0.00 }, "camera": { "maxLevel": 3, "levelCosts": [800, 1200, 1600], "followersMultPerLevel": 0.00, "revenueMultPerLevel": 0.05 }, "set_dressing": { "maxLevel": 3, "levelCosts": [500, 800, 1100], "followersMultPerLevel": 0.03, "revenueMultPerLevel": 0.03 } }` |
+| upgrades | object | Map of equipment upgrade definitions (costs, effects, caps) keyed by upgrade ID. | `{ "lighting": { "maxLevel": 3, "levelCosts": [600, 900, 1200], "followersMultPerLevel": 0.05, "ofSubsMultPerLevel": 0.00 }, "camera": { "maxLevel": 3, "levelCosts": [800, 1200, 1600], "followersMultPerLevel": 0.00, "ofSubsMultPerLevel": 0.05 }, "set_dressing": { "maxLevel": 3, "levelCosts": [500, 800, 1100], "followersMultPerLevel": 0.03, "ofSubsMultPerLevel": 0.03 } }` |
 
 ### CONFIG.themes.act2
 - Purpose
@@ -81,7 +81,7 @@
 | --- | --- | --- | --- |
 | themeIds | array | Theme IDs introduced in Act 2. | `["theme_luxury_retreat", "theme_editorial", "theme_downtown_chic", "theme_sunlit_getaway", "theme_afterhours"]` |
 | themes | object | Theme definitions keyed by theme ID. | `See docs/DATA_THEMES.md` |
-| modifiers | object | Theme modifier map keyed by theme ID. | `Use followersMult/revenueMult in DATA_THEMES.md` |
+| modifiers | object | Theme modifier map keyed by theme ID. | `Use followersMult/ofSubsMult in DATA_THEMES.md` |
 
 ### CONFIG.story.act2
 - Purpose
@@ -98,7 +98,7 @@
 
 ### CONFIG.social.strategy
 - Purpose
-  - Platform emphasis and audience composition tuning (Balanced/Growth/Revenue strategies).
+  - Platform emphasis and audience composition tuning (Balanced/Growth/MRR strategies).
 - Used by
   - `/src/systems/social.js` (`setSocialStrategy`, `postPromoContent`)
 - Values
@@ -118,7 +118,7 @@
 | key | type | meaning | default value |
 | --- | --- | --- | --- |
 | milestoneOrder | array | Ordered list of milestone IDs. | `["ms_followers_1000", "ms_subscribers_250", "ms_revenue_50000", "ms_reputation_25", "ms_reputation_50"]` |
-| milestones | object | Map of milestone definitions keyed by milestone ID. | `{ "ms_followers_1000": { "label": "First 1,000 Followers", "type": "followers", "threshold": 1000 }, "ms_subscribers_250": { "label": "First 250 Subscribers", "type": "subscribers", "threshold": 250 }, "ms_revenue_50000": { "label": "$50k Lifetime Revenue", "type": "lifetimeRevenue", "threshold": 50000 }, "ms_reputation_25": { "label": "Reputation 25", "type": "reputation", "threshold": 25 }, "ms_reputation_50": { "label": "Reputation 50", "type": "reputation", "threshold": 50 } }` |
+| milestones | object | Map of milestone definitions keyed by milestone ID. | `{ "ms_followers_1000": { "label": "First 1,000 Followers", "type": "followers", "threshold": 1000 }, "ms_subscribers_250": { "label": "First 250 Subscribers", "type": "subscribers", "threshold": 250 }, "ms_revenue_50000": { "label": "$50k MRR", "type": "mrr", "threshold": 50000 }, "ms_reputation_25": { "label": "Reputation 25", "type": "reputation", "threshold": 25 }, "ms_reputation_50": { "label": "Reputation 50", "type": "reputation", "threshold": 50 } }` |
 
 ### CONFIG.performers.act2Roster
 - Purpose
@@ -133,7 +133,7 @@
 | performerIds | array | IDs of new performers introduced in Act 2. | `["act2_aria_vale", "act2_jonah_kade", "act2_sky_moreno", "act2_pax_hollow"]` |
 | performers | object | Map of performer definitions keyed by performer ID. | `See docs/DATA_PERFORMERS.md` |
 | roleIds | array | Role IDs used for Act 2 performer differentiation. | `["lead", "specialist", "support"]` |
-| roles | object | Map of role definitions keyed by role ID. | `{ "lead": { "label": "Lead", "followersMult": 1.05, "revenueMult": 1.05 }, "specialist": { "label": "Specialist", "followersMult": 1.10, "revenueMult": 1.00 }, "support": { "label": "Support", "followersMult": 0.95, "revenueMult": 1.00 } }` |
+| roles | object | Map of role definitions keyed by role ID. | `{ "lead": { "label": "Lead", "followersMult": 1.05, "ofSubsMult": 1.05 }, "specialist": { "label": "Specialist", "followersMult": 1.10, "ofSubsMult": 1.00 }, "support": { "label": "Support", "followersMult": 0.95, "ofSubsMult": 1.00 } }` |
 
 ## 4) Required Config Keys (Minimum Implementation Set)
 Minimum keys needed for Act 2 systems to compile/run:

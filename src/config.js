@@ -58,7 +58,7 @@ const CONFIG = {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,
     autosave_interval_seconds: 10,
-    save_schema_version: 3,
+    save_schema_version: 4,
     default_slot_id: "slot_1",
     autosave_slot_id: "autosave",
     slots: [
@@ -96,7 +96,7 @@ const CONFIG = {
   },
   economy: {
     promo_followers_gain: 100,
-    premium_base_revenue: 250,
+    premium_base_of_subs: 25,
     subscriber_conversion_rate: 0.01,
     base_shoot_cost: 100
   },
@@ -139,7 +139,7 @@ const CONFIG = {
         endDay: 205,
         multipliers: {
           promoFollowerMult: 0.95,
-          premiumRevenueMult: 1
+          premiumOfSubsMult: 1
         }
       },
       shift_premium_bump: {
@@ -148,7 +148,7 @@ const CONFIG = {
         endDay: 235,
         multipliers: {
           promoFollowerMult: 1,
-          premiumRevenueMult: 1.08
+          premiumOfSubsMult: 1.08
         }
       }
     }
@@ -159,23 +159,23 @@ const CONFIG = {
         id: "prestige",
         label: "Prestige",
         requiredReputation: 60,
-        revenueMult: 1.10,
+        ofSubsMult: 1.10,
         followersMult: 0.95,
-        blurb: "High-end brand. More money per premium, slightly less reach."
+        blurb: "High-end brand. More OF subs per premium, slightly less reach."
       },
       {
         id: "volume",
         label: "Volume",
         requiredReputation: 60,
-        revenueMult: 0.95,
+        ofSubsMult: 0.95,
         followersMult: 1.10,
-        blurb: "Chase reach. More followers, slightly less money per premium."
+        blurb: "Chase reach. More followers, slightly less premium OF subs."
       },
       {
         id: "boutique",
         label: "Boutique",
         requiredReputation: 60,
-        revenueMult: 1.05,
+        ofSubsMult: 1.05,
         followersMult: 1.05,
         blurb: "Balanced refinement. Slight boost to both."
       }
@@ -197,6 +197,11 @@ const CONFIG = {
     fatigue_per_shoot: 10,
     fatigue_recovery_per_day: 5,
     starting_loyalty: 50,
+    starPowerProgression: {
+      enabled: true,
+      shootsPerIncrease: 5,
+      maxStarPower: 6
+    },
     core_ids: [
       "core_lena_watts",
       "core_milo_park",
@@ -323,7 +328,7 @@ const CONFIG = {
     flatFee: 300,
     bundleCount: 5,
     promoFollowersMult: 1.5,
-    premiumRevenueMult: 0.5,
+    premiumOfSubsMult: 0.5,
     premiumSubsMult: 0.5
   },
   performerManagement: {
@@ -436,8 +441,8 @@ const CONFIG = {
     milestones: {
       legacy_revenue_250k: {
         id: "legacy_revenue_250k",
-        label: "$250k Lifetime Revenue",
-        type: "lifetimeRevenue",
+        label: "$250k MRR",
+        type: "mrr",
         threshold: 250000,
         rewardCash: 5000
       },
@@ -471,19 +476,19 @@ const CONFIG = {
         maxLevel: 3,
         levelCosts: [600, 900, 1200],
         followersMultPerLevel: 0.05,
-        revenueMultPerLevel: 0.00
+        ofSubsMultPerLevel: 0.00
       },
       camera: {
         maxLevel: 3,
         levelCosts: [800, 1200, 1600],
         followersMultPerLevel: 0.00,
-        revenueMultPerLevel: 0.05
+        ofSubsMultPerLevel: 0.05
       },
       set_dressing: {
         maxLevel: 3,
         levelCosts: [500, 800, 1100],
         followersMultPerLevel: 0.03,
-        revenueMultPerLevel: 0.03
+        ofSubsMultPerLevel: 0.03
       }
     }
   },
@@ -548,25 +553,25 @@ const CONFIG = {
           id: "lingerie",
           name: "Lingerie",
           description: "Your signature premium look — lace, heels, and zero subtlety.",
-          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
+          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
         },
         office: {
           id: "office",
           name: "Office",
           description: "After-hours authority — desks, suits, and someone ‘breaking rules.’",
-          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
+          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
         },
         uniform: {
           id: "uniform",
           name: "Uniform",
           description: "Roleplay on demand — maid, nurse, teacher vibes, you call the shots.",
-          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
+          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
         },
         interracial: {
           id: "interracial",
           name: "Interracial",
           description: "A bold, high-click category flex — instantly legible, instantly addictive.",
-          modifiers: { followersMult: 1.00, revenueMult: 1.00 }
+          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
         }
       }
     },

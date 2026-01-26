@@ -3,7 +3,7 @@ STATUS: Historical (MVP reference). MVP is complete and frozen. For current scop
 # MVP Overview — Studio Empire
 
 ## 1) MVP Summary (Plain English)
-The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content generates revenue, all under the pressure of a $10,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and revenue while watching metrics move each day. The MVP does not include Acts 2–3, rival studios, extra content types, mobile support, or online systems.
+The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content grows OF subscribers and MRR, all under the pressure of a $10,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and MRR while watching metrics move each day. The MVP does not include Acts 2–3, rival studios, extra content types, mobile support, or online systems.
 
 ---
 
@@ -16,7 +16,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 1. Book a shoot (performer, location, theme, content type, and platform for Promo posts).
 2. Complete the shoot and generate content with results.
 3. View content summary.
-4. Review analytics (followers, subscribers, revenue, feedback).
+4. Review analytics (followers, subscribers, MRR change, feedback).
 5. Adjust strategy (next booking and/or platform choice).
 6. After 5 shoots, manually trigger **Advance Day** to resolve day-start systems and repeat until Day 90.
 
@@ -50,11 +50,11 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 ---
 
 ## 6) MVP Resources & Stats
-- Cash — available money for costs and debt — increases from Premium revenue — decreases from shoot location costs and debt payments — player cares because cash gates actions and debt payoff.
+- Cash — available money for costs and debt — increases from daily MRR — decreases from shoot location costs and debt payments — player cares because cash gates actions and debt payoff.
 - Debt Remaining — amount owed toward the $10,000 deadline — decreases when paid from cash — increases only at start as the $10,000 total obligation — player cares because paying it off by Day 90 is the win condition.
 - Day — current in-game day (1–90) — increases only when the player manually advances the day after 5 completed shoots — cannot decrease — player cares because Day 90 is the deadline.
 - Followers — audience size from Promo content — increases via Promo results and platform reach — may stagnate if no Promo — player cares because followers convert to subscribers at a fixed rate.
-- Subscribers — paying audience base — increases via conversion from followers and Premium performance — decreases only if explicitly modeled (not required in MVP) — player cares because subscribers drive Premium revenue.
+- Subscribers — paying audience base — increases via conversion from followers and Premium performance — decreases only if explicitly modeled (not required in MVP) — player cares because subscribers drive MRR.
 - Reputation — studio reputation — increases through successful content and progress — decreases only if explicitly modeled (not required in MVP) — player cares because it gates unlocks like Tier 1 location.
 - Performer Star Power — individual performer appeal — increases through use or success (as defined in config) — decreases only if explicitly modeled (not required in MVP) — player cares because it affects results.
 - Performer Fatigue — individual exhaustion — increases after shoots — decreases over time with rest — player cares because high fatigue affects performance.
@@ -66,7 +66,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - Hub — central navigation and status — displays day, cash, debt remaining, followers/subscribers, reputation, next action, shoots today — buttons for Booking, Analytics, Social, Gallery, Roster, Shop, Pay Debt, Save, Load, Export, Import, plus a save slot selector.
 - Booking — plan a shoot — displays performers, locations, themes, content type, shoot cost — buttons for Confirm Shoot, Back to Hub.
 - Content — view the generated content result — displays content placeholder and shoot summary — buttons for View Analytics, Back to Hub.
-- Analytics — review outcomes — displays revenue gained, followers gained, subscribers gained, feedback summary — buttons for Book Next Shoot, Back to Hub.
+- Analytics — review outcomes — displays MRR change, followers gained, subscribers gained, feedback summary — buttons for Book Next Shoot, Back to Hub.
 - Roster — review performers — displays core and freelance performers with star power, fatigue, loyalty — button for Back to Hub.
 - Social — post Promo content — displays Instagram and X with recent posts — buttons for Post to Instagram, Post to X, Back to Hub.
 - Gallery — browse content history — displays list/grid of content entries — button for Back to Hub.
@@ -102,7 +102,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 - [ ] New game starts at Day 1 with $5,000 cash and $10,000 debt due by Day 90.
 - [ ] Core loop (book → content → analytics → next decision) works at least twice in a row.
 - [ ] Promo content increases followers and affects reach via platform choice.
-- [ ] Premium content generates revenue and affects subscriber metrics.
+- [ ] Premium content grows OF subscribers and affects MRR.
 - [ ] Performers show star power, fatigue, and loyalty, with fatigue changing over time.
 - [ ] Booking requires performer, location, theme, and content type selection.
 - [ ] Day advances only after every 5 completed shoots and a manual **Advance Day** action.

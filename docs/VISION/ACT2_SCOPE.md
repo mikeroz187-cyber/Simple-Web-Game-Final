@@ -41,7 +41,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.2 — Advanced Analytics
 - Summary (1–2 sentences)
-  - Add 7-day and 30-day rollups for revenue, followers, and subscribers plus promo/premium split summaries.
+- Add 7-day and 30-day rollups for MRR, followers, and subscribers plus promo/premium split summaries.
 - Player Value (why it matters)
   - Rewards informed choices and clarifies the impact of decisions over time.
 - MVP Dependencies (what must already exist)
@@ -101,7 +101,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 - UI Surfaces (which screens/panels)
   - Shop screen (equipment upgrade cards), Analytics screen (output notes).
 - Config Additions (what new tunables are required)
-  - Upgrade cost tables and per-level revenue/follower multipliers.
+- Upgrade cost tables and per-level OF subs/follower multipliers.
 - Save/Load Considerations (versioning/migration notes)
   - Initialize equipment state with baseline values on migration.
 - Acceptance Criteria (specific + testable)
@@ -203,7 +203,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 
 ### A2.9 — Studio Milestones
 - Summary (1–2 sentences)
-  - Add milestones tied to revenue, followers, subscribers, and reputation thresholds.
+- Add milestones tied to MRR, followers, subscribers, and reputation thresholds.
 - Player Value (why it matters)
   - Provides clear long-term goals and feedback for progress.
 - MVP Dependencies (what must already exist)
@@ -253,7 +253,7 @@ Act 2 delivers mid-game depth by expanding studio operations without changing th
 - Content theme catalog expansions — five Act 2 themes defined in `DATA_THEMES.md`.
 - Act 2 story event triggers and schedules — days 95/120/145/170 (on day start).
 - Social strategy modifiers and audience composition tuning — Balanced, Growth Focus, Revenue Focus strategies.
-- Milestone definitions and threshold rules — revenue/followers/subscribers/reputation thresholds in config.
+- Milestone definitions and threshold rules — MRR/followers/subscribers/reputation thresholds in config.
 
 ## 7) Act 2 Completion Checklist (Definition of Done)
 - [ ] All A2 features listed above are implemented.

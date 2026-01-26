@@ -7,6 +7,12 @@ All values are config-driven and should map directly to `config.js` and the init
 
 ## Field Definitions (Applies to All Performers)
 - **portraitPath** (string): Placeholder image path or data URI for the performer portrait. If missing or blank, the UI falls back to a generic placeholder.
+- **starPowerShoots** (number): Shoot counter used for Star Power progression (counts shoots since last increase).
+
+## Star Power Progression (Post-MVP)
+- Star Power increases by +1 after **5 shoots** with the same performer.
+- The counter resets after each increase.
+- Progress is tracked per performer via `starPowerShoots` and persisted in save data.
 
 ---
 

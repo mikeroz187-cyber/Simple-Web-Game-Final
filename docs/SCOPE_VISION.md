@@ -29,7 +29,7 @@ Studio Empire’s ultimate form is a strategic studio‑management experience wh
 ### Act 1 (MVP) — Foundation
 - Run a small studio under a tight 90‑day debt deadline.
 - Book shoots, review results, and iterate on strategy.
-- Choose between Promo growth and Premium revenue.
+- Choose between Promo growth and Premium OF subs/MRR.
 - Build early reputation and unlock a limited location upgrade.
 - Manage a small roster of performers with basic stats.
   - Current scope note: the location list is reduced to Bedroom (Tier 0), Shower (Tier 1), and Office (Tier 2), using the existing tier unlock flow.
@@ -62,7 +62,7 @@ Studio Empire’s ultimate form is a strategic studio‑management experience wh
 ### Act 3 — Endgame / Mastery
 **Endgame gameplay depth**
 - Macro‑level studio stewardship with multi‑track objectives.
-- Long‑term optimization of talent, brand, and revenue streams.
+- Long‑term optimization of talent, brand, and MRR streams.
 - Strategic pacing to avoid burnout or overreach.
 
 **Advanced systems**

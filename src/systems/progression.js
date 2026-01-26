@@ -79,14 +79,13 @@ function purchaseLocationUnlock(gameState) {
   return purchaseTier1Location(gameState);
 }
 
-function getLifetimeRevenue(gameState) {
-  if (!gameState || !gameState.content || !Array.isArray(gameState.content.entries)) {
+function getLifetimeOfSubs(gameState) {
+  if (!gameState || !gameState.player) {
     return 0;
   }
-  return gameState.content.entries.reduce(function (total, entry) {
-    const revenue = entry && entry.results ? entry.results.revenue : 0;
-    return total + (Number.isFinite(revenue) ? revenue : 0);
-  }, 0);
+  return Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
 }
 
 function getMilestoneMetricValue(gameState, milestone) {
@@ -103,8 +102,8 @@ function getMilestoneMetricValue(gameState, milestone) {
   if (type === "reputation") {
     return gameState.player.reputation;
   }
-  if (type === "lifetimeRevenue") {
-    return getLifetimeRevenue(gameState);
+  if (type === "lifetimeOfSubs") {
+    return getLifetimeOfSubs(gameState);
   }
   if (type === "mrr") {
     return getMRR(gameState);

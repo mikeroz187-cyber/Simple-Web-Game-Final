@@ -18,15 +18,15 @@ All steps are confirmed in Act 3 scope and must be implemented as described.
 ## 3) Milestones / Goals Model
 Act 3 goals are represented by **tiered, config-driven milestones** that do not replace Act 2 milestones.
 - **Primary milestone types (config-driven):** legacy milestones and reputation branch progress (if enabled).
-- **Objective categories:** revenue, reputation, subscribers, legacyScore, storyCompletion.
+- **Objective categories:** MRR, reputation, subscribers, legacyScore, storyCompletion.
 - **Progress evaluation rules:** evaluate after booking completion, event resolution, or day advance using config-defined thresholds.
 
 **Milestone record shape:**
 ```
 {
   id: "legacy_revenue_250k",
-  label: "$250k Lifetime Revenue",
-  type: "lifetimeRevenue",
+  label: "$250k MRR",
+  type: "mrr",
   threshold: 250000,
   rewardCash: 5000,
   status: "locked" | "in_progress" | "complete" | "claimed",

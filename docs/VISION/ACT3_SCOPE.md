@@ -1,7 +1,7 @@
 # Act 3 Scope (Late Game + Endgame)
 
 ## 1) Act 3 Goal Statement
-Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions that emphasize mastery, scale, and legacy outcomes. Late-game depth means the player manages macro-level studio stewardship, long-term optimization of talent, brand identity, and revenue streams, and adapts to high-impact events without changing the MVP core loop. Act 3 provides longer arcs and endgame objectives through additive systems only, with no new app architecture or technical stack changes. The intended payoff versus Act 2 is sustained mastery: larger strategic choices, higher stakes, and legacy milestones that reflect the studio’s long-term identity. The game remains a single-page, local-only, config-driven web app with a single authoritative `gameState`.
+Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions that emphasize mastery, scale, and legacy outcomes. Late-game depth means the player manages macro-level studio stewardship, long-term optimization of talent, brand identity, and MRR streams, and adapts to high-impact events without changing the MVP core loop. Act 3 provides longer arcs and endgame objectives through additive systems only, with no new app architecture or technical stack changes. The intended payoff versus Act 2 is sustained mastery: larger strategic choices, higher stakes, and legacy milestones that reflect the studio’s long-term identity. The game remains a single-page, local-only, config-driven web app with a single authoritative `gameState`.
 
 **Act 3 timeline:** Days 181–270. Day 180 ends Act 2; Day 181 begins Act 3.
 
@@ -18,7 +18,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.1 — Rival Studios / Competitive Pressure
 - Summary (1–2 sentences)
-  - Add two rival studios with deterministic weekly standings checks and market shift modifiers that impact revenue and follower growth.
+  - Add two rival studios with deterministic weekly standings checks and market shift modifiers that impact premium OF subs and follower growth.
 - Player Value (why it matters late-game)
   - Creates high-stakes decisions and forces the player to adapt strategy to remain competitive.
 - Dependencies (MVP + Act 2 prerequisites)
@@ -136,7 +136,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.6 — Content Performance Variance
 - Summary (1–2 sentences)
-  - Add bounded ±15% variance applied to Promo followers or Premium revenue, using deterministic seed rolls.
+  - Add bounded ±15% variance applied to Promo followers or Premium OF subs, using deterministic seed rolls.
 - Player Value (why it matters late-game)
   - Adds strategic risk management and reinforces long-term planning.
 - Dependencies (MVP + Act 2 prerequisites)
@@ -159,7 +159,7 @@ Act 3 delivers late-game depth by extending Act 2 with endgame-scale decisions t
 
 ### A3.8 — Legacy / Recognition Milestones
 - Summary (1–2 sentences)
-  - Add legacy milestones tied to high-end thresholds (revenue, reputation, subscribers, and story completion).
+  - Add legacy milestones tied to high-end thresholds (MRR, reputation, subscribers, and story completion).
 - Player Value (why it matters late-game)
   - Creates long-term goals and a sense of prestige for sustained play.
 - Dependencies (MVP + Act 2 prerequisites)

@@ -188,7 +188,7 @@ const STORY_EVENT_COPY = {
   },
   act3_market_shift_day225: {
     title: "Market Shift",
-    message: "Audience preferences pivot toward premium experiences. You adjust strategy to defend revenue and protect retention."
+    message: "Audience preferences pivot toward premium experiences. You adjust strategy to defend MRR and protect retention."
   },
   act3_mentorship_day245: {
     title: "Mentorship and Succession",

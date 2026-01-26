@@ -4,6 +4,13 @@ function advanceDay(gameState) {
   recoverAllPerformers(gameState);
   advancePerformerManagementDay(gameState);
   rerollFreelancerProfilesOnNewDay(gameState);
+  const daysPerMonth = CONFIG.onlyfans && Number.isFinite(CONFIG.onlyfans.daysPerMonth)
+    ? CONFIG.onlyfans.daysPerMonth
+    : 30;
+  const dailyIncome = daysPerMonth > 0 ? Math.floor(getMRR(gameState) / daysPerMonth) : 0;
+  if (dailyIncome > 0) {
+    gameState.player.cash = Math.max(0, gameState.player.cash + dailyIncome);
+  }
   recordAnalyticsSnapshot(gameState);
   maybeApplyWeeklyCompetitionCheck(gameState, gameState.player.day);
   const storyResult = checkStoryEvents(gameState);
@@ -66,7 +73,7 @@ function buildAgencyPackPerformer() {
   };
 }
 
-function getReputationRevenueMultiplier(gameState) {
+function getReputationOfSubsMultiplier(gameState) {
   if (typeof getSelectedReputationBranch !== "function") {
     return 1;
   }
@@ -74,7 +81,7 @@ function getReputationRevenueMultiplier(gameState) {
   if (!branch) {
     return 1;
   }
-  return Number.isFinite(branch.revenueMult) ? branch.revenueMult : 1;
+  return Number.isFinite(branch.ofSubsMult) ? branch.ofSubsMult : 1;
 }
 
 function canApplyContentVariance(gameState) {
@@ -352,45 +359,42 @@ function confirmBooking(gameState, selection) {
   let socialFollowersGained = 0;
   let socialSubscribersGained = 0;
   let onlyFansSubscribersGained = 0;
-  let payout = 0;
-  let basePayout = 0;
+  let baseOfSubs = 0;
+  let adjustedOfSubs = 0;
   let varianceApplied = false;
   let variancePct = 0;
   let varianceRoll = null;
   if (selection.contentType === "Premium") {
-    const premiumResult = calculatePremiumRevenue(performer, theme);
-    const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
-    payout = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
-    basePayout = payout;
+    const premiumResult = calculatePremiumOfSubs(performer, theme);
+    baseOfSubs = premiumResult.ok ? premiumResult.value : 0;
+    adjustedOfSubs = applyEquipmentOfSubsMultiplier(baseOfSubs, gameState);
     if (canApplyContentVariance(gameState)) {
       const varianceConfig = getContentVarianceConfig();
       const maxVariance = Number.isFinite(varianceConfig.maxVariancePct) ? varianceConfig.maxVariancePct : 0;
       varianceRoll = rollContentVariance(gameState);
       variancePct = (varianceRoll * 2 * maxVariance) - maxVariance;
-      payout = Math.round(basePayout * (1 + variancePct));
+      adjustedOfSubs = Math.round(adjustedOfSubs * (1 + variancePct));
       varianceApplied = true;
     }
     const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
-    payout = Math.round(payout * competitionMultipliers.premiumRevenueMult);
-    const reputationRevenueMult = getReputationRevenueMultiplier(gameState);
-    payout = Math.round(payout * reputationRevenueMult);
-    const baselineFollowersResult = calculatePromoFollowers(performer, theme);
-    const baselineFollowers = baselineFollowersResult.ok ? baselineFollowersResult.value : 0;
-    const baselineSubscribers = calculateSubscribersGained(baselineFollowers);
+    adjustedOfSubs = Math.round(adjustedOfSubs * competitionMultipliers.premiumOfSubsMult);
+    const reputationOfSubsMult = getReputationOfSubsMultiplier(gameState);
+    adjustedOfSubs = Math.round(adjustedOfSubs * reputationOfSubsMult);
     const premiumConfig = CONFIG.conversion && CONFIG.conversion.premium ? CONFIG.conversion.premium : {};
     const premiumMultiplier = Number.isFinite(premiumConfig.ofSubsMultiplier)
       ? premiumConfig.ofSubsMultiplier
       : 1;
-    onlyFansSubscribersGained = Math.max(0, Math.floor(baselineSubscribers * premiumMultiplier));
+    adjustedOfSubs = Math.round(adjustedOfSubs * premiumMultiplier);
+    onlyFansSubscribersGained = Math.max(0, Math.floor(adjustedOfSubs));
     if (isAgencyPack) {
-      const premiumRevenueMult = Number.isFinite(agencyConfig.premiumRevenueMult)
-        ? agencyConfig.premiumRevenueMult
+      const premiumOfSubsMult = Number.isFinite(agencyConfig.premiumOfSubsMult)
+        ? agencyConfig.premiumOfSubsMult
         : 1;
       const premiumSubsMult = Number.isFinite(agencyConfig.premiumSubsMult)
         ? agencyConfig.premiumSubsMult
         : 1;
-      payout = Math.round(payout * premiumRevenueMult);
-      onlyFansSubscribersGained = Math.max(0, Math.floor(onlyFansSubscribersGained * premiumSubsMult));
+      adjustedOfSubs = Math.round(adjustedOfSubs * premiumOfSubsMult);
+      onlyFansSubscribersGained = Math.max(0, Math.floor(adjustedOfSubs * premiumSubsMult));
     }
   }
 
@@ -418,7 +422,6 @@ function confirmBooking(gameState, selection) {
   };
 
   if (selection.contentType === "Premium") {
-    entry.results.payout = payout;
     entry.results.variancePct = variancePct;
   }
 
@@ -437,12 +440,12 @@ function confirmBooking(gameState, selection) {
       contentType: "Premium",
       roll: varianceRoll,
       variancePct: variancePct,
-      basePayout: basePayout,
-      adjustedPayout: payout
+      baseOfSubs: baseOfSubs,
+      adjustedOfSubs: adjustedOfSubs
     });
   }
 
-  gameState.player.cash = Math.max(0, gameState.player.cash - shootCost + payout);
+  gameState.player.cash = Math.max(0, gameState.player.cash - shootCost);
   gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
   gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
   gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);
@@ -454,9 +457,19 @@ function confirmBooking(gameState, selection) {
   const fatigueMultiplier = hasCombo && Number.isFinite(comboConfig.fatigueMultiplierEach)
     ? comboConfig.fatigueMultiplierEach
     : 1;
+  const starPowerMessages = [];
   if (!isAgencyPack) {
-    updatePerformerStats(gameState, performer.id, fatigueMultiplier);
-    updatePerformerAvailabilityAfterBooking(gameState, performer);
+    performerSelection.performerIds.forEach(function (performerId) {
+      const updateResult = updatePerformerStats(gameState, performerId, fatigueMultiplier);
+      if (updateResult && updateResult.performer) {
+        updatePerformerAvailabilityAfterBooking(gameState, updateResult.performer);
+        if (updateResult.starPowerResult && updateResult.starPowerResult.leveledUp) {
+          starPowerMessages.push(
+            updateResult.performer.name + " leveled up: Star Power " + updateResult.starPowerResult.newStarPower + "."
+          );
+        }
+      }
+    });
   }
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
@@ -471,12 +484,13 @@ function confirmBooking(gameState, selection) {
   if (selection.contentType === "Premium" && varianceApplied) {
     const variancePercent = Math.round(variancePct * 100);
     const varianceLabel = (variancePercent >= 0 ? "+" : "") + variancePercent + "%";
-    varianceMessage = " Revenue variance: " + varianceLabel + ".";
+    varianceMessage = " OF subs variance: " + varianceLabel + ".";
   }
+  const starPowerMessage = starPowerMessages.length ? (" " + starPowerMessages.join(" ")) : "";
   const resultMessage = selection.contentType === "Promo"
-    ? "Promo shot complete. Post it to generate reach."
+    ? "Promo shot complete. Post it to generate reach." + starPowerMessage
     : "Premium release complete. +" + onlyFansSubscribersGained + " OF subs (MRR +" + formatCurrency(mrrDelta) + "/mo)." +
-      varianceMessage;
+      varianceMessage + starPowerMessage;
 
   return {
     ok: true,

@@ -6,7 +6,7 @@ This catalog defines Act 3 reputation branches. Values mirror `config.toml` and 
 
 ## Act 3 Reputation Branches
 
-| id | label | requiredReputation | revenueMult | followersMult |
+| id | label | requiredReputation | ofSubsMult | followersMult |
 | --- | --- | --- | --- | --- |
 | prestige | Prestige | 60 | 1.10 | 0.95 |
 | volume | Volume | 60 | 0.95 | 1.10 |
