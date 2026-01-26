@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 25, 2026 (A3.7 de-scoped; Act 3 complete)
+**Last Updated:** January 26, 2026 (Act 1+ expansion approved)
 
 ---
 
@@ -81,6 +81,15 @@
 
 ---
 
+## Post-MVP Expansion — Act 1+ Content (Approved)
+
+- [ ] Reputation gains via milestone rewards tied to followers, OF subs, and MRR.
+- [ ] Recruitment panel on the Roster screen with rep-gated candidates and a meet slideshow leading to hire/decline.
+- [ ] Daily pacing update: per-performer daily caps (max 3) plus agency sample pack once per day.
+- [ ] Shared slideshow viewer for recruit meets and shoot photo galleries.
+
+---
+
 ## Act 3 — Days 181-270
 
 ### Complete (8/8 complete)
@@ -109,7 +118,8 @@
 | Act 2 | 16/16 | 0 |
 | Fixes/QoL | 22/22 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **62/62** | **0** |
+| Act 1+ Expansion | 0/4 | 4 |
+| **Total** | **62/66** | **4** |
 
 ---
 

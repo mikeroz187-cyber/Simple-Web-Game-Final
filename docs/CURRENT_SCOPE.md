@@ -1,8 +1,9 @@
 # CURRENT SCOPE (Authoritative)
 
-**Last Updated:** January 25, 2026
+**Last Updated:** January 26, 2026
 
 ## Current Phase
+- **Post-MVP (Act 1+ Content Expansion) — Approved**: Tie reputation to milestone rewards (followers, OF subs, MRR), add a roster Recruitment panel with rep-gated candidates and a meet slideshow leading to hire/decline, replace the global 5/day booking cap with per-performer daily caps plus a once-per-day agency pack, and add a slideshow viewer for recruit meets and shoot photos.
 - **Act 3 (Days 181-270) — Complete**: Act 3 foundations, story arc, progression systems, optional automation expansion, and legacy milestones are delivered. Current work is polish/bugfix only.
 - **Codex scope update (approved)**: Implement Star Power progression, apply Star Power to promo social gains, and refactor revenue mechanics into OF subs + MRR income (no new screens).
 
@@ -21,7 +22,7 @@
 - Ongoing work is restricted to Act 3 items listed in `docs/task-checklist.md`.
 
 ## Next Steps (Act 3 — Start Here)
-1. **Act 3 scope complete** — move into polish/bugfix-only mode.
+1. **Implement Act 1+ content expansion** — reputation milestone rewards, recruitment/hiring flow, per-performer daily caps + agency pack once/day, and shared slideshow viewer for recruit meets and shoot photos.
 
 ## Act 1 Time Control (Locked)
 - **Manual Advance Day is intentional and player-facing**: the UI “Advance Day” action is an MVP feature and is in scope.

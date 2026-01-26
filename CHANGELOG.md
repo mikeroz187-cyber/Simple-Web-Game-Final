@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Authorized the Act 1+ content expansion scope (reputation milestone rewards, recruitment flow, daily pacing changes, and slideshow viewer) and added the pending checklist items.
+  - Why: Document the newly approved scope so implementation can proceed with clear constraints and tracked tasks.
+  - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Added Star Power progression counters, applied Star Power/theme modifiers to promo posts, refactored premium growth to OF subs + daily MRR cash, and renamed revenue multipliers to OF-subscriber multipliers.
   - Why: Shift growth away from direct revenue and make OF subs/MRR the core progression loop with star power leveling.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/systems/economy.js, src/systems/social.js, src/systems/competition.js, src/systems/shop.js, src/systems/progression.js, src/systems/story.js, src/ui/render.js, config.toml, docs/CURRENT_SCOPE.md, docs/task-checklist.md, docs/DATA_PERFORMERS.md, docs/DATA_THEMES.md, docs/DATA_EQUIPMENT.md, docs/DATA_REPUTATION_BRANCHES.md, docs/DATA_MARKET_SHIFTS.md, docs/DATA_MILESTONES.md, docs/DATA_LEGACY_MILESTONES.md, docs/DATA_SOCIAL_STRATEGIES.md, docs/DATA_STORY_EVENTS.md, docs/SCOPE_MVP.md, docs/SCOPE_VISION.md, docs/MASTER_IMPLEMENTATION_PLAN.md, CHANGELOG.md.
