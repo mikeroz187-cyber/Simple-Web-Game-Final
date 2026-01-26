@@ -807,10 +807,17 @@ function renderAnalytics(gameState) {
       ? entry.results.onlyFansSubscribersGained
       : 0;
     const latestMrrDelta = getMRRDeltaForSubs(latestOnlyFansSubs);
+    let saturationLine = "";
+    if (entry.contentType === "Premium" && Number.isFinite(entry.results.saturationMult)) {
+      const saturationLabel = entry.results.saturationTierLabel || "Saturation tier";
+      const saturationMult = entry.results.saturationMult.toFixed(2) + "x";
+      saturationLine = "<p><strong>Saturation:</strong> " + saturationMult + " (" + saturationLabel + ")</p>";
+    }
     latestShootBody = "<p><strong>MRR Change:</strong> " + formatCurrency(latestMrrDelta) + "/mo</p>" +
       "<p><strong>Social Followers Gained:</strong> " + entry.results.socialFollowersGained + "</p>" +
       "<p><strong>Social Subscribers Gained:</strong> " + entry.results.socialSubscribersGained + "</p>" +
       "<p><strong>OnlyFans Subscribers Gained:</strong> " + latestOnlyFansSubs + "</p>" +
+      saturationLine +
       "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>";
   }
   const latestShootPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Latest Shoot Results</h3>" +

@@ -69,13 +69,22 @@ function initCompetitionStateIfMissing(gameState) {
   }
 
   if (!gameState.market || typeof gameState.market !== "object") {
-    gameState.market = { activeShiftId: null, shiftHistory: [] };
+    gameState.market = { activeShiftId: null, shiftHistory: [], saturation: { active: false, activatedDay: null } };
   }
   if (typeof gameState.market.activeShiftId !== "string" && gameState.market.activeShiftId !== null) {
     gameState.market.activeShiftId = null;
   }
   if (!Array.isArray(gameState.market.shiftHistory)) {
     gameState.market.shiftHistory = [];
+  }
+  if (!gameState.market.saturation || typeof gameState.market.saturation !== "object") {
+    gameState.market.saturation = { active: false, activatedDay: null };
+  }
+  if (typeof gameState.market.saturation.active !== "boolean") {
+    gameState.market.saturation.active = false;
+  }
+  if (!Number.isFinite(gameState.market.saturation.activatedDay)) {
+    gameState.market.saturation.activatedDay = null;
   }
 }
 

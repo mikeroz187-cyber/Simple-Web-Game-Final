@@ -131,6 +131,7 @@ This document summarizes the **current** `gameState` structure as implemented in
 ### `rivals` / `market`
 - `rivals.studios` + `rivals.lastCheckDay`
 - `market.activeShiftId` + `market.shiftHistory`
+- `market.saturation.active` + `market.saturation.activatedDay`
 
 ### `reputation`
 - `branchId` (selected Studio Identity)

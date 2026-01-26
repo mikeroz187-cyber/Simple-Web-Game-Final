@@ -795,6 +795,12 @@ function setupEventHandlers() {
       const result = payDebt(window.gameState);
       setUiMessage(result.message || "");
       if (result.ok) {
+        if (result.saturationActivated) {
+          const event = { id: "act2_saturation_activated", day: window.gameState.player.day };
+          ensureStoryLogState(window.gameState);
+          appendStoryLogEntries(window.gameState, [event]);
+          showStoryEvents([event]);
+        }
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);

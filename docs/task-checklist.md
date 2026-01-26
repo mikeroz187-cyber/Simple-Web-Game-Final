@@ -56,6 +56,7 @@
 - [x] Agency Sample Pack booking mode (promo-strong, premium-weak).
 - [x] Booking locations reduced to 3 tiers (Bedroom/Shower/Office) with unlock gating.
 - [x] Themes locked to 4 MVP themes.
+- [x] Post-debt Market Saturation tiers (Premium OF subs only) + activation story popup.
 
 ---
 

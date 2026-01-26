@@ -172,7 +172,11 @@ function newGameState() {
     },
     market: {
       activeShiftId: null,
-      shiftHistory: []
+      shiftHistory: [],
+      saturation: {
+        active: false,
+        activatedDay: null
+      }
     },
     reputation: buildDefaultReputationState(),
     shootOutputs: [],

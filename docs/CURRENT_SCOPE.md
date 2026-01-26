@@ -2,7 +2,7 @@
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-**Last Updated:** March 2, 2026
+**Last Updated:** January 26, 2026
 
 ## Recently Completed
 - Recruitment flow with rep-gated candidates, meet slideshow, and hire/decline outcomes.
@@ -11,6 +11,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Competition system, market shifts, and Studio Identity (reputation branches).
 - Act 2 and Act 3 story events, Story Log screen, and legacy milestones.
 - Premium variance rolls, equipment upgrades, Tier 2 locations, and analytics rollups.
+- Post-debt Market Saturation tiers for Premium OF subs with Act 2 activation messaging.
 
 ## Currently Working On
 - Documentation reconciliation so every doc matches the current implementation.

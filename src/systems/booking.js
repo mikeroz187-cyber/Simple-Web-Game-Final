@@ -101,6 +101,32 @@ function getReputationOfSubsMultiplier(gameState) {
   return Number.isFinite(branch.ofSubsMult) ? branch.ofSubsMult : 1;
 }
 
+function getMarketSaturationConfig() {
+  if (CONFIG.market && CONFIG.market.saturation && typeof CONFIG.market.saturation === "object") {
+    return CONFIG.market.saturation;
+  }
+  return null;
+}
+
+function getMarketSaturationTier(config, currentSubs) {
+  if (!config || !Array.isArray(config.tiers)) {
+    return null;
+  }
+  const subs = Number.isFinite(currentSubs) ? currentSubs : 0;
+  for (let index = 0; index < config.tiers.length; index += 1) {
+    const tier = config.tiers[index];
+    if (!tier || typeof tier !== "object") {
+      continue;
+    }
+    const min = Number.isFinite(tier.min) ? tier.min : 0;
+    const hasMax = Number.isFinite(tier.max);
+    if (subs >= min && (!hasMax || subs <= tier.max)) {
+      return tier;
+    }
+  }
+  return null;
+}
+
 function canApplyContentVariance(gameState) {
   if (!gameState || !gameState.player || !gameState.content || !gameState.content.variance) {
     return false;
@@ -385,6 +411,8 @@ function confirmBooking(gameState, selection) {
   let varianceApplied = false;
   let variancePct = 0;
   let varianceRoll = null;
+  let saturationMult = null;
+  let saturationTierLabel = null;
   if (selection.contentType === "Premium") {
     const premiumResult = calculatePremiumOfSubs(performer, theme);
     baseOfSubs = premiumResult.ok ? premiumResult.value : 0;
@@ -419,6 +447,26 @@ function confirmBooking(gameState, selection) {
     }
   }
 
+  if (selection.contentType === "Premium") {
+    const saturationConfig = getMarketSaturationConfig();
+    const saturationState = gameState.market && gameState.market.saturation ? gameState.market.saturation : null;
+    const saturationActive = saturationConfig && saturationConfig.enabledAfterDebt === true &&
+      saturationState && saturationState.active === true;
+    if (saturationActive) {
+      const currentSubs = Number.isFinite(gameState.player.onlyFansSubscribers)
+        ? gameState.player.onlyFansSubscribers
+        : 0;
+      const tier = getMarketSaturationTier(saturationConfig, currentSubs);
+      const fallbackMult = Number.isFinite(saturationConfig.defaultMult)
+        ? saturationConfig.defaultMult
+        : 1;
+      const tierMult = tier && Number.isFinite(tier.mult) ? tier.mult : fallbackMult;
+      onlyFansSubscribersGained = Math.max(0, Math.floor(onlyFansSubscribersGained * tierMult));
+      saturationMult = tierMult;
+      saturationTierLabel = tier && typeof tier.label === "string" ? tier.label : "Saturation tier";
+    }
+  }
+
   let feedbackSummary = selection.contentType === "Promo"
     ? "Promo shot complete. Post it to generate reach."
     : "Premium release boosted OF subscribers.";
@@ -445,6 +493,10 @@ function confirmBooking(gameState, selection) {
 
   if (selection.contentType === "Premium") {
     entry.results.variancePct = variancePct;
+  }
+  if (selection.contentType === "Premium" && Number.isFinite(saturationMult)) {
+    entry.results.saturationMult = saturationMult;
+    entry.results.saturationTierLabel = saturationTierLabel;
   }
 
   if (isAgencyPack) {

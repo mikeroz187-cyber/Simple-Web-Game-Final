@@ -117,5 +117,22 @@ function payDebt(gameState) {
   }
   gameState.player.cash = Math.max(0, gameState.player.cash - gameState.player.debtRemaining);
   gameState.player.debtRemaining = 0;
-  return { ok: true, message: "Debt paid in full." };
+  let saturationActivated = false;
+  const saturationConfig = CONFIG.market && CONFIG.market.saturation ? CONFIG.market.saturation : null;
+  if (saturationConfig && saturationConfig.enabledAfterDebt === true) {
+    if (!gameState.market || typeof gameState.market !== "object") {
+      gameState.market = { activeShiftId: null, shiftHistory: [], saturation: { active: false, activatedDay: null } };
+    }
+    if (!gameState.market.saturation || typeof gameState.market.saturation !== "object") {
+      gameState.market.saturation = { active: false, activatedDay: null };
+    }
+    if (!gameState.market.saturation.active) {
+      gameState.market.saturation.active = true;
+      gameState.market.saturation.activatedDay = Number.isFinite(gameState.player.day)
+        ? gameState.player.day
+        : null;
+      saturationActivated = true;
+    }
+  }
+  return { ok: true, message: "Debt paid in full.", saturationActivated: saturationActivated };
 }

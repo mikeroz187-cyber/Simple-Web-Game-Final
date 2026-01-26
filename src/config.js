@@ -163,6 +163,21 @@ const CONFIG = {
       }
     }
   },
+  market: {
+    saturation: {
+      enabledAfterDebt: true,
+      defaultMult: 1,
+      tiers: [
+        { min: 0, max: 99, mult: 1, label: "0–99 subs tier" },
+        { min: 100, max: 199, mult: 0.95, label: "100–199 subs tier" },
+        { min: 200, max: 349, mult: 0.9, label: "200–349 subs tier" },
+        { min: 350, max: 499, mult: 0.85, label: "350–499 subs tier" },
+        { min: 500, max: 699, mult: 0.8, label: "500–699 subs tier" },
+        { min: 700, max: 999, mult: 0.75, label: "700–999 subs tier" },
+        { min: 1000, max: null, mult: 0.7, label: "1000+ subs tier" }
+      ]
+    }
+  },
   reputation: {
     branches: [
       {
