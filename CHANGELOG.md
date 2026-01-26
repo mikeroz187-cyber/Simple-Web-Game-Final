@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Gated competition unlock to post-debt with a one-time Act 2 message and updated hub lock copy.
+  - Why: Keep competition inactive in Act 1 while activating it immediately after debt is cleared with clear player messaging.
+  - Files touched: src/config.js, src/systems/competition.js, src/systems/economy.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added Net Worth (Cash + MRR valuation multiple) in Hub/Analytics and analytics snapshots.
   - Why: Surface a single macro stat that captures cash plus MRR valuation for quick progress checks.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/analytics.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

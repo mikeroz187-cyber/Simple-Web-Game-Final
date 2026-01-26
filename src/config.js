@@ -169,6 +169,11 @@ const CONFIG = {
     }
   },
   market: {
+    competition: {
+      enabled: true,
+      unlockAfterDebt: true,
+      unlockMessageId: "act2_competition_unlocked"
+    },
     saturation: {
       enabledAfterDebt: true,
       defaultMult: 1,

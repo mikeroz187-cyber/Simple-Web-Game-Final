@@ -5,6 +5,30 @@ function getCompetitionConfig() {
   return {};
 }
 
+function getMarketCompetitionConfig() {
+  if (CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object") {
+    return CONFIG.market.competition;
+  }
+  return {};
+}
+
+function isCompetitionUnlocked(gameState) {
+  const config = getMarketCompetitionConfig();
+  if (config && config.enabled === false) {
+    return false;
+  }
+  if (config && config.unlockAfterDebt === true) {
+    if (!gameState || !gameState.player) {
+      return false;
+    }
+    const debtRemaining = Number.isFinite(gameState.player.debtRemaining)
+      ? gameState.player.debtRemaining
+      : 0;
+    return debtRemaining <= 0;
+  }
+  return true;
+}
+
 function getCompetitionStartDay(config) {
   if (config && Number.isFinite(config.startDay)) {
     return config.startDay;
@@ -12,7 +36,14 @@ function getCompetitionStartDay(config) {
   return Infinity;
 }
 
-function isCompetitionEnabled(config, day) {
+function isCompetitionEnabled(config, day, gameState) {
+  const marketConfig = getMarketCompetitionConfig();
+  if (marketConfig && marketConfig.enabled === false) {
+    return false;
+  }
+  if (marketConfig && marketConfig.unlockAfterDebt === true) {
+    return isCompetitionUnlocked(gameState);
+  }
   if (config && config.enabled === true) {
     return true;
   }
@@ -128,7 +159,7 @@ function getShiftForDay(catalog, day) {
 
 function getActiveMarketShift(gameState, day) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config, day)) {
+  if (!isCompetitionEnabled(config, day, gameState)) {
     return null;
   }
   const catalog = getMarketShiftsCatalog(config);
@@ -156,7 +187,7 @@ function clampMultiplier(value) {
 
 function getCompetitionMultipliers(gameState, day) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config, day)) {
+  if (!isCompetitionEnabled(config, day, gameState)) {
     return { promoFollowerMult: 1, premiumOfSubsMult: 1 };
   }
   const shift = getActiveMarketShift(gameState, day);
@@ -227,7 +258,7 @@ function addCompetitionStoryLogEntry(gameState, day, rank, total) {
 
 function maybeApplyWeeklyCompetitionCheck(gameState, currentDay) {
   const config = getCompetitionConfig();
-  if (!isCompetitionEnabled(config, currentDay)) {
+  if (!isCompetitionEnabled(config, currentDay, gameState)) {
     return { ok: false, checked: false };
   }
   if (!gameState || !Number.isFinite(currentDay)) {
