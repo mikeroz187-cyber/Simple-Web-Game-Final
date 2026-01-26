@@ -63,7 +63,7 @@
 - [x] CUT: Booking confirm with 2 performers when combo is disabled (two-performer booking removed).
 - [x] Social: Promo content can be posted to both Instagram and X (once per platform).
 - [x] Social: Promo list hides fully-posted promos; Recent Posts capped at 5.
-- [x] Booking: daily cap blocks >5 shoots; day no longer auto-advances; player must use Advance Day.
+- [x] Booking: manual Advance Day pacing (global daily cap later replaced by per-performer caps).
 - [x] Social: Promo OF conversion tuned to ~1 per 20 posts + fractional carry implemented.
 - [x] CUT: Booking any two performers regardless of roles (two-performer booking removed).
 - [x] CUT: Reduced booking locations to 3 (Bedroom Tier 0, Shower Tier 1, Office Tier 2).
@@ -83,10 +83,10 @@
 
 ## Post-MVP Expansion — Act 1+ Content (Approved)
 
-- [ ] Reputation gains via milestone rewards tied to followers, OF subs, and MRR.
-- [ ] Recruitment panel on the Roster screen with rep-gated candidates and a meet slideshow leading to hire/decline.
-- [ ] Daily pacing update: per-performer daily caps (max 3) plus agency sample pack once per day.
-- [ ] Shared slideshow viewer for recruit meets and shoot photo galleries.
+- [x] Reputation gains via milestone rewards tied to followers, OF subs, and MRR.
+- [x] Recruitment panel on the Roster screen with rep-gated candidates and a meet slideshow leading to hire/decline.
+- [x] Daily pacing update: per-performer daily caps (max 3) plus agency sample pack once per day.
+- [x] Shared slideshow viewer for recruit meets and shoot photo galleries.
 
 ---
 
@@ -118,8 +118,8 @@
 | Act 2 | 16/16 | 0 |
 | Fixes/QoL | 22/22 | 0 |
 | Act 3 | 8/8 | 0 |
-| Act 1+ Expansion | 0/4 | 4 |
-| **Total** | **62/66** | **4** |
+| Act 1+ Expansion | 4/4 | 0 |
+| **Total** | **66/66** | **0** |
 
 ---
 

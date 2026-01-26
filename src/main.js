@@ -18,6 +18,7 @@
     ensureStoryLogState(window.gameState);
     ensureSocialManualStrategyState(window.gameState);
     ensureReputationState(window.gameState);
+    ensureRecruitmentState(window.gameState);
     initCompetitionStateIfMissing(window.gameState);
     const storyResult = checkStoryEvents(window.gameState);
     if (CONFIG.save.autosave_enabled) {

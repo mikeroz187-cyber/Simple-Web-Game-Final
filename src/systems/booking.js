@@ -1,5 +1,6 @@
 function advanceDay(gameState) {
   gameState.player.shootsToday = 0;
+  gameState.player.agencyPackUsedToday = false;
   gameState.player.day += 1;
   recoverAllPerformers(gameState);
   advancePerformerManagementDay(gameState);
@@ -36,6 +37,22 @@ function getAgencyPackConfig() {
     return CONFIG.agencyPacks;
   }
   return { enabled: false };
+}
+
+function getShootPhotoConfig() {
+  if (CONFIG.shootPhotos && typeof CONFIG.shootPhotos === "object") {
+    return CONFIG.shootPhotos;
+  }
+  return { count: 0, placeholderPath: CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH };
+}
+
+function buildShootPhotoPaths() {
+  const config = getShootPhotoConfig();
+  const count = Number.isFinite(config.count) ? Math.max(0, Math.floor(config.count)) : 0;
+  const placeholderPath = config.placeholderPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+  return Array.from({ length: count }, function () {
+    return placeholderPath;
+  });
 }
 
 function isAgencyPackSelection(selection) {
@@ -130,6 +147,13 @@ function getEntryPerformerIds(entry) {
     return [entry.performerId];
   }
   return [];
+}
+
+function getEntryPhotoPaths(entry) {
+  if (!entry || !Array.isArray(entry.photoPaths) || entry.photoPaths.length === 0) {
+    return buildShootPhotoPaths();
+  }
+  return entry.photoPaths.slice();
 }
 
 function getBookingPerformerSelection(gameState, selection) {
@@ -283,17 +307,14 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Day limit reached. No more shoots allowed." };
   }
 
-  const shootsPerDay = CONFIG.game.shoots_per_day;
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
-  if (currentShoots >= shootsPerDay) {
-    return {
-      ok: false,
-      message: "Daily shoot limit reached (" + shootsPerDay + "). Click Advance Day on the Hub to shoot more."
-    };
-  }
 
   const agencyConfig = getAgencyPackConfig();
   const isAgencyPack = isAgencyPackSelection(selection) && agencyConfig.enabled;
+  const agencyDailyLimit = Number.isFinite(agencyConfig.dailyLimit) ? agencyConfig.dailyLimit : 1;
+  if (isAgencyPack && agencyDailyLimit > 0 && gameState.player.agencyPackUsedToday) {
+    return { ok: false, message: "Agency Sample Pack already used today." };
+  }
   let performerSelection = null;
   let performer = null;
   if (isAgencyPack) {
@@ -413,6 +434,7 @@ function confirmBooking(gameState, selection) {
     contentType: selection.contentType,
     source: isAgencyPack ? "agency_pack" : "core",
     shootCost: shootCost,
+    photoPaths: buildShootPhotoPaths(),
     results: {
       socialFollowersGained: socialFollowersGained,
       socialSubscribersGained: socialSubscribersGained,
@@ -449,6 +471,9 @@ function confirmBooking(gameState, selection) {
   gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
   gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
   gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);
+  if (isAgencyPack && agencyDailyLimit > 0) {
+    gameState.player.agencyPackUsedToday = true;
+  }
 
   gameState.content.entries.push(entry);
   gameState.content.lastContentId = entry.id;

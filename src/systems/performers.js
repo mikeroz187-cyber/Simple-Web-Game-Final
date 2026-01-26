@@ -5,6 +5,26 @@ function isPerformerAvailable(performer) {
   return performer.fatigue < CONFIG.performers.max_fatigue;
 }
 
+function getPerformerDailyBookingCap(performer) {
+  const config = CONFIG.performers || {};
+  const capLimit = Number.isFinite(config.max_daily_bookings_cap) ? config.max_daily_bookings_cap : 3;
+  const defaultCap = Number.isFinite(config.default_max_bookings_per_day) ? config.default_max_bookings_per_day : 1;
+  let baseCap = defaultCap;
+  if (performer && Number.isFinite(performer.maxBookingsPerDay)) {
+    baseCap = performer.maxBookingsPerDay;
+  } else if (performer && performer.id) {
+    const catalogEntry = config.catalog ? config.catalog[performer.id] : null;
+    if (catalogEntry && Number.isFinite(catalogEntry.maxBookingsPerDay)) {
+      baseCap = catalogEntry.maxBookingsPerDay;
+    }
+  }
+  const normalizedBase = Math.max(1, Math.floor(baseCap));
+  if (Number.isFinite(capLimit) && capLimit > 0) {
+    return Math.min(capLimit, normalizedBase);
+  }
+  return normalizedBase;
+}
+
 function getPerformerManagementConfig() {
   if (CONFIG.performerManagement && typeof CONFIG.performerManagement === "object") {
     return CONFIG.performerManagement;
@@ -200,14 +220,12 @@ function isPerformerBookable(gameState, performer) {
     return { ok: false, reason: "Performer must rest (" + restDaysRemaining + " day(s) remaining)." };
   }
 
-  const maxConsecutive = Number.isFinite(CONFIG.performerManagement.maxConsecutiveBookings)
-    ? CONFIG.performerManagement.maxConsecutiveBookings
-    : 0;
   const consecutiveBookings = availability && Number.isFinite(availability.consecutiveBookings)
     ? availability.consecutiveBookings
     : 0;
-  if (maxConsecutive > 0 && consecutiveBookings >= maxConsecutive) {
-    return { ok: false, reason: "Performer hit max consecutive shoots today." };
+  const dailyCap = getPerformerDailyBookingCap(performer);
+  if (dailyCap > 0 && consecutiveBookings >= dailyCap) {
+    return { ok: false, reason: "Daily shoot cap reached." };
   }
 
   if (!isPerformerAvailable(performer)) {

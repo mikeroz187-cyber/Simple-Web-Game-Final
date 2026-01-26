@@ -305,6 +305,49 @@ function ensureContentVarianceState(candidate) {
   }
 }
 
+function getShootPhotoConfigForSave() {
+  if (CONFIG.shootPhotos && typeof CONFIG.shootPhotos === "object") {
+    return CONFIG.shootPhotos;
+  }
+  return { count: 0, placeholderPath: CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH };
+}
+
+function buildShootPhotoPathsForSave() {
+  const config = getShootPhotoConfigForSave();
+  const count = Number.isFinite(config.count) ? Math.max(0, Math.floor(config.count)) : 0;
+  const placeholderPath = config.placeholderPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+  return Array.from({ length: count }, function () {
+    return placeholderPath;
+  });
+}
+
+function ensureContentEntryPhotoPaths(candidate) {
+  if (!candidate || !candidate.content || !Array.isArray(candidate.content.entries)) {
+    return;
+  }
+  const defaults = buildShootPhotoPathsForSave();
+  candidate.content.entries.forEach(function (entry) {
+    if (!entry) {
+      return;
+    }
+    if (!Array.isArray(entry.photoPaths) || entry.photoPaths.length === 0) {
+      entry.photoPaths = defaults.slice();
+      return;
+    }
+    const sanitized = entry.photoPaths.filter(function (path) {
+      return typeof path === "string" && path.trim().length > 0;
+    });
+    if (sanitized.length === 0) {
+      entry.photoPaths = defaults.slice();
+      return;
+    }
+    while (sanitized.length < defaults.length) {
+      sanitized.push(defaults[sanitized.length] || defaults[0]);
+    }
+    entry.photoPaths = sanitized;
+  });
+}
+
 function getCompetitionConfigForSave() {
   if (CONFIG.competition && typeof CONFIG.competition === "object") {
     return CONFIG.competition;
@@ -416,6 +459,12 @@ function migrateGameState(candidate) {
   if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
     candidate.player.shootsToday = 0;
   }
+  if (!candidate.player || typeof candidate.player.agencyPackUsedToday !== "boolean") {
+    if (!candidate.player) {
+      candidate.player = newGameState().player;
+    }
+    candidate.player.agencyPackUsedToday = false;
+  }
   if (!candidate.social || typeof candidate.social !== "object") {
     candidate.social = { posts: [] };
   }
@@ -473,8 +522,10 @@ function migrateGameState(candidate) {
   ensureFreelancerProfilesState(candidate);
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
+  ensureContentEntryPhotoPaths(candidate);
   ensureCompetitionState(candidate);
   ensureReputationState(candidate);
+  ensureRecruitmentState(candidate);
   ensureLegacyMilestonesState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
@@ -518,7 +569,8 @@ function validateGameState(candidate) {
     "automation",
     "rivals",
     "market",
-    "reputation"
+    "reputation",
+    "recruitment"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
@@ -563,8 +615,8 @@ function validateGameState(candidate) {
     return { ok: false, message: "Player day out of range." };
   }
 
-  if (player.shootsToday > CONFIG.game.shoots_per_day) {
-    return { ok: false, message: "Player shoots per day out of range." };
+  if (typeof player.agencyPackUsedToday !== "boolean") {
+    return { ok: false, message: "Player agency pack usage invalid." };
   }
 
   const roster = candidate.roster;
@@ -679,6 +731,15 @@ function validateGameState(candidate) {
     }
     if (typeof entry.results.feedbackSummary !== "string" || entry.results.feedbackSummary.length === 0) {
       return { ok: false, message: "Content feedback invalid." };
+    }
+    if (!Array.isArray(entry.photoPaths) || entry.photoPaths.length === 0) {
+      return { ok: false, message: "Content photos invalid." };
+    }
+    const hasInvalidPhoto = entry.photoPaths.some(function (path) {
+      return typeof path !== "string" || path.length === 0;
+    });
+    if (hasInvalidPhoto) {
+      return { ok: false, message: "Content photos invalid." };
     }
   }
 
@@ -826,6 +887,25 @@ function validateGameState(candidate) {
 
   if (candidate.legacyMilestones !== undefined && !Array.isArray(candidate.legacyMilestones)) {
     return { ok: false, message: "Legacy milestones data invalid." };
+  }
+
+  if (candidate.recruitment !== undefined) {
+    const recruitment = candidate.recruitment;
+    if (typeof recruitment !== "object" || recruitment === null || Array.isArray(recruitment)) {
+      return { ok: false, message: "Recruitment data invalid." };
+    }
+    if (!Array.isArray(recruitment.declinedIds) || !Array.isArray(recruitment.hiredIds)) {
+      return { ok: false, message: "Recruitment data invalid." };
+    }
+    const hasBadDeclined = recruitment.declinedIds.some(function (entry) {
+      return typeof entry !== "string";
+    });
+    const hasBadHired = recruitment.hiredIds.some(function (entry) {
+      return typeof entry !== "string";
+    });
+    if (hasBadDeclined || hasBadHired) {
+      return { ok: false, message: "Recruitment data invalid." };
+    }
   }
 
   return { ok: true };

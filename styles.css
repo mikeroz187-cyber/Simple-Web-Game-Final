@@ -190,6 +190,26 @@ body {
   margin-top: 8px;
 }
 
+.slideshow-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: #f8f9fd;
+  margin: 12px 0;
+}
+
+.slideshow-image {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+}
+
 .modal-root {
   position: fixed;
   inset: 0;
