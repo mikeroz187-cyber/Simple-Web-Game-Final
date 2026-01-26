@@ -745,13 +745,13 @@ const CONFIG = {
           id: "lingerie",
           name: "Lingerie",
           description: "Your signature premium look — lace, heels, and zero subtlety.",
-          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
+          modifiers: { followersMult: 1.12, ofSubsMult: 0.92 }
         },
         office: {
           id: "office",
           name: "Office",
           description: "After-hours authority — desks, suits, and someone ‘breaking rules.’",
-          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
+          modifiers: { followersMult: 0.95, ofSubsMult: 1.08 }
         },
         uniform: {
           id: "uniform",
@@ -763,7 +763,7 @@ const CONFIG = {
           id: "interracial",
           name: "Interracial",
           description: "A bold, high-click category flex — instantly legible, instantly addictive.",
-          modifiers: { followersMult: 1.00, ofSubsMult: 1.00 }
+          modifiers: { followersMult: 0.90, ofSubsMult: 1.12 }
         }
       }
     },
