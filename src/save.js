@@ -390,13 +390,34 @@ function ensureCompetitionState(candidate) {
   }
 
   if (!candidate.market || typeof candidate.market !== "object") {
-    candidate.market = { activeShiftId: null, shiftHistory: [] };
+    candidate.market = { activeShiftId: null, shiftHistory: [], saturation: { active: false, activatedDay: null } };
   }
   if (typeof candidate.market.activeShiftId !== "string" && candidate.market.activeShiftId !== null) {
     candidate.market.activeShiftId = null;
   }
   if (!Array.isArray(candidate.market.shiftHistory)) {
     candidate.market.shiftHistory = [];
+  }
+  if (!candidate.market.saturation || typeof candidate.market.saturation !== "object") {
+    candidate.market.saturation = { active: false, activatedDay: null };
+  }
+  if (typeof candidate.market.saturation.active !== "boolean") {
+    candidate.market.saturation.active = false;
+  }
+  if (!Number.isFinite(candidate.market.saturation.activatedDay)) {
+    candidate.market.saturation.activatedDay = null;
+  }
+  const saturationConfig = CONFIG.market && CONFIG.market.saturation ? CONFIG.market.saturation : null;
+  if (saturationConfig && saturationConfig.enabledAfterDebt === true) {
+    const debtPaid = candidate.player && Number.isFinite(candidate.player.debtRemaining)
+      ? candidate.player.debtRemaining <= 0
+      : false;
+    if (debtPaid && !candidate.market.saturation.active) {
+      candidate.market.saturation.active = true;
+      candidate.market.saturation.activatedDay = Number.isFinite(candidate.player.day)
+        ? candidate.player.day
+        : candidate.market.saturation.activatedDay;
+    }
   }
 }
 

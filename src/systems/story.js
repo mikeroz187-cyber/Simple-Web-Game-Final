@@ -162,6 +162,10 @@ const STORY_EVENT_COPY = {
     title: "Debt Cleared",
     message: "You paid the $10,000 debt on time. The studio is stable, and the loan is behind you. You now have a real foundation for long-term growth."
   },
+  act2_saturation_activated: {
+    title: "Debt Cleared — Act 2",
+    message: "Debt cleared. Congrats—you’re legit now. Unfortunately, the market noticed. New Premium subs will taper as you grow (Saturation tiers are now active)."
+  },
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",
     message: "The $10,000 debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."
