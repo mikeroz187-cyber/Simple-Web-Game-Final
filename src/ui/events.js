@@ -504,17 +504,39 @@ function setupEventHandlers() {
 
     if (action === "post-instagram" || action === "post-x") {
       const platform = action === "post-instagram" ? "Instagram" : "X";
+      const pipelineBefore = typeof getOfPipeline === "function" ? getOfPipeline(window.gameState) : null;
+      const carryBefore = pipelineBefore ? pipelineBefore.carry : null;
       const result = postPromoContent(window.gameState, platform, uiState.social.selectedContentId);
-      setUiMessage(result.message || "");
-      if (result.ok) {
-        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-        if (!saveResult.ok) {
-          setUiMessage(saveResult.message);
+      if (!result.ok) {
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+        return;
+      }
+      const latestPost = window.gameState.social.posts.length
+        ? window.gameState.social.posts[window.gameState.social.posts.length - 1]
+        : null;
+      const pipelineAfter = typeof getOfPipeline === "function" ? getOfPipeline(window.gameState) : null;
+      const carryAfter = pipelineAfter ? pipelineAfter.carry : null;
+      let message = "Posted Promo";
+      if (latestPost) {
+        message += ": +" + latestPost.socialFollowersGained + " followers, +" + latestPost.socialSubscribersGained + " social subs";
+      }
+      if (Number.isFinite(carryBefore) && Number.isFinite(carryAfter) && pipelineAfter) {
+        let delta = carryAfter - carryBefore;
+        if (carryAfter < carryBefore) {
+          delta = (1 - carryBefore) + carryAfter;
         }
-        const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
-        if (milestoneCards.length) {
-          showEventCards(milestoneCards);
-        }
+        const pipelineValue = pipelineAfter.progressText.replace("OF Pipeline: ", "").replace(" / ", "/");
+        message += ", OF Pipeline +" + delta.toFixed(2) + " (now " + pipelineValue + ")";
+      }
+      setUiMessage(message + ".");
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message);
+      }
+      const milestoneCards = buildMilestoneEventCards(result.milestoneEvents);
+      if (milestoneCards.length) {
+        showEventCards(milestoneCards);
       }
       renderApp(window.gameState);
       return;

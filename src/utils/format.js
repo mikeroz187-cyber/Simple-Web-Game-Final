@@ -45,3 +45,14 @@ function getLocationThumbnailSizePx() {
 function getLocationThumbnailRadiusPx() {
   return CONFIG.ui.panel_gap_px / 2;
 }
+
+function getOfPipeline(gameState) {
+  if (!gameState || !gameState.player || !Number.isFinite(gameState.player.onlyFansSubCarry)) {
+    return null;
+  }
+  const rawCarry = gameState.player.onlyFansSubCarry;
+  const safeCarry = rawCarry < 0 ? 0 : rawCarry;
+  const displayCarry = safeCarry > 1 ? safeCarry % 1 : safeCarry;
+  const progressText = "OF Pipeline: " + displayCarry.toFixed(2) + " / 1.00";
+  return { carry: safeCarry, progressText: progressText };
+}
