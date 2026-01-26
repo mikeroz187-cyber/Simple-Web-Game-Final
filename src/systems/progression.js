@@ -79,6 +79,93 @@ function purchaseLocationUnlock(gameState) {
   return purchaseTier1Location(gameState);
 }
 
+function getUnlockScheduleConfig() {
+  if (CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)) {
+    return CONFIG.progression.unlockSchedule;
+  }
+  return [];
+}
+
+function getAppliedUnlockIds(gameState) {
+  if (!gameState || !gameState.unlocks) {
+    return [];
+  }
+  if (!Array.isArray(gameState.unlocks.appliedUnlockIds)) {
+    gameState.unlocks.appliedUnlockIds = [];
+  }
+  return gameState.unlocks.appliedUnlockIds;
+}
+
+function isScheduledUnlockAvailable(gameState, type, id) {
+  const schedule = getUnlockScheduleConfig();
+  const isScheduled = schedule.some(function (entry) {
+    return entry && entry.type === type && entry.id === id;
+  });
+  if (!isScheduled) {
+    return true;
+  }
+  return getAppliedUnlockIds(gameState).indexOf(id) !== -1;
+}
+
+function applyScheduledUnlocks(gameState) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, events: [] };
+  }
+
+  if (typeof ensureUnlocksState === "function") {
+    ensureUnlocksState(gameState);
+  }
+
+  const schedule = getUnlockScheduleConfig();
+  if (!Array.isArray(schedule) || schedule.length === 0) {
+    return { ok: true, events: [] };
+  }
+
+  const currentDay = gameState.player.day;
+  const appliedIds = getAppliedUnlockIds(gameState);
+  const appliedSet = new Set(appliedIds);
+  const events = [];
+
+  schedule.forEach(function (entry) {
+    if (!entry || !Number.isFinite(entry.day) || typeof entry.type !== "string" || typeof entry.id !== "string") {
+      return;
+    }
+    if (entry.day > currentDay || appliedSet.has(entry.id)) {
+      return;
+    }
+
+    let shouldNotify = true;
+    if (entry.type === "location") {
+      const catalog = CONFIG.locations && CONFIG.locations.catalog ? CONFIG.locations.catalog : {};
+      const location = catalog[entry.id];
+      if (location && Number.isFinite(location.tier)) {
+        const tierId = location.tier >= 2 ? "tier2" : "tier1";
+        const alreadyUnlocked = typeof isLocationTierUnlocked === "function"
+          ? isLocationTierUnlocked(gameState, tierId)
+          : false;
+        if (alreadyUnlocked) {
+          shouldNotify = false;
+        }
+        if (location.tier >= 1) {
+          gameState.unlocks.locationTiers.tier1 = true;
+          gameState.unlocks.locationTier1Unlocked = true;
+        }
+        if (location.tier >= 2) {
+          gameState.unlocks.locationTiers.tier2 = true;
+        }
+      }
+    }
+
+    appliedSet.add(entry.id);
+    appliedIds.push(entry.id);
+    if (shouldNotify && typeof entry.storyId === "string") {
+      events.push({ id: entry.storyId, day: currentDay });
+    }
+  });
+
+  return { ok: true, events: events };
+}
+
 function getLifetimeOfSubs(gameState) {
   if (!gameState || !gameState.player) {
     return 0;

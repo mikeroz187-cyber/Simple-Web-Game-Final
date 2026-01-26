@@ -56,6 +56,10 @@ function getAvailableRecruitCandidates(gameState) {
     if (isPerformerInRoster(gameState, candidate.performerId)) {
       return false;
     }
+    if (typeof isScheduledUnlockAvailable === "function" &&
+      !isScheduledUnlockAvailable(gameState, "performer", candidate.performerId)) {
+      return false;
+    }
     const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
     return currentRep >= repRequired;
   }).sort(function (a, b) {

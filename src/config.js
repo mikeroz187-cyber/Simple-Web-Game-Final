@@ -552,7 +552,13 @@ const CONFIG = {
   },
   progression: {
     starting_reputation: 0,
-    location_tier_1_unlock_cost: 2000
+    location_tier_1_unlock_cost: 2000,
+    unlockSchedule: [
+      { day: 4, type: "equipment", id: "lighting", storyId: "unlock_equipment_lighting" },
+      { day: 7, type: "location", id: "shower", storyId: "unlock_location_shower" },
+      { day: 12, type: "performer", id: "recruit_aria_lux", storyId: "unlock_performer_aria_lux" },
+      { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" }
+    ]
   },
   milestones: {
     milestoneOrder: [

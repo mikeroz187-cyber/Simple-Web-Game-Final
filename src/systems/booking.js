@@ -14,8 +14,13 @@ function advanceDay(gameState) {
   }
   recordAnalyticsSnapshot(gameState);
   maybeApplyWeeklyCompetitionCheck(gameState, gameState.player.day);
+  const unlockResult = typeof applyScheduledUnlocks === "function"
+    ? applyScheduledUnlocks(gameState)
+    : { events: [] };
   const storyResult = checkStoryEvents(gameState);
-  return storyResult.events || [];
+  const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
+  const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
+  return unlockEvents.concat(storyEvents);
 }
 
 function getBookingComboConfig() {

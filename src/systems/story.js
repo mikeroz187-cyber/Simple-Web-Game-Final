@@ -205,6 +205,22 @@ const STORY_EVENT_COPY = {
   act3_exit_strategy_day270: {
     title: "Exit Strategy",
     message: "You formalize a long-term exit strategy focused on stability and legacy recognition."
+  },
+  unlock_equipment_lighting: {
+    title: "Unlocked!",
+    message: "New gear available: Lighting upgrades."
+  },
+  unlock_location_shower: {
+    title: "Unlocked!",
+    message: "New location available: Shower (Tier 1)."
+  },
+  unlock_performer_aria_lux: {
+    title: "Unlocked!",
+    message: "New performer available: Aria Lux."
+  },
+  unlock_equipment_camera: {
+    title: "Unlocked!",
+    message: "New gear available: Camera upgrades."
   }
 };
 
