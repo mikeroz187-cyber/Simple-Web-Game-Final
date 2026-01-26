@@ -795,6 +795,10 @@ function renderAnalytics(gameState) {
   const competitionMultipliers = competitionEnabled && typeof getCompetitionMultipliers === "function"
     ? getCompetitionMultipliers(gameState, dayNumber)
     : { promoFollowerMult: 1, premiumOfSubsMult: 1 };
+  const ofPipeline = typeof getOfPipeline === "function" ? getOfPipeline(gameState) : null;
+  const ofPipelineLine = ofPipeline
+    ? "<p><strong>OF Pipeline:</strong> " + ofPipeline.progressText.replace("OF Pipeline: ", "") + "</p>"
+    : "";
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
@@ -803,6 +807,7 @@ function renderAnalytics(gameState) {
     "<p><strong>Social Followers Gained:</strong> " + todaySummary.socialFollowers + "</p>" +
     "<p><strong>Social Subscribers Gained:</strong> " + todaySummary.socialSubscribers + "</p>" +
     "<p><strong>OnlyFans Subscribers Gained:</strong> " + todaySummary.onlyFansSubscribers + "</p>" +
+    ofPipelineLine +
     "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
     "</div>";
 
@@ -1141,12 +1146,16 @@ function renderSocial(gameState) {
   const canPost = availablePromoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
   const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
   const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
+  const socialPipeline = typeof getOfPipeline === "function" ? getOfPipeline(gameState) : null;
+  const socialPipelineLine = socialPipeline
+    ? "<p class=\"helper-text\">" + socialPipeline.progressText + "</p>"
+    : "";
 
   const body = strategyPanel +
     manualPanel +
     "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + "</div>" +
+    "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + socialPipelineLine + "</div>" +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Post to Instagram", "post-instagram", "primary", !canPost || hasPostedInstagram) +

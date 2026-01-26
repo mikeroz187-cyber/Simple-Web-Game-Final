@@ -61,6 +61,7 @@
 - [x] Themes have meaningful tradeoffs (followersMult vs ofSubsMult) + Booking UI shows effects.
 - [x] Post-debt Market Saturation tiers (Premium OF subs only) + activation story popup.
 - [x] Social footprint bonus boosts Premium gains (capped, config-driven, visible in Analytics).
+- [x] Promo posts show OF Pipeline progress (carry) + clear post results messaging.
 
 ---
 

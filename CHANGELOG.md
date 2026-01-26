@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added OF pipeline carry visibility in Analytics/Social and clearer Promo post feedback messaging.
+  - Why: Ensure Promo posts feel impactful and show progress toward the next OF subscriber.
+  - Files touched: src/utils/format.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Gated competition unlock to post-debt with a one-time Act 2 message and updated hub lock copy.
   - Why: Keep competition inactive in Act 1 while activating it immediately after debt is cleared with clear player messaging.
   - Files touched: src/config.js, src/systems/competition.js, src/systems/economy.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
