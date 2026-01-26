@@ -8,6 +8,7 @@ All values are config-driven and should map directly to `config.js` and the init
 ## Field Definitions (Applies to All Performers)
 - **portraitPath** (string): Placeholder image path or data URI for the performer portrait. If missing or blank, the UI falls back to a generic placeholder.
 - **starPowerShoots** (number): Shoot counter used for Star Power progression (counts shoots since last increase).
+- **maxBookingsPerDay** (number): Daily booking cap for the performer (default 1/day, max 3/day).
 
 ## Star Power Progression (Post-MVP)
 - Star Power increases by +1 after **5 shoots** with the same performer.
@@ -37,6 +38,22 @@ These are available as short-term hires, not part of the core team.
 | free_rin_holt | Rin Holt | freelance | 2 | Reliable utility hire with a clean, consistent style. |
 | free_kira_sol | Kira Sol | freelance | 1 | Quiet wildcard who surprises when the concept is right. |
 | free_eli_hart | Eli Hart | freelance | 1 | Budget-friendly helper with earnest charm and limited reach. |
+
+---
+
+## Post-MVP — Recruitable Performers (Roster Expansion)
+
+These performers are not in the starting roster and can be hired through Recruitment once Reputation thresholds are met.
+
+| id | name | type | starPower | maxBookingsPerDay | description |
+| --- | --- | --- | --- | --- | --- |
+| recruit_bryn_sterling | Bryn Sterling | core | 2 | 1 | Quick study with a sharp camera instinct and easy chemistry. |
+| recruit_aria_lux | Aria Lux | core | 3 | 2 | Polished starlet who treats every set like a headline moment. |
+| recruit_dahlia_slate | Dahlia Slate | core | 3 | 1 | Glossy brand-builder who keeps the vibe premium and polished. |
+| recruit_eden_frost | Eden Frost | core | 2 | 2 | Cool, composed performer who thrives under pressure and bright lights. |
+| recruit_fern_kestrel | Fern Kestrel | core | 3 | 1 | Hyper-competent closer with a knack for turning concepts into buzz. |
+| recruit_celeste_noir | Celeste Noir | core | 4 | 3 | High-stamina headliner with a loyal fan club and a cinematic gaze. |
+| recruit_gigi_blade | Gigi Blade | core | 4 | 3 | Relentless showstopper who lives for big swings and bold sets. |
 
 ---
 

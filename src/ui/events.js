@@ -19,6 +19,12 @@ function setEquipmentMessage(message) {
   uiState.shop.equipmentMessage = message || "";
 }
 
+function clearSlideshowState() {
+  const uiState = getUiState();
+  uiState.slideshow = { mode: null, id: null, index: 0 };
+  uiState.recruitMeet = { performerId: null, slideIndex: 0 };
+}
+
 function resetBookingSelection() {
   const uiState = getUiState();
   const bookingMode = uiState.booking && uiState.booking.bookingMode ? uiState.booking.bookingMode : "core";
@@ -146,6 +152,23 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
+function getSlideshowImagePaths(gameState, slideshow) {
+  if (!slideshow || !slideshow.mode) {
+    return [];
+  }
+  if (slideshow.mode === "recruit") {
+    const candidate = getRecruitmentCandidateById(slideshow.id);
+    return candidate && Array.isArray(candidate.meetSlides) ? candidate.meetSlides : [];
+  }
+  if (slideshow.mode === "shoot") {
+    const entry = gameState.content.entries.find(function (contentEntry) {
+      return contentEntry.id === slideshow.id;
+    }) || null;
+    return entry ? getEntryPhotoPaths(entry) : [];
+  }
+  return [];
+}
+
 function setupEventHandlers() {
   ensureAutomationValidation();
 
@@ -160,6 +183,100 @@ function setupEventHandlers() {
 
     if (action === "dismiss-modal") {
       clearModal();
+      return;
+    }
+
+    if (action === "open-meet-recruit") {
+      const performerId = target.dataset.id;
+      uiState.slideshow = { mode: "recruit", id: performerId, index: 0 };
+      uiState.recruitMeet = { performerId: performerId, slideIndex: 0 };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "recruit-next-slide") {
+      const slideshow = uiState.slideshow;
+      if (!slideshow || slideshow.mode !== "recruit") {
+        return;
+      }
+      const slides = getSlideshowImagePaths(window.gameState, slideshow);
+      const maxIndex = Math.max(0, slides.length - 1);
+      const nextIndex = Math.min(maxIndex, (slideshow.index || 0) + 1);
+      slideshow.index = nextIndex;
+      uiState.recruitMeet = { performerId: slideshow.id, slideIndex: nextIndex };
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "recruit-hire") {
+      const performerId = target.dataset.id;
+      const result = hireRecruitCandidate(window.gameState, performerId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        clearSlideshowState();
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        showScreen("screen-roster");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "recruit-decline") {
+      const performerId = target.dataset.id || (uiState.recruitMeet && uiState.recruitMeet.performerId);
+      const result = declineRecruitCandidate(window.gameState, performerId);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+      }
+      if (uiState.slideshow && uiState.slideshow.mode === "recruit") {
+        clearSlideshowState();
+        showScreen("screen-roster");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "view-shoot-photos") {
+      const contentId = target.dataset.id;
+      uiState.slideshow = { mode: "shoot", id: contentId, index: 0 };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "slideshow-prev" || action === "slideshow-next") {
+      const slideshow = uiState.slideshow;
+      if (!slideshow || slideshow.mode !== "shoot") {
+        return;
+      }
+      const slides = getSlideshowImagePaths(window.gameState, slideshow);
+      const maxIndex = Math.max(0, slides.length - 1);
+      const delta = action === "slideshow-next" ? 1 : -1;
+      slideshow.index = clamp((slideshow.index || 0) + delta, 0, maxIndex);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "slideshow-close") {
+      const mode = uiState.slideshow && uiState.slideshow.mode ? uiState.slideshow.mode : null;
+      clearSlideshowState();
+      if (mode === "recruit") {
+        showScreen("screen-roster");
+      } else if (mode === "shoot") {
+        showScreen("screen-gallery");
+      } else {
+        showScreen("screen-hub");
+      }
+      renderApp(window.gameState);
       return;
     }
 
@@ -534,10 +651,7 @@ function setupEventHandlers() {
       if (shootsInput) {
         const rawShoots = shootsInput.valueAsNumber;
         if (Number.isFinite(rawShoots)) {
-          const maxShoots = Number.isFinite(CONFIG.game.shoots_per_day)
-            ? CONFIG.game.shoots_per_day
-            : 5;
-          player.shootsToday = clamp(Math.floor(rawShoots), 0, maxShoots);
+          player.shootsToday = Math.max(0, Math.floor(rawShoots));
         }
       }
 
@@ -610,6 +724,7 @@ function setupEventHandlers() {
         ensureStoryLogState(window.gameState);
         ensureSocialManualStrategyState(window.gameState);
         ensureReputationState(window.gameState);
+        ensureRecruitmentState(window.gameState);
         initCompetitionStateIfMissing(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
@@ -643,6 +758,7 @@ function setupEventHandlers() {
           ensureStoryLogState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
           ensureReputationState(window.gameState);
+          ensureRecruitmentState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             appendStoryLogEntries(window.gameState, storyResult.events);

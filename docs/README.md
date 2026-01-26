@@ -26,6 +26,11 @@ MVP UI docs remain **historical references**; current UI additions are documente
 
 ## Documentation Index
 
+**Current / Post-MVP Docs:**
+- **CORE_GAMEPLAY_LOOP.md** – **(Current)** Gameplay loop and daily pacing rules for the post-MVP phase.
+- **UI_LAYOUT_AND_INTERACTION_MODEL.md** – **(Current)** UI layout/interaction updates for recruitment and slideshows.
+- **GAMESTATE_DATA_MODEL.md** – **(Current)** Additive gameState fields introduced post-MVP.
+
 **MVP / Implementation Docs (Historical Reference):**
 - **CURRENT_SCOPE.md** – **(Current)** Authoritative current scope document (what features are in/out for the current phase).
 - **SCOPE_MVP.md** – **(MVP, Historical)** Detailed MVP scope and early access plan, listing features included in MVP and which are deferred.

@@ -11,6 +11,15 @@ const SHOOT_OUTPUT_PLACEHOLDER_SVG = [
 ].join("");
 
 const LOCATION_PLACEHOLDER_THUMB_PATH = "assets/images/placeholders/location_placeholder.svg";
+const SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH = "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG);
+
+function buildPlaceholderImagePaths(count, path) {
+  const safeCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+  const resolvedPath = path || "";
+  return Array.from({ length: safeCount }, function () {
+    return resolvedPath;
+  });
+}
 
 const AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT = false;
 const AUTOMATION_AUTO_BOOK_PER_DAY = 1;
@@ -54,6 +63,7 @@ const CONFIG = {
   SHOOT_OUTPUTS_MAX_HISTORY: 50,
   LOCATION_PLACEHOLDER_THUMB_PATH: LOCATION_PLACEHOLDER_THUMB_PATH,
   SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH: "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG),
+  SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH: SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH,
   save: {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,
@@ -193,6 +203,8 @@ const CONFIG = {
     core_count: 3,
     freelance_count: 5,
     default_star_power: 1,
+    default_max_bookings_per_day: 1,
+    max_daily_bookings_cap: 3,
     max_fatigue: 100,
     fatigue_per_shoot: 10,
     fatigue_recovery_per_day: 5,
@@ -304,8 +316,116 @@ const CONFIG = {
         type: "freelance",
         starPower: 2,
         description: "Deadpan support who makes chaos look like a deliberate choice."
+      },
+      recruit_aria_lux: {
+        id: "recruit_aria_lux",
+        name: "Aria Lux",
+        type: "core",
+        starPower: 3,
+        maxBookingsPerDay: 2,
+        description: "Polished starlet who treats every set like a headline moment."
+      },
+      recruit_bryn_sterling: {
+        id: "recruit_bryn_sterling",
+        name: "Bryn Sterling",
+        type: "core",
+        starPower: 2,
+        description: "Quick study with a sharp camera instinct and easy chemistry."
+      },
+      recruit_celeste_noir: {
+        id: "recruit_celeste_noir",
+        name: "Celeste Noir",
+        type: "core",
+        starPower: 4,
+        maxBookingsPerDay: 3,
+        description: "High-stamina headliner with a loyal fan club and a cinematic gaze."
+      },
+      recruit_dahlia_slate: {
+        id: "recruit_dahlia_slate",
+        name: "Dahlia Slate",
+        type: "core",
+        starPower: 3,
+        description: "Glossy brand-builder who keeps the vibe premium and polished."
+      },
+      recruit_eden_frost: {
+        id: "recruit_eden_frost",
+        name: "Eden Frost",
+        type: "core",
+        starPower: 2,
+        maxBookingsPerDay: 2,
+        description: "Cool, composed performer who thrives under pressure and bright lights."
+      },
+      recruit_fern_kestrel: {
+        id: "recruit_fern_kestrel",
+        name: "Fern Kestrel",
+        type: "core",
+        starPower: 3,
+        description: "Hyper-competent closer with a knack for turning concepts into buzz."
+      },
+      recruit_gigi_blade: {
+        id: "recruit_gigi_blade",
+        name: "Gigi Blade",
+        type: "core",
+        starPower: 4,
+        maxBookingsPerDay: 3,
+        description: "Relentless showstopper who lives for big swings and bold sets."
       }
     }
+  },
+  recruitment: {
+    maxRosterSize: 10,
+    dailyCandidateLimit: 1,
+    candidates: [
+      {
+        performerId: "recruit_bryn_sterling",
+        repRequired: 5,
+        hireCost: 900,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "A sharp-eyed newcomer looking for a studio with real ambition and a tasteful edge."
+      },
+      {
+        performerId: "recruit_aria_lux",
+        repRequired: 10,
+        hireCost: 1400,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "She brings a red-carpet aura and expects direction that feels exclusive, not desperate."
+      },
+      {
+        performerId: "recruit_dahlia_slate",
+        repRequired: 15,
+        hireCost: 1800,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "Your brand gets brighter with every shoot, and she knows exactly how to sell the glow."
+      },
+      {
+        performerId: "recruit_eden_frost",
+        repRequired: 20,
+        hireCost: 2200,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "A composed pro who thrives on tight schedules and perfectly framed moments."
+      },
+      {
+        performerId: "recruit_fern_kestrel",
+        repRequired: 25,
+        hireCost: 2700,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "She thrives on momentum, and your studio’s reputation has her attention."
+      },
+      {
+        performerId: "recruit_celeste_noir",
+        repRequired: 30,
+        hireCost: 3400,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "A headliner with high standards and higher stamina, drawn to elite creative control."
+      },
+      {
+        performerId: "recruit_gigi_blade",
+        repRequired: 35,
+        hireCost: 4200,
+        meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
+        pitchText: "A viral magnet with a taste for premium spots and a daring, glamorous edge."
+      }
+    ]
   },
   freelancers: {
     profiles: [
@@ -325,6 +445,7 @@ const CONFIG = {
   },
   agencyPacks: {
     enabled: true,
+    dailyLimit: 1,
     flatFee: 300,
     bundleCount: 5,
     promoFollowersMult: 1.5,
@@ -357,6 +478,10 @@ const CONFIG = {
       startDay: 181,
       maxRollLogEntries: 100
     }
+  },
+  shootPhotos: {
+    count: 5,
+    placeholderPath: SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH
   },
   social_platforms: {
     platforms: ["Instagram", "X"],
@@ -397,27 +522,79 @@ const CONFIG = {
   },
   milestones: {
     milestoneOrder: [
+      "ms_followers_500",
+      "ms_subscribers_100",
+      "ms_mrr_10000",
       "ms_followers_1000",
       "ms_subscribers_250",
+      "ms_followers_2500",
       "ms_revenue_50000",
+      "ms_subscribers_500",
+      "ms_followers_5000",
+      "ms_mrr_100000",
       "ms_reputation_25",
       "ms_reputation_50"
     ],
     milestones: {
+      ms_followers_500: {
+        label: "First 500 Social Followers",
+        type: "followers",
+        threshold: 500,
+        rewardReputation: 2
+      },
+      ms_subscribers_100: {
+        label: "First 100 OF Subscribers",
+        type: "subscribers",
+        threshold: 100,
+        rewardReputation: 2
+      },
+      ms_mrr_10000: {
+        label: "$10k MRR",
+        type: "mrr",
+        threshold: 10000,
+        rewardReputation: 3
+      },
       ms_followers_1000: {
         label: "First 1,000 Social Followers",
         type: "followers",
-        threshold: 1000
+        threshold: 1000,
+        rewardReputation: 3
       },
       ms_subscribers_250: {
         label: "First 250 OF Subscribers",
         type: "subscribers",
-        threshold: 250
+        threshold: 250,
+        rewardReputation: 3
+      },
+      ms_followers_2500: {
+        label: "2,500 Social Followers",
+        type: "followers",
+        threshold: 2500,
+        rewardReputation: 5
       },
       ms_revenue_50000: {
         label: "$50k MRR",
         type: "mrr",
-        threshold: 50000
+        threshold: 50000,
+        rewardReputation: 7
+      },
+      ms_subscribers_500: {
+        label: "500 OF Subscribers",
+        type: "subscribers",
+        threshold: 500,
+        rewardReputation: 5
+      },
+      ms_followers_5000: {
+        label: "5,000 Social Followers",
+        type: "followers",
+        threshold: 5000,
+        rewardReputation: 7
+      },
+      ms_mrr_100000: {
+        label: "$100k MRR",
+        type: "mrr",
+        threshold: 100000,
+        rewardReputation: 10
       },
       ms_reputation_25: {
         label: "Reputation 25",

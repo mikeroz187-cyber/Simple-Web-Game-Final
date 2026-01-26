@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added reputation milestone rewards, recruitment flow with meet slideshow, and shoot-photo viewer tied to saved photo paths.
+  - Why: Deliver the approved Act 1+ content expansion for reputation, recruitment, and slideshows.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/performers.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, index.html, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/DATA_MILESTONES.md, docs/DATA_PERFORMERS.md, docs/README.md, docs/task-checklist.md, CHANGELOG.md.
+- What: Replaced the global daily shoot cap with per-performer caps and a once-per-day agency pack limit.
+  - Why: Match the new pacing rules without breaking save/load or daily resets.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/performers.js, src/ui/render.js, src/ui/events.js, CHANGELOG.md.
 - What: Authorized the Act 1+ content expansion scope (reputation milestone rewards, recruitment flow, daily pacing changes, and slideshow viewer) and added the pending checklist items.
   - Why: Document the newly approved scope so implementation can proceed with clear constraints and tracked tasks.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.

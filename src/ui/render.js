@@ -18,6 +18,15 @@ function getUiState() {
       roster: {
         showFreelancers: false
       },
+      slideshow: {
+        mode: null,
+        id: null,
+        index: 0
+      },
+      recruitMeet: {
+        performerId: null,
+        slideIndex: 0
+      },
       shop: {
         equipmentMessage: ""
       },
@@ -41,6 +50,7 @@ function renderApp(gameState) {
   renderRoster(gameState);
   renderSocial(gameState);
   renderGallery(gameState);
+  renderSlideshow(gameState);
   renderStoryLog(gameState);
   renderShop(gameState);
 }
@@ -153,22 +163,29 @@ function getContractSummary(gameState, performerId) {
 }
 
 function getAvailabilitySummary(gameState, performerId) {
-  const availability = getAvailabilityState(gameState, performerId);
+  const performer = typeof performerId === "string" && gameState && gameState.roster
+    ? gameState.roster.performers.find(function (entry) {
+      return entry.id === performerId;
+    })
+    : performerId;
+  const resolvedId = performer && performer.id ? performer.id : performerId;
+  const availability = getAvailabilityState(gameState, resolvedId);
   const restDaysRemaining = availability && Number.isFinite(availability.restDaysRemaining)
     ? availability.restDaysRemaining
     : 0;
   const consecutiveBookings = availability && Number.isFinite(availability.consecutiveBookings)
     ? availability.consecutiveBookings
     : 0;
-  const maxConsecutive = Number.isFinite(CONFIG.performerManagement.maxConsecutiveBookings)
-    ? CONFIG.performerManagement.maxConsecutiveBookings
-    : 0;
+  const defaultDailyCap = Number.isFinite(CONFIG.performers.default_max_bookings_per_day)
+    ? CONFIG.performers.default_max_bookings_per_day
+    : 1;
+  const dailyCap = performer ? getPerformerDailyBookingCap(performer) : defaultDailyCap;
   return {
     restDaysRemaining: restDaysRemaining,
     consecutiveBookings: consecutiveBookings,
-    maxConsecutive: maxConsecutive,
+    maxConsecutive: dailyCap,
     label: (restDaysRemaining > 0 ? "Rest: " + restDaysRemaining + " day(s) | " : "") +
-      "Streak: " + consecutiveBookings + " / " + maxConsecutive
+      "Daily shoots: " + consecutiveBookings + " / " + dailyCap
   };
 }
 
@@ -212,7 +229,7 @@ function renderHub(gameState) {
   const statusHtml = [
     "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
     "<p><strong>Days Left:</strong> " + daysLeft + "</p>",
-    "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + " / " + CONFIG.game.shoots_per_day + "</p>",
+    "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + "</p>",
     "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
     "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
     "<p><strong>Social Followers:</strong> " + gameState.player.socialFollowers + "</p>",
@@ -393,7 +410,6 @@ function renderHub(gameState) {
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
   const debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
-  const debugMaxShoots = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
   const debugPanel = isDebugEnabled()
     ? "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
@@ -428,8 +444,8 @@ function renderHub(gameState) {
       "</div>" +
       "<div class=\"field-row\">" +
       "<label class=\"field-label\" for=\"debug-shoots-today-input\">Shoots Today</label>" +
-      "<input id=\"debug-shoots-today-input\" class=\"input-control\" type=\"number\" min=\"0\" max=\"" + debugMaxShoots +
-      "\" step=\"1\" value=\"" + gameState.player.shootsToday + "\" />" +
+      "<input id=\"debug-shoots-today-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" +
+      gameState.player.shootsToday + "\" />" +
       "</div>" +
       "<div class=\"button-row\">" +
       "<button class=\"button\" type=\"button\" data-action=\"debug-apply-stats\">Apply Stats (No Reload)</button>" +
@@ -462,6 +478,7 @@ function renderBooking(gameState) {
   const screen = qs("#screen-booking");
   const uiState = getUiState();
   const bookingMode = uiState.booking.bookingMode || "core";
+  const agencyPackUsedToday = Boolean(gameState.player.agencyPackUsedToday);
   const isAgencyPack = bookingMode === "agency_pack";
   const allPerformers = gameState.roster.performers;
   const performers = allPerformers.filter(function (performer) {
@@ -498,10 +515,14 @@ function renderBooking(gameState) {
   ];
   const bookingModeRows = bookingModeOptions.map(function (option) {
     const isSelected = option.id === bookingMode;
+    const isAgencyOption = option.id === "agency_pack";
+    const isDisabled = isAgencyOption && agencyPackUsedToday;
+    const lockNote = isDisabled ? " Used today — available tomorrow." : "";
     return "<div class=\"list-item\">" +
-      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-booking-mode\" data-id=\"" + option.id + "\">" +
+      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-booking-mode\" data-id=\"" +
+      option.id + "\"" + (isDisabled ? " disabled" : "") + ">" +
       option.label + "</button>" +
-      "<p class=\"helper-text\">" + option.description + "</p>" +
+      "<p class=\"helper-text\">" + option.description + lockNote + "</p>" +
       "</div>";
   }).join("");
 
@@ -538,7 +559,7 @@ function renderBooking(gameState) {
     const displayProfile = getPerformerDisplayProfile(gameState, performer);
     const typeLabel = getPerformerTypeLabel(performer.type);
     const contractSummary = getContractSummary(gameState, performer.id);
-    const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+    const availabilitySummary = getAvailabilitySummary(gameState, performer);
     const detail = "Star Power: " + performer.starPower +
       " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
       " | " + contractSummary.label +
@@ -647,7 +668,8 @@ function renderBooking(gameState) {
     uiState.booking.contentType &&
     shootCostResult.ok &&
     gameState.player.cash >= computedShootCost &&
-    !selectedLocationLocked;
+    !selectedLocationLocked &&
+    !(isAgencyPack && agencyPackUsedToday);
 
   const performerPanel = isAgencyPack
     ? "<div class=\"panel\"><h3 class=\"panel-title\">Agency Sample Pack</h3>" +
@@ -826,6 +848,48 @@ function renderRoster(gameState) {
     return performer.type !== "freelance";
   });
 
+  const rosterSize = getContractedRosterCount(gameState);
+  const maxRosterSize = getRecruitmentMaxRosterSize();
+  const isRosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
+  const activeCandidate = getActiveRecruitCandidate(gameState);
+  const recruitmentHeader = "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>" +
+    "<p><strong>Roster Size:</strong> " + rosterSize + " / " + maxRosterSize + "</p>";
+  let recruitmentBody = "";
+  if (isRosterFull) {
+    recruitmentBody = "<p class=\"helper-text\">Roster full.</p>";
+  } else if (!activeCandidate) {
+    recruitmentBody = "<p class=\"helper-text\">Gain reputation to attract new talent.</p>";
+  } else {
+    const performer = CONFIG.performers.catalog[activeCandidate.performerId];
+    const name = performer ? performer.name : "Unknown";
+    const portraitPath = getPerformerPortraitPath(performer);
+    const portraitAlt = "Portrait of " + name;
+    const starPower = performer && Number.isFinite(performer.starPower) ? performer.starPower : 1;
+    const dailyCap = performer ? getPerformerDailyBookingCap(performer) : 1;
+    const repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
+    const hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
+    recruitmentBody = "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
+      "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" +
+      portraitSize + "\" style=\"" + portraitStyle + "\" />" +
+      "<div>" +
+      "<p><strong>" + name + "</strong></p>" +
+      "<p>Star Power: " + starPower + "</p>" +
+      "<p>Daily Cap: " + dailyCap + "</p>" +
+      "<p>Hire Cost: " + formatCurrency(hireCost) + "</p>" +
+      "<p>Rep Required: " + repRequired + "</p>" +
+      "<div class=\"button-row\">" +
+      createButton("Meet", "open-meet-recruit", "primary", false, "data-id=\"" + activeCandidate.performerId + "\"") +
+      createButton("Decline", "recruit-decline", "", false, "data-id=\"" + activeCandidate.performerId + "\"") +
+      "</div>" +
+      "</div>" +
+      "</div>";
+  }
+
+  const recruitmentSection = "<div class=\"panel\"><h3 class=\"panel-title\">Recruitment</h3>" +
+    recruitmentHeader +
+    recruitmentBody +
+    "</div>";
+
   const contractedRows = contractedPerformers.length
     ? contractedPerformers.map(function (performer) {
       const performerStatus = isPerformerBookable(gameState, performer);
@@ -834,7 +898,7 @@ function renderRoster(gameState) {
       const displayProfile = getPerformerDisplayProfile(gameState, performer);
       const portraitAlt = "Portrait of " + displayProfile.name;
       const contractSummary = getContractSummary(gameState, performer.id);
-      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
+      const availabilitySummary = getAvailabilitySummary(gameState, performer);
       const renewalCost = getRenewalCostByType(performer.type);
       const renewLabel = Number.isFinite(renewalCost)
         ? "Renew Contract (" + formatCurrency(renewalCost) + ")"
@@ -859,7 +923,8 @@ function renderRoster(gameState) {
 
   const contractedSection = "<div class=\"panel\"><h3 class=\"panel-title\">Contracted Talent</h3>" + contractedRows + "</div>";
 
-  const body = contractedSection +
+  const body = recruitmentSection +
+    contractedSection +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Back to Hub", "nav-hub") +
@@ -1079,6 +1144,13 @@ function renderGallery(gameState) {
   const detailBundlePanel = detailBundleThumbs
     ? "<p><strong>Sample Pack:</strong></p>" + detailBundleThumbs
     : "";
+  const detailPhotoPaths = selectedEntry ? getEntryPhotoPaths(selectedEntry) : [];
+  const photoButton = selectedEntry
+    ? "<div class=\"button-row\">" +
+      createButton("View Shoot Photos", "view-shoot-photos", "primary", detailPhotoPaths.length === 0,
+        "data-id=\"" + selectedEntry.id + "\"") +
+      "</div>"
+    : "";
 
   const detailPanel = selectedEntry
     ? "<div class=\"panel\"><h3 class=\"panel-title\">Entry Details</h3>" +
@@ -1092,6 +1164,7 @@ function renderGallery(gameState) {
       "<p><strong>Type:</strong> " + selectedEntry.contentType + "</p>" +
       "<p><strong>Shoot Cost:</strong> " + formatCurrency(selectedEntry.shootCost) + "</p>" +
       detailBundlePanel +
+      photoButton +
       "</div>"
     : "";
 
@@ -1126,6 +1199,95 @@ function renderGallery(gameState) {
     createButton("Back to Hub", "nav-hub") +
     "</div>";
   screen.innerHTML = createPanel("Gallery", body, "screen-gallery-title");
+}
+
+function renderSlideshow(gameState) {
+  const screen = qs("#screen-slideshow");
+  if (!screen) {
+    return;
+  }
+  const uiState = getUiState();
+  const slideshow = uiState.slideshow || { mode: null, id: null, index: 0 };
+  if (!slideshow.mode) {
+    const emptyBody = "<p class=\"helper-text\">No slideshow selected.</p>" +
+      "<div class=\"button-row\">" + createButton("Back to Hub", "nav-hub") + "</div>";
+    screen.innerHTML = createPanel("Slideshow", emptyBody, "screen-slideshow-title");
+    return;
+  }
+
+  if (slideshow.mode === "recruit") {
+    const candidate = getRecruitmentCandidateById(slideshow.id);
+    const performer = candidate ? CONFIG.performers.catalog[candidate.performerId] : null;
+    const name = performer ? performer.name : "Recruit";
+    const slides = candidate && Array.isArray(candidate.meetSlides) ? candidate.meetSlides : [];
+    const slideCount = slides.length;
+    const safeIndex = Math.min(Math.max(0, slideshow.index), Math.max(0, slideCount - 1));
+    const slidePath = slideCount ? slides[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    const slideNumber = slideCount ? safeIndex + 1 : 0;
+    const pitchText = candidate && candidate.pitchText ? candidate.pitchText : "A private audition, tastefully framed.";
+    const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
+    const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
+    const rosterSize = getContractedRosterCount(gameState);
+    const maxRosterSize = getRecruitmentMaxRosterSize();
+    const rosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
+    const canHire = !rosterFull && gameState.player.cash >= hireCost && gameState.player.reputation >= repRequired;
+    const nextButton = safeIndex < slideCount - 1
+      ? "<div class=\"button-row\">" + createButton("Next", "recruit-next-slide", "primary") + "</div>"
+      : "";
+    const decisionButtons = safeIndex === slideCount - 1
+      ? "<div class=\"button-row\">" +
+        createButton("Hire (" + formatCurrency(hireCost) + ")", "recruit-hire", "primary", !canHire,
+          "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
+        createButton("Decline", "recruit-decline", "", false, "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
+        "</div>"
+      : "";
+    const body = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Private Audition — " + name + "</h3>" +
+      "<p class=\"helper-text\">" + pitchText + "</p>" +
+      "<div class=\"slideshow-frame\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Audition slide " + (safeIndex + 1) + "\" />" +
+      "</div>" +
+      "<p class=\"helper-text\">Slide " + slideNumber + " of " + slideCount + "</p>" +
+      nextButton +
+      decisionButtons +
+      "<div class=\"button-row\">" +
+      createButton("Back to Roster", "slideshow-close") +
+      "</div>" +
+      "</div>";
+    screen.innerHTML = createPanel("Meet Recruit", body, "screen-slideshow-title");
+    return;
+  }
+
+  if (slideshow.mode === "shoot") {
+    const entry = gameState.content.entries.find(function (contentEntry) {
+      return contentEntry.id === slideshow.id;
+    }) || null;
+    const photos = entry ? getEntryPhotoPaths(entry) : [];
+    const slideCount = photos.length;
+    const safeIndex = Math.min(Math.max(0, slideshow.index), Math.max(0, slideCount - 1));
+    const slidePath = slideCount ? photos[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    const slideNumber = slideCount ? safeIndex + 1 : 0;
+    const prevDisabled = safeIndex <= 0;
+    const nextDisabled = safeIndex >= slideCount - 1;
+    const body = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Shoot Photos</h3>" +
+      "<div class=\"slideshow-frame\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Shoot photo " + (safeIndex + 1) + "\" />" +
+      "</div>" +
+      "<p class=\"helper-text\">Photo " + slideNumber + " of " + slideCount + "</p>" +
+      "<div class=\"button-row\">" +
+      createButton("Prev", "slideshow-prev", "", prevDisabled) +
+      createButton("Next", "slideshow-next", "primary", nextDisabled) +
+      createButton("Close", "slideshow-close") +
+      "</div>" +
+      "</div>";
+    screen.innerHTML = createPanel("Shoot Photos", body, "screen-slideshow-title");
+    return;
+  }
+
+  const fallbackBody = "<p class=\"helper-text\">Slideshow unavailable.</p>" +
+    "<div class=\"button-row\">" + createButton("Back to Hub", "nav-hub") + "</div>";
+  screen.innerHTML = createPanel("Slideshow", fallbackBody, "screen-slideshow-title");
 }
 
 function renderStoryLog(gameState) {
