@@ -21,6 +21,11 @@ This document captures **post-MVP** UI additions approved in `docs/CURRENT_SCOPE
   - **Next** button advances slides.
   - Final slide reveals **Hire** (shows cost) and **Decline** buttons.
 
+## Booking Result — Shoot Confirmation (Content Screen)
+- **Location:** Content screen immediately after confirming a shoot.
+- **Behavior:** Shows a five-image slideshow preview pulled from the booking entry (Promo or Premium).
+- **Controls:** Prev / Next plus a slide counter (e.g., "2 / 5").
+
 ## Gallery — Shoot Photos
 - **Entry Details:** Includes a **View Shoot Photos** button.
 - **Behavior:** Opens the shared slideshow screen to display 5 shoot photos, one at a time.
