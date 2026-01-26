@@ -187,7 +187,8 @@ function newGameState() {
     },
     unlocks: {
       locationTier1Unlocked: false,
-      locationTiers: { tier0: true, tier1: false, tier2: false }
+      locationTiers: { tier0: true, tier1: false, tier2: false },
+      appliedUnlockIds: []
     },
     story: {
       introShown: false,
@@ -387,6 +388,10 @@ function ensureUnlocksState(gameState) {
 
   if (gameState.unlocks.locationTier1Unlocked) {
     gameState.unlocks.locationTiers.tier1 = true;
+  }
+
+  if (!Array.isArray(gameState.unlocks.appliedUnlockIds)) {
+    gameState.unlocks.appliedUnlockIds = [];
   }
 }
 

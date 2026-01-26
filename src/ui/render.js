@@ -1404,9 +1404,15 @@ function renderShop(gameState) {
   const equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
     ? CONFIG.equipment.upgradeOrder
     : [];
+  const unlockedEquipmentOrder = equipmentOrder.filter(function (upgradeId) {
+    if (typeof isScheduledUnlockAvailable !== "function") {
+      return true;
+    }
+    return isScheduledUnlockAvailable(gameState, "equipment", upgradeId);
+  });
 
-  const equipmentRows = equipmentOrder.length
-    ? equipmentOrder.map(function (upgradeId) {
+  const equipmentRows = unlockedEquipmentOrder.length
+    ? unlockedEquipmentOrder.map(function (upgradeId) {
       const upgrade = CONFIG.equipment.upgrades[upgradeId];
       if (!upgrade) {
         return "";

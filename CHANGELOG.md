@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a day-based unlock schedule for locations, equipment, and performers with one-time story popups.
+  - Why: Introduce a simple, config-driven cadence for unlocking content on specific days with persistent messaging.
+  - Files touched: src/config.js, src/state.js, src/systems/progression.js, src/systems/booking.js, src/systems/recruitment.js, src/systems/story.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added OF pipeline carry visibility in Analytics/Social and clearer Promo post feedback messaging.
   - Why: Ensure Promo posts feel impactful and show progress toward the next OF subscriber.
   - Files touched: src/utils/format.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
