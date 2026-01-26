@@ -18,6 +18,7 @@ function getUiState() {
       roster: {
         showFreelancers: false
       },
+      bookingSlideshowIndex: 0,
       slideshow: {
         mode: null,
         id: null,
@@ -697,6 +698,7 @@ function renderBooking(gameState) {
 
 function renderContent(gameState) {
   const screen = qs("#screen-content");
+  const uiState = getUiState();
   const entry = getLatestContentEntry(gameState);
   const locationThumbSize = getLocationThumbnailSizePx();
   const locationThumbRadius = getLocationThumbnailRadiusPx();
@@ -715,11 +717,31 @@ function renderContent(gameState) {
     const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
     const locationAlt = "Thumbnail of " + location;
     const theme = getThemeName(entry.themeId);
+    const photoPaths = typeof getEntryPhotoPaths === "function"
+      ? getEntryPhotoPaths(entry).slice(0, 5)
+      : [];
+    const slideCount = photoPaths.length;
+    const maxIndex = Math.max(0, slideCount - 1);
+    const rawIndex = Number.isFinite(uiState.bookingSlideshowIndex) ? uiState.bookingSlideshowIndex : 0;
+    const safeIndex = Math.min(Math.max(0, rawIndex), maxIndex);
+    const slidePath = slideCount ? photoPaths[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    const counterLabel = slideCount ? (safeIndex + 1) + " / " + slideCount : "0 / 0";
+    const prevDisabled = safeIndex <= 0;
+    const nextDisabled = safeIndex >= maxIndex;
+    uiState.bookingSlideshowIndex = safeIndex;
     const bundleThumbs = renderBundleThumbs(entry.bundleThumbs);
     const bundlePanel = bundleThumbs
       ? "<p><strong>Sample Pack:</strong></p>" + bundleThumbs
       : "";
-    contentBody = "<div class=\"content-placeholder\">Content preview placeholder</div>" +
+    const slideshowPanel = "<div class=\"slideshow-frame\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Shoot preview " + (safeIndex + 1) + "\" />" +
+      "</div>" +
+      "<div class=\"button-row\">" +
+      createButton("Prev", "booking-slideshow-prev", "", prevDisabled) +
+      createButton("Next", "booking-slideshow-next", "primary", nextDisabled) +
+      "<span class=\"helper-text\">" + counterLabel + "</span>" +
+      "</div>";
+    contentBody = slideshowPanel +
       "<div class=\"panel\">" +
       "<p><strong>Performer:</strong> " + performer + "</p>" +
       "<div style=\"" + locationRowStyle + "\">" +

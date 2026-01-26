@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Replaced the booking result image preview with a five-image slideshow and controls for Premium/Promo shoots.
+  - Why: Align the booking confirmation UI with the shared slideshow system and show multiple shoot photos.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Added reputation milestone rewards, recruitment flow with meet slideshow, and shoot-photo viewer tied to saved photo paths.
   - Why: Deliver the approved Act 1+ content expansion for reputation, recruitment, and slideshows.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/performers.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, index.html, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/DATA_MILESTONES.md, docs/DATA_PERFORMERS.md, docs/README.md, docs/task-checklist.md, CHANGELOG.md.

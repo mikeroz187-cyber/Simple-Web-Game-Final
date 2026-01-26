@@ -87,6 +87,7 @@
 - [x] Recruitment panel on the Roster screen with rep-gated candidates and a meet slideshow leading to hire/decline.
 - [x] Daily pacing update: per-performer daily caps (max 3) plus agency sample pack once per day.
 - [x] Shared slideshow viewer for recruit meets and shoot photo galleries.
+- [x] Booking result slideshow (5 images) for Premium and Promo shoots.
 
 ---
 
@@ -118,8 +119,8 @@
 | Act 2 | 16/16 | 0 |
 | Fixes/QoL | 22/22 | 0 |
 | Act 3 | 8/8 | 0 |
-| Act 1+ Expansion | 4/4 | 0 |
-| **Total** | **66/66** | **0** |
+| Act 1+ Expansion | 5/5 | 0 |
+| **Total** | **67/67** | **0** |
 
 ---
 

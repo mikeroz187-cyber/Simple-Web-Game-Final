@@ -280,6 +280,21 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "booking-slideshow-prev" || action === "booking-slideshow-next") {
+      const entry = getLatestContentEntry(window.gameState);
+      if (!entry) {
+        return;
+      }
+      const slides = typeof getEntryPhotoPaths === "function"
+        ? getEntryPhotoPaths(entry).slice(0, 5)
+        : [];
+      const maxIndex = Math.max(0, slides.length - 1);
+      const delta = action === "booking-slideshow-next" ? 1 : -1;
+      uiState.bookingSlideshowIndex = clamp((uiState.bookingSlideshowIndex || 0) + delta, 0, maxIndex);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "nav-hub") {
       showScreen("screen-hub");
       renderApp(window.gameState);
@@ -399,6 +414,7 @@ function setupEventHandlers() {
       setUiMessage(result.message || "");
       if (result.ok) {
         resetBookingSelection();
+        uiState.bookingSlideshowIndex = 0;
         appendStoryLogEntries(window.gameState, result.storyEvents);
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
