@@ -75,6 +75,7 @@
 - [x] Debug: Dev-only stat setters (cash/rep/followers/subs) for milestone testing.
 - [x] Fix: Legacy milestones now mark Complete and pay reward cash once (status + rewards).
 - [x] Fix: milestone completion now flips status to Complete and pays rewards (added debug “Run Checks Now”).
+- [x] Replace Freelancers with Agency Sample Packs (bundle posting; 5-image sets; promo-strong / premium-weak)
 
 ---
 
@@ -104,9 +105,9 @@
 |-------|----------|-----------|
 | Act 1 | 16/16 | 0 |
 | Act 2 | 16/16 | 0 |
-| Fixes/QoL | 19/19 | 0 |
+| Fixes/QoL | 20/20 | 0 |
 | Act 3 | 8/8 | 0 |
-| **Total** | **59/59** | **0** |
+| **Total** | **60/60** | **0** |
 
 ---
 

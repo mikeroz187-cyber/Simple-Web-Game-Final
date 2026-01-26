@@ -628,7 +628,11 @@ function validateGameState(candidate) {
     if (!Number.isFinite(entry.dayCreated)) {
       return { ok: false, message: "Content day invalid." };
     }
-    if (performerIds.indexOf(entry.performerId) === -1) {
+    const source = entry.source || "core";
+    if (["core", "agency_pack"].indexOf(source) === -1) {
+      return { ok: false, message: "Content source invalid." };
+    }
+    if (source !== "agency_pack" && performerIds.indexOf(entry.performerId) === -1) {
       return { ok: false, message: "Content performer invalid." };
     }
     if (typeof entry.locationId !== "string" || entry.locationId.length === 0) {

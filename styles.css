@@ -183,6 +183,13 @@ body {
   background: #fbfcff;
 }
 
+.bundle-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .modal-root {
   position: fixed;
   inset: 0;
