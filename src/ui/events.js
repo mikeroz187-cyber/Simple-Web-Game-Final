@@ -21,11 +21,13 @@ function setEquipmentMessage(message) {
 
 function resetBookingSelection() {
   const uiState = getUiState();
+  const bookingMode = uiState.booking && uiState.booking.bookingMode ? uiState.booking.bookingMode : "core";
   uiState.booking = {
     performerIdA: null,
     locationId: null,
     themeId: null,
-    contentType: null
+    contentType: null,
+    bookingMode: bookingMode
   };
 }
 
@@ -239,6 +241,17 @@ function setupEventHandlers() {
           message: result.message
         }]);
       }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "select-booking-mode") {
+      const mode = target.dataset.id;
+      uiState.booking.bookingMode = mode;
+      if (mode === "agency_pack") {
+        uiState.booking.performerIdA = null;
+      }
+      setUiMessage("");
       renderApp(window.gameState);
       return;
     }

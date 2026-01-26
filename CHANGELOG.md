@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Replaced freelance booking with agency sample packs, including booking mode toggle, bundle thumbnails, and promo/premium multipliers.
+  - Why: Deliver the agency sample pack mechanic with bundled posting visuals and the requested promo-strong/premium-weak balance.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/systems/social.js, src/save.js, src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: Reduced booking locations to Bedroom (Tier 0), Shower (Tier 1), and Office (Tier 2) with legacy-safe fallbacks.
   - Why: Align the location scope with the new three-location tiered unlock plan without breaking older saves.
   - Files touched: src/config.js, src/ui/render.js, src/save.js, config.toml, docs/DATA_LOCATIONS.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/SCOPE_VISION.md, docs/MVP/MVP_TEST_SCENARIOS.md, CHANGELOG.md.

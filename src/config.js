@@ -337,6 +337,14 @@ const CONFIG = {
     promoFollowersBonusFlat: 80,
     freelancerSocialSubMultiplier: 0.6
   },
+  agencyPacks: {
+    enabled: true,
+    flatFee: 300,
+    bundleCount: 5,
+    promoFollowersMult: 1.5,
+    premiumRevenueMult: 0.5,
+    premiumSubsMult: 0.5
+  },
   performerManagement: {
     contractDaysByType: {
       core: 90,

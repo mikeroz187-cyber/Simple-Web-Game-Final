@@ -6,6 +6,18 @@ function calculateShootCost(location) {
   return { ok: true, value: Math.max(0, Math.round(cost)) };
 }
 
+function calculateAgencyPackCost(location) {
+  if (!location) {
+    return { ok: false, value: 0, message: "Select a location to calculate cost." };
+  }
+  const agencyConfig = CONFIG.agencyPacks && typeof CONFIG.agencyPacks === "object"
+    ? CONFIG.agencyPacks
+    : {};
+  const flatFee = Number.isFinite(agencyConfig.flatFee) ? agencyConfig.flatFee : 0;
+  const cost = flatFee + location.cost;
+  return { ok: true, value: Math.max(0, Math.round(cost)) };
+}
+
 function getEquipmentLevel(gameState, levelKey) {
   if (!gameState || !gameState.equipment) {
     return 0;

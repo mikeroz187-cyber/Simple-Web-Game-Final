@@ -6,7 +6,8 @@ function getUiState() {
         performerIdA: null,
         locationId: null,
         themeId: null,
-        contentType: null
+        contentType: null,
+        bookingMode: "core"
       },
       social: {
         selectedContentId: null
@@ -474,7 +475,12 @@ function renderHub(gameState) {
 function renderBooking(gameState) {
   const screen = qs("#screen-booking");
   const uiState = getUiState();
-  const performers = gameState.roster.performers;
+  const bookingMode = uiState.booking.bookingMode || "core";
+  const isAgencyPack = bookingMode === "agency_pack";
+  const allPerformers = gameState.roster.performers;
+  const performers = allPerformers.filter(function (performer) {
+    return performer.type !== "freelance";
+  });
   const hasPerformers = performers.length > 0;
   const portraitSize = getPerformerPortraitSizePx();
   const portraitRadius = getPerformerPortraitRadiusPx();
@@ -491,6 +497,27 @@ function renderBooking(gameState) {
   if (uiState.booking.locationId && locationIds.indexOf(uiState.booking.locationId) === -1) {
     uiState.booking.locationId = locationIds.length ? locationIds[0] : null;
   }
+
+  const bookingModeOptions = [
+    {
+      id: "core",
+      label: "Core Performer",
+      description: "Book your core roster with full premium upside."
+    },
+    {
+      id: "agency_pack",
+      label: "Agency Sample Pack",
+      description: "Source a five-image pack matched to the chosen theme and location."
+    }
+  ];
+  const bookingModeRows = bookingModeOptions.map(function (option) {
+    const isSelected = option.id === bookingMode;
+    return "<div class=\"list-item\">" +
+      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-booking-mode\" data-id=\"" + option.id + "\">" +
+      option.label + "</button>" +
+      "<p class=\"helper-text\">" + option.description + "</p>" +
+      "</div>";
+  }).join("");
 
   const performerOptions = hasPerformers
     ? performers.map(function (performer) {
@@ -602,16 +629,20 @@ function renderBooking(gameState) {
     return "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-content-type\" data-id=\"" + type + "\">" + type + "</button>";
   }).join("");
 
-  const performerSelection = getBookingPerformerSelection(gameState, {
-    performerIdA: uiState.booking.performerIdA
-  });
+  const performerSelection = isAgencyPack
+    ? { ok: true }
+    : getBookingPerformerSelection(gameState, {
+      performerIdA: uiState.booking.performerIdA
+    });
   const performerSelectionOk = performerSelection.ok;
   const selectedLocation = uiState.booking.locationId
     ? CONFIG.locations.catalog[uiState.booking.locationId]
     : null;
-  const shootCostResult = calculateShootCost(selectedLocation);
+  const shootCostResult = isAgencyPack
+    ? calculateAgencyPackCost(selectedLocation)
+    : calculateShootCost(selectedLocation);
   const comboConfig = getBookingComboConfig();
-  const hasCombo = comboConfig.enabled && performerSelectionOk && performerSelection.performerIds.length === 2;
+  const hasCombo = !isAgencyPack && comboConfig.enabled && performerSelectionOk && performerSelection.performerIds.length === 2;
   const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
   const computedShootCost = selectedLocation
     ? (hasCombo ? Math.floor(shootCostResult.value * costMultiplier) : shootCostResult.value)
@@ -627,12 +658,25 @@ function renderBooking(gameState) {
         ? CONFIG.locations.tier2ReputationRequirement
         : 0))
     : false;
-  const canConfirm = hasPerformers && performerSelectionOk && uiState.booking.locationId && uiState.booking.themeId && uiState.booking.contentType && shootCostResult.ok && gameState.player.cash >= computedShootCost && !selectedLocationLocked;
+  const canConfirm = (isAgencyPack || (hasPerformers && performerSelectionOk)) &&
+    uiState.booking.locationId &&
+    uiState.booking.themeId &&
+    uiState.booking.contentType &&
+    shootCostResult.ok &&
+    gameState.player.cash >= computedShootCost &&
+    !selectedLocationLocked;
 
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" +
-    performerSelectA +
-    performerCardsRow +
-    "</div>" +
+  const performerPanel = isAgencyPack
+    ? "<div class=\"panel\"><h3 class=\"panel-title\">Agency Sample Pack</h3>" +
+      "<p class=\"helper-text\">We source a five-image pack that fits the selected theme and location.</p>" +
+      "</div>"
+    : "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" +
+      performerSelectA +
+      performerCardsRow +
+      "</div>";
+
+  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Booking Mode</h3>" + bookingModeRows + "</div>" +
+    performerPanel +
     "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Themes</h3>" + themeRows + "</div>" +
     "<div class=\"panel\"><h3 class=\"panel-title\">Content Type</h3><div class=\"button-row\">" + contentTypeRows + "</div></div>" +
@@ -666,6 +710,10 @@ function renderContent(gameState) {
     const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
     const locationAlt = "Thumbnail of " + location;
     const theme = getThemeName(entry.themeId);
+    const bundleThumbs = renderBundleThumbs(entry.bundleThumbs);
+    const bundlePanel = bundleThumbs
+      ? "<p><strong>Sample Pack:</strong></p>" + bundleThumbs
+      : "";
     contentBody = "<div class=\"content-placeholder\">Content preview placeholder</div>" +
       "<div class=\"panel\">" +
       "<p><strong>Performer:</strong> " + performer + "</p>" +
@@ -677,6 +725,7 @@ function renderContent(gameState) {
       "<p><strong>Content Type:</strong> " + entry.contentType + "</p>" +
       "<p><strong>Day Created:</strong> " + entry.dayCreated + "</p>" +
       "<p><strong>Shoot Cost:</strong> " + formatCurrency(entry.shootCost) + "</p>" +
+      bundlePanel +
       "</div>";
   }
 
@@ -788,16 +837,10 @@ function renderRoster(gameState) {
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
   const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
-  const compactRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;justify-content:space-between;";
-  const compactMetaStyle = "display:flex;flex-direction:column;gap:4px;";
-  const uiState = getUiState();
-  const showFreelancers = Boolean(uiState.roster && uiState.roster.showFreelancers);
+  getUiState();
 
   const contractedPerformers = performers.filter(function (performer) {
     return performer.type !== "freelance";
-  });
-  const freelancerPerformers = performers.filter(function (performer) {
-    return performer.type === "freelance";
   });
 
   const contractedRows = contractedPerformers.length
@@ -833,37 +876,9 @@ function renderRoster(gameState) {
     }).join("")
     : "<p class=\"helper-text\">No contracted performers available.</p>";
 
-  const freelancerRows = freelancerPerformers.length
-    ? freelancerPerformers.map(function (performer) {
-      const displayProfile = getPerformerDisplayProfile(gameState, performer);
-      const roleLabel = getPerformerRoleLabel(gameState, performer.id);
-      const contractSummary = getContractSummary(gameState, performer.id);
-      const availabilitySummary = getAvailabilitySummary(gameState, performer.id);
-      const descriptionLine = displayProfile.description
-        ? "<p class=\"helper-text\">" + displayProfile.description + "</p>"
-        : "";
-      const availabilityLine = "Contract: " + contractSummary.label + " | " + availabilitySummary.label;
-      return "<div class=\"list-item\" style=\"" + compactRowStyle + "\">" +
-        "<div style=\"" + compactMetaStyle + "\">" +
-        "<p><strong>" + displayProfile.name + "</strong> (" + performer.type + ")</p>" +
-        descriptionLine +
-        "<p class=\"helper-text\">Role: " + roleLabel + "</p>" +
-        "<p class=\"helper-text\">" + availabilityLine + "</p>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No freelancers available.</p>";
-
   const contractedSection = "<div class=\"panel\"><h3 class=\"panel-title\">Contracted Talent</h3>" + contractedRows + "</div>";
-  const freelancerToggleLabel = showFreelancers ? "Hide Freelancer Pool" : "Show Freelancer Pool";
-  const freelancerToggle = "<div class=\"button-row\">" + createButton(freelancerToggleLabel, "toggle-freelancer-pool") + "</div>";
-  const freelancerSection = "<div class=\"panel\"><h3 class=\"panel-title\">Freelancer Pool</h3>" +
-    freelancerToggle +
-    (showFreelancers ? freelancerRows : "<p class=\"helper-text\">Hidden. Use the toggle to browse guest talent.</p>") +
-    "</div>";
 
   const body = contractedSection +
-    freelancerSection +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
     createButton("Back to Hub", "nav-hub") +
@@ -1079,6 +1094,10 @@ function renderGallery(gameState) {
       return entry.id === uiState.gallery.selectedContentId;
     })
     : null;
+  const detailBundleThumbs = selectedEntry ? renderBundleThumbs(selectedEntry.bundleThumbs) : "";
+  const detailBundlePanel = detailBundleThumbs
+    ? "<p><strong>Sample Pack:</strong></p>" + detailBundleThumbs
+    : "";
 
   const detailPanel = selectedEntry
     ? "<div class=\"panel\"><h3 class=\"panel-title\">Entry Details</h3>" +
@@ -1091,6 +1110,7 @@ function renderGallery(gameState) {
       "<p><strong>Theme:</strong> " + getThemeName(selectedEntry.themeId) + "</p>" +
       "<p><strong>Type:</strong> " + selectedEntry.contentType + "</p>" +
       "<p><strong>Shoot Cost:</strong> " + formatCurrency(selectedEntry.shootCost) + "</p>" +
+      detailBundlePanel +
       "</div>"
     : "";
 
@@ -1098,7 +1118,9 @@ function renderGallery(gameState) {
     ? shootOutputs.slice().reverse().map(function (output) {
       const thumbPath = output.thumbnailPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
       const fallbackPath = CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
-      const performerLabel = getShootOutputPerformerLabel(gameState, output.performerIds);
+      const performerLabel = output.source === "agency_pack"
+        ? "Agency Sample Pack"
+        : getShootOutputPerformerLabel(gameState, output.performerIds);
       const tierLabel = formatShootOutputTierLabel(output.tier);
       const dayLabel = Number.isFinite(output.day) ? output.day : "?";
       const socialFollowers = Number.isFinite(output.socialFollowersGained) ? output.socialFollowersGained : 0;
@@ -1248,6 +1270,27 @@ function getLatestContentEntry(gameState) {
   }) || null;
 }
 
+function getBundleThumbSizePx() {
+  return CONFIG.ui.main_padding_px * 3;
+}
+
+function renderBundleThumbs(bundleThumbs) {
+  if (!Array.isArray(bundleThumbs) || bundleThumbs.length === 0) {
+    return "";
+  }
+  const thumbSize = getBundleThumbSizePx();
+  const thumbRadius = Math.round(CONFIG.ui.panel_gap_px / 2);
+  const thumbStyle = "width:" + thumbSize + "px;height:" + thumbSize + "px;object-fit:cover;border-radius:" +
+    thumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);";
+  const thumbs = bundleThumbs.map(function (thumbPath) {
+    const resolvedPath = thumbPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
+    const fallbackPath = CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
+    return "<img src=\"" + resolvedPath + "\" alt=\"Sample pack thumbnail\" width=\"" + thumbSize + "\" height=\"" + thumbSize +
+      "\" style=\"" + thumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />";
+  }).join("");
+  return "<div class=\"bundle-thumbs\">" + thumbs + "</div>";
+}
+
 function getPerformerName(gameState, performerId) {
   const performer = gameState.roster.performers.find(function (entry) {
     return entry.id === performerId;
@@ -1259,6 +1302,9 @@ function getPerformerName(gameState, performerId) {
 }
 
 function getContentEntryPerformerLabel(gameState, entry) {
+  if (entry && entry.source === "agency_pack") {
+    return "Agency Sample Pack";
+  }
   const performerIds = typeof getEntryPerformerIds === "function"
     ? getEntryPerformerIds(entry)
     : (entry && entry.performerId ? [entry.performerId] : []);

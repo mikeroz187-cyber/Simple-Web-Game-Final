@@ -333,6 +333,8 @@ function postPromoContent(gameState, platform, contentId) {
     CONFIG.economy.promo_followers_gain * platformMultiplier * strategyReachMult
   );
   let socialFollowersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+  const source = entry.source || "core";
+  const isAgencyPack = source === "agency_pack";
   const performerIds = getEntryPerformerIds(entry);
   const comboConfig = getBookingComboConfig();
   const hasCombo = comboConfig.enabled && performerIds.length === 2;
@@ -347,6 +349,13 @@ function postPromoContent(gameState, platform, contentId) {
       comboConfig.promoFollowersMultiplierByRoles
     );
     socialFollowersGained = Math.round(socialFollowersGained * promoMultiplier);
+  }
+  if (isAgencyPack) {
+    const agencyConfig = CONFIG.agencyPacks && typeof CONFIG.agencyPacks === "object" ? CONFIG.agencyPacks : {};
+    const promoFollowersMult = Number.isFinite(agencyConfig.promoFollowersMult)
+      ? agencyConfig.promoFollowersMult
+      : 1;
+    socialFollowersGained = Math.round(socialFollowersGained * promoFollowersMult);
   }
   const isFreelancer = performerIds.some(function (performerId) {
     const performer = gameState.roster.performers.find(function (rosterEntry) {

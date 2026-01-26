@@ -59,6 +59,48 @@ function getContentVarianceConfig() {
   return { enabled: false };
 }
 
+function getAgencyPackConfig() {
+  if (CONFIG.agencyPacks && typeof CONFIG.agencyPacks === "object") {
+    return CONFIG.agencyPacks;
+  }
+  return { enabled: false };
+}
+
+function isAgencyPackSelection(selection) {
+  if (!selection) {
+    return false;
+  }
+  return selection.bookingMode === "agency_pack";
+}
+
+function getAgencyPackStarPower() {
+  const coreIds = Array.isArray(CONFIG.performers.core_ids) ? CONFIG.performers.core_ids : [];
+  const starPowers = coreIds.map(function (performerId) {
+    const performer = CONFIG.performers.catalog[performerId];
+    return performer ? performer.starPower : null;
+  }).filter(function (value) {
+    return Number.isFinite(value);
+  });
+  if (!starPowers.length) {
+    return Number.isFinite(CONFIG.performers.default_star_power) ? CONFIG.performers.default_star_power : 1;
+  }
+  const total = starPowers.reduce(function (sum, value) {
+    return sum + value;
+  }, 0);
+  return Math.max(1, Math.round(total / starPowers.length));
+}
+
+function buildAgencyPackPerformer() {
+  return {
+    id: "agency_pack",
+    name: "Agency Sample Pack",
+    type: "agency_pack",
+    starPower: getAgencyPackStarPower(),
+    fatigue: 0,
+    loyalty: 0
+  };
+}
+
 function getReputationRevenueMultiplier(gameState) {
   if (typeof getSelectedReputationBranch !== "function") {
     return 1;
@@ -279,11 +321,26 @@ function confirmBooking(gameState, selection) {
     };
   }
 
-  const performerSelection = getBookingPerformerSelection(gameState, selection);
-  if (!performerSelection.ok) {
-    return { ok: false, message: performerSelection.message || "Select valid performers." };
+  const agencyConfig = getAgencyPackConfig();
+  const isAgencyPack = isAgencyPackSelection(selection) && agencyConfig.enabled;
+  let performerSelection = null;
+  let performer = null;
+  if (isAgencyPack) {
+    performer = buildAgencyPackPerformer();
+    performerSelection = {
+      ok: true,
+      performerA: null,
+      performerB: null,
+      performerIds: [],
+      roleKey: null
+    };
+  } else {
+    performerSelection = getBookingPerformerSelection(gameState, selection);
+    if (!performerSelection.ok) {
+      return { ok: false, message: performerSelection.message || "Select valid performers." };
+    }
+    performer = performerSelection.performerA;
   }
-  const performer = performerSelection.performerA;
 
   const location = CONFIG.locations.catalog[selection.locationId];
   if (!location) {
@@ -312,13 +369,15 @@ function confirmBooking(gameState, selection) {
   if (CONFIG.content_types.available.indexOf(selection.contentType) === -1) {
     return { ok: false, message: "Select a content type." };
   }
-  const shootCostResult = calculateShootCost(location);
+  const shootCostResult = isAgencyPack
+    ? calculateAgencyPackCost(location)
+    : calculateShootCost(location);
   if (!shootCostResult.ok) {
     return { ok: false, message: "Unable to calculate shoot cost." };
   }
 
   const comboConfig = getBookingComboConfig();
-  const hasCombo = comboConfig.enabled && performerSelection.performerIds.length === 2;
+  const hasCombo = !isAgencyPack && comboConfig.enabled && performerSelection.performerIds.length === 2;
   const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
   const shootCost = hasCombo
     ? Math.floor(shootCostResult.value * costMultiplier)
@@ -368,6 +427,16 @@ function confirmBooking(gameState, selection) {
       ? premiumConfig.ofSubsMultiplier
       : 1;
     onlyFansSubscribersGained = Math.max(0, Math.floor(baselineSubscribers * premiumMultiplier));
+    if (isAgencyPack) {
+      const premiumRevenueMult = Number.isFinite(agencyConfig.premiumRevenueMult)
+        ? agencyConfig.premiumRevenueMult
+        : 1;
+      const premiumSubsMult = Number.isFinite(agencyConfig.premiumSubsMult)
+        ? agencyConfig.premiumSubsMult
+        : 1;
+      payout = Math.round(payout * premiumRevenueMult);
+      onlyFansSubscribersGained = Math.max(0, Math.floor(onlyFansSubscribersGained * premiumSubsMult));
+    }
   }
 
   let feedbackSummary = selection.contentType === "Promo"
@@ -378,11 +447,12 @@ function confirmBooking(gameState, selection) {
   const entry = {
     id: contentId,
     dayCreated: gameState.player.day,
-    performerId: performer.id,
-    performerIds: performerSelection.performerIds,
+    performerId: isAgencyPack ? null : performer.id,
+    performerIds: isAgencyPack ? [] : performerSelection.performerIds,
     locationId: location.id,
     themeId: theme.id,
     contentType: selection.contentType,
+    source: isAgencyPack ? "agency_pack" : "core",
     shootCost: shootCost,
     results: {
       socialFollowersGained: socialFollowersGained,
@@ -395,6 +465,14 @@ function confirmBooking(gameState, selection) {
   if (selection.contentType === "Premium") {
     entry.results.payout = payout;
     entry.results.variancePct = variancePct;
+  }
+
+  if (isAgencyPack) {
+    const bundleCount = Number.isFinite(agencyConfig.bundleCount) ? agencyConfig.bundleCount : 0;
+    entry.bundleCount = bundleCount;
+    entry.bundleThumbs = Array.from({ length: bundleCount }, function () {
+      return CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
+    });
   }
 
   if (varianceApplied) {
@@ -421,8 +499,10 @@ function confirmBooking(gameState, selection) {
   const fatigueMultiplier = hasCombo && Number.isFinite(comboConfig.fatigueMultiplierEach)
     ? comboConfig.fatigueMultiplierEach
     : 1;
-  updatePerformerStats(gameState, performer.id, fatigueMultiplier);
-  updatePerformerAvailabilityAfterBooking(gameState, performer);
+  if (!isAgencyPack) {
+    updatePerformerStats(gameState, performer.id, fatigueMultiplier);
+    updatePerformerAvailabilityAfterBooking(gameState, performer);
+  }
   const nextShoots = currentShoots + 1;
   gameState.player.shootsToday = nextShoots;
 
@@ -458,12 +538,17 @@ function createShootOutputRecord(entry) {
   }
   const tier = entry.contentType === "Premium" ? "premium" : "standard";
   const performerIds = getEntryPerformerIds(entry);
+  const source = entry.source || "core";
+  const normalizedPerformerIds = source === "agency_pack"
+    ? []
+    : (performerIds.length ? performerIds : (entry.performerId ? [entry.performerId] : []));
   return {
     id: "shoot_output_" + entry.id,
     day: entry.dayCreated,
-    performerIds: performerIds.length ? performerIds : [entry.performerId],
+    performerIds: normalizedPerformerIds,
     themeId: entry.themeId || null,
     tier: tier,
+    source: source,
     socialFollowersGained: Number.isFinite(entry.results.socialFollowersGained) ? entry.results.socialFollowersGained : 0,
     socialSubscribersGained: Number.isFinite(entry.results.socialSubscribersGained) ? entry.results.socialSubscribersGained : 0,
     onlyFansSubscribersGained: Number.isFinite(entry.results.onlyFansSubscribersGained) ? entry.results.onlyFansSubscribersGained : 0,
