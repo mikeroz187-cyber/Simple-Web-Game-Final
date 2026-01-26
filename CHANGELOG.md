@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Net Worth (Cash + MRR valuation multiple) in Hub/Analytics and analytics snapshots.
+  - Why: Surface a single macro stat that captures cash plus MRR valuation for quick progress checks.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/analytics.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added a capped social footprint bonus to Premium OF subs with Analytics visibility.
   - Why: Reward social growth strategy with a mild, config-driven Premium boost and clear reporting.
   - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

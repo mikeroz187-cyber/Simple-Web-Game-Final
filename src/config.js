@@ -108,7 +108,12 @@ const CONFIG = {
     promo_followers_gain: 100,
     premium_base_of_subs: 25,
     subscriber_conversion_rate: 0.01,
-    base_shoot_cost: 100
+    base_shoot_cost: 100,
+    netWorth: {
+      enabled: true,
+      valuationMultiple: 12,
+      label: "Net Worth"
+    }
   },
   onlyfans: {
     pricePerMonth: 10,

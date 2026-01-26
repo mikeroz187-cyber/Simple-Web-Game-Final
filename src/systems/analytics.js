@@ -98,6 +98,7 @@ function recordAnalyticsSnapshot(gameState) {
     dayNumber: dayNumber,
     timestamp: Date.now(),
     mrr: getMRR(gameState),
+    netWorth: getNetWorth(gameState),
     cash: Number.isFinite(gameState.player.cash) ? gameState.player.cash : 0,
     socialFollowers: Number.isFinite(gameState.player.socialFollowers) ? gameState.player.socialFollowers : 0,
     socialSubscribers: Number.isFinite(gameState.player.socialSubscribers) ? gameState.player.socialSubscribers : 0,
