@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added content-type shoot cost multipliers so Premium bookings cost more and booking UI shows the adjusted total.
+  - Why: Provide a simple, config-driven balance lever and ensure the displayed cost matches cash deductions.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added a day-based unlock schedule for locations, equipment, and performers with one-time story popups.
   - Why: Introduce a simple, config-driven cadence for unlocking content on specific days with persistent messaging.
   - Files touched: src/config.js, src/state.js, src/systems/progression.js, src/systems/booking.js, src/systems/recruitment.js, src/systems/story.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

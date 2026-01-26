@@ -662,9 +662,11 @@ function renderBooking(gameState) {
   const comboConfig = getBookingComboConfig();
   const hasCombo = !isAgencyPack && comboConfig.enabled && performerSelectionOk && performerSelection.performerIds.length === 2;
   const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
-  const computedShootCost = selectedLocation
+  const baseShootCost = selectedLocation
     ? (hasCombo ? Math.floor(shootCostResult.value * costMultiplier) : shootCostResult.value)
     : 0;
+  const adjustedCost = applyContentTypeCostMultiplier(baseShootCost, uiState.booking.contentType);
+  const computedShootCost = adjustedCost.finalCost;
   const shootCostLabel = selectedLocation
     ? formatCurrency(computedShootCost)
     : "Select a location";

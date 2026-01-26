@@ -52,6 +52,7 @@
 - [x] MRR derived from OF subs with daily cash income.
 - [x] Net Worth stat (Cash + MRR valuationMultiple) displayed in Hub/Analytics and stored in snapshots.
 - [x] Star Power progression (per-performer shoots → Star Power).
+- [x] Content-type shoot cost multipliers (Premium costs more) applied in booking + UI shows final cost.
 - [x] Promo gains apply only on posting (no double-counting).
 - [x] Promo OF conversion uses fractional carry.
 - [x] Promo list hides fully posted entries; Recent Posts capped at 5.
