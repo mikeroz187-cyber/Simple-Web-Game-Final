@@ -623,9 +623,11 @@ function renderBooking(gameState) {
       return "";
     }
     const isSelected = theme.id === uiState.booking.themeId;
+    const effectsLabel = formatThemeEffects(theme);
     return "<div class=\"list-item\">" +
       "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-theme\" data-id=\"" + theme.id + "\">" + theme.name + "</button>" +
       "<p class=\"helper-text\">" + theme.description + "</p>" +
+      "<p class=\"helper-text\">" + effectsLabel + "</p>" +
       "</div>";
   }).join("");
 
@@ -1504,6 +1506,21 @@ function getThemeById(themeId) {
 function getThemeName(themeId) {
   const theme = getThemeById(themeId);
   return theme ? theme.name : "Unknown Theme";
+}
+
+function formatSignedPercent(value) {
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const sign = safeValue > 0 ? "+" : "";
+  return sign + safeValue + "%";
+}
+
+function formatThemeEffects(theme) {
+  const modifiers = theme && theme.modifiers ? theme.modifiers : {};
+  const followersMult = Number.isFinite(modifiers.followersMult) ? modifiers.followersMult : 1;
+  const ofSubsMult = Number.isFinite(modifiers.ofSubsMult) ? modifiers.ofSubsMult : 1;
+  const followersPct = Math.round((followersMult - 1) * 100);
+  const ofSubsPct = Math.round((ofSubsMult - 1) * 100);
+  return "Effects: Followers " + formatSignedPercent(followersPct) + ", OF Subs " + formatSignedPercent(ofSubsPct);
 }
 
 function getNextActionLabel(gameState) {

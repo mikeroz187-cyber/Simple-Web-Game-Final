@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added MVP theme tradeoff modifiers and surfaced their effects in the Booking theme selector.
+  - Why: Make theme choice strategic with clear, config-driven follower vs OF subs tradeoffs.
+  - Files touched: src/config.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added post-debt market saturation tiers for Premium OF subs, with activation messaging and analytics visibility.
   - Why: Make post-debt growth taper explicit and config-driven without affecting pre-debt gameplay.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/competition.js, src/systems/economy.js, src/systems/story.js, src/systems/booking.js, src/ui/events.js, src/ui/render.js, docs/GAMESTATE_DATA_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
