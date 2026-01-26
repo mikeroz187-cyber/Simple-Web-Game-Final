@@ -1,11 +1,3 @@
-function getPerformerRoleId(performerId) {
-  if (!performerId) {
-    return "support";
-  }
-  const roleMap = CONFIG.performers.role_by_id || {};
-  return roleMap[performerId] || "support";
-}
-
 function getFreelancerProfilesConfig() {
   if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
     return CONFIG.freelancers;
@@ -158,10 +150,6 @@ function newGameState() {
             loyalty: CONFIG.performers.starting_loyalty
           };
         }),
-      performerRoles: rosterIds.reduce(function (roles, performerId) {
-        roles[performerId] = getPerformerRoleId(performerId);
-        return roles;
-      }, {}),
       freelancerProfiles: freelancerProfiles
     },
     content: {

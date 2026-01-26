@@ -17,41 +17,6 @@ function getBookingComboConfig() {
   return { enabled: false };
 }
 
-function getBookingComboRoleKey(roleA, roleB) {
-  if (!roleA || !roleB) {
-    return null;
-  }
-  const normalized = [roleA, roleB].map(function (role) {
-    return String(role || "").toLowerCase();
-  }).sort();
-  return normalized.join("+");
-}
-
-function getPerformerRoleIdForBooking(gameState, performerId) {
-  if (!gameState || !gameState.roster || !performerId) {
-    return "support";
-  }
-  const roleMap = gameState.roster.performerRoles || {};
-  if (roleMap[performerId]) {
-    return roleMap[performerId];
-  }
-  if (typeof getPerformerRoleId === "function") {
-    return getPerformerRoleId(performerId);
-  }
-  return "support";
-}
-
-function getBookingComboMultiplier(comboConfig, roleKey, multiplierMap) {
-  if (!comboConfig || !comboConfig.enabled || !roleKey) {
-    return 1;
-  }
-  if (!multiplierMap || typeof multiplierMap !== "object") {
-    return 1;
-  }
-  const value = multiplierMap[roleKey];
-  return Number.isFinite(value) ? value : 1;
-}
-
 function getContentVarianceConfig() {
   if (CONFIG.content && CONFIG.content.variance && typeof CONFIG.content.variance === "object") {
     return CONFIG.content.variance;
@@ -182,8 +147,7 @@ function getBookingPerformerSelection(gameState, selection) {
     ok: true,
     performerA: performerA,
     performerB: null,
-    performerIds: [performerA.id],
-    roleKey: null
+    performerIds: [performerA.id]
   };
 }
 
@@ -331,8 +295,7 @@ function confirmBooking(gameState, selection) {
       ok: true,
       performerA: null,
       performerB: null,
-      performerIds: [],
-      roleKey: null
+      performerIds: []
     };
   } else {
     performerSelection = getBookingPerformerSelection(gameState, selection);
@@ -398,14 +361,6 @@ function confirmBooking(gameState, selection) {
     const premiumResult = calculatePremiumRevenue(performer, theme);
     const baseRevenue = premiumResult.ok ? premiumResult.value : 0;
     payout = applyEquipmentRevenueMultiplier(baseRevenue, gameState);
-    if (hasCombo) {
-      const revenueMultiplier = getBookingComboMultiplier(
-        comboConfig,
-        performerSelection.roleKey,
-        comboConfig.revenueMultiplierByRoles
-      );
-      payout = Math.round(payout * revenueMultiplier);
-    }
     basePayout = payout;
     if (canApplyContentVariance(gameState)) {
       const varianceConfig = getContentVarianceConfig();

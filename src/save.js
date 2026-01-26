@@ -134,14 +134,6 @@ function importSaveFromFile() {
   });
 }
 
-function getDefaultPerformerRoleId(performerId) {
-  if (!performerId) {
-    return "support";
-  }
-  const roleMap = CONFIG.performers.role_by_id || {};
-  return roleMap[performerId] || "support";
-}
-
 function getFreelancerProfilesConfig() {
   if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
     return CONFIG.freelancers;
@@ -210,14 +202,6 @@ function ensureRosterCompleteness(candidate) {
     if (entry) {
       roster.performers.push(entry);
       rosterIds.push(entry.id);
-    }
-  });
-  if (!roster.performerRoles || typeof roster.performerRoles !== "object") {
-    roster.performerRoles = {};
-  }
-  roster.performers.forEach(function (performer) {
-    if (!roster.performerRoles[performer.id]) {
-      roster.performerRoles[performer.id] = getDefaultPerformerRoleId(performer.id);
     }
   });
 }
@@ -557,9 +541,6 @@ function validateGameState(candidate) {
   const roster = candidate.roster;
   if (!roster || !Array.isArray(roster.performers)) {
     return { ok: false, message: "Roster data invalid." };
-  }
-  if (roster.performerRoles !== undefined && (typeof roster.performerRoles !== "object" || roster.performerRoles === null || Array.isArray(roster.performerRoles))) {
-    return { ok: false, message: "Roster roles invalid." };
   }
   if (roster.freelancerProfiles !== undefined && (typeof roster.freelancerProfiles !== "object" || roster.freelancerProfiles === null || Array.isArray(roster.freelancerProfiles))) {
     return { ok: false, message: "Roster freelancer profiles invalid." };

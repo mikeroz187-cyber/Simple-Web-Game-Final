@@ -186,15 +186,7 @@ const CONFIG = {
     combo: {
       enabled: false,
       costMultiplier: 1.6,
-      fatigueMultiplierEach: 0.85,
-      revenueMultiplierByRoles: {
-        "lead+specialist": 1.18,
-        "lead+support": 1.1
-      },
-      promoFollowersMultiplierByRoles: {
-        "lead+specialist": 1.08,
-        "lead+support": 1.15
-      }
+      fatigueMultiplierEach: 0.85
     }
   },
   performers: {
@@ -223,17 +215,6 @@ const CONFIG = {
       "act2_sable_quinn",
       "act2_joel_riggs"
     ],
-    role_labels: {
-      lead: "Lead",
-      specialist: "Specialist",
-      support: "Support"
-    },
-    role_by_id: {
-      act2_ivy_glaze: "lead",
-      act2_dex_marion: "specialist",
-      act2_sable_quinn: "lead",
-      act2_joel_riggs: "support"
-    },
     catalog: {
       core_lena_watts: {
         id: "core_lena_watts",

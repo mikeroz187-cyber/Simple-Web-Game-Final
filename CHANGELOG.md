@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed performer role labels and role-based multipliers from booking, roster, and save handling.
+  - Why: Roles were cut; UI and calculations should no longer depend on Lead/Support/Specialist tags.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Replaced freelance booking with agency sample packs, including booking mode toggle, bundle thumbnails, and promo/premium multipliers.
   - Why: Deliver the agency sample pack mechanic with bundled posting visuals and the requested promo-strong/premium-weak balance.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/systems/social.js, src/save.js, src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
