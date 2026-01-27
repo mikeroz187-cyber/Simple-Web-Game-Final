@@ -88,6 +88,26 @@ function formatCompetitionMultiplier(value) {
   return "x" + numeric.toFixed(2);
 }
 
+function getDebtEstimateLine(gameState) {
+  const player = gameState && gameState.player ? gameState.player : null;
+  const debtRemaining = player && Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+  const estimate = typeof getDaysToAffordDebtEstimate === "function"
+    ? getDaysToAffordDebtEstimate(gameState)
+    : { days: null, dailyNet: 0 };
+  if (estimate.days === 0 && debtRemaining <= 0) {
+    return "<p><strong>Debt:</strong> PAID</p>";
+  }
+  const dailyNet = Number.isFinite(estimate.dailyNet) ? estimate.dailyNet : 0;
+  const netSign = dailyNet >= 0 ? "+" : "-";
+  const netLabel = "Net " + netSign + formatCurrency(Math.abs(dailyNet)) + "/day from OF payout − overhead";
+  if (estimate.days === null) {
+    return "<p><strong>Est. days to afford debt:</strong> — " +
+      "<span class=\"helper-text\">(cashflow negative; " + netLabel + ")</span></p>";
+  }
+  return "<p><strong>Est. days to afford debt:</strong> " + estimate.days +
+    " days <span class=\"helper-text\">(" + netLabel + ")</span></p>";
+}
+
 function getPerformerTypeLabel(type) {
   if (type === "freelance") {
     return "Freelance";
@@ -234,6 +254,7 @@ function renderHub(gameState) {
     ? getDailyOverhead(gameState)
     : { amount: 0, label: null };
   const overheadLabel = dailyOverhead.label ? " (" + dailyOverhead.label + ")" : "";
+  const debtEstimateLine = getDebtEstimateLine(gameState);
   const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
     ? CONFIG.legacyMilestones
     : { milestoneOrder: [], milestones: {} };
@@ -245,6 +266,7 @@ function renderHub(gameState) {
     "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + "</p>",
     "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
     "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
+    debtEstimateLine,
     "<p><strong>Social Followers:</strong> " + gameState.player.socialFollowers + "</p>",
     "<p><strong>Social Subscribers:</strong> " + gameState.player.socialSubscribers + "</p>",
     "<p><strong>OnlyFans Subscribers:</strong> " + gameState.player.onlyFansSubscribers + "</p>",
@@ -808,10 +830,12 @@ function renderAnalytics(gameState) {
   const ofPipelineLine = ofPipeline
     ? "<p><strong>OF Pipeline:</strong> " + ofPipeline.progressText.replace("OF Pipeline: ", "") + "</p>"
     : "";
+  const debtEstimateLine = getDebtEstimateLine(gameState);
 
   const todayTotalsPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
     "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>" +
+    debtEstimateLine +
     "<p><strong>MRR Change:</strong> " + formatCurrency(todaySummary.mrrDelta) + "/mo</p>" +
     "<p><strong>Social Followers Gained:</strong> " + todaySummary.socialFollowers + "</p>" +
     "<p><strong>Social Subscribers Gained:</strong> " + todaySummary.socialSubscribers + "</p>" +
