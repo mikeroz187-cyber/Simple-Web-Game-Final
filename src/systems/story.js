@@ -118,10 +118,6 @@ const STORY_EVENT_COPY = {
     title: "Press Quote, Carefully Spicy",
     message: "A journalist asks for a single line to sum you up. You give them something tasteful with a bite, and it gets repeated like a mantra."
   },
-  act1_pack02_whisper_network_day63: {
-    title: "Whisper Network",
-    message: "A quiet network starts routing work your way, the kind that pays more for discretion than effort. It feels like the city just nudged you toward the velvet rope."
-  },
   act1_pack02_fanmail_stack_day72: {
     title: "Fanmail Stack",
     message: "The inbox is now a queue of confessions, proposals, and dubious ideas. It’s messy, flattering, and very good for the ego—and the myth."
@@ -247,6 +243,69 @@ const STORY_EVENT_COPY = {
     message: "New gear available: Set Dressing upgrades."
   }
 };
+
+function getReferencedStoryEventIdsFromConfig() {
+  const ids = new Set();
+  const addId = function (value) {
+    if (typeof value === "string") {
+      ids.add(value);
+    }
+  };
+  if (!CONFIG || typeof CONFIG !== "object") {
+    return [];
+  }
+  const story = CONFIG.story || {};
+  const act1 = story.act1 || {};
+  if (Array.isArray(act1.schedule)) {
+    act1.schedule.forEach(function (entry) {
+      addId(entry && entry.id);
+    });
+  }
+  if (act1.intro) {
+    addId(act1.intro.id);
+  }
+  if (Array.isArray(act1.debtReminders)) {
+    act1.debtReminders.forEach(function (entry) {
+      addId(entry && entry.id);
+    });
+  }
+  if (act1.endEvents) {
+    addId(act1.endEvents.win && act1.endEvents.win.id);
+    addId(act1.endEvents.loss && act1.endEvents.loss.id);
+  }
+  const act2 = story.act2 || {};
+  if (Array.isArray(act2.schedule)) {
+    act2.schedule.forEach(function (entry) {
+      addId(entry && entry.id);
+    });
+  }
+  const act3 = story.act3 || {};
+  if (Array.isArray(act3.schedule)) {
+    act3.schedule.forEach(function (entry) {
+      addId(entry && entry.id);
+    });
+  }
+  const progression = CONFIG.progression || {};
+  if (Array.isArray(progression.unlockSchedule)) {
+    progression.unlockSchedule.forEach(function (entry) {
+      addId(entry && entry.storyId);
+    });
+  }
+  const recruitment = CONFIG.recruitment || {};
+  if (Array.isArray(recruitment.candidates)) {
+    recruitment.candidates.forEach(function (entry) {
+      addId(entry && entry.storyId);
+    });
+  }
+  const market = CONFIG.market || {};
+  if (market.competition && typeof market.competition.unlockMessageId === "string") {
+    addId(market.competition.unlockMessageId);
+  }
+  if (market.saturation && typeof market.saturation.unlockMessageId === "string") {
+    addId(market.saturation.unlockMessageId);
+  }
+  return Array.from(ids).sort();
+}
 
 function getAct3EventEffects(eventId) {
   if (!eventId || !CONFIG.story || !CONFIG.story.act3 || !CONFIG.story.act3.effects) {

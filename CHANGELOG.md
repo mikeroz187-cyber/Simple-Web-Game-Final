@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Cleaned story event copy references, added config hook for saturation unlock messaging, and removed an unused Act 1 story copy entry.
+  - Why: Keep story event IDs consistent between config, UI triggers, and copy while avoiding dead toasts.
+  - Files touched: src/systems/story.js, src/ui/events.js, src/config.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Removed freelancer profile/rotation remnants from state, save/load, booking day advance, and social bonuses.
   - Why: Fully retire the freelancer system now that Agency Sample Packs handle non-core booking variation.
   - Files touched: src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
