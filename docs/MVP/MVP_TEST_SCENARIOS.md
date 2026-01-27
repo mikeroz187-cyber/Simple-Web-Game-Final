@@ -15,7 +15,7 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 **Expect** the initial state matches config defaults:
 - `day = 1`
 - `cash = 5000`
-- `debtRemaining = 10000`
+- `debtRemaining = 25000`
 - `followers = 0`
 - `reputation = 0`
 

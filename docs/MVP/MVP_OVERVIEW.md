@@ -11,7 +11,7 @@ Note: The current build uses `src/config.js`; `config.toml` is a legacy referenc
 - Acts 2–3 systems (competition, automation, studio identity, legacy milestones) are implemented beyond the MVP baseline.
 
 ## 1) MVP Summary (Plain English)
-The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content grows OF subscribers and MRR, all under the pressure of a $10,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and MRR while watching metrics move each day. The **MVP baseline** did not include Acts 2–3 systems, rival studios, extra content types, mobile support, or online systems.
+The player runs a small adult content studio for Act 1 (Days 1–90), booking shoots, reviewing results, and adjusting strategy to grow followers, subscribers, and cash. Each cycle creates immediate feedback as Promo content builds followers while Premium content grows OF subscribers and MRR, all under the pressure of a $25,000 debt due by Day 90. Progress is measured by day count, cash, follower/subscriber growth, and debt remaining as the player repeats the booking → content → analytics loop. It is fun because the player makes clear tradeoffs between growth and MRR while watching metrics move each day. The **MVP baseline** did not include Acts 2–3 systems, rival studios, extra content types, mobile support, or online systems.
 
 ---
 
@@ -59,7 +59,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 
 ## 6) MVP Resources & Stats
 - Cash — available money for costs and debt — increases from daily MRR — decreases from shoot location costs and debt payments — player cares because cash gates actions and debt payoff.
-- Debt Remaining — amount owed toward the $10,000 deadline — decreases when paid from cash — increases only at start as the $10,000 total obligation — player cares because paying it off by Day 90 is the win condition.
+- Debt Remaining — amount owed toward the $25,000 deadline — decreases when paid from cash — increases only at start as the $25,000 total obligation — player cares because paying it off by Day 90 is the win condition.
 - Day — current in-game day (1–90) — increases only when the player manually advances the day after 5 completed shoots — cannot decrease — player cares because Day 90 is the deadline.
 - Followers — audience size from Promo content — increases via Promo results and platform reach — may stagnate if no Promo — player cares because followers convert to subscribers at a fixed rate.
 - Subscribers — paying audience base — increases via conversion from followers and Premium performance — decreases only if explicitly modeled (not required in MVP) — player cares because subscribers drive MRR.
@@ -107,7 +107,7 @@ Ship the smallest, stable loop that lets the player book a shoot, see results, a
 ---
 
 ## 10) MVP Definition of Done (Ship Checklist)
-- [ ] New game starts at Day 1 with $5,000 cash and $10,000 debt due by Day 90.
+- [ ] New game starts at Day 1 with $5,000 cash and $25,000 debt due by Day 90.
 - [ ] Core loop (book → content → analytics → next decision) works at least twice in a row.
 - [ ] Promo content increases followers and affects reach via platform choice.
 - [ ] Premium content grows OF subscribers and affects MRR.

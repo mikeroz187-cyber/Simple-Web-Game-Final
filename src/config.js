@@ -100,7 +100,7 @@ const CONFIG = {
     max_day: 270,
     starting_cash: 5000,
     loan_principal: 5000,
-    loan_total_due: 10000,
+    loan_total_due: 25000,
     debt_due_day: 90,
     shoots_per_day: 5
   },
@@ -119,10 +119,14 @@ const CONFIG = {
       enableDailyOfPayout: true,
       enableDailyOverhead: true,
       overheadTiers: [
-        { minSubs: 0, dailyOverhead: 5, label: "Basics" },
-        { minSubs: 100, dailyOverhead: 10, label: "Growing" },
-        { minSubs: 250, dailyOverhead: 18, label: "Scaling" },
-        { minSubs: 500, dailyOverhead: 28, label: "Big League" }
+        { minSubs: 0, dailyOverhead: 0, label: "Shoestring" },
+        { minSubs: 50, dailyOverhead: 8, label: "Scrappy" },
+        { minSubs: 100, dailyOverhead: 20, label: "Growing" },
+        { minSubs: 200, dailyOverhead: 60, label: "Scaling" },
+        { minSubs: 350, dailyOverhead: 100, label: "Busy" },
+        { minSubs: 500, dailyOverhead: 150, label: "Big League" },
+        { minSubs: 750, dailyOverhead: 210, label: "Enterprise" },
+        { minSubs: 1000, dailyOverhead: 270, label: "Machine" }
       ]
     },
     netWorth: {

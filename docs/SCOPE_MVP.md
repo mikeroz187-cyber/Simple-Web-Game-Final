@@ -12,7 +12,7 @@
 # Studio Empire — MVP Scope
 
 ## Purpose of MVP
-The MVP lets a player run a small adult content studio for the first 90 in‑game days, focused on paying off a debt. The player books shoots, reviews the resulting content and metrics, and adjusts their strategy to grow followers and OF subscribers (MRR). It is fun because each cycle shows clear, immediate feedback (followers, subscribers, cash) and the Day 90 debt deadline creates urgency. Success means paying the $10,000 debt by Day 90 while sustaining a steady loop of shoots, analysis, and strategy changes.
+The MVP lets a player run a small adult content studio for the first 90 in‑game days, focused on paying off a debt. The player books shoots, reviews the resulting content and metrics, and adjusts their strategy to grow followers and OF subscribers (MRR). It is fun because each cycle shows clear, immediate feedback (followers, subscribers, cash) and the Day 90 debt deadline creates urgency. Success means paying the $25,000 debt by Day 90 while sustaining a steady loop of shoots, analysis, and strategy changes.
 
 ## MVP Player Fantasy
 - Feel like a studio manager making tradeoffs between growth (Promo) and OF subs/MRR (Premium).
@@ -31,13 +31,13 @@ The MVP lets a player run a small adult content studio for the first 90 in‑gam
 
 ## MVP Win / Loss / End Conditions
 - **Progress** is measured by day count, cash on hand, total followers/subscribers, and debt remaining.
-- **Win condition:** debt of $10,000 is fully repaid by Day 90.
+- **Win condition:** debt of $25,000 is fully repaid by Day 90.
 - **Loss condition:** Day 90 ends and the debt is not repaid.
 - **End of session condition:** player chooses to stop (save/quit); there is no other forced end before Day 90.
 
 ## MVP Must-Have Features (Build These)
 - [ ] **Core loop:** Player can book a shoot → view content → see analytics → adjust strategy → repeat (verify by completing at least two consecutive loops).
-- [ ] **Act 1 story framing:** Intro event establishes the $5,000 loan and $10,000 debt due by Day 90; 2–3 debt reminder events appear before Day 90 (verify by advancing days).
+- [ ] **Act 1 story framing:** Intro event establishes the $5,000 loan and $25,000 debt due by Day 90; 2–3 debt reminder events appear before Day 90 (verify by advancing days).
 - [ ] **Content types:** Promo (SFW) and Premium (NSFW) are selectable and behave differently (Promo increases followers; Premium grows OF subscribers and MRR) (verify via analytics changes).
 - [ ] **Booking system:** Player selects performer, location, theme, and content type for each shoot (verify all inputs affect the generated content/metrics).
 - [ ] **Performers (MVP size):** 3 core performers and 5 freelance performers are available; freelancers can be hired per shoot (verify roster list and selection options).

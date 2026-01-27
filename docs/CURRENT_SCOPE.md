@@ -2,7 +2,7 @@
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-**Last Updated:** January 26, 2026
+**Last Updated:** January 27, 2026
 
 ## Recently Completed
 - Recruitment flow with rep-gated candidates, meet slideshow, and hire/decline outcomes.
@@ -13,6 +13,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Premium variance rolls, equipment upgrades, Tier 2 locations, and analytics rollups.
 - Post-debt Market Saturation tiers for Premium OF subs with Act 2 activation messaging.
 - Daily OF cash payouts on day advance plus tiered overhead scaling.
+- Balance Pass v1 retuning debt to $25,000 and overhead tiers for post-payout economy pacing.
 
 ## Currently Working On
 - Documentation reconciliation so every doc matches the current implementation.

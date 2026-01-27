@@ -5,6 +5,7 @@ This document describes the **current implemented loop** and rules as they exist
 ## Current Game Rules (Source of Truth)
 - **Day flow is manual.** The player advances the day by clicking **Advance Day** on the Hub.
 - **Day limit for booking:** New shoots cannot be booked once `player.day >= player.debtDueDay` (default Day 90).
+- **Debt target:** Act 1 starts with **$25,000** due by Day 90; clearing it is the Act 1 gate that unlocks post-debt systems.
 - **No global shoots/day cap.** The game tracks `shootsToday`, but booking is limited by performer availability and contracts.
 - **Per‑performer daily cap:** Each contracted performer has a daily booking cap (default 1/day, max 3/day) tracked as consecutive bookings and reset on day advance.
 - **Agency Sample Pack:** Optional booking mode available once per day (flat fee + location cost, five-image bundle output).
@@ -13,7 +14,7 @@ This document describes the **current implemented loop** and rules as they exist
   - **Promo** content generates results only when posted on Social.
   - **Premium** content immediately adds OnlyFans subscribers and increases MRR.
 - **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
-- **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance.
+- **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance, starting at $0 and ramping through $8 (50 subs), $20 (100), $60 (200), $100 (350), $150 (500), $210 (750), and $270 (1,000).
 - **Reputation:** Increases from milestone rewards (followers, OF subs, MRR thresholds). It gates Tier 2 location unlocks, recruitment candidates, and studio identity selection.
 - **Automation (optional):** If enabled, auto-book or auto-post can run once per day when you click **Advance Day**.
 - **Competition & variance:** After Day 181, competition standings and market shifts can modify Promo/Premium outputs, and Premium content may roll variance.
