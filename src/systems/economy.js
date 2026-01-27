@@ -134,6 +134,25 @@ function getDailyOverhead(gameState) {
   return { amount: Math.max(0, Math.round(amount)), label: label };
 }
 
+function getDaysToAffordDebtEstimate(gameState) {
+  const player = gameState && gameState.player ? gameState.player : null;
+  const debtRemaining = player && Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+  const cash = player && Number.isFinite(player.cash) ? player.cash : 0;
+  const dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  const overhead = typeof getDailyOverhead === "function"
+    ? getDailyOverhead(gameState)
+    : { amount: 0, label: null };
+  const dailyNet = dailyPayout - overhead.amount;
+  if (debtRemaining <= 0) {
+    return { days: 0, dailyNet: dailyNet };
+  }
+  const amountNeeded = Math.max(0, debtRemaining - cash);
+  if (dailyNet <= 0) {
+    return { days: null, dailyNet: dailyNet };
+  }
+  return { days: Math.ceil(amountNeeded / dailyNet), dailyNet: dailyNet };
+}
+
 function getNetWorth(gameState) {
   const cash = (gameState && gameState.player && Number.isFinite(gameState.player.cash))
     ? gameState.player.cash

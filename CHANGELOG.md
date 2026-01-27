@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a Hub/Analytics estimate for days to afford debt based on daily net cashflow.
+  - Why: Clarify payoff timing using the existing daily OF payout and overhead values.
+  - Files touched: src/systems/economy.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Balance Pass v2 retuned Promo follower base gain up 15% and Premium base OF subs down ~10%, plus documented the intended early Promo-heavy pacing.
   - Why: Encourage marketing-heavy early play while letting Premium scaling take over later.
   - Files touched: config.toml, src/config.js, docs/CORE_GAMEPLAY_LOOP.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
