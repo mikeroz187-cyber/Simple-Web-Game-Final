@@ -19,8 +19,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 
 ## Currently Working On
-- Documentation reconciliation so every doc matches the current implementation.
-- Clarifying UI copy, labels, and data catalogs to mirror in-game behavior.
+- Premium UI redesign Phase 1: Foundation (dark theme, glassmorphism, atmosphere)
 
 ## Next 3–7 Candidate Tasks
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.

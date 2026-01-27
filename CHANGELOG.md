@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Premium UI redesign Phase 1 — new dark "Neon Noir VIP" color system, glassmorphism panels, atmospheric background with floating particles, updated typography (Inter + JetBrains Mono).
+  - Why: Transform the visual identity from "beige office" to a premium dark lounge aesthetic per docs/UI_PREMIUM_VISION.md.
+  - Files touched: index.html, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Applied neon VIP lounge visual polish with Bebas Neue headings, laminated card styling, and a Hub dashboard/feed layout.
   - Why: Deliver the requested cohesive art direction and improve Hub readability without changing gameplay.
   - Files touched: index.html, styles.css, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

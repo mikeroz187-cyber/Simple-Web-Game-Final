@@ -1,6 +1,16 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** March 2, 2026 (docs reconciliation pass)
+**Last Updated:** January 27, 2026 (premium UI redesign Phase 1)
+
+---
+
+## UI Premium Redesign — In Progress
+- [x] Phase 1: Foundation (colors, typography, atmosphere, glassmorphism)
+- [ ] Phase 2: Layout infrastructure (header bar, nav rail, viewport)
+- [ ] Phase 3: Hub screen redesign (hero metrics, live feed, card strip)
+- [ ] Phase 4: Component library (buttons, stat cards, selection cards)
+- [ ] Phase 5: Screen polish (Booking, Gallery, Roster, Analytics, Shop)
+- [ ] Phase 6: Micro-interactions (number animations, transitions, toasts)
 
 ---
 
