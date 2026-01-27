@@ -1483,7 +1483,7 @@ function renderShop(gameState) {
   const screen = qs("#screen-shop");
   const cost = Number.isFinite(CONFIG.locations.tier1UnlockCost)
     ? CONFIG.locations.tier1UnlockCost
-    : CONFIG.progression.location_tier_1_unlock_cost;
+    : 0;
   const unlocked = isLocationTierUnlocked(gameState, "tier1");
   const canBuy = !unlocked && gameState.player.cash >= cost;
   const tier1Name = CONFIG.locations.tier1Name || "Location Tier 1";
