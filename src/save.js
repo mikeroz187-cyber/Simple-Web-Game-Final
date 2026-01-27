@@ -159,7 +159,7 @@ function ensureRosterCompleteness(candidate) {
   const rosterIds = roster.performers.map(function (entry) {
     return entry.id;
   });
-  const catalogIds = CONFIG.performers.core_ids;
+  const catalogIds = Array.isArray(CONFIG.performers.core_ids) ? CONFIG.performers.core_ids : [];
   const missingIds = catalogIds.filter(function (performerId) {
     return rosterIds.indexOf(performerId) === -1;
   });
@@ -172,7 +172,40 @@ function ensureRosterCompleteness(candidate) {
   });
 }
 
-function pruneFreelanceRosterEntries(candidate) {
+function pruneAppliedUnlockIds(candidate) {
+  if (!candidate || !candidate.unlocks || !Array.isArray(candidate.unlocks.appliedUnlockIds)) {
+    return;
+  }
+  const schedule = CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)
+    ? CONFIG.progression.unlockSchedule
+    : [];
+  const allowedIdSet = new Set(schedule.filter(function (entry) {
+    return entry &&
+      (entry.type === "equipment" || entry.type === "location") &&
+      typeof entry.id === "string";
+  }).map(function (entry) {
+    return entry.id;
+  }));
+  const seenIds = new Set();
+  candidate.unlocks.appliedUnlockIds = candidate.unlocks.appliedUnlockIds.filter(function (id) {
+    if (typeof id !== "string") {
+      return false;
+    }
+    if (!allowedIdSet.has(id)) {
+      return false;
+    }
+    if (seenIds.has(id)) {
+      return false;
+    }
+    seenIds.add(id);
+    return true;
+  });
+}
+
+function pruneFreelancerRemnants(candidate) {
+  if (!CONFIG.agencyPacks || CONFIG.agencyPacks.enabled !== true) {
+    return;
+  }
   if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
     return;
   }
@@ -186,16 +219,11 @@ function pruneFreelanceRosterEntries(candidate) {
     }
     return false;
   });
+  if (candidate.roster.freelancerProfiles !== undefined) {
+    delete candidate.roster.freelancerProfiles;
+  }
   if (removedIds.size === 0) {
     return;
-  }
-  const profiles = candidate.roster.freelancerProfiles;
-  if (profiles && typeof profiles === "object" && !Array.isArray(profiles)) {
-    Object.keys(profiles).forEach(function (performerId) {
-      if (removedIds.has(performerId)) {
-        delete profiles[performerId];
-      }
-    });
   }
   const management = candidate.performerManagement;
   if (!management || typeof management !== "object") {
@@ -532,10 +560,17 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.storyLog)) {
     candidate.storyLog = [];
   }
-  pruneFreelanceRosterEntries(candidate);
-  if (candidate.roster && candidate.roster.freelancerProfiles !== undefined) {
-    delete candidate.roster.freelancerProfiles;
+  if (typeof ensureUnlocksState === "function") {
+    ensureUnlocksState(candidate);
   }
+  pruneAppliedUnlockIds(candidate);
+  if (!candidate.roster || typeof candidate.roster !== "object") {
+    candidate.roster = { performers: [] };
+  }
+  if (!Array.isArray(candidate.roster.performers)) {
+    candidate.roster.performers = [];
+  }
+  pruneFreelancerRemnants(candidate);
   ensureRosterCompleteness(candidate);
   ensurePerformerStarPowerProgress(candidate);
   ensurePerformerManagementState(candidate);

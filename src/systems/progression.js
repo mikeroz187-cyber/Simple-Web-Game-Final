@@ -115,6 +115,7 @@ function applyScheduledUnlocks(gameState) {
     ensureUnlocksState(gameState);
   }
 
+  const ALLOWED_TYPES = new Set(["equipment", "location"]);
   const schedule = getUnlockScheduleConfig();
   if (!Array.isArray(schedule) || schedule.length === 0) {
     return { ok: true, events: [] };
@@ -127,6 +128,17 @@ function applyScheduledUnlocks(gameState) {
 
   schedule.forEach(function (entry) {
     if (!entry || !Number.isFinite(entry.day) || typeof entry.type !== "string" || typeof entry.id !== "string") {
+      return;
+    }
+    if (!ALLOWED_TYPES.has(entry.type)) {
+      try {
+        if (typeof window !== "undefined" &&
+          window.location &&
+          String(window.location.search).includes("debug=1")
+        ) {
+          console.warn("[applyScheduledUnlocks] Ignoring unsupported unlock type:", entry.type, entry.id);
+        }
+      } catch (e) {}
       return;
     }
     if (entry.day > currentDay || appliedSet.has(entry.id)) {
