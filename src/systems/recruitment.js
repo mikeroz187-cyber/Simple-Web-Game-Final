@@ -75,7 +75,7 @@ function getActiveRecruitCandidate(gameState) {
   return available[0];
 }
 
-function getNewRecruitNotificationEvents(gameState) {
+function getNewRecruitEligibilityEvents(gameState) {
   if (!gameState || !gameState.player) {
     return [];
   }

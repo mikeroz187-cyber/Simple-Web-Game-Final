@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Routed recruit eligibility toasts through rep-only checks and recruitment candidates instead of day schedule entries.
+  - Why: Ensure performer leads only fire when reputation eligibility is met and avoid schedule-based unlock noise.
+  - Files touched: src/systems/recruitment.js, src/systems/booking.js, src/systems/story.js, CHANGELOG.md.
 - What: Cleaned story event copy references, added config hook for saturation unlock messaging, and removed an unused Act 1 story copy entry.
   - Why: Keep story event IDs consistent between config, UI triggers, and copy while avoiding dead toasts.
   - Files touched: src/systems/story.js, src/ui/events.js, src/config.js, docs/task-checklist.md, CHANGELOG.md.

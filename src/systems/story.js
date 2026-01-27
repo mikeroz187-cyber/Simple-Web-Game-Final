@@ -401,23 +401,17 @@ function resolvePerformerUnlockCopy(eventId, gameState) {
   if (!eventId || eventId.indexOf("unlock_performer_") !== 0) {
     return null;
   }
-  const schedule = CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)
-    ? CONFIG.progression.unlockSchedule
-    : [];
-  const scheduleEntry = schedule.find(function (entry) {
-    return entry && entry.type === "performer" && entry.storyId === eventId;
-  });
-  if (!scheduleEntry || typeof scheduleEntry.id !== "string") {
-    return null;
-  }
-  const performerId = scheduleEntry.id;
   const candidates = CONFIG.recruitment && Array.isArray(CONFIG.recruitment.candidates)
     ? CONFIG.recruitment.candidates
     : [];
   const candidate = candidates.find(function (entry) {
-    return entry && entry.performerId === performerId;
+    return entry && entry.storyId === eventId;
   });
   if (!candidate) {
+    return null;
+  }
+  const performerId = candidate.performerId;
+  if (typeof performerId !== "string") {
     return null;
   }
   const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;

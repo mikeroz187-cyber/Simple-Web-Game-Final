@@ -24,8 +24,8 @@ function advanceDay(gameState) {
     ? applyScheduledUnlocks(gameState)
     : { events: [] };
   const storyResult = checkStoryEvents(gameState);
-  const recruitResult = typeof getNewRecruitNotificationEvents === "function"
-    ? getNewRecruitNotificationEvents(gameState)
+  const recruitResult = typeof getNewRecruitEligibilityEvents === "function"
+    ? getNewRecruitEligibilityEvents(gameState)
     : [];
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
