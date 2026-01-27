@@ -71,6 +71,32 @@ function renderHeaderStats(gameState) {
   container.innerHTML = html;
 }
 
+function getEventIcon(entry) {
+  if (!entry || !entry.id) return "📋";
+  var id = entry.id.toLowerCase();
+  if (id.indexOf("debt") >= 0 || id.indexOf("loan") >= 0) return "⚠️";
+  if (id.indexOf("unlock") >= 0 || id.indexOf("new") >= 0) return "🔓";
+  if (id.indexOf("performer") >= 0 || id.indexOf("recruit") >= 0) return "⭐";
+  if (id.indexOf("milestone") >= 0 || id.indexOf("legacy") >= 0) return "🏆";
+  if (id.indexOf("shoot") >= 0 || id.indexOf("content") >= 0) return "📸";
+  if (id.indexOf("social") >= 0 || id.indexOf("post") >= 0) return "📱";
+  if (id.indexOf("competition") >= 0 || id.indexOf("rival") >= 0) return "🏁";
+  if (id.indexOf("market") >= 0 || id.indexOf("shift") >= 0) return "📈";
+  if (id.indexOf("manager") >= 0) return "👔";
+  if (id.indexOf("win") >= 0 || id.indexOf("success") >= 0) return "🎉";
+  if (id.indexOf("fail") >= 0 || id.indexOf("loss") >= 0) return "💔";
+  return "📋";
+}
+
+function formatMultiplier(value) {
+  var num = Number.isFinite(value) ? value : 1;
+  if (num >= 1) {
+    return "+" + Math.round((num - 1) * 100) + "%";
+  } else {
+    return Math.round((num - 1) * 100) + "%";
+  }
+}
+
 function renderApp(gameState) {
   getUiState();
   renderHeaderStats(gameState);
@@ -222,374 +248,234 @@ function getAvailabilitySummary(gameState, performerId) {
 }
 
 function renderHub(gameState) {
-  const hub = qs("#screen-hub");
-  const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
-  const nextAction = getNextActionLabel(gameState);
-  const competitionConfig = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
-    ? CONFIG.market.competition
-    : {};
-  const competitionDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
-  const competitionStartDay = typeof getCompetitionStartDay === "function"
-    ? getCompetitionStartDay(competitionConfig)
-    : null;
-  const competitionUnlocked = typeof isCompetitionUnlocked === "function"
-    ? isCompetitionUnlocked(gameState)
-    : true;
-  const competitionEnabled = typeof isCompetitionEnabled === "function"
-    ? isCompetitionEnabled(competitionConfig, competitionDay, gameState)
-    : Boolean(competitionConfig.enabled);
-  const standings = competitionEnabled && typeof getCompetitionStandings === "function"
-    ? getCompetitionStandings(gameState)
-    : null;
-  const standingLabel = competitionEnabled && standings
-    ? standings.rank + "/" + standings.total
-    : "—";
-  const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
-    ? getActiveMarketShift(gameState, competitionDay)
-    : null;
-  const marketShiftLabel = activeMarketShift ? activeMarketShift.name : "None";
-  const reputationConfig = CONFIG.reputation && typeof CONFIG.reputation === "object" ? CONFIG.reputation : {};
-  const selectionStartDay = Number.isFinite(reputationConfig.selectionStartDay) ? reputationConfig.selectionStartDay : null;
-  const reputationBranches = typeof getReputationBranches === "function" ? getReputationBranches() : [];
-  const selectedBranch = typeof getSelectedReputationBranch === "function"
-    ? getSelectedReputationBranch(gameState)
-    : null;
-  const netWorthConfig = CONFIG.economy && CONFIG.economy.netWorth ? CONFIG.economy.netWorth : null;
-  const netWorthMultiple = netWorthConfig && Number.isFinite(netWorthConfig.valuationMultiple)
-    ? netWorthConfig.valuationMultiple
-    : 0;
-  const dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
-  const dailyOverhead = typeof getDailyOverhead === "function"
-    ? getDailyOverhead(gameState)
-    : { amount: 0, label: null };
-  const debtEstimateMetric = getDebtEstimateMetric(gameState);
-  const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
-    ? CONFIG.legacyMilestones
-    : { milestoneOrder: [], milestones: {} };
-  const legacyOrder = Array.isArray(legacyConfig.milestoneOrder) ? legacyConfig.milestoneOrder : [];
+  var hub = qs("#screen-hub");
+  if (!hub) return;
 
-  const metrics = [
-    { label: "Day", value: gameState.player.day },
-    { label: "Days Left", value: daysLeft },
-    { label: "Shoots Today", value: gameState.player.shootsToday },
-    { label: "Cash", value: formatCurrency(gameState.player.cash) },
-    {
-      label: "Debt Remaining",
-      value: formatCurrency(gameState.player.debtRemaining),
-      sub: "Due Day " + gameState.player.debtDueDay
-    },
-    debtEstimateMetric,
-    { label: "Social Followers", value: gameState.player.socialFollowers },
-    { label: "Social Subscribers", value: gameState.player.socialSubscribers },
-    { label: "OnlyFans Subscribers", value: gameState.player.onlyFansSubscribers },
-    { label: "MRR", value: formatCurrency(getMRR(gameState)) + "/mo" },
-    { label: "Daily OF Payout (est)", value: "+" + formatCurrency(dailyPayout) + "/day" },
-    {
-      label: "Daily Overhead",
-      value: "-" + formatCurrency(dailyOverhead.amount) + "/day",
-      sub: dailyOverhead.label ? dailyOverhead.label : null
-    },
-    {
-      label: "Net Worth",
-      value: formatCurrency(getNetWorth(gameState)),
-      sub: "Cash + (MRR × " + netWorthMultiple + ")"
-    },
-    { label: "Reputation", value: gameState.player.reputation },
-    { label: "Next Action", value: nextAction }
-  ];
-  const metricsHtml = metrics.map(function (metric) {
-    const subLine = metric.sub ? "<div class=\"metric-sub\">" + metric.sub + "</div>" : "";
-    return "<div class=\"metric-card\">" +
-      "<div class=\"metric-label\">" + metric.label + "</div>" +
-      "<div class=\"metric-value\">" + metric.value + "</div>" +
-      subLine +
-      "</div>";
-  }).join("");
-  const metricsPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
-    "<div class=\"metric-grid\">" + metricsHtml + "</div>" +
-    "</div>";
+  var player = gameState.player;
+  var day = player.day;
+  var cash = player.cash;
+  var debt = player.debtRemaining;
+  var debtDueDay = player.debtDueDay;
+  var ofSubs = player.onlyFansSubscribers;
+  var followers = player.socialFollowers;
+  var socialSubs = player.socialSubscribers;
+  var reputation = player.reputation;
 
-  let competitionPanelBody = "";
-  const competitionUnlockAfterDebt = competitionConfig && competitionConfig.unlockAfterDebt === true;
-  if (competitionUnlockAfterDebt) {
-    if (!competitionUnlocked) {
-      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks once debt is cleared.</p>";
-    } else if (competitionEnabled) {
-      competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
-        "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
-        "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
-    } else {
-      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks once debt is cleared.</p>";
-    }
-  } else if (competitionEnabled) {
-    competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
-      "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
-      "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
-  } else if (!competitionUnlocked) {
-    competitionPanelBody = "<p class=\"helper-text\">Locked until debt is cleared.</p>";
-  } else {
-    const startDayLabel = Number.isFinite(competitionStartDay)
-      ? "Competition begins Day " + competitionStartDay + "."
-      : "Competition begins soon.";
-    competitionPanelBody = "<p class=\"helper-text\">" + startDayLabel + "</p>";
-  }
-  const competitionPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Competition</h3>" +
-    competitionPanelBody +
-    "</div>";
+  var mrr = typeof getMRR === "function" ? getMRR(gameState) : 0;
+  var netWorth = typeof getNetWorth === "function" ? getNetWorth(gameState) : cash;
+  var dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
+  var dailyNet = dailyPayout - dailyOverhead.amount;
+  var debtEstimate = typeof getDaysToAffordDebtEstimate === "function" ? getDaysToAffordDebtEstimate(gameState) : { days: null };
 
-  let reputationPanelBody = "";
-  if (!Number.isFinite(selectionStartDay)) {
-    reputationPanelBody = "<p class=\"helper-text\">Studio Identity unavailable.</p>";
-  } else if (gameState.player.day < selectionStartDay) {
-    reputationPanelBody = "<p class=\"helper-text\">Studio Identity unlocks Day " + selectionStartDay + ".</p>";
-  } else if (!selectedBranch) {
-    const requiredReputation = reputationBranches.length && Number.isFinite(reputationBranches[0].requiredReputation)
-      ? reputationBranches[0].requiredReputation
-      : 0;
-    if (gameState.player.reputation < requiredReputation) {
-      reputationPanelBody = "<p class=\"helper-text\">Need Reputation ≥ " + requiredReputation + " to choose an identity.</p>";
-    } else if (reputationBranches.length === 0) {
-      reputationPanelBody = "<p class=\"helper-text\">No identity paths available.</p>";
-    } else {
-      const branchCards = reputationBranches.map(function (branch) {
-        const revenueLabel = "Premium OF subs " + formatCompetitionMultiplier(branch.ofSubsMult);
-        const followersLabel = "Promo followers " + formatCompetitionMultiplier(branch.followersMult);
-        return "<div class=\"list-item\">" +
-          "<p><strong>" + branch.label + "</strong></p>" +
-          "<p class=\"helper-text\">" + branch.blurb + "</p>" +
-          "<p class=\"helper-text\">" + revenueLabel + ", " + followersLabel + "</p>" +
-          "<div class=\"button-row\">" +
-          createButton("Choose", "select-reputation-branch", "primary", false, "data-id=\"" + branch.id + "\"") +
-          "</div>" +
-          "</div>";
-      }).join("");
-      reputationPanelBody = branchCards;
-    }
-  } else {
-    const revenueLabel = "Premium OF subs " + formatCompetitionMultiplier(selectedBranch.ofSubsMult);
-    const followersLabel = "Promo followers " + formatCompetitionMultiplier(selectedBranch.followersMult);
-    reputationPanelBody = "<p><strong>Selected:</strong> " + selectedBranch.label + "</p>" +
-      "<p class=\"helper-text\">" + revenueLabel + ", " + followersLabel + "</p>" +
-      "<p class=\"helper-text\">Locked.</p>";
-  }
-  const reputationPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Studio Identity</h3>" +
-    reputationPanelBody +
-    "</div>";
-
-  const legacyMilestoneRows = legacyOrder.map(function (milestoneId) {
-    const definition = legacyConfig.milestones ? legacyConfig.milestones[milestoneId] : null;
-    if (!definition) {
-      return "";
-    }
-    const legacyEntries = Array.isArray(gameState.legacyMilestones) ? gameState.legacyMilestones : [];
-    const existing = legacyEntries.find(function (entry) {
-      return entry.id === milestoneId;
-    });
-    const metricValue = typeof getLegacyMilestoneMetricValue === "function"
-      ? getLegacyMilestoneMetricValue(gameState, definition)
-      : 0;
-    const threshold = Number.isFinite(definition.threshold) ? definition.threshold : 0;
-    const currentValue = Number.isFinite(metricValue) ? metricValue : 0;
-    const isComplete = Boolean(existing);
-    const label = definition.type === "storyComplete"
-      ? "Complete Act 3 Story (Day 270 event)"
-      : definition.label;
-    let progressLabel = currentValue + " / " + threshold;
-    if (definition.type === "mrr") {
-      progressLabel = formatCurrency(currentValue) + " / " + formatCurrency(threshold);
-    }
-    if (definition.type === "storyComplete") {
-      progressLabel = currentValue >= threshold ? "1 / 1" : "0 / 1";
-    }
-    const statusLabel = isComplete ? "✅ Complete" : "⏳ In Progress";
-    return "<div class=\"list-item\">" +
-      "<p><strong>" + label + "</strong></p>" +
-      "<p class=\"helper-text\">Progress: " + progressLabel + "</p>" +
-      "<p class=\"helper-text\">Status: " + statusLabel + "</p>" +
-      "</div>";
-  }).join("");
-  const legacyPanelBody = legacyMilestoneRows
-    ? legacyMilestoneRows
-    : "<p class=\"helper-text\">No legacy milestones available.</p>";
-  const legacyPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Legacy Milestones</h3>" +
-    legacyPanelBody +
-    "</div>";
-
-  const storyEntries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
-  const feedEntries = storyEntries.slice(0, 5);
-  const eventCards = feedEntries.length
-    ? feedEntries.map(function (entry) {
-      const headline = entry.title || "Studio Update";
-      const preview = getStoryLogPreview(entry.body || "").replace(/\\s+/g, " ").trim();
-      const dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber : "";
-      const dayLine = dayLabel ? "<div class=\"event-meta\">" + dayLabel + "</div>" : "";
-      return "<div class=\"event-card\">" +
-        "<div class=\"event-headline\">" + headline + "</div>" +
-        "<div class=\"event-preview\">" + preview + "</div>" +
-        dayLine +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No story events logged yet.</p>";
-  const eventsPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Tabloid Feed</h3>" +
-    "<div class=\"event-feed\">" + eventCards + "</div>" +
-    "</div>";
-
-  const uiState = getUiState();
-
-  const automationConfig = CONFIG.automation || {};
-  const autoBookCount = Number.isFinite(automationConfig.maxActionsPerDay)
-    ? automationConfig.maxActionsPerDay
-    : 1;
-  const automationEnabled = Boolean(gameState.automation && gameState.automation.enabled);
-  const automationChecked = automationEnabled ? " checked" : "";
-  const autoBookEnabled = Boolean(gameState.automation && gameState.automation.autoBookEnabled);
-  const autoBookChecked = autoBookEnabled ? " checked" : "";
-  const autoPostEnabled = Boolean(gameState.automation && gameState.automation.autoPostEnabled);
-  const autoPostChecked = autoPostEnabled ? " checked" : "";
-  const autoBookLabel = "Auto-Book (" + autoBookCount + "/day)";
-  const autoPostLabel = "Auto-Post (" + autoBookCount + "/day)";
-  const automationCapLabel = autoBookCount === 1
-    ? "1 automated action"
-    : autoBookCount + " automated actions";
-  const automationPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Automation</h3>" +
-    "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"automation-enabled-toggle\">Automation Enabled</label>" +
-    "<input id=\"automation-enabled-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-automation-enabled\"" +
-    automationChecked + " />" +
+  // Hero Metrics (4 big stats)
+  var heroMetricsHtml = "<div class=\"hero-metrics\">" +
+    "<div class=\"hero-stat\">" +
+      "<div class=\"hero-stat__value hero-stat__value--gold\">" + formatCurrency(cash) + "</div>" +
+      "<div class=\"hero-stat__divider\"></div>" +
+      "<div class=\"hero-stat__label\">Cash</div>" +
+      "<div class=\"hero-stat__sub " + (dailyNet >= 0 ? "hero-stat__sub--positive" : "hero-stat__sub--negative") + "\">" +
+        (dailyNet >= 0 ? "+" : "") + formatCurrency(dailyNet) + "/day</div>" +
     "</div>" +
-    "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"auto-book-toggle\">" + autoBookLabel + "</label>" +
-    "<input id=\"auto-book-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-book\"" +
-    autoBookChecked + " />" +
+    "<div class=\"hero-stat\">" +
+      "<div class=\"hero-stat__value" + (debt > 0 ? " hero-stat__value--red" : " hero-stat__value--green") + "\">" + formatCurrency(debt) + "</div>" +
+      "<div class=\"hero-stat__divider\"></div>" +
+      "<div class=\"hero-stat__label\">Debt</div>" +
+      "<div class=\"hero-stat__sub\">" + (debt > 0 ? "Due Day " + debtDueDay : "PAID OFF") + "</div>" +
     "</div>" +
-    "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"auto-post-toggle\">" + autoPostLabel + "</label>" +
-    "<input id=\"auto-post-toggle\" class=\"checkbox-control\" type=\"checkbox\" data-action=\"toggle-auto-post\"" +
-    autoPostChecked + " />" +
+    "<div class=\"hero-stat\">" +
+      "<div class=\"hero-stat__value hero-stat__value--pink\">" + ofSubs.toLocaleString() + "</div>" +
+      "<div class=\"hero-stat__divider\"></div>" +
+      "<div class=\"hero-stat__label\">OF Subscribers</div>" +
+      "<div class=\"hero-stat__sub\">" + formatCurrency(mrr) + " MRR</div>" +
     "</div>" +
-    "<p class=\"helper-text\">Runs only when you click Advance Day. Max " + automationCapLabel + " per day.</p>" +
-    "</div>";
+    "<div class=\"hero-stat\">" +
+      "<div class=\"hero-stat__value\">" + netWorth.toLocaleString() + "</div>" +
+      "<div class=\"hero-stat__divider\"></div>" +
+      "<div class=\"hero-stat__label\">Net Worth</div>" +
+      "<div class=\"hero-stat__sub\">" + (debtEstimate.days !== null ? "~" + debtEstimate.days + " days to clear debt" : "Cashflow negative") + "</div>" +
+    "</div>" +
+  "</div>";
 
-  const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
-  const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
-  const managerConfig = CONFIG.upgrades && CONFIG.upgrades.manager
-    ? CONFIG.upgrades.manager
-    : null;
-  let managerPanel = "";
-  if (managerConfig && managerConfig.enabled) {
-    const upgrades = gameState.player.upgrades && typeof gameState.player.upgrades === "object"
-      ? gameState.player.upgrades
-      : { managerHired: false };
-    const managerHired = Boolean(upgrades.managerHired);
-    const debtRemaining = Number.isFinite(gameState.player.debtRemaining) ? gameState.player.debtRemaining : 0;
-    const managerTitle = managerConfig.title || "Hire Manager";
-    const managerDescription = managerConfig.description || "";
-    const managerCost = Number.isFinite(managerConfig.cost) ? managerConfig.cost : 0;
-    const reductionMult = Number.isFinite(managerConfig.overheadReductionMult)
-      ? managerConfig.overheadReductionMult
-      : 1;
-    const reductionPct = Math.max(0, Math.round((1 - reductionMult) * 100));
-    if (managerHired) {
-      const hiredLine = reductionPct > 0
-        ? "Manager: HIRED (Overhead -" + reductionPct + "%)"
-        : "Manager: HIRED";
-      managerPanel = "<div class=\"panel\">" +
-        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
-        "<p><strong>" + hiredLine + "</strong></p>" +
-        "</div>";
-    } else if (managerConfig.unlockAfterDebt === true && debtRemaining > 0) {
-      const buttonLabel = managerTitle + " (" + formatCurrency(managerCost) + ")";
-      const descriptionLine = managerDescription ? "<p class=\"helper-text\">" + managerDescription + "</p>" : "";
-      managerPanel = "<div class=\"panel\">" +
-        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
-        descriptionLine +
-        "<p class=\"helper-text\">Locked until debt is cleared.</p>" +
-        "<div class=\"button-row\">" + createButton(buttonLabel, "hire-manager", "primary", true) + "</div>" +
-        "</div>";
-    } else {
-      const buttonLabel = managerTitle + " (" + formatCurrency(managerCost) + ")";
-      const descriptionLine = managerDescription ? "<p class=\"helper-text\">" + managerDescription + "</p>" : "";
-      managerPanel = "<div class=\"panel\">" +
-        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
-        descriptionLine +
-        "<div class=\"button-row\">" + createButton(buttonLabel, "hire-manager", "primary") + "</div>" +
-        "</div>";
-    }
-  }
-  const debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
-  const debugPanel = isDebugEnabled()
-    ? "<div class=\"panel\">" +
+  // Secondary stats row
+  var secondaryStatsHtml = "<div class=\"secondary-stats-row\">" +
+    "<div class=\"secondary-stat\"><span>Followers</span><span class=\"secondary-stat__value\">" + followers.toLocaleString() + "</span></div>" +
+    "<div class=\"secondary-stat\"><span>Social Subs</span><span class=\"secondary-stat__value\">" + socialSubs.toLocaleString() + "</span></div>" +
+    "<div class=\"secondary-stat\"><span>Reputation</span><span class=\"secondary-stat__value\">" + reputation + "</span></div>" +
+    "<div class=\"secondary-stat\"><span>Shoots Today</span><span class=\"secondary-stat__value\">" + player.shootsToday + "</span></div>" +
+  "</div>";
+
+  // Tabloid Feed
+  var storyEntries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse().slice(0, 8) : [];
+  var feedItemsHtml = storyEntries.length ? storyEntries.map(function (entry, index) {
+    var isNew = index === 0;
+    var dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber : "";
+    var title = entry.title || "Studio Update";
+    var body = entry.body || "";
+    var preview = body.length > 80 ? body.substring(0, 80) + "..." : body;
+    var icon = getEventIcon(entry);
+    return "<div class=\"feed-item" + (isNew ? " feed-item--new" : "") + "\">" +
+      "<div class=\"feed-item__header\">" +
+        "<span class=\"feed-item__badge" + (isNew ? " feed-item__badge--now" : "") + "\">" + (isNew ? "New" : dayLabel) + "</span>" +
+        "<span class=\"feed-item__icon\">" + icon + "</span>" +
+        "<span class=\"feed-item__title\">" + title + "</span>" +
+      "</div>" +
+      "<div class=\"feed-item__body\">" + preview + "</div>" +
+    "</div>";
+  }).join("") : "<div class=\"feed-item\"><div class=\"feed-item__body\">No events yet. Start booking shoots!</div></div>";
+
+  var feedHtml = "<div class=\"live-feed\">" +
+    "<div class=\"live-feed__header\">" +
+      "<span class=\"live-feed__title\">📰 Tabloid Feed</span>" +
+      "<button class=\"button\" data-action=\"nav-story-log\" style=\"padding:4px 8px;font-size:10px;min-height:auto;\">View All</button>" +
+    "</div>" +
+    "<div class=\"live-feed__list\">" + feedItemsHtml + "</div>" +
+  "</div>";
+
+  // Competition card
+  var competitionConfig = CONFIG.market && CONFIG.market.competition ? CONFIG.market.competition : {};
+  var competitionUnlocked = typeof isCompetitionUnlocked === "function" ? isCompetitionUnlocked(gameState) : false;
+  var competitionEnabled = typeof isCompetitionEnabled === "function" ? isCompetitionEnabled(competitionConfig, day, gameState) : false;
+  var standings = competitionEnabled && typeof getCompetitionStandings === "function" ? getCompetitionStandings(gameState) : null;
+  var activeShift = competitionEnabled && typeof getActiveMarketShift === "function" ? getActiveMarketShift(gameState, day) : null;
+
+  var competitionValue = !competitionUnlocked ? "Locked" : (competitionEnabled && standings ? "Rank " + standings.rank + "/" + standings.total : "Inactive");
+  var competitionSub = !competitionUnlocked ? "Clear debt to unlock" : (activeShift ? "Shift: " + activeShift.name : "No active shift");
+  var competitionBadge = !competitionUnlocked ? "<span class=\"strip-card__badge strip-card__badge--locked\">Locked</span>" :
+    (competitionEnabled ? "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>" : "");
+
+  // Identity card
+  var selectedBranch = typeof getSelectedReputationBranch === "function" ? getSelectedReputationBranch(gameState) : null;
+  var reputationConfig = CONFIG.reputation || {};
+  var selectionStartDay = reputationConfig.selectionStartDay || 181;
+  var identityValue = selectedBranch ? selectedBranch.label : (day >= selectionStartDay ? "Choose Identity" : "Locked");
+  var identitySub = selectedBranch ?
+    "OF " + formatMultiplier(selectedBranch.ofSubsMult) + ", Followers " + formatMultiplier(selectedBranch.followersMult) :
+    (day >= selectionStartDay ? "Select your path" : "Unlocks Day " + selectionStartDay);
+  var identityBadge = selectedBranch ? "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>" :
+    (day >= selectionStartDay ? "" : "<span class=\"strip-card__badge strip-card__badge--locked\">Locked</span>");
+
+  // Legacy milestones card
+  var legacyConfig = CONFIG.legacyMilestones || { milestoneOrder: [], milestones: {} };
+  var legacyOrder = legacyConfig.milestoneOrder || [];
+  var completedLegacy = Array.isArray(gameState.legacyMilestones) ? gameState.legacyMilestones.length : 0;
+  var totalLegacy = legacyOrder.length;
+  var legacyValue = completedLegacy + " / " + totalLegacy + " Complete";
+  var nextLegacy = legacyOrder.find(function (id) {
+    return !gameState.legacyMilestones || !gameState.legacyMilestones.find(function (m) { return m.id === id; });
+  });
+  var nextLegacyDef = nextLegacy && legacyConfig.milestones ? legacyConfig.milestones[nextLegacy] : null;
+  var legacySub = nextLegacyDef ? "Next: " + (nextLegacyDef.label || nextLegacy) : "All complete!";
+  var legacyBadge = completedLegacy === totalLegacy ? "<span class=\"strip-card__badge strip-card__badge--active\">Done</span>" : "";
+
+  // Manager card
+  var managerConfig = CONFIG.upgrades && CONFIG.upgrades.manager ? CONFIG.upgrades.manager : null;
+  var managerHired = player.upgrades && player.upgrades.managerHired;
+  var managerUnlocked = managerConfig && (managerConfig.unlockAfterDebt !== true || debt <= 0);
+  var managerValue = managerHired ? "Hired" : (managerUnlocked ? formatCurrency(managerConfig ? managerConfig.cost : 0) : "Locked");
+  var managerSub = managerHired ? "Overhead reduced" : (managerUnlocked ? "Reduces daily overhead" : "Clear debt to unlock");
+  var managerBadge = managerHired ? "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>" :
+    (!managerUnlocked ? "<span class=\"strip-card__badge strip-card__badge--locked\">Locked</span>" : "");
+  var managerButton = !managerHired && managerUnlocked && managerConfig ?
+    "<button class=\"button primary\" data-action=\"hire-manager\" style=\"margin-top:6px;padding:4px 8px;font-size:10px;min-height:auto;\">Hire</button>" : "";
+
+  var cardsStripHtml = "<div class=\"cards-strip\">" +
+    "<div class=\"strip-card\">" +
+      "<div class=\"strip-card__title\">Competition</div>" +
+      "<div class=\"strip-card__value\">" + competitionValue + "</div>" +
+      "<div class=\"strip-card__sub\">" + competitionSub + "</div>" +
+      competitionBadge +
+    "</div>" +
+    "<div class=\"strip-card\">" +
+      "<div class=\"strip-card__title\">Studio Identity</div>" +
+      "<div class=\"strip-card__value\">" + identityValue + "</div>" +
+      "<div class=\"strip-card__sub\">" + identitySub + "</div>" +
+      identityBadge +
+    "</div>" +
+    "<div class=\"strip-card\">" +
+      "<div class=\"strip-card__title\">Legacy Milestones</div>" +
+      "<div class=\"strip-card__value\">" + legacyValue + "</div>" +
+      "<div class=\"strip-card__sub\">" + legacySub + "</div>" +
+      legacyBadge +
+    "</div>" +
+    "<div class=\"strip-card\">" +
+      "<div class=\"strip-card__title\">Manager</div>" +
+      "<div class=\"strip-card__value\">" + managerValue + "</div>" +
+      "<div class=\"strip-card__sub\">" + managerSub + "</div>" +
+      managerBadge +
+      managerButton +
+    "</div>" +
+  "</div>";
+
+  // Footer controls
+  var canPayDebt = debt > 0 && cash >= debt;
+  var autoBookEnabled = gameState.automation && gameState.automation.autoBookEnabled;
+  var autoPostEnabled = gameState.automation && gameState.automation.autoPostEnabled;
+
+  var footerHtml = "<div class=\"hub-footer\">" +
+    "<div class=\"hub-footer__actions\">" +
+      "<button class=\"button vip\" data-action=\"pay-debt\"" + (canPayDebt ? "" : " disabled") + ">👑 Pay Debt (" + formatCurrency(debt) + ")</button>" +
+    "</div>" +
+    "<div class=\"hub-footer__automation\">" +
+      "<span>Automation</span>" +
+      "<div class=\"automation-group\">" +
+        "<button class=\"automation-toggle" + (autoBookEnabled ? " is-on" : "") + "\" data-action=\"toggle-auto-book\" title=\"Auto-Book\"></button>" +
+        "<span>Book</span>" +
+      "</div>" +
+      "<div class=\"automation-group\">" +
+        "<button class=\"automation-toggle" + (autoPostEnabled ? " is-on" : "") + "\" data-action=\"toggle-auto-post\" title=\"Auto-Post\"></button>" +
+        "<span>Post</span>" +
+      "</div>" +
+    "</div>" +
+  "</div>";
+
+  // Debug panel (only if enabled)
+  var debugPanel = "";
+  if (typeof isDebugEnabled === "function" && isDebugEnabled()) {
+    var uiState = getUiState();
+    var debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
+    debugPanel = "<div class=\"panel\" style=\"margin-top:var(--gap-md);\">" +
       "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
       "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-day-input\">Day</label>" +
-      "<input id=\"debug-day-input\" class=\"input-control\" type=\"number\" min=\"" + CONFIG.debug.minDay +
-      "\" max=\"" + CONFIG.debug.maxDay + "\" step=\"1\" value=\"" + gameState.player.day + "\" />" +
+        "<label class=\"field-label\" for=\"debug-day-input\">Day</label>" +
+        "<input id=\"debug-day-input\" class=\"input-control\" type=\"number\" min=\"" + CONFIG.debug.minDay + "\" max=\"" + CONFIG.debug.maxDay + "\" step=\"1\" value=\"" + day + "\" style=\"width:80px;\" />" +
+        "<button class=\"button\" type=\"button\" data-action=\"debug-set-day-reload\" style=\"margin-left:8px;\">Set Day</button>" +
       "</div>" +
-      "<div class=\"button-row\">" +
-      "<button class=\"button\" type=\"button\" data-action=\"debug-set-day-reload\">Set Day + Reload</button>" +
-      "</div>" +
-      "<h4 class=\"panel-title\">Set Stats (Dev Only)</h4>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-cash-input\">Cash</label>" +
-      "<input id=\"debug-cash-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.cash + "\" />" +
+      "<div class=\"field-row\" style=\"margin-top:8px;\">" +
+        "<label class=\"field-label\" for=\"debug-cash-input\">Cash</label>" +
+        "<input id=\"debug-cash-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + cash + "\" style=\"width:100px;\" />" +
       "</div>" +
       "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-reputation-input\">Reputation</label>" +
-      "<input id=\"debug-reputation-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.reputation + "\" />" +
+        "<label class=\"field-label\" for=\"debug-reputation-input\">Rep</label>" +
+        "<input id=\"debug-reputation-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + reputation + "\" style=\"width:80px;\" />" +
       "</div>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-followers-input\">Social Followers</label>" +
-      "<input id=\"debug-followers-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.socialFollowers + "\" />" +
+      "<div class=\"button-row\" style=\"margin-top:8px;\">" +
+        "<button class=\"button\" type=\"button\" data-action=\"debug-apply-stats\">Apply Stats</button>" +
+        "<button class=\"button\" type=\"button\" data-action=\"debug-run-milestone-checks\">Run Milestones</button>" +
       "</div>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-social-subs-input\">Social Subs</label>" +
-      "<input id=\"debug-social-subs-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.socialSubscribers + "\" />" +
-      "</div>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-of-subs-input\">OF Subs</label>" +
-      "<input id=\"debug-of-subs-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" + gameState.player.onlyFansSubscribers + "\" />" +
-      "</div>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"debug-shoots-today-input\">Shoots Today</label>" +
-      "<input id=\"debug-shoots-today-input\" class=\"input-control\" type=\"number\" min=\"0\" step=\"1\" value=\"" +
-      gameState.player.shootsToday + "\" />" +
-      "</div>" +
-      "<div class=\"button-row\">" +
-      "<button class=\"button\" type=\"button\" data-action=\"debug-apply-stats\">Apply Stats (No Reload)</button>" +
-      "</div>" +
-      "<div class=\"button-row\">" +
-      "<button class=\"button\" type=\"button\" data-action=\"debug-run-milestone-checks\">Run Milestone Checks Now</button>" +
-      "</div>" +
-      "<p class=\"helper-text\">Applies immediately and autosaves.</p>" +
-      "<div id=\"debug-day-status\" class=\"muted\">" + debugStatus + "</div>" +
-      "<p class=\"helper-text\">Current day: " + gameState.player.day +
-      ". Debug mode is enabled via ?" + CONFIG.debug.queryParam + "=" + CONFIG.debug.queryValue + ".</p>" +
-      "</div>"
-    : "";
+      "<div id=\"debug-day-status\" class=\"muted\" style=\"margin-top:8px;\">" + debugStatus + "</div>" +
+    "</div>";
+  }
 
-  hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
-    "<div class=\"hub-layout\">" +
-    "<div class=\"hub-column\">" +
-    metricsPanel +
+  // Assemble Hub
+  hub.innerHTML = "<div class=\"hub-dashboard\">" +
+    "<div class=\"hub-dashboard__metrics\">" +
+      "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;\">" +
+        "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
+        heroMetricsHtml +
+        secondaryStatsHtml +
+      "</div>" +
     "</div>" +
-    "<div class=\"hub-column\">" +
-    eventsPanel +
+    "<div class=\"hub-dashboard__feed\">" +
+      "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;overflow:hidden;\">" +
+        feedHtml +
+      "</div>" +
     "</div>" +
-    "</div>" +
-    competitionPanel +
-    reputationPanel +
-    legacyPanel +
-    debtButtonRow +
-    managerPanel +
-    renderStatusMessage() +
-    automationPanel +
-    debugPanel;
+  "</div>" +
+  cardsStripHtml +
+  footerHtml +
+  renderStatusMessage() +
+  debugPanel;
 }
 
 function renderBooking(gameState) {

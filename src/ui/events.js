@@ -228,6 +228,26 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "toggle-auto-book") {
+      ensureAutomationState(window.gameState);
+      window.gameState.automation.autoBookEnabled = !window.gameState.automation.autoBookEnabled;
+      window.gameState.automation.enabled = window.gameState.automation.autoBookEnabled ||
+        window.gameState.automation.autoPostEnabled;
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "toggle-auto-post") {
+      ensureAutomationState(window.gameState);
+      window.gameState.automation.autoPostEnabled = !window.gameState.automation.autoPostEnabled;
+      window.gameState.automation.enabled = window.gameState.automation.autoBookEnabled ||
+        window.gameState.automation.autoPostEnabled;
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "open-meet-recruit") {
       const performerId = target.dataset.id;
       uiState.slideshow = { mode: "recruit", id: performerId, index: 0 };
@@ -987,6 +1007,8 @@ function setupEventHandlers() {
         ? automationConfig.maxActionsPerDay
         : 1;
       window.gameState.automation.autoBookEnabled = Boolean(target.checked);
+      window.gameState.automation.enabled = window.gameState.automation.autoBookEnabled ||
+        window.gameState.automation.autoPostEnabled;
       const message = window.gameState.automation.autoBookEnabled
         ? "Automation enabled: Auto-Book (" + maxActions + "/day)."
         : "Automation disabled: Auto-Book.";
@@ -1006,6 +1028,8 @@ function setupEventHandlers() {
         ? automationConfig.maxActionsPerDay
         : 1;
       window.gameState.automation.autoPostEnabled = Boolean(target.checked);
+      window.gameState.automation.enabled = window.gameState.automation.autoBookEnabled ||
+        window.gameState.automation.autoPostEnabled;
       const message = window.gameState.automation.autoPostEnabled
         ? "Automation enabled: Auto-Post (" + maxActions + "/day)."
         : "Automation disabled: Auto-Post.";
