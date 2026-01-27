@@ -80,7 +80,8 @@ function buildDefaultAutomationState() {
 function buildDefaultRecruitmentState() {
   return {
     declinedIds: [],
-    hiredIds: []
+    hiredIds: [],
+    notifiedIds: []
   };
 }
 
@@ -444,5 +445,8 @@ function ensureRecruitmentState(gameState) {
   }
   if (!Array.isArray(gameState.recruitment.hiredIds)) {
     gameState.recruitment.hiredIds = [];
+  }
+  if (!Array.isArray(gameState.recruitment.notifiedIds)) {
+    gameState.recruitment.notifiedIds = [];
   }
 }

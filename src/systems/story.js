@@ -346,22 +346,16 @@ function getPerformerUnlockContext(eventId) {
   if (!eventId || eventId.indexOf("unlock_performer_") !== 0) {
     return null;
   }
-  const schedule = CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)
-    ? CONFIG.progression.unlockSchedule
-    : [];
-  const unlockEntry = schedule.find(function (entry) {
-    return entry && entry.storyId === eventId && entry.type === "performer" && typeof entry.id === "string";
-  });
-  if (!unlockEntry) {
-    return null;
-  }
-  const performerId = unlockEntry.id;
   const candidates = CONFIG.recruitment && Array.isArray(CONFIG.recruitment.candidates)
     ? CONFIG.recruitment.candidates
     : [];
   const candidate = candidates.find(function (entry) {
-    return entry && entry.performerId === performerId;
+    return entry && entry.storyId === eventId && typeof entry.performerId === "string";
   }) || null;
+  if (!candidate) {
+    return null;
+  }
+  const performerId = candidate.performerId;
   const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
   const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
   const catalog = CONFIG.performers && CONFIG.performers.catalog ? CONFIG.performers.catalog : {};

@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Made performer recruitment purely reputation-driven and added one-time eligibility story notifications.
+  - Why: Remove day-based gating confusion and only notify when recruits are actually available.
+  - Files touched: src/config.js, src/state.js, src/systems/recruitment.js, src/systems/booking.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX clarified performer unlock story messages to reflect reputation-gated recruitment steps and roster location.
   - Why: Prevent unlock toasts from implying immediate booking access when reputation gating still applies.
   - Files touched: src/systems/story.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.

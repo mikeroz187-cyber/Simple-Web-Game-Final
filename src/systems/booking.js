@@ -25,10 +25,14 @@ function advanceDay(gameState) {
     ? applyScheduledUnlocks(gameState)
     : { events: [] };
   const storyResult = checkStoryEvents(gameState);
+  const recruitResult = typeof getNewRecruitNotificationEvents === "function"
+    ? getNewRecruitNotificationEvents(gameState)
+    : [];
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
+  const recruitEvents = Array.isArray(recruitResult) ? recruitResult : [];
   return {
-    storyEvents: unlockEvents.concat(storyEvents),
+    storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents),
     cashflow: {
       subs: subs,
       payout: dailyPayout,
