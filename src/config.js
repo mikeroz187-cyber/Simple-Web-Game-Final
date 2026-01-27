@@ -432,6 +432,7 @@ const CONFIG = {
     candidates: [
       {
         performerId: "recruit_bryn_sterling",
+        storyId: "unlock_performer_bryn_sterling",
         repRequired: 5,
         hireCost: 900,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -439,6 +440,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_aria_lux",
+        storyId: "unlock_performer_aria_lux",
         repRequired: 10,
         hireCost: 1400,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -446,6 +448,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_dahlia_slate",
+        storyId: "unlock_performer_dahlia_slate",
         repRequired: 15,
         hireCost: 1800,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -453,6 +456,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_eden_frost",
+        storyId: "unlock_performer_eden_frost",
         repRequired: 20,
         hireCost: 2200,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -460,6 +464,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_fern_kestrel",
+        storyId: "unlock_performer_fern_kestrel",
         repRequired: 25,
         hireCost: 2700,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -467,6 +472,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_celeste_noir",
+        storyId: "unlock_performer_celeste_noir",
         repRequired: 30,
         hireCost: 3400,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -474,6 +480,7 @@ const CONFIG = {
       },
       {
         performerId: "recruit_gigi_blade",
+        storyId: "unlock_performer_gigi_blade",
         repRequired: 35,
         hireCost: 4200,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
@@ -576,14 +583,7 @@ const CONFIG = {
     unlockSchedule: [
       { day: 4, type: "equipment", id: "lighting", storyId: "unlock_equipment_lighting" },
       { day: 7, type: "location", id: "shower", storyId: "unlock_location_shower" },
-      { day: 12, type: "performer", id: "recruit_aria_lux", storyId: "unlock_performer_aria_lux" },
       { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" },
-      { day: 45, type: "performer", id: "recruit_bryn_sterling", storyId: "unlock_performer_bryn_sterling" },
-      { day: 60, type: "performer", id: "recruit_dahlia_slate", storyId: "unlock_performer_dahlia_slate" },
-      { day: 75, type: "performer", id: "recruit_eden_frost", storyId: "unlock_performer_eden_frost" },
-      { day: 90, type: "performer", id: "recruit_fern_kestrel", storyId: "unlock_performer_fern_kestrel" },
-      { day: 120, type: "performer", id: "recruit_celeste_noir", storyId: "unlock_performer_celeste_noir" },
-      { day: 150, type: "performer", id: "recruit_gigi_blade", storyId: "unlock_performer_gigi_blade" },
       { day: 180, type: "equipment", id: "set_dressing", storyId: "unlock_equipment_set_dressing" }
     ]
   },

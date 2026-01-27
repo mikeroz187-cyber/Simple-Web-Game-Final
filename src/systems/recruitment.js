@@ -56,10 +56,6 @@ function getAvailableRecruitCandidates(gameState) {
     if (isPerformerInRoster(gameState, candidate.performerId)) {
       return false;
     }
-    if (typeof isScheduledUnlockAvailable === "function" &&
-      !isScheduledUnlockAvailable(gameState, "performer", candidate.performerId)) {
-      return false;
-    }
     const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
     return currentRep >= repRequired;
   }).sort(function (a, b) {
@@ -77,6 +73,52 @@ function getActiveRecruitCandidate(gameState) {
     return null;
   }
   return available[0];
+}
+
+function getNewRecruitNotificationEvents(gameState) {
+  if (!gameState || !gameState.player) {
+    return [];
+  }
+  ensureRecruitmentState(gameState);
+  const rosterSize = getContractedRosterCount(gameState);
+  const maxRosterSize = getRecruitmentMaxRosterSize();
+  if (maxRosterSize > 0 && rosterSize >= maxRosterSize) {
+    return [];
+  }
+  const config = getRecruitmentConfig();
+  const candidates = Array.isArray(config.candidates) ? config.candidates : [];
+  const declined = new Set(gameState.recruitment.declinedIds || []);
+  const hired = new Set(gameState.recruitment.hiredIds || []);
+  const notified = new Set(gameState.recruitment.notifiedIds || []);
+  const currentRep = Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0;
+  const events = [];
+
+  candidates.forEach(function (candidate) {
+    if (!candidate || typeof candidate.performerId !== "string") {
+      return;
+    }
+    if (declined.has(candidate.performerId) || hired.has(candidate.performerId)) {
+      return;
+    }
+    if (isPerformerInRoster(gameState, candidate.performerId)) {
+      return;
+    }
+    const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
+    if (currentRep < repRequired) {
+      return;
+    }
+    if (notified.has(candidate.performerId)) {
+      return;
+    }
+    gameState.recruitment.notifiedIds.push(candidate.performerId);
+    notified.add(candidate.performerId);
+    events.push({
+      id: candidate.storyId || "recruit_available_" + candidate.performerId,
+      day: gameState.player.day
+    });
+  });
+
+  return events;
 }
 
 function buildRecruitRosterEntry(performerId) {

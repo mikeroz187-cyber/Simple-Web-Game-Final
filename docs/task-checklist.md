@@ -71,6 +71,7 @@
 - [x] Balance Pass v1: increased debt to 25,000 and retuned overhead tiers for post-payout economy.
 - [x] Balance Pass v2: Promo reach +15% and Premium base subs -10% to support early marketing-heavy pacing.
 - [x] Performer unlock toasts are rep-aware and point players to Roster → Recruitment.
+- [x] Recruitable performers unlock purely by Reputation thresholds; one-time “new recruit” toast fires only when eligible.
 
 ---
 
