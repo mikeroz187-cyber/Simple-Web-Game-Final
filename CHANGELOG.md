@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Extended the late-game unlock schedule with the remaining recruit performers and the set dressing equipment upgrade, plus matching unlock story copy.
+  - Why: Pace meaningful unlocks later in the run using existing content IDs without duplicating entries or adding story-only unlocks.
+  - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added content-type shoot cost multipliers so Premium bookings cost more and booking UI shows the adjusted total.
   - Why: Provide a simple, config-driven balance lever and ensure the displayed cost matches cash deductions.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

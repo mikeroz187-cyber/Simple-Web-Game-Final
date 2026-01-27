@@ -73,6 +73,7 @@
 - [x] Per-performer daily caps (max 3) + agency pack once per day.
 - [x] Shared slideshow viewer for recruit meets and shoot photos.
 - [x] Booking result slideshow (5 images) for Promo/Premium shoots.
+- [x] Late-game unlock cadence extended using only remaining meaningful unlocks (limited by available content; no duplicates; no story-only unlocks).
 
 ---
 

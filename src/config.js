@@ -561,7 +561,14 @@ const CONFIG = {
       { day: 4, type: "equipment", id: "lighting", storyId: "unlock_equipment_lighting" },
       { day: 7, type: "location", id: "shower", storyId: "unlock_location_shower" },
       { day: 12, type: "performer", id: "recruit_aria_lux", storyId: "unlock_performer_aria_lux" },
-      { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" }
+      { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" },
+      { day: 45, type: "performer", id: "recruit_bryn_sterling", storyId: "unlock_performer_bryn_sterling" },
+      { day: 60, type: "performer", id: "recruit_dahlia_slate", storyId: "unlock_performer_dahlia_slate" },
+      { day: 75, type: "performer", id: "recruit_eden_frost", storyId: "unlock_performer_eden_frost" },
+      { day: 90, type: "performer", id: "recruit_fern_kestrel", storyId: "unlock_performer_fern_kestrel" },
+      { day: 120, type: "performer", id: "recruit_celeste_noir", storyId: "unlock_performer_celeste_noir" },
+      { day: 150, type: "performer", id: "recruit_gigi_blade", storyId: "unlock_performer_gigi_blade" },
+      { day: 180, type: "equipment", id: "set_dressing", storyId: "unlock_equipment_set_dressing" }
     ]
   },
   milestones: {
