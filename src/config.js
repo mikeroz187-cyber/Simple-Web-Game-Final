@@ -713,6 +713,16 @@ const CONFIG = {
       }
     }
   },
+  upgrades: {
+    manager: {
+      enabled: true,
+      unlockAfterDebt: true,
+      cost: 12000,
+      overheadReductionMult: 0.85,
+      title: "Hire Manager",
+      description: "Cuts daily overhead by 15%. One-time purchase."
+    }
+  },
   equipment: {
     upgradeOrder: ["lighting", "camera", "set_dressing"],
     upgrades: {

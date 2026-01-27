@@ -450,6 +450,50 @@ function renderHub(gameState) {
 
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
+  const managerConfig = CONFIG.upgrades && CONFIG.upgrades.manager
+    ? CONFIG.upgrades.manager
+    : null;
+  let managerPanel = "";
+  if (managerConfig && managerConfig.enabled) {
+    const upgrades = gameState.player.upgrades && typeof gameState.player.upgrades === "object"
+      ? gameState.player.upgrades
+      : { managerHired: false };
+    const managerHired = Boolean(upgrades.managerHired);
+    const debtRemaining = Number.isFinite(gameState.player.debtRemaining) ? gameState.player.debtRemaining : 0;
+    const managerTitle = managerConfig.title || "Hire Manager";
+    const managerDescription = managerConfig.description || "";
+    const managerCost = Number.isFinite(managerConfig.cost) ? managerConfig.cost : 0;
+    const reductionMult = Number.isFinite(managerConfig.overheadReductionMult)
+      ? managerConfig.overheadReductionMult
+      : 1;
+    const reductionPct = Math.max(0, Math.round((1 - reductionMult) * 100));
+    if (managerHired) {
+      const hiredLine = reductionPct > 0
+        ? "Manager: HIRED (Overhead -" + reductionPct + "%)"
+        : "Manager: HIRED";
+      managerPanel = "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
+        "<p><strong>" + hiredLine + "</strong></p>" +
+        "</div>";
+    } else if (managerConfig.unlockAfterDebt === true && debtRemaining > 0) {
+      const buttonLabel = managerTitle + " (" + formatCurrency(managerCost) + ")";
+      const descriptionLine = managerDescription ? "<p class=\"helper-text\">" + managerDescription + "</p>" : "";
+      managerPanel = "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
+        descriptionLine +
+        "<p class=\"helper-text\">Locked until debt is cleared.</p>" +
+        "<div class=\"button-row\">" + createButton(buttonLabel, "hire-manager", "primary", true) + "</div>" +
+        "</div>";
+    } else {
+      const buttonLabel = managerTitle + " (" + formatCurrency(managerCost) + ")";
+      const descriptionLine = managerDescription ? "<p class=\"helper-text\">" + managerDescription + "</p>" : "";
+      managerPanel = "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">" + managerTitle + "</h3>" +
+        descriptionLine +
+        "<div class=\"button-row\">" + createButton(buttonLabel, "hire-manager", "primary") + "</div>" +
+        "</div>";
+    }
+  }
   const debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
   const debugPanel = isDebugEnabled()
     ? "<div class=\"panel\">" +
@@ -507,6 +551,7 @@ function renderHub(gameState) {
     reputationPanel +
     legacyPanel +
     debtButtonRow +
+    managerPanel +
     "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +
     automationPanel +

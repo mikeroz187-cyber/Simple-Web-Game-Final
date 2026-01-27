@@ -84,6 +84,12 @@ function buildDefaultRecruitmentState() {
   };
 }
 
+function buildDefaultPlayerUpgradesState() {
+  return {
+    managerHired: false
+  };
+}
+
 function getRandomFreelancerProfileId(avoidId) {
   const profileIds = getFreelancerProfileIds();
   if (profileIds.length === 0) {
@@ -139,6 +145,7 @@ function newGameState() {
       debtDueDay: CONFIG.game.debt_due_day,
       shootsToday: 0,
       agencyPackUsedToday: false,
+      upgrades: buildDefaultPlayerUpgradesState(),
       socialFollowers: 0,
       socialSubscribers: 0,
       onlyFansSubscribers: 0,
@@ -265,6 +272,19 @@ function buildDefaultManualStrategyState() {
     allocations: getDefaultManualStrategyAllocations(),
     lastAppliedDay: null
   };
+}
+
+function ensurePlayerUpgradesState(gameState) {
+  if (!gameState || !gameState.player) {
+    return;
+  }
+  if (!gameState.player.upgrades || typeof gameState.player.upgrades !== "object" || Array.isArray(gameState.player.upgrades)) {
+    gameState.player.upgrades = buildDefaultPlayerUpgradesState();
+    return;
+  }
+  if (typeof gameState.player.upgrades.managerHired !== "boolean") {
+    gameState.player.upgrades.managerHired = false;
+  }
 }
 
 function ensureShootOutputsState(gameState) {

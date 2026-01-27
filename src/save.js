@@ -446,6 +446,19 @@ function ensureLegacyMilestonesState(candidate) {
   }
 }
 
+function ensurePlayerUpgradesState(candidate) {
+  if (!candidate || !candidate.player) {
+    return;
+  }
+  if (!candidate.player.upgrades || typeof candidate.player.upgrades !== "object" || Array.isArray(candidate.player.upgrades)) {
+    candidate.player.upgrades = { managerHired: false };
+    return;
+  }
+  if (typeof candidate.player.upgrades.managerHired !== "boolean") {
+    candidate.player.upgrades.managerHired = false;
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -548,6 +561,7 @@ function migrateGameState(candidate) {
   ensureReputationState(candidate);
   ensureRecruitmentState(candidate);
   ensureLegacyMilestonesState(candidate);
+  ensurePlayerUpgradesState(candidate);
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -638,6 +652,13 @@ function validateGameState(candidate) {
 
   if (typeof player.agencyPackUsedToday !== "boolean") {
     return { ok: false, message: "Player agency pack usage invalid." };
+  }
+
+  if (!player.upgrades || typeof player.upgrades !== "object" || Array.isArray(player.upgrades)) {
+    player.upgrades = { managerHired: false };
+  }
+  if (typeof player.upgrades.managerHired !== "boolean") {
+    player.upgrades.managerHired = false;
   }
 
   const roster = candidate.roster;

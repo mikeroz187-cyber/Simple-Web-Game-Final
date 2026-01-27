@@ -125,12 +125,32 @@ function getDailyOverhead(gameState) {
       selectedTier = tier;
     }
   });
-  const amount = selectedTier && Number.isFinite(selectedTier.dailyOverhead)
+  let amount = selectedTier && Number.isFinite(selectedTier.dailyOverhead)
     ? selectedTier.dailyOverhead
     : 0;
-  const label = selectedTier && typeof selectedTier.label === "string"
+  let label = selectedTier && typeof selectedTier.label === "string"
     ? selectedTier.label
     : null;
+  const upgradesConfig = CONFIG.upgrades && CONFIG.upgrades.manager
+    ? CONFIG.upgrades.manager
+    : null;
+  const managerHired = Boolean(
+    gameState &&
+    gameState.player &&
+    gameState.player.upgrades &&
+    gameState.player.upgrades.managerHired
+  );
+  if (upgradesConfig && upgradesConfig.enabled && managerHired) {
+    const reductionMult = Number.isFinite(upgradesConfig.overheadReductionMult)
+      ? upgradesConfig.overheadReductionMult
+      : 1;
+    amount = Math.round(amount * reductionMult);
+    if (!label) {
+      label = "Manager";
+    } else {
+      label = label + " + Manager";
+    }
+  }
   return { amount: Math.max(0, Math.round(amount)), label: label };
 }
 
@@ -151,6 +171,34 @@ function getDaysToAffordDebtEstimate(gameState) {
     return { days: null, dailyNet: dailyNet };
   }
   return { days: Math.ceil(amountNeeded / dailyNet), dailyNet: dailyNet };
+}
+
+function hireManager(gameState) {
+  const managerConfig = CONFIG.upgrades && CONFIG.upgrades.manager
+    ? CONFIG.upgrades.manager
+    : null;
+  if (!managerConfig || managerConfig.enabled !== true) {
+    return { ok: false, message: "Manager upgrade not available." };
+  }
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "Game state missing." };
+  }
+  if (!gameState.player.upgrades || typeof gameState.player.upgrades !== "object") {
+    gameState.player.upgrades = { managerHired: false };
+  }
+  if (managerConfig.unlockAfterDebt === true && gameState.player.debtRemaining > 0) {
+    return { ok: false, message: "Locked until debt is cleared." };
+  }
+  if (gameState.player.upgrades.managerHired) {
+    return { ok: false, message: "Manager already hired." };
+  }
+  const cost = Number.isFinite(managerConfig.cost) ? managerConfig.cost : 0;
+  if (gameState.player.cash < cost) {
+    return { ok: false, message: "Not enough cash." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+  gameState.player.upgrades.managerHired = true;
+  return { ok: true, message: "Manager hired. Daily overhead reduced." };
 }
 
 function getNetWorth(gameState) {

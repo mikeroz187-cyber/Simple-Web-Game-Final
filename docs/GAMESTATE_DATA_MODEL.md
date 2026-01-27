@@ -28,6 +28,7 @@ This document summarizes the **current** `gameState` structure as implemented in
 ### `player`
 - `day`, `cash`, `debtRemaining`, `debtDueDay`
 - `shootsToday`, `agencyPackUsedToday`
+- `upgrades` (player upgrade flags like `managerHired`)
 - `socialFollowers`, `socialSubscribers`
 - `onlyFansSubscribers`, `onlyFansSubCarry`
 - `reputation`
