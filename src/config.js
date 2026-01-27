@@ -192,6 +192,7 @@ const CONFIG = {
     },
     saturation: {
       enabledAfterDebt: true,
+      unlockMessageId: "act2_saturation_activated",
       defaultMult: 1,
       tiers: [
         { min: 0, max: 99, mult: 1, label: "0–99 subs tier" },

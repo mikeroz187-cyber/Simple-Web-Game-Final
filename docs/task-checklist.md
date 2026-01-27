@@ -77,6 +77,7 @@
 - [x] Competition Hub panel messaging matches debt-gated unlock (no misleading start day).
 - [x] Competition config is single-source (CONFIG.market.competition); legacy CONFIG.competition removed.
 - [x] Tier 1 unlock cost has a single source of truth (CONFIG.locations.tier1UnlockCost); legacy duplicate removed.
+- [x] Orphan/missing story events cleaned up: no dead STORY_EVENT_COPY keys; no config references to missing story IDs.
 
 ---
 

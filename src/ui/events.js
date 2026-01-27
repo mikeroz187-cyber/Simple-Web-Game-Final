@@ -832,7 +832,13 @@ function setupEventHandlers() {
       if (result.ok) {
         const storyEvents = [];
         if (result.saturationActivated) {
-          storyEvents.push({ id: "act2_saturation_activated", day: window.gameState.player.day });
+          const saturationConfig = CONFIG.market && CONFIG.market.saturation
+            ? CONFIG.market.saturation
+            : {};
+          const saturationMessageId = typeof saturationConfig.unlockMessageId === "string"
+            ? saturationConfig.unlockMessageId
+            : "act2_saturation_activated";
+          storyEvents.push({ id: saturationMessageId, day: window.gameState.player.day });
         }
         if (result.competitionUnlocked) {
           const competitionConfig = CONFIG.market && CONFIG.market.competition
