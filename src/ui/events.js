@@ -784,6 +784,7 @@ function setupEventHandlers() {
         ensureSocialManualStrategyState(window.gameState);
         ensureReputationState(window.gameState);
         ensureRecruitmentState(window.gameState);
+        ensurePlayerUpgradesState(window.gameState);
         initCompetitionStateIfMissing(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {
@@ -818,6 +819,7 @@ function setupEventHandlers() {
           ensureSocialManualStrategyState(window.gameState);
           ensureReputationState(window.gameState);
           ensureRecruitmentState(window.gameState);
+          ensurePlayerUpgradesState(window.gameState);
           const storyResult = checkStoryEvents(window.gameState);
           if (storyResult.ok && storyResult.events.length) {
             appendStoryLogEntries(window.gameState, storyResult.events);
@@ -859,6 +861,19 @@ function setupEventHandlers() {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "hire-manager") {
+      const result = hireManager(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
         }
       }
       renderApp(window.gameState);

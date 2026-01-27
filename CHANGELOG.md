@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the post-debt Hire Manager upgrade in the Hub that permanently reduces daily overhead.
+  - Why: Provide a simple, config-driven money sink after debt is cleared while easing late-game overhead.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/economy.js, src/ui/render.js, src/ui/events.js, src/main.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/CORE_GAMEPLAY_LOOP.md, docs/GAMESTATE_DATA_MODEL.md, CHANGELOG.md.
 - What: Added a Hub/Analytics estimate for days to afford debt based on daily net cashflow.
   - Why: Clarify payoff timing using the existing daily OF payout and overhead values.
   - Files touched: src/systems/economy.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
