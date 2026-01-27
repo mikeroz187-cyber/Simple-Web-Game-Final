@@ -82,10 +82,10 @@ debt_due_day = 90
 # Placeholder values: replace if MVP docs specify exact numbers.
 
 # Followers gained from a Promo shoot.
-promo_followers_gain = 100 # Placeholder
+promo_followers_gain = 115 # Placeholder
 
 # Base OF subscribers gained from a Premium shoot (before multipliers).
-premium_base_of_subs = 25 # Placeholder
+premium_base_of_subs = 23 # Placeholder
 
 # Fixed conversion rate from followers to subscribers.
 subscriber_conversion_rate = 0.01 # Placeholder (1%)

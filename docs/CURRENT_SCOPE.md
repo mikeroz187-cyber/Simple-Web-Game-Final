@@ -14,6 +14,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Post-debt Market Saturation tiers for Premium OF subs with Act 2 activation messaging.
 - Daily OF cash payouts on day advance plus tiered overhead scaling.
 - Balance Pass v1 retuning debt to $25,000 and overhead tiers for post-payout economy pacing.
+- Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 
 ## Currently Working On
 - Documentation reconciliation so every doc matches the current implementation.

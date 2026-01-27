@@ -105,8 +105,8 @@ const CONFIG = {
     shoots_per_day: 5
   },
   economy: {
-    promo_followers_gain: 100,
-    premium_base_of_subs: 25,
+    promo_followers_gain: 115,
+    premium_base_of_subs: 23,
     subscriber_conversion_rate: 0.01,
     base_shoot_cost: 100,
     contentTypeCostMult: {

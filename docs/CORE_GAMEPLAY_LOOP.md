@@ -13,6 +13,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Promo vs Premium:**
   - **Promo** content generates results only when posted on Social.
   - **Premium** content immediately adds OnlyFans subscribers and increases MRR.
+- **Pacing guideline:** Early days (≈1–30) favor Promo-heavy output (roughly 2 Promo / 1 Premium) to build footprint; mid/late days should gradually lean Premium-heavy as scaling kicks in.
 - **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
 - **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance, starting at $0 and ramping through $8 (50 subs), $20 (100), $60 (200), $100 (350), $150 (500), $210 (750), and $270 (1,000).
 - **Reputation:** Increases from milestone rewards (followers, OF subs, MRR thresholds). It gates Tier 2 location unlocks, recruitment candidates, and studio identity selection.
