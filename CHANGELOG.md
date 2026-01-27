@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Refreshed competition and performer unlock messaging to match debt-gated unlocks and reputation-driven recruitment, plus updated checklist notes.
+  - Why: Remove legacy day-based unlock confusion and keep UI/story copy aligned with current systems.
+  - Files touched: src/ui/render.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Restricted scheduled unlocks to equipment/location, with save-load cleanup for legacy unlock IDs and freelancer remnants when Agency Packs are enabled.
   - Why: Prevent unsupported unlock types and retired freelancer data from reappearing in progression or saves.
   - Files touched: src/systems/progression.js, src/save.js, docs/task-checklist.md, CHANGELOG.md.

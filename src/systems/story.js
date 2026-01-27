@@ -208,7 +208,7 @@ const STORY_EVENT_COPY = {
   },
   unlock_performer_aria_lux: {
     title: "Unlocked!",
-    message: "New performer available: Aria Lux."
+    message: "New talent lead: Aria Lux. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_equipment_camera: {
     title: "Unlocked!",
@@ -216,27 +216,27 @@ const STORY_EVENT_COPY = {
   },
   unlock_performer_bryn_sterling: {
     title: "Unlocked!",
-    message: "New performer available: Bryn Sterling."
+    message: "New talent lead: Bryn Sterling. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_dahlia_slate: {
     title: "Unlocked!",
-    message: "New performer available: Dahlia Slate."
+    message: "New talent lead: Dahlia Slate. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_eden_frost: {
     title: "Unlocked!",
-    message: "New performer available: Eden Frost."
+    message: "New talent lead: Eden Frost. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_fern_kestrel: {
     title: "Unlocked!",
-    message: "New performer available: Fern Kestrel."
+    message: "New talent lead: Fern Kestrel. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_celeste_noir: {
     title: "Unlocked!",
-    message: "New performer available: Celeste Noir."
+    message: "New talent lead: Celeste Noir. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_gigi_blade: {
     title: "Unlocked!",
-    message: "New performer available: Gigi Blade."
+    message: "New talent lead: Gigi Blade. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_equipment_set_dressing: {
     title: "Unlocked!",
@@ -424,7 +424,7 @@ function resolvePerformerUnlockCopy(eventId, gameState) {
     ? resolvedState.player.reputation
     : 0;
   const costText = "Hire cost: " + formatCurrency(hireCost) + ".";
-  const callToAction = "Go to Roster → Recruitment.";
+  const callToAction = "New talent becomes available as your Reputation grows. Check Roster → Recruitment.";
   const message = currentRep < repRequired
     ? "New talent lead: " + performerName + ". Requires Reputation ≥ " + repRequired + " to recruit. " + costText + " " + callToAction
     : performerName + " is ready to recruit now. " + costText + " " + callToAction;
