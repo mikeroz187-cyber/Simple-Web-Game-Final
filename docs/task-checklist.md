@@ -73,6 +73,7 @@
 - [x] Balance Pass v2: Promo reach +15% and Premium base subs -10% to support early marketing-heavy pacing.
 - [x] Performer unlock toasts are rep-aware and point players to Roster → Recruitment.
 - [x] Recruitable performers unlock purely by Reputation thresholds; one-time “new recruit” toast fires only when eligible.
+- [x] Freelance performers removed from roster state/UI; Agency Sample Packs are the only “non-core” booking variation.
 
 ---
 

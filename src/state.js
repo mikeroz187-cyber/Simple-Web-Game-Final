@@ -109,9 +109,7 @@ function getRandomFreelancerProfileId(avoidId) {
 
 function newGameState() {
   const now = new Date().toISOString();
-  const rosterIds = CONFIG.performers.core_ids
-    .concat(CONFIG.performers.freelance_ids)
-    .concat(CONFIG.performers.act2_ids || []);
+  const rosterIds = CONFIG.performers.core_ids.slice();
   const performerManagement = { contracts: {}, availability: {}, retentionFlags: {} };
   const freelancerProfiles = {};
 
@@ -127,12 +125,6 @@ function newGameState() {
     };
     performerManagement.availability[performerId] = { restDaysRemaining: 0, consecutiveBookings: 0 };
     performerManagement.retentionFlags[performerId] = { warned: false, left: false };
-    if (performer.type === "freelance") {
-      const profileId = getRandomFreelancerProfileId();
-      if (profileId) {
-        freelancerProfiles[performerId] = profileId;
-      }
-    }
   });
 
   return {

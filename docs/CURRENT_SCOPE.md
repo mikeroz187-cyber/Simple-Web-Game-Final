@@ -26,6 +26,6 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.
 - Tune economy values in `src/config.js` (MRR pacing, costs, conversions).
 - Expand theme catalog once art + balance targets are defined.
-- Surface freelancer personas more explicitly in the Roster UI.
+- Surface Agency Sample Pack flavor text more explicitly in Booking UI copy.
 - Add QA notes for save migration edge cases and debug workflows.
 - Review automation balance (auto-book vs auto-post priority) for late-game pacing.
