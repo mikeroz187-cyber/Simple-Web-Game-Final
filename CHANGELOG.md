@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Restricted scheduled unlocks to equipment/location, with save-load cleanup for legacy unlock IDs and freelancer remnants when Agency Packs are enabled.
+  - Why: Prevent unsupported unlock types and retired freelancer data from reappearing in progression or saves.
+  - Files touched: src/systems/progression.js, src/save.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Routed recruit eligibility toasts through rep-only checks and recruitment candidates instead of day schedule entries.
   - Why: Ensure performer leads only fire when reputation eligibility is met and avoid schedule-based unlock noise.
   - Files touched: src/systems/recruitment.js, src/systems/booking.js, src/systems/story.js, CHANGELOG.md.

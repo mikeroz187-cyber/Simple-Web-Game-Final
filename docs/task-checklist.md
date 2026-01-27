@@ -78,6 +78,9 @@
 - [x] Competition config is single-source (CONFIG.market.competition); legacy CONFIG.competition removed.
 - [x] Tier 1 unlock cost has a single source of truth (CONFIG.locations.tier1UnlockCost); legacy duplicate removed.
 - [x] Orphan/missing story events cleaned up: no dead STORY_EVENT_COPY keys; no config references to missing story IDs.
+- [x] Scheduled unlocks enforce equipment/location only (unsupported types ignored; no story events).
+- [x] Save/load prunes legacy scheduled unlock IDs; removes freelancer remnants when Agency Packs enabled.
+- [x] Save-load no longer re-injects freelance performers into roster.
 
 ---
 
