@@ -479,229 +479,171 @@ function renderHub(gameState) {
 }
 
 function renderBooking(gameState) {
-  const screen = qs("#screen-booking");
-  const uiState = getUiState();
-  const bookingMode = uiState.booking.bookingMode || "core";
-  const agencyPackUsedToday = Boolean(gameState.player.agencyPackUsedToday);
-  const isAgencyPack = bookingMode === "agency_pack";
-  const allPerformers = gameState.roster.performers;
-  const performers = allPerformers.filter(function (performer) {
-    return performer.type === "core";
-  });
-  const hasPerformers = performers.length > 0;
-  const portraitSize = getPerformerPortraitSizePx();
-  const portraitRadius = getPerformerPortraitRadiusPx();
-  const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const locationThumbSize = getLocationThumbnailSizePx();
-  const locationThumbRadius = getLocationThumbnailRadiusPx();
-  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
+  var screen = qs("#screen-booking");
+  if (!screen) return;
 
-  const tier2Ids = Array.isArray(CONFIG.locations.tier2_ids) ? CONFIG.locations.tier2_ids : [];
-  const locationIds = CONFIG.locations.tier0_ids
-    .concat(CONFIG.locations.tier1_ids)
-    .concat(tier2Ids);
-  if (uiState.booking.locationId && locationIds.indexOf(uiState.booking.locationId) === -1) {
-    uiState.booking.locationId = locationIds.length ? locationIds[0] : null;
+  var uiState = getUiState();
+  var bookingMode = uiState.booking.bookingMode || "core";
+  var agencyPackUsedToday = Boolean(gameState.player.agencyPackUsedToday);
+  var isAgencyPack = bookingMode === "agency_pack";
+
+  // Get performers
+  var allPerformers = gameState.roster.performers || [];
+  var corePerformers = allPerformers.filter(function(p) { return p.type === "core"; });
+  var selectedPerformerId = uiState.booking.performerIdA;
+  var selectedPerformer = selectedPerformerId ? corePerformers.find(function(p) { return p.id === selectedPerformerId; }) : null;
+
+  // Get locations
+  var locationIds = (CONFIG.locations.tier0_ids || [])
+    .concat(CONFIG.locations.tier1_ids || [])
+    .concat(CONFIG.locations.tier2_ids || []);
+  var selectedLocationId = uiState.booking.locationId;
+  var selectedLocation = selectedLocationId ? CONFIG.locations.catalog[selectedLocationId] : null;
+
+  // Get themes
+  var themeIds = CONFIG.themes.mvp.theme_ids || [];
+  var selectedThemeId = uiState.booking.themeId;
+  var selectedTheme = selectedThemeId ? getThemeById(selectedThemeId) : null;
+
+  // Content type
+  var selectedContentType = uiState.booking.contentType;
+
+  // Calculate cost
+  var shootCostResult = isAgencyPack ? calculateAgencyPackCost(selectedLocation) : calculateShootCost(selectedLocation);
+  var baseCost = shootCostResult.ok ? shootCostResult.value : 0;
+  var adjustedCost = applyContentTypeCostMultiplier(baseCost, selectedContentType);
+  var finalCost = adjustedCost.finalCost;
+
+  // Booking mode cards
+  var modeCardsHtml = '<div class="selection-grid selection-grid--2col">' +
+    '<div class="selection-card' + (bookingMode === 'core' ? ' is-selected' : '') + '" data-action="select-booking-mode" data-id="core">' +
+      '<div class="selection-card__title">Core Performer</div>' +
+      '<div class="selection-card__subtitle">Book your contracted talent</div>' +
+      '<div class="selection-card__meta">Full premium potential</div>' +
+    '</div>' +
+    '<div class="selection-card' + (bookingMode === 'agency_pack' ? ' is-selected' : '') + (agencyPackUsedToday ? ' is-disabled' : '') + '" data-action="select-booking-mode" data-id="agency_pack">' +
+      (agencyPackUsedToday ? '<span class="selection-card__badge">Used Today</span>' : '') +
+      '<div class="selection-card__title">Agency Sample Pack</div>' +
+      '<div class="selection-card__subtitle">5-image variety bundle</div>' +
+      '<div class="selection-card__meta">Good for promos</div>' +
+    '</div>' +
+  '</div>';
+
+  // Performer selection (only for core mode)
+  var performerHtml = '';
+  if (!isAgencyPack) {
+    var performerCardsHtml = corePerformers.map(function(p) {
+      var isSelected = p.id === selectedPerformerId;
+      var status = isPerformerBookable(gameState, p);
+      var statusClass = status.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
+      var statusText = status.ok ? 'Available' : status.reason;
+      var portraitPath = getPerformerPortraitPath(p);
+      return '<div class="performer-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-performer-a" data-id="' + p.id + '" style="cursor:pointer;">' +
+        '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
+        '<div class="performer-card__info">' +
+          '<div class="performer-card__name">' + p.name + '</div>' +
+          '<div class="performer-card__stats">' +
+            '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + p.starPower + '</span></span>' +
+            '<span class="performer-card__stat">😓 <span class="performer-card__stat-value">' + p.fatigue + '</span></span>' +
+            '<span class="performer-card__stat">❤️ <span class="performer-card__stat-value">' + p.loyalty + '</span></span>' +
+          '</div>' +
+          '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    performerHtml = '<div class="panel"><h3 class="panel-title">Select Performer</h3>' + performerCardsHtml + '</div>';
+  } else {
+    performerHtml = '<div class="panel"><h3 class="panel-title">Agency Pack</h3>' +
+      '<p style="color:var(--text-muted);font-size:13px;">Agency provides a 5-image sample pack matched to your selected theme and location.</p></div>';
   }
 
-  const bookingModeOptions = [
-    {
-      id: "core",
-      label: "Core Performer",
-      description: "Book your core roster with full premium upside."
-    },
-    {
-      id: "agency_pack",
-      label: "Agency Sample Pack",
-      description: "Source a five-image pack matched to the chosen theme and location."
-    }
-  ];
-  const bookingModeRows = bookingModeOptions.map(function (option) {
-    const isSelected = option.id === bookingMode;
-    const isAgencyOption = option.id === "agency_pack";
-    const isDisabled = isAgencyOption && agencyPackUsedToday;
-    const lockNote = isDisabled ? " Used today — available tomorrow." : "";
-    return "<div class=\"list-item\">" +
-      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-booking-mode\" data-id=\"" +
-      option.id + "\"" + (isDisabled ? " disabled" : "") + ">" +
-      option.label + "</button>" +
-      "<p class=\"helper-text\">" + option.description + lockNote + "</p>" +
-      "</div>";
-  }).join("");
+  // Location selection
+  var locationCardsHtml = locationIds.map(function(locId) {
+    var loc = CONFIG.locations.catalog[locId];
+    if (!loc) return '';
+    var isSelected = locId === selectedLocationId;
+    var tier1Locked = loc.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
+    var tier2Locked = loc.tier === 2 && !isLocationTierUnlocked(gameState, "tier2");
+    var tier2RepReq = CONFIG.locations.tier2ReputationRequirement || 0;
+    var tier2RepLocked = loc.tier === 2 && gameState.player.reputation < tier2RepReq;
+    var isLocked = tier1Locked || tier2Locked || tier2RepLocked;
+    var lockReason = tier1Locked || tier2Locked ? 'Locked' : (tier2RepLocked ? 'Rep ' + tier2RepReq + ' required' : '');
+    var thumbPath = getLocationThumbnailPath(loc);
+    return '<div class="location-card' + (isSelected ? ' is-selected' : '') + (isLocked ? ' is-disabled' : '') + '" data-action="select-location" data-id="' + locId + '">' +
+      '<img class="location-card__thumb" src="' + thumbPath + '" alt="' + loc.name + '">' +
+      '<div class="location-card__info">' +
+        '<div class="location-card__name">' + loc.name + '</div>' +
+        '<div class="location-card__meta">' +
+          '<span class="location-card__cost">' + formatCurrency(loc.cost) + '</span>' +
+          (isLocked ? ' <span class="location-card__lock">• ' + lockReason + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 
-  const performerOptions = hasPerformers
-    ? performers.map(function (performer) {
-      const displayProfile = getPerformerDisplayProfile(gameState, performer);
-      const optionLabel = displayProfile.name;
-      const selectedA = performer.id === uiState.booking.performerIdA ? " selected" : "";
-      return {
-        id: performer.id,
-        label: optionLabel,
-        selectedA: selectedA
-      };
-    })
-    : [];
-  const performerOptionsA = performerOptions.map(function (option) {
-    return "<option value=\"" + option.id + "\"" + option.selectedA + ">" + option.label + "</option>";
-  }).join("");
-  const performerSelectA = "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"performer-slot-a\">Performer (Required)</label>" +
-    "<select id=\"performer-slot-a\" class=\"select-control\" data-action=\"select-performer-a\">" +
-    "<option value=\"\"" + (uiState.booking.performerIdA ? "" : " selected") + ">Select performer...</option>" +
-    performerOptionsA +
-    "</select>" +
-    "</div>";
+  // Theme selection
+  var themeCardsHtml = themeIds.map(function(themeId) {
+    var theme = getThemeById(themeId);
+    if (!theme) return '';
+    var isSelected = themeId === selectedThemeId;
+    var effectsLabel = formatThemeEffects(theme);
+    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-theme" data-id="' + themeId + '">' +
+      '<div class="selection-card__title">' + theme.name + '</div>' +
+      '<div class="selection-card__subtitle">' + theme.description + '</div>' +
+      '<div class="selection-card__meta selection-card__meta--highlight">' + effectsLabel + '</div>' +
+    '</div>';
+  }).join('');
 
-  const selectedPerformerA = uiState.booking.performerIdA
-    ? performers.find(function (performer) {
-      return performer.id === uiState.booking.performerIdA;
-    })
-    : null;
-  const performerCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
-  const performerCards = [selectedPerformerA].filter(Boolean).map(function (performer) {
-    const displayProfile = getPerformerDisplayProfile(gameState, performer);
-    const typeLabel = getPerformerTypeLabel(performer.type);
-    const contractSummary = getContractSummary(gameState, performer.id);
-    const availabilitySummary = getAvailabilitySummary(gameState, performer);
-    const detail = "Star Power: " + performer.starPower +
-      " | Fatigue: " + performer.fatigue + " | Loyalty: " + performer.loyalty +
-      " | " + contractSummary.label +
-      " | " + availabilitySummary.label;
-    const performerStatus = isPerformerBookable(gameState, performer);
-    const availabilityNote = performerStatus.ok ? "Available" : "Unavailable — " + performerStatus.reason;
-    const portraitPath = getPerformerPortraitPath(performer);
-    const portraitAlt = "Portrait of " + displayProfile.name;
-    return "<div class=\"panel\" style=\"" + performerCardStyle + "\">" +
-      "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
-      "<div>" +
-      "<p><strong>" + displayProfile.name + "</strong></p>" +
-      "<p class=\"helper-text\">" + typeLabel + "</p>" +
-      "<p class=\"helper-text\">" + detail + "</p>" +
-      "<p class=\"helper-text\">" + availabilityNote + "</p>" +
-      "</div>" +
-      "</div>";
-  }).join("");
-  const performerCardsRow = performerCards
-    ? "<div class=\"panel-row\" style=\"display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;flex-wrap:wrap;align-items:flex-start;\">" + performerCards + "</div>"
-    : "<p class=\"helper-text\">Select a performer to preview their portrait.</p>";
+  // Content type selection
+  var contentTypes = CONFIG.content_types.available || ['Promo', 'Premium'];
+  var contentTypeHtml = contentTypes.map(function(type) {
+    var isSelected = type === selectedContentType;
+    var isPremium = type === 'Premium';
+    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-content-type" data-id="' + type + '" style="text-align:center;">' +
+      (isPremium ? '<span class="selection-card__badge selection-card__badge--premium">💎</span>' : '') +
+      '<div class="selection-card__title">' + type + '</div>' +
+      '<div class="selection-card__meta">' + (isPremium ? 'Higher cost, OF subs' : 'Social reach') + '</div>' +
+    '</div>';
+  }).join('');
 
-  const locationRows = locationIds.map(function (locationId) {
-    const location = CONFIG.locations.catalog[locationId];
-    const isSelected = location.id === uiState.booking.locationId;
-    const tier2RepRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
-      ? CONFIG.locations.tier2ReputationRequirement
-      : 0;
-    const tier1Locked = location.tier === 1 && !isLocationTierUnlocked(gameState, "tier1");
-    const tier2Locked = location.tier === 2 && !isLocationTierUnlocked(gameState, "tier2");
-    const tier2RepLocked = location.tier === 2 && gameState.player.reputation < tier2RepRequirement;
-    const isLocked = tier1Locked || tier2Locked || tier2RepLocked;
-    const label = location.name;
-    let lockNote = "";
-    if (tier1Locked || tier2Locked) {
-      lockNote = "Locked";
-    } else if (tier2RepLocked) {
-      lockNote = "Requires Rep ≥ " + tier2RepRequirement;
-    }
-    const detail = "Cost: " + formatCurrency(location.cost) + (lockNote ? " — " + lockNote : "");
-    const thumbPath = getLocationThumbnailPath(location);
-    const fallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
-    const thumbAlt = "Thumbnail of " + location.name;
-    return "<div class=\"list-item\" style=\"" + locationRowStyle + "\">" +
-      "<img src=\"" + thumbPath + "\" alt=\"" + thumbAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />" +
-      "<div>" +
-      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-location\" data-id=\"" + location.id + "\"" + (isLocked ? " disabled" : "") + ">" + label + "</button>" +
-      "<p class=\"helper-text\">" + detail + "</p>" +
-      "</div>" +
-      "</div>";
-  }).join("");
+  // Validation
+  var performerValid = isAgencyPack || (selectedPerformer && isPerformerBookable(gameState, selectedPerformer).ok);
+  var locationValid = selectedLocation && !((selectedLocation.tier === 1 && !isLocationTierUnlocked(gameState, "tier1")) || (selectedLocation.tier === 2 && !isLocationTierUnlocked(gameState, "tier2")));
+  var canAfford = gameState.player.cash >= finalCost;
+  var canConfirm = performerValid && locationValid && selectedTheme && selectedContentType && canAfford && !(isAgencyPack && agencyPackUsedToday);
 
-  const themeIds = CONFIG.themes.mvp.theme_ids.concat(CONFIG.themes.act2 ? CONFIG.themes.act2.theme_ids : []);
-  if (themeIds.length && uiState.booking.themeId && themeIds.indexOf(uiState.booking.themeId) === -1) {
-    uiState.booking.themeId = themeIds[0];
-  }
-  const themeRows = themeIds.map(function (themeId) {
-    const theme = getThemeById(themeId);
-    if (!theme) {
-      return "";
-    }
-    const isSelected = theme.id === uiState.booking.themeId;
-    const effectsLabel = formatThemeEffects(theme);
-    return "<div class=\"list-item\">" +
-      "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-theme\" data-id=\"" + theme.id + "\">" + theme.name + "</button>" +
-      "<p class=\"helper-text\">" + theme.description + "</p>" +
-      "<p class=\"helper-text\">" + effectsLabel + "</p>" +
-      "</div>";
-  }).join("");
+  // Summary
+  var summaryHtml = '<div class="booking-summary">' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Mode</span><span class="booking-summary__value">' + (isAgencyPack ? 'Agency Pack' : 'Core') + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Performer</span><span class="booking-summary__value">' + (isAgencyPack ? 'Agency' : (selectedPerformer ? selectedPerformer.name : '—')) + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Location</span><span class="booking-summary__value">' + (selectedLocation ? selectedLocation.name : '—') + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Theme</span><span class="booking-summary__value">' + (selectedTheme ? selectedTheme.name : '—') + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Type</span><span class="booking-summary__value">' + (selectedContentType || '—') + '</span></div>' +
+    '<div class="divider"></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Total Cost</span><span class="booking-summary__value booking-summary__value--cost">' + formatCurrency(finalCost) + '</span></div>' +
+    '<div class="button-row" style="margin-top:var(--gap-md);">' +
+      '<button class="button primary" data-action="confirm-shoot"' + (canConfirm ? '' : ' disabled') + ' style="flex:1;">📷 Confirm Shoot</button>' +
+    '</div>' +
+  '</div>';
 
-  const contentTypeRows = CONFIG.content_types.available.map(function (type) {
-    const isSelected = type === uiState.booking.contentType;
-    return "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-content-type\" data-id=\"" + type + "\">" + type + "</button>";
-  }).join("");
-
-  const performerSelection = isAgencyPack
-    ? { ok: true }
-    : getBookingPerformerSelection(gameState, {
-      performerIdA: uiState.booking.performerIdA
-    });
-  const performerSelectionOk = performerSelection.ok;
-  const selectedLocation = uiState.booking.locationId
-    ? CONFIG.locations.catalog[uiState.booking.locationId]
-    : null;
-  const shootCostResult = isAgencyPack
-    ? calculateAgencyPackCost(selectedLocation)
-    : calculateShootCost(selectedLocation);
-  const comboConfig = getBookingComboConfig();
-  const hasCombo = !isAgencyPack && comboConfig.enabled && performerSelectionOk && performerSelection.performerIds.length === 2;
-  const costMultiplier = Number.isFinite(comboConfig.costMultiplier) ? comboConfig.costMultiplier : 1;
-  const baseShootCost = selectedLocation
-    ? (hasCombo ? Math.floor(shootCostResult.value * costMultiplier) : shootCostResult.value)
-    : 0;
-  const adjustedCost = applyContentTypeCostMultiplier(baseShootCost, uiState.booking.contentType);
-  const computedShootCost = adjustedCost.finalCost;
-  const shootCostLabel = selectedLocation
-    ? formatCurrency(computedShootCost)
-    : "Select a location";
-
-  const selectedLocationLocked = selectedLocation
-    ? (selectedLocation.tier === 1 && !isLocationTierUnlocked(gameState, "tier1"))
-      || (selectedLocation.tier === 2 && !isLocationTierUnlocked(gameState, "tier2"))
-      || (selectedLocation.tier === 2 && gameState.player.reputation < (Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
-        ? CONFIG.locations.tier2ReputationRequirement
-        : 0))
-    : false;
-  const canConfirm = (isAgencyPack || (hasPerformers && performerSelectionOk)) &&
-    uiState.booking.locationId &&
-    uiState.booking.themeId &&
-    uiState.booking.contentType &&
-    shootCostResult.ok &&
-    gameState.player.cash >= computedShootCost &&
-    !selectedLocationLocked &&
-    !(isAgencyPack && agencyPackUsedToday);
-
-  const performerPanel = isAgencyPack
-    ? "<div class=\"panel\"><h3 class=\"panel-title\">Agency Sample Pack</h3>" +
-      "<p class=\"helper-text\">We source a five-image pack that fits the selected theme and location.</p>" +
-      "</div>"
-    : "<div class=\"panel\"><h3 class=\"panel-title\">Performers</h3>" +
-      performerSelectA +
-      performerCardsRow +
-      "</div>";
-
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Booking Mode</h3>" + bookingModeRows + "</div>" +
-    performerPanel +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Locations</h3>" + locationRows + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Themes</h3>" + themeRows + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Content Type</h3><div class=\"button-row\">" + contentTypeRows + "</div></div>" +
-    "<div class=\"panel\"><p><strong>Shoot Cost:</strong> " + shootCostLabel + "</p></div>" +
+  // Assemble layout
+  screen.innerHTML = '<h2 class="screen-title">Booking</h2>' +
+    '<div class="booking-layout">' +
+      '<div class="booking-layout__left">' +
+        '<div class="panel"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
+        performerHtml +
+      '</div>' +
+      '<div class="booking-layout__right">' +
+        '<div class="panel"><h3 class="panel-title">Location</h3>' + locationCardsHtml + '</div>' +
+        '<div class="panel"><h3 class="panel-title">Theme</h3><div class="selection-grid selection-grid--2col">' + themeCardsHtml + '</div></div>' +
+        '<div class="panel"><h3 class="panel-title">Content Type</h3><div class="selection-grid selection-grid--2col">' + contentTypeHtml + '</div></div>' +
+        summaryHtml +
+      '</div>' +
+    '</div>' +
     renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Confirm Shoot", "confirm-shoot", "primary", !canConfirm) +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-
-  screen.innerHTML = createPanel("Booking", body, "screen-booking-title");
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
 
 function renderContent(gameState) {
   const screen = qs("#screen-content");
@@ -773,499 +715,337 @@ function renderContent(gameState) {
 }
 
 function renderAnalytics(gameState) {
-  const screen = qs("#screen-analytics");
-  const entry = getLatestContentEntry(gameState);
-  const dayNumber = gameState && gameState.player && Number.isFinite(gameState.player.day)
-    ? gameState.player.day
-    : 0;
-  const todaySummary = getWindowedSummary(gameState, 1);
-  const competitionConfig = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
-    ? CONFIG.market.competition
-    : {};
-  const competitionEnabled = typeof isCompetitionEnabled === "function"
-    ? isCompetitionEnabled(competitionConfig, dayNumber, gameState)
-    : Boolean(competitionConfig.enabled);
-  const activeMarketShift = competitionEnabled && typeof getActiveMarketShift === "function"
-    ? getActiveMarketShift(gameState, dayNumber)
-    : null;
-  const competitionMultipliers = competitionEnabled && typeof getCompetitionMultipliers === "function"
-    ? getCompetitionMultipliers(gameState, dayNumber)
-    : { promoFollowerMult: 1, premiumOfSubsMult: 1 };
-  const ofPipeline = typeof getOfPipeline === "function" ? getOfPipeline(gameState) : null;
-  const ofPipelineLine = ofPipeline
-    ? "<p><strong>OF Pipeline:</strong> " + ofPipeline.progressText.replace("OF Pipeline: ", "") + "</p>"
-    : "";
-  const debtEstimateLine = getDebtEstimateLine(gameState);
+  var screen = qs("#screen-analytics");
+  if (!screen) return;
 
-  const todayTotalsPanel = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Today (Day " + dayNumber + ") Totals</h3>" +
-    "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>" +
-    debtEstimateLine +
-    "<p><strong>MRR Change:</strong> " + formatCurrency(todaySummary.mrrDelta) + "/mo</p>" +
-    "<p><strong>Social Followers Gained:</strong> " + todaySummary.socialFollowers + "</p>" +
-    "<p><strong>Social Subscribers Gained:</strong> " + todaySummary.socialSubscribers + "</p>" +
-    "<p><strong>OnlyFans Subscribers Gained:</strong> " + todaySummary.onlyFansSubscribers + "</p>" +
-    ofPipelineLine +
-    "<p class=\"helper-text\">Totals for the current in-game day.</p>" +
-    "</div>";
+  var player = gameState.player;
+  var cash = player.cash;
+  var ofSubs = player.onlyFansSubscribers;
+  var followers = player.socialFollowers;
+  var socialSubs = player.socialSubscribers;
+  var reputation = player.reputation;
+  var mrr = typeof getMRR === "function" ? getMRR(gameState) : 0;
+  var netWorth = typeof getNetWorth === "function" ? getNetWorth(gameState) : cash;
+  var dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
 
-  const marketShiftNote = competitionEnabled && activeMarketShift
-    ? "<div class=\"panel\"><p class=\"helper-text\">Market shift active: " + activeMarketShift.name +
-      " (Promo " + formatCompetitionMultiplier(competitionMultipliers.promoFollowerMult) +
-      ", Premium OF subs " + formatCompetitionMultiplier(competitionMultipliers.premiumOfSubsMult) + ").</p></div>"
-    : "";
+  var contentEntries = gameState.content.entries || [];
+  var promoCount = contentEntries.filter(function(e) { return e.contentType === 'Promo'; }).length;
+  var premiumCount = contentEntries.filter(function(e) { return e.contentType === 'Premium'; }).length;
 
-  let latestShootBody = "<p class=\"helper-text\">No shoots yet today.</p>";
-  if (!entry && gameState.content.lastContentId) {
-    latestShootBody = "<p class=\"helper-text\">Latest shoot record missing.</p>";
-  }
-  if (entry) {
-    const latestOnlyFansSubs = Number.isFinite(entry.results.onlyFansSubscribersGained)
-      ? entry.results.onlyFansSubscribersGained
-      : 0;
-    const latestMrrDelta = getMRRDeltaForSubs(latestOnlyFansSubs);
-    let socialBonusLine = "";
-    if (entry.contentType === "Premium" && Number.isFinite(entry.results.socialFootprintMult)) {
-      const socialPercent = Math.round((entry.results.socialFootprintMult - 1) * 100);
-      socialBonusLine = "<p><strong>Social bonus:</strong> +" + socialPercent + "% (followers-based)</p>";
-      if (entry.results.socialFootprintDetail) {
-        socialBonusLine += "<p class=\"helper-text\">" + entry.results.socialFootprintDetail + "</p>";
-      }
-    }
-    let saturationLine = "";
-    if (entry.contentType === "Premium" && Number.isFinite(entry.results.saturationMult)) {
-      const saturationLabel = entry.results.saturationTierLabel || "Saturation tier";
-      const saturationMult = entry.results.saturationMult.toFixed(2) + "x";
-      saturationLine = "<p><strong>Saturation:</strong> " + saturationMult + " (" + saturationLabel + ")</p>";
-    }
-    latestShootBody = "<p><strong>MRR Change:</strong> " + formatCurrency(latestMrrDelta) + "/mo</p>" +
-      "<p><strong>Social Followers Gained:</strong> " + entry.results.socialFollowersGained + "</p>" +
-      "<p><strong>Social Subscribers Gained:</strong> " + entry.results.socialSubscribersGained + "</p>" +
-      "<p><strong>OnlyFans Subscribers Gained:</strong> " + latestOnlyFansSubs + "</p>" +
-      socialBonusLine +
-      saturationLine +
-      "<p><strong>Feedback:</strong> " + entry.results.feedbackSummary + "</p>";
-  }
-  const latestShootPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Latest Shoot Results</h3>" +
-    latestShootBody + "</div>";
-  const analyticsBody = todayTotalsPanel + marketShiftNote + latestShootPanel;
+  // Top stats grid
+  var topStatsHtml = '<div class="analytics-grid">' +
+    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--gold">' + formatCurrency(cash) + '</div><div class="analytics-card__label">Cash</div></div>' +
+    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--pink">' + ofSubs.toLocaleString() + '</div><div class="analytics-card__label">OF Subscribers</div></div>' +
+    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--gold">' + formatCurrency(mrr) + '</div><div class="analytics-card__label">Monthly Revenue</div></div>' +
+    '<div class="analytics-card"><div class="analytics-card__value">' + formatCurrency(netWorth) + '</div><div class="analytics-card__label">Net Worth</div></div>' +
+  '</div>';
 
-  const rollupWindows = CONFIG.analytics && Array.isArray(CONFIG.analytics.rollupWindowsDays)
-    ? CONFIG.analytics.rollupWindowsDays
-    : [];
-  const rollupRows = rollupWindows.length
-    ? rollupWindows.map(function (windowDays) {
-      const summary = getWindowedSummary(gameState, windowDays);
-      return "<div class=\"list-item\"><p>Last " + summary.windowDays + " days: MRR +" + formatCurrency(summary.mrrDelta) +
-        "/mo | Social Followers +" + summary.socialFollowers + " | Social Subs +" + summary.socialSubscribers +
-        " | OF Subs +" + summary.onlyFansSubscribers + " | Shoots: Promo " + summary.promoCount +
-        " / Premium " + summary.premiumCount + "</p></div>";
-    }).join("")
-    : "<p class=\"helper-text\">No rollup windows configured.</p>";
-  const rollupsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Rollups</h3>" + rollupRows + "</div>";
+  // Secondary stats
+  var secondaryStatsHtml = '<div class="panel"><h3 class="panel-title">Social & Reputation</h3>' +
+    '<div class="stat-row"><span class="stat-row__label">Social Followers</span><span class="stat-row__value">' + followers.toLocaleString() + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Social Subscribers</span><span class="stat-row__value">' + socialSubs.toLocaleString() + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + reputation + '</span></div>' +
+  '</div>';
 
-  const snapshots = Array.isArray(gameState.analyticsHistory) ? gameState.analyticsHistory.slice(-5).reverse() : [];
-  const snapshotRows = snapshots.length
-    ? snapshots.map(function (snapshot) {
-      const socialFollowers = Number.isFinite(snapshot.socialFollowers) ? snapshot.socialFollowers : 0;
-      const socialSubscribers = Number.isFinite(snapshot.socialSubscribers) ? snapshot.socialSubscribers : 0;
-      const onlyFansSubscribers = Number.isFinite(snapshot.onlyFansSubscribers) ? snapshot.onlyFansSubscribers : 0;
-      const cash = Number.isFinite(snapshot.cash) ? snapshot.cash : 0;
-      const mrr = Number.isFinite(snapshot.mrr) ? snapshot.mrr : 0;
-      const netWorth = Number.isFinite(snapshot.netWorth) ? snapshot.netWorth : null;
-      const netWorthLabel = Number.isFinite(netWorth)
-        ? ", Net Worth " + formatCurrency(netWorth)
-        : "";
-      return "<div class=\"list-item\"><p>Day " + snapshot.dayNumber + " — Social Followers " + socialFollowers +
-        ", Social Subs " + socialSubscribers + ", OF Subs " + onlyFansSubscribers +
-        ", Cash " + formatCurrency(cash) + ", MRR " + formatCurrency(mrr) + "/mo" +
-        netWorthLabel + "</p></div>";
-    }).join("")
-    : "<p class=\"helper-text\">No snapshots yet.</p>";
-  const snapshotsPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Snapshots</h3>" + snapshotRows + "</div>";
+  // Cashflow stats
+  var dailyNet = dailyPayout - dailyOverhead.amount;
+  var cashflowHtml = '<div class="panel"><h3 class="panel-title">Daily Cashflow</h3>' +
+    '<div class="stat-row"><span class="stat-row__label">OF Payout</span><span class="stat-row__value stat-row__value--positive">+' + formatCurrency(dailyPayout) + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Overhead</span><span class="stat-row__value stat-row__value--negative">-' + formatCurrency(dailyOverhead.amount) + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Net Daily</span><span class="stat-row__value ' + (dailyNet >= 0 ? 'stat-row__value--positive' : 'stat-row__value--negative') + '">' + (dailyNet >= 0 ? '+' : '') + formatCurrency(dailyNet) + '</span></div>' +
+  '</div>';
 
-  const body = analyticsBody +
-    rollupsPanel +
-    snapshotsPanel +
-    renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Book Next Shoot", "nav-booking", "primary", !entry) +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-  screen.innerHTML = createPanel("Analytics", body, "screen-analytics-title");
+  // Content stats
+  var contentStatsHtml = '<div class="panel"><h3 class="panel-title">Content Library</h3>' +
+    '<div class="stat-row"><span class="stat-row__label">Total Shoots</span><span class="stat-row__value">' + contentEntries.length + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Promo Content</span><span class="stat-row__value">' + promoCount + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Premium Content</span><span class="stat-row__value">' + premiumCount + '</span></div>' +
+  '</div>';
+
+  // Layout
+  screen.innerHTML = '<h2 class="screen-title">Analytics</h2>' +
+    '<div class="analytics-layout">' +
+      topStatsHtml +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-md);">' +
+        secondaryStatsHtml +
+        cashflowHtml +
+        contentStatsHtml +
+      '</div>' +
+    '</div>' +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
 
 function renderRoster(gameState) {
-  const screen = qs("#screen-roster");
-  const performers = gameState.roster && Array.isArray(gameState.roster.performers)
-    ? gameState.roster.performers
-    : [];
-  const portraitSize = getPerformerPortraitSizePx();
-  const portraitRadius = getPerformerPortraitRadiusPx();
-  const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const performerRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
-  getUiState();
+  var screen = qs("#screen-roster");
+  if (!screen) return;
 
-  const contractedPerformers = performers.filter(function (performer) {
-    return performer.type === "core";
-  });
+  var performers = gameState.roster.performers || [];
+  var contractedPerformers = performers.filter(function(p) { return p.type === "core"; });
 
-  const rosterSize = getContractedRosterCount(gameState);
-  const maxRosterSize = getRecruitmentMaxRosterSize();
-  const isRosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
-  const activeCandidate = getActiveRecruitCandidate(gameState);
-  const recruitmentHeader = "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>" +
-    "<p><strong>Roster Size:</strong> " + rosterSize + " / " + maxRosterSize + "</p>";
-  let recruitmentBody = "";
-  if (isRosterFull) {
-    recruitmentBody = "<p class=\"helper-text\">Roster full.</p>";
-  } else if (!activeCandidate) {
-    recruitmentBody = "<p class=\"helper-text\">Gain reputation to attract new talent.</p>";
-  } else {
-    const performer = CONFIG.performers.catalog[activeCandidate.performerId];
-    const name = performer ? performer.name : "Unknown";
-    const portraitPath = getPerformerPortraitPath(performer);
-    const portraitAlt = "Portrait of " + name;
-    const starPower = performer && Number.isFinite(performer.starPower) ? performer.starPower : 1;
-    const dailyCap = performer ? getPerformerDailyBookingCap(performer) : 1;
-    const repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
-    const hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
-    recruitmentBody = "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
-      "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" +
-      portraitSize + "\" style=\"" + portraitStyle + "\" />" +
-      "<div>" +
-      "<p><strong>" + name + "</strong></p>" +
-      "<p>Star Power: " + starPower + "</p>" +
-      "<p>Daily Cap: " + dailyCap + "</p>" +
-      "<p>Hire Cost: " + formatCurrency(hireCost) + "</p>" +
-      "<p>Rep Required: " + repRequired + "</p>" +
-      "<div class=\"button-row\">" +
-      createButton("Meet", "open-meet-recruit", "primary", false, "data-id=\"" + activeCandidate.performerId + "\"") +
-      createButton("Decline", "recruit-decline", "", false, "data-id=\"" + activeCandidate.performerId + "\"") +
-      "</div>" +
-      "</div>" +
-      "</div>";
+  // Performer grid
+  var performerCardsHtml = contractedPerformers.map(function(p) {
+    var status = isPerformerBookable(gameState, p);
+    var statusClass = status.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
+    var statusText = status.ok ? 'Available' : status.reason;
+    var portraitPath = getPerformerPortraitPath(p);
+    var contractSummary = getContractSummary(gameState, p.id);
+    var availSummary = getAvailabilitySummary(gameState, p);
+
+    return '<div class="performer-card">' +
+      '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
+      '<div class="performer-card__info">' +
+        '<div class="performer-card__name">' + p.name + '</div>' +
+        '<div class="performer-card__type">' + getPerformerTypeLabel(p.type) + '</div>' +
+        '<div class="performer-card__stats">' +
+          '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + p.starPower + '</span></span>' +
+          '<span class="performer-card__stat">😓 <span class="performer-card__stat-value">' + p.fatigue + '</span></span>' +
+          '<span class="performer-card__stat">❤️ <span class="performer-card__stat-value">' + p.loyalty + '</span></span>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + contractSummary.label + '</div>' +
+        '<div style="font-size:10px;color:var(--text-muted);">' + availSummary.label + '</div>' +
+        '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  if (!performerCardsHtml) {
+    performerCardsHtml = '<div class="empty-state"><div class="empty-state__icon">👤</div><div class="empty-state__title">No Performers</div><div class="empty-state__description">Recruit performers to build your roster.</div></div>';
   }
 
-  const recruitmentSection = "<div class=\"panel\"><h3 class=\"panel-title\">Recruitment</h3>" +
-    recruitmentHeader +
-    recruitmentBody +
-    "</div>";
+  // Recruitment panel
+  var rosterSize = getContractedRosterCount(gameState);
+  var maxRosterSize = getRecruitmentMaxRosterSize();
+  var isRosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
+  var activeCandidate = getActiveRecruitCandidate(gameState);
+  var recruitmentHeader = '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + gameState.player.reputation + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Roster Size</span><span class="stat-row__value">' + rosterSize + ' / ' + maxRosterSize + '</span></div>';
+  var recruitmentHtml = '';
 
-  const contractedRows = contractedPerformers.length
-    ? contractedPerformers.map(function (performer) {
-      const performerStatus = isPerformerBookable(gameState, performer);
-      const availability = performerStatus.ok ? "Available" : "Unavailable";
-      const portraitPath = getPerformerPortraitPath(performer);
-      const displayProfile = getPerformerDisplayProfile(gameState, performer);
-      const portraitAlt = "Portrait of " + displayProfile.name;
-      const contractSummary = getContractSummary(gameState, performer.id);
-      const availabilitySummary = getAvailabilitySummary(gameState, performer);
-      const renewalCost = getRenewalCostByType(performer.type);
-      const renewLabel = Number.isFinite(renewalCost)
-        ? "Renew Contract (" + formatCurrency(renewalCost) + ")"
-        : "Renew Contract";
-      const renewButton = contractSummary.isExpired
-        ? "<div class=\"button-row\">" + createButton(renewLabel, "renew-contract", "primary", false, "data-id=\"" + performer.id + "\"") + "</div>"
-        : "";
-      return "<div class=\"panel\" style=\"" + performerRowStyle + "\">" +
-        "<img src=\"" + portraitPath + "\" alt=\"" + portraitAlt + "\" width=\"" + portraitSize + "\" height=\"" + portraitSize + "\" style=\"" + portraitStyle + "\" />" +
-        "<div>" +
-        "<p><strong>" + displayProfile.name + "</strong> (" + performer.type + ")</p>" +
-        "<p>Star Power: " + performer.starPower + "</p>" +
-        "<p>Fatigue: " + performer.fatigue + " (" + availability + ")</p>" +
-        "<p>Loyalty: " + performer.loyalty + "</p>" +
-        "<p>" + contractSummary.label + "</p>" +
-        "<p>Availability: " + availabilitySummary.label + "</p>" +
-        renewButton +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No contracted performers available.</p>";
+  if (isRosterFull) {
+    recruitmentHtml = '<div class="panel"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
+      '<p style="color:var(--text-muted);font-size:12px;">Roster full. Release a contract to recruit more talent.</p></div>';
+  } else if (!activeCandidate) {
+    recruitmentHtml = '<div class="panel"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
+      '<p style="color:var(--text-muted);font-size:12px;">No recruits available. Increase reputation to attract talent.</p></div>';
+  } else {
+    var performer = CONFIG.performers.catalog[activeCandidate.performerId];
+    var name = performer ? performer.name : "Unknown";
+    var portraitPath = performer ? getPerformerPortraitPath(performer) : '';
+    var starPower = performer && Number.isFinite(performer.starPower) ? performer.starPower : '?';
+    var dailyCap = performer ? getPerformerDailyBookingCap(performer) : '?';
+    var repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
+    var hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
+    recruitmentHtml = '<div class="panel"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
+      '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
+        '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + name + '">' +
+        '<div class="performer-card__info">' +
+          '<div class="performer-card__name">' + name + '</div>' +
+          '<div class="performer-card__stats">' +
+            '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + starPower + '</span></span>' +
+            '<span class="performer-card__stat">🎯 <span class="performer-card__stat-value">' + dailyCap + '</span></span>' +
+          '</div>' +
+          '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Rep Required: ' + repRequired + '</div>' +
+          '<div style="font-size:10px;color:var(--text-muted);">Hire Cost: ' + formatCurrency(hireCost) + '</div>' +
+          '<div class="button-row" style="margin-top:6px;">' +
+            '<button class="button small primary" data-action="open-meet-recruit" data-id="' + activeCandidate.performerId + '">Meet</button>' +
+            '<button class="button small" data-action="recruit-decline" data-id="' + activeCandidate.performerId + '">Decline</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
 
-  const contractedSection = "<div class=\"panel\"><h3 class=\"panel-title\">Contracted Talent</h3>" + contractedRows + "</div>";
+  // Contract renewals
+  var renewalsHtml = '';
+  var expiringSoon = contractedPerformers.filter(function(p) {
+    var contract = getContractState(gameState, p.id);
+    return contract && contract.daysRemaining > 0 && contract.daysRemaining <= 7;
+  });
+  if (expiringSoon.length > 0) {
+    var renewalItemsHtml = expiringSoon.map(function(p) {
+      var contract = getContractState(gameState, p.id);
+      return '<div class="post-item"><div class="post-item__info"><div class="post-item__title">' + p.name + '</div><div class="post-item__meta">' + contract.daysRemaining + ' days remaining</div></div>' +
+        '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">Renew</button></div>';
+    }).join('');
+    renewalsHtml = '<div class="panel"><h3 class="panel-title">⚠️ Expiring Contracts</h3>' + renewalItemsHtml + '</div>';
+  }
 
-  const body = recruitmentSection +
-    contractedSection +
-    renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-  screen.innerHTML = createPanel("Roster", body, "screen-roster-title");
+  // Layout
+  screen.innerHTML = '<h2 class="screen-title">Roster</h2>' +
+    '<div class="roster-layout">' +
+      '<div class="roster-grid">' + performerCardsHtml + '</div>' +
+      '<div class="roster-sidebar">' + recruitmentHtml + renewalsHtml + '</div>' +
+    '</div>' +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
+
 
 function renderSocial(gameState) {
-  const screen = qs("#screen-social");
-  const uiState = getUiState();
-  const strategies = getSocialStrategies();
-  const activeStrategyId = getActiveSocialStrategyId(gameState);
-  const manualConfig = getManualSocialStrategyConfig();
-  const manualStrategy = gameState.social && gameState.social.manualStrategy
-    ? gameState.social.manualStrategy
+  var screen = qs("#screen-social");
+  if (!screen) return;
+
+  var uiState = getUiState();
+  var entries = gameState.content.entries || [];
+  var promoEntries = entries.filter(function(e) { return e.contentType === 'Promo'; });
+
+  // Get posts
+  var posts = gameState.social.posts || [];
+
+  // Available to post (promo content not fully posted)
+  var availableToPost = promoEntries.filter(function(entry) {
+    var postedPlatforms = posts.filter(function(p) { return p.contentId === entry.id; }).map(function(p) { return p.platform; });
+    return postedPlatforms.length < 2; // Assuming 2 platforms
+  }).slice(0, 5);
+
+  var availableListHtml = availableToPost.map(function(entry) {
+    var postedPlatforms = posts.filter(function(p) { return p.contentId === entry.id; }).map(function(p) { return p.platform; });
+    var canPostIG = postedPlatforms.indexOf('Instagram') === -1;
+    var canPostX = postedPlatforms.indexOf('X') === -1;
+    var isSelected = entry.id === uiState.social.selectedContentId;
+
+    return '<div class="post-item" data-action="select-social-content" data-id="' + entry.id + '">' +
+      '<div class="post-item__info">' +
+        '<div class="post-item__title">' + (entry.title || 'Promo #' + entry.id) + '</div>' +
+        '<div class="post-item__meta">Day ' + entry.dayCreated + '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:4px;align-items:center;">' +
+        (canPostIG ? '<span class="tag">IG</span>' : '<span class="tag tag--success">IG ✓</span>') +
+        (canPostX ? '<span class="tag">X</span>' : '<span class="tag tag--success">X ✓</span>') +
+        (isSelected ? '<span class="tag tag--accent">Selected</span>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  if (!availableListHtml) {
+    availableListHtml = '<div class="empty-state" style="padding:var(--gap-md);"><div class="empty-state__description">No promo content available to post.</div></div>';
+  }
+
+  var selectedEntry = uiState.social.selectedContentId
+    ? promoEntries.find(function(entry) { return entry.id === uiState.social.selectedContentId; })
     : null;
-  const lastAppliedDay = manualStrategy && Number.isFinite(manualStrategy.lastAppliedDay)
-    ? manualStrategy.lastAppliedDay
-    : null;
-  const appliedToday = hasAppliedManualSocialStrategyToday(gameState);
-  const promoEntries = gameState.content.entries.filter(function (entry) {
-    return entry.contentType === "Promo";
-  });
-  const postedPlatformsByContent = new Map();
-  gameState.social.posts.forEach(function (post) {
-    if (!postedPlatformsByContent.has(post.contentId)) {
-      postedPlatformsByContent.set(post.contentId, new Set());
-    }
-    postedPlatformsByContent.get(post.contentId).add(post.platform);
-  });
-  const availablePromoEntries = promoEntries.filter(function (entry) {
-    const platforms = postedPlatformsByContent.get(entry.id) || new Set();
-    const isFullyPosted = platforms.has("Instagram") && platforms.has("X");
-    return !isFullyPosted;
-  });
+  var canPost = Boolean(selectedEntry);
+  var hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, 'Instagram') : false;
+  var hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, 'X') : false;
 
-  const strategyList = strategies.length
-    ? strategies.map(function (strategy) {
-      const isActive = strategy.id === activeStrategyId;
-      const activeTag = isActive ? " <span class=\"helper-text\">(Active)</span>" : "";
-      const statusLine = isActive ? "<p><strong>Status:</strong> Active</p>" : "";
-      const buttonLabel = isActive ? "Active Strategy" : "Select Strategy";
-      return "<div class=\"list-item\">" +
-        "<div class=\"panel\">" +
-        "<p><strong>" + strategy.label + "</strong>" + activeTag + "</p>" +
-        "<p class=\"helper-text\">" + strategy.description + "</p>" +
-        "<p><strong>Primary Effect:</strong> " + strategy.primaryEffect + "</p>" +
-        statusLine +
-        "<div class=\"button-row\">" +
-        createButton(buttonLabel, "select-social-strategy", isActive ? "is-disabled" : "", isActive, "data-id=\"" + strategy.id + "\"") +
-        "</div>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No social strategies available.</p>";
+  // Recent posts
+  var recentPosts = posts.slice().reverse().slice(0, 5);
+  var recentPostsHtml = recentPosts.map(function(post) {
+    var entry = entries.find(function(e) { return e.id === post.contentId; });
+    var title = entry ? entry.title : 'Content #' + post.contentId;
+    return '<div class="post-item">' +
+      '<div class="post-item__info">' +
+        '<div class="post-item__title">' + title + '</div>' +
+        '<div class="post-item__meta">' + post.platform + ' • Day ' + post.dayPosted + '</div>' +
+      '</div>' +
+      '<span class="tag tag--success">Posted</span>' +
+    '</div>';
+  }).join('');
 
-  const strategyPanel = "<div class=\"panel\"><h3 class=\"panel-title\">Social Strategies</h3>" + strategyList + "</div>";
+  if (!recentPostsHtml) {
+    recentPostsHtml = '<div class="empty-state" style="padding:var(--gap-md);"><div class="empty-state__description">No posts yet.</div></div>';
+  }
 
-  const manualChannels = manualConfig ? manualConfig.channels : [];
-  const manualPreview = getManualSocialStrategyPreview(gameState);
-  const manualIssues = getManualSocialStrategyIssues(gameState);
-  const manualMaxSpend = manualConfig ? getManualStrategyMaxSpend(gameState) : 0;
-  const manualAllocationRows = manualChannels.map(function (channel) {
-    const label = getManualStrategyChannelLabel(channel);
-    const value = manualStrategy && manualStrategy.allocations && Number.isFinite(manualStrategy.allocations[channel])
-      ? manualStrategy.allocations[channel]
-      : 0;
-    const inputId = "manual-strategy-" + channel;
-    return "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"" + inputId + "\">" + label + " %</label>" +
-      "<input id=\"" + inputId + "\" class=\"select-control\" type=\"number\" min=\"0\" max=\"100\" step=\"1\" value=\"" + value + "\"" +
-      " data-action=\"manual-strategy-channel\" data-channel=\"" + channel + "\" />" +
-      "</div>";
-  }).join("");
+  // Social stats
+  var statsHtml = '<div class="panel"><h3 class="panel-title">Social Stats</h3>' +
+    '<div class="stat-row"><span class="stat-row__label">Followers</span><span class="stat-row__value">' + gameState.player.socialFollowers.toLocaleString() + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">Subscribers</span><span class="stat-row__value">' + gameState.player.socialSubscribers.toLocaleString() + '</span></div>' +
+    '<div class="stat-row"><span class="stat-row__label">OF Pipeline</span><span class="stat-row__value">' + (gameState.player.onlyFansSubCarry * 100).toFixed(0) + '%</span></div>' +
+  '</div>';
 
-  const budgetValue = manualStrategy && Number.isFinite(manualStrategy.dailyBudget)
-    ? manualStrategy.dailyBudget
-    : 0;
-  const totalPct = manualPreview.totalPct || 0;
-  const allocationStatus = totalPct === 100
-    ? "Allocation total: 100%."
-    : "Allocation total: " + totalPct + "% (must be 100%).";
-  const previewLine = "Est. Social Followers +" + manualPreview.socialFollowersGained +
-    ", Est. Social Subs +" + manualPreview.socialSubscribersGained;
-  const issueLines = manualIssues.length
-    ? "<p class=\"helper-text\">" + manualIssues.join(" ") + "</p>"
-    : "";
-  const appliedDayLabel = Number.isFinite(lastAppliedDay) ? lastAppliedDay : "Never";
-  const todayLabel = gameState && gameState.player && Number.isFinite(gameState.player.day)
-    ? gameState.player.day
-    : "?";
-  const appliedTransparencyLine = "<p class=\"helper-text\">Last applied day: " + appliedDayLabel +
-    " (Today: " + todayLabel + ")</p>";
-  const canApplyManual = manualIssues.length === 0;
-  const manualApplyLabel = appliedToday ? "Applied — come back tomorrow" : "Apply Strategy";
-  const disableManualApply = appliedToday || !canApplyManual;
-
-  const manualPanel = manualConfig
-    ? "<div class=\"panel\">" +
-      "<h3 class=\"panel-title\">Manual Social Strategy</h3>" +
-      "<p class=\"helper-text\">Allocate a daily budget across channels and apply once per day.</p>" +
-      "<div class=\"field-row\">" +
-      "<label class=\"field-label\" for=\"manual-strategy-budget\">Daily Social Budget</label>" +
-      "<input id=\"manual-strategy-budget\" class=\"select-control\" type=\"number\" min=\"" + manualConfig.minSpend + "\" max=\"" + manualMaxSpend + "\" step=\"1\" value=\"" + budgetValue + "\"" +
-      " data-action=\"manual-strategy-budget\" />" +
-      "</div>" +
-      manualAllocationRows +
-      "<p class=\"helper-text\">" + allocationStatus + "</p>" +
-      "<p class=\"helper-text\">" + previewLine + "</p>" +
-      appliedTransparencyLine +
-      issueLines +
-      "<div class=\"button-row\">" +
-      createButton("Auto-normalize", "normalize-manual-strategy") +
-      createButton(manualApplyLabel, "apply-manual-strategy", "primary", disableManualApply) +
-      "</div>" +
-      "</div>"
-    : "";
-
-  const recentPosts = gameState.social.posts.length
-    ? gameState.social.posts.slice(-5).reverse()
-    : [];
-  const postsList = recentPosts.length
-    ? recentPosts.map(function (post) {
-      return "<div class=\"panel\">" +
-        "<p><strong>" + post.platform + "</strong> — Day " + post.dayPosted + "</p>" +
-        "<p>Social Followers Gained: " + post.socialFollowersGained + "</p>" +
-        "<p>Social Subscribers Gained: " + post.socialSubscribersGained + "</p>" +
-        "<p>OnlyFans Subscribers Gained: " + post.onlyFansSubscribersGained + "</p>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No social posts yet.</p>";
-
-  const promoList = availablePromoEntries.length
-    ? availablePromoEntries.map(function (entry) {
-      const isSelected = entry.id === uiState.social.selectedContentId;
-      const performer = getContentEntryPerformerLabel(gameState, entry);
-      const theme = getThemeName(entry.themeId);
-      const label = "Day " + entry.dayCreated + " — " + performer + " (" + theme + ")";
-      return "<div class=\"list-item\">" +
-        "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-social-content\" data-id=\"" + entry.id + "\">" + label + "</button>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No unposted promo content available.</p>";
-
-  const selectedEntry = uiState.social.selectedContentId
-    ? availablePromoEntries.find(function (entry) {
-      return entry.id === uiState.social.selectedContentId;
-    })
-    : null;
-
-  const postedStatus = selectedEntry
-    ? "<p><strong>Posted:</strong> " + CONFIG.social_platforms.platforms.map(function (platform) {
-      return platform + " " + (hasPosted(gameState, selectedEntry.id, platform) ? "✅" : "❌");
-    }).join(" / ") + "</p>"
-    : "<p class=\"helper-text\">Select a Promo content entry to see posted status.</p>";
-
-  const canPost = availablePromoEntries.length > 0 && Boolean(uiState.social.selectedContentId);
-  const hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, "Instagram") : false;
-  const hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, "X") : false;
-  const socialPipeline = typeof getOfPipeline === "function" ? getOfPipeline(gameState) : null;
-  const socialPipelineLine = socialPipeline
-    ? "<p class=\"helper-text\">" + socialPipeline.progressText + "</p>"
-    : "";
-
-  const body = strategyPanel +
-    manualPanel +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Recent Posts</h3>" + postsList + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Promo Content</h3>" + promoList + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Posted Status</h3>" + postedStatus + socialPipelineLine + "</div>" +
-    renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Post to Instagram", "post-instagram", "primary", !canPost || hasPostedInstagram) +
-    createButton("Post to X", "post-x", "", !canPost || hasPostedX) +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-  screen.innerHTML = createPanel("Social", body, "screen-social-title");
+  // Layout
+  screen.innerHTML = '<h2 class="screen-title">Social</h2>' +
+    '<div class="social-layout">' +
+      '<div class="social-panel">' +
+        '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
+          '<h3 class="panel-title">Available to Post</h3>' +
+          '<div class="social-panel__content">' + availableListHtml + '</div>' +
+          '<div class="button-row" style="margin-top:var(--gap-sm);">' +
+            '<button class="button small primary" data-action="post-instagram"' + (canPost && !hasPostedInstagram ? '' : ' disabled') + '>Post to IG</button>' +
+            '<button class="button small" data-action="post-x"' + (canPost && !hasPostedX ? '' : ' disabled') + '>Post to X</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="social-panel">' +
+        statsHtml +
+        '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
+          '<h3 class="panel-title">Recent Posts</h3>' +
+          '<div class="social-panel__content">' + recentPostsHtml + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
 
 function renderGallery(gameState) {
-  const screen = qs("#screen-gallery");
-  const uiState = getUiState();
-  const entries = gameState.content.entries;
-  const shootOutputs = Array.isArray(gameState.shootOutputs) ? gameState.shootOutputs : [];
-  const outputThumbSize = getShootOutputThumbnailSizePx();
-  const outputThumbRadius = getShootOutputThumbnailRadiusPx();
-  const outputThumbStyle = "width:" + outputThumbSize + "px;height:" + outputThumbSize + "px;object-fit:cover;border-radius:" + outputThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const outputCardStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:flex-start;";
-  const outputMetaStyle = "display:flex;flex-direction:column;gap:" + Math.max(1, Math.round(CONFIG.ui.panel_gap_px / 2)) + "px;";
-  const locationThumbSize = getLocationThumbnailSizePx();
-  const locationThumbRadius = getLocationThumbnailRadiusPx();
-  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
+  var screen = qs("#screen-gallery");
+  if (!screen) return;
 
-  const entryList = entries.length
-    ? entries.map(function (entry) {
-      const isSelected = entry.id === uiState.gallery.selectedContentId;
-      const performer = getContentEntryPerformerLabel(gameState, entry);
-      const location = getLocationName(entry.locationId);
-      const theme = getThemeName(entry.themeId);
-      const locationData = CONFIG.locations.catalog[entry.locationId];
-      const locationThumbPath = getLocationThumbnailPath(locationData);
-      const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
-      const locationAlt = "Thumbnail of " + location;
-      return "<div class=\"list-item\">" +
-        "<div style=\"" + locationRowStyle + "\">" +
-        "<img src=\"" + locationThumbPath + "\" alt=\"" + locationAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + locationFallbackPath + "';\" />" +
-        "<button class=\"select-button" + (isSelected ? " is-selected" : "") + "\" data-action=\"select-gallery-entry\" data-id=\"" + entry.id + "\">" +
-        "Day " + entry.dayCreated + " — " + performer + " — " + location + " — " + theme + " — " + entry.contentType +
-        "</button>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
+  var uiState = getUiState();
+  var entries = gameState.content.entries || [];
+  var reversedEntries = entries.slice().reverse();
+  var selectedEntryId = uiState.gallery.selectedContentId;
 
-  const selectedEntry = uiState.gallery.selectedContentId
-    ? entries.find(function (entry) {
-      return entry.id === uiState.gallery.selectedContentId;
+  // Content cards
+  var contentCardsHtml = reversedEntries.map(function(entry) {
+    var performer = getContentEntryPerformerLabel(gameState, entry);
+    var isPremium = entry.contentType === 'Premium';
+    var typeClass = isPremium ? 'content-card__type--premium' : 'content-card__type--promo';
+    var thumbPath = entry.thumbnailPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
+    var isSelected = entry.id === selectedEntryId;
+
+    return '<div class="content-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-gallery-entry" data-id="' + entry.id + '">' +
+      '<img class="content-card__image" src="' + thumbPath + '" alt="' + entry.title + '">' +
+      '<div class="content-card__body">' +
+        '<div class="content-card__title">' + (entry.title || 'Untitled') + '</div>' +
+        '<div class="content-card__meta">' +
+          '<span class="content-card__type ' + typeClass + '">' + entry.contentType + '</span>' +
+          '<span>' + performer + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  if (!contentCardsHtml) {
+    contentCardsHtml = '<div class="empty-state"><div class="empty-state__icon">📷</div><div class="empty-state__title">No Content Yet</div><div class="empty-state__description">Book your first shoot to start building your library.</div><button class="button primary" data-action="nav-booking">Book a Shoot</button></div>';
+  }
+
+  var selectedEntry = selectedEntryId
+    ? entries.find(function(entry) {
+      return entry.id === selectedEntryId;
     })
     : null;
-  const detailBundleThumbs = selectedEntry ? renderBundleThumbs(selectedEntry.bundleThumbs) : "";
-  const detailBundlePanel = detailBundleThumbs
-    ? "<p><strong>Sample Pack:</strong></p>" + detailBundleThumbs
-    : "";
-  const detailPhotoPaths = selectedEntry ? getEntryPhotoPaths(selectedEntry) : [];
-  const photoButton = selectedEntry
-    ? "<div class=\"button-row\">" +
-      createButton("View Shoot Photos", "view-shoot-photos", "primary", detailPhotoPaths.length === 0,
-        "data-id=\"" + selectedEntry.id + "\"") +
-      "</div>"
-    : "";
 
-  const detailPanel = selectedEntry
-    ? "<div class=\"panel\"><h3 class=\"panel-title\">Entry Details</h3>" +
-      "<p><strong>Day:</strong> " + selectedEntry.dayCreated + "</p>" +
-      "<p><strong>Performer:</strong> " + getContentEntryPerformerLabel(gameState, selectedEntry) + "</p>" +
-      "<div style=\"" + locationRowStyle + "\">" +
-      "<img src=\"" + getLocationThumbnailPath(CONFIG.locations.catalog[selectedEntry.locationId]) + "\" alt=\"Thumbnail of " + getLocationName(selectedEntry.locationId) + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH + "';\" />" +
-      "<p><strong>Location:</strong> " + getLocationName(selectedEntry.locationId) + "</p>" +
-      "</div>" +
-      "<p><strong>Theme:</strong> " + getThemeName(selectedEntry.themeId) + "</p>" +
-      "<p><strong>Type:</strong> " + selectedEntry.contentType + "</p>" +
-      "<p><strong>Shoot Cost:</strong> " + formatCurrency(selectedEntry.shootCost) + "</p>" +
-      detailBundlePanel +
-      photoButton +
-      "</div>"
-    : "";
+  var detailPanel = '';
+  if (selectedEntry) {
+    var locationName = getLocationName(selectedEntry.locationId);
+    var themeName = getThemeName(selectedEntry.themeId);
+    var photoPaths = getEntryPhotoPaths(selectedEntry);
+    detailPanel = '<div class="panel"><h3 class="panel-title">Entry Details</h3>' +
+      '<div class="stat-row"><span class="stat-row__label">Day Created</span><span class="stat-row__value">' + selectedEntry.dayCreated + '</span></div>' +
+      '<div class="stat-row"><span class="stat-row__label">Performer</span><span class="stat-row__value">' + getContentEntryPerformerLabel(gameState, selectedEntry) + '</span></div>' +
+      '<div class="stat-row"><span class="stat-row__label">Location</span><span class="stat-row__value">' + locationName + '</span></div>' +
+      '<div class="stat-row"><span class="stat-row__label">Theme</span><span class="stat-row__value">' + themeName + '</span></div>' +
+      '<div class="stat-row"><span class="stat-row__label">Type</span><span class="stat-row__value">' + selectedEntry.contentType + '</span></div>' +
+      '<div class="stat-row"><span class="stat-row__label">Shoot Cost</span><span class="stat-row__value">' + formatCurrency(selectedEntry.shootCost) + '</span></div>' +
+      '<div class="button-row">' +
+        '<button class="button primary" data-action="view-shoot-photos" data-id="' + selectedEntry.id + '"' + (photoPaths.length ? '' : ' disabled') + '>View Shoot Photos</button>' +
+      '</div>' +
+    '</div>';
+  }
 
-  const outputCards = shootOutputs.length
-    ? shootOutputs.slice().reverse().map(function (output) {
-      const thumbPath = output.thumbnailPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
-      const fallbackPath = CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
-      const performerLabel = output.source === "agency_pack"
-        ? "Agency Sample Pack"
-        : getShootOutputPerformerLabel(gameState, output.performerIds);
-      const tierLabel = formatShootOutputTierLabel(output.tier);
-      const dayLabel = Number.isFinite(output.day) ? output.day : "?";
-      const socialFollowers = Number.isFinite(output.socialFollowersGained) ? output.socialFollowersGained : 0;
-      const onlyFansSubscribers = Number.isFinite(output.onlyFansSubscribersGained) ? output.onlyFansSubscribersGained : 0;
-      return "<div class=\"panel\" style=\"" + outputCardStyle + "\">" +
-        "<img src=\"" + thumbPath + "\" alt=\"Shoot output thumbnail\" width=\"" + outputThumbSize + "\" height=\"" + outputThumbSize + "\"" +
-        " style=\"" + outputThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />" +
-        "<div style=\"" + outputMetaStyle + "\">" +
-        "<p><strong>Day " + dayLabel + " — " + tierLabel + " Shoot</strong></p>" +
-        "<p class=\"helper-text\">Performers: " + performerLabel + "</p>" +
-        "<p class=\"helper-text\">Social Followers: " + socialFollowers + " | OF Subs: " + onlyFansSubscribers + "</p>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
-
-  const body = "<div class=\"panel\"><h3 class=\"panel-title\">Shoot Outputs</h3>" + outputCards + "</div>" +
-    "<div class=\"panel\"><h3 class=\"panel-title\">Content History</h3>" + entryList + "</div>" +
-    detailPanel +
-    renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-  screen.innerHTML = createPanel("Gallery", body, "screen-gallery-title");
+  // Layout
+  screen.innerHTML = '<h2 class="screen-title">Gallery</h2>' +
+    '<div class="gallery-layout">' +
+      '<div class="gallery-grid">' + contentCardsHtml + '</div>' +
+      detailPanel +
+    '</div>' +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
 
 function renderSlideshow(gameState) {
   const screen = qs("#screen-slideshow");
@@ -1357,124 +1137,118 @@ function renderSlideshow(gameState) {
 }
 
 function renderStoryLog(gameState) {
-  const screen = qs("#screen-story-log");
-  const entries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
-  const entryList = entries.length
-    ? entries.map(function (entry) {
-      const dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber + " — " : "";
-      const title = dayLabel + entry.title;
-      const preview = getStoryLogPreview(entry.body);
-      return "<div class=\"list-item\">" +
-        "<button class=\"select-button\" data-action=\"view-story-log-entry\" data-id=\"" + entry.id + "\">" + title + "</button>" +
-        "<p class=\"helper-text\">" + preview + "</p>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No story events logged yet.</p>";
+  var screen = qs("#screen-story-log");
+  if (!screen) return;
 
-  const body = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Story Log</h3>" +
-    "<div class=\"story-log-list\">" + entryList + "</div>" +
-    "</div>" +
-    renderStatusMessage() +
-    "<div class=\"button-row\">" +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
+  var entries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
 
-  screen.innerHTML = createPanel("Story Log", body, "screen-story-log-title");
+  var entriesHtml = entries.map(function(entry) {
+    var icon = getEventIcon(entry);
+    var dayLabel = Number.isFinite(entry.dayNumber) ? 'Day ' + entry.dayNumber : '';
+    return '<div class="story-log-item" data-action="view-story-log-entry" data-id="' + entry.id + '">' +
+      '<div class="story-log-item__header">' +
+        (dayLabel ? '<span class="story-log-item__day">' + dayLabel + '</span>' : '') +
+        '<span style="font-size:14px;">' + icon + '</span>' +
+        '<span class="story-log-item__title">' + (entry.title || 'Event') + '</span>' +
+      '</div>' +
+      '<div class="story-log-item__body">' + (entry.body || '') + '</div>' +
+    '</div>';
+  }).join('');
+
+  if (!entriesHtml) {
+    entriesHtml = '<div class="empty-state"><div class="empty-state__icon">📜</div><div class="empty-state__title">No Story Events</div><div class="empty-state__description">Events will appear here as your studio grows.</div></div>';
+  }
+
+  screen.innerHTML = '<h2 class="screen-title">Story Log</h2>' +
+    '<div class="story-log-layout">' +
+      '<div class="story-log-list">' + entriesHtml + '</div>' +
+    '</div>' +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
 
-function renderShop(gameState) {
-  const screen = qs("#screen-shop");
-  const cost = Number.isFinite(CONFIG.locations.tier1UnlockCost)
-    ? CONFIG.locations.tier1UnlockCost
-    : 0;
-  const unlocked = isLocationTierUnlocked(gameState, "tier1");
-  const canBuy = !unlocked && gameState.player.cash >= cost;
-  const tier1Name = CONFIG.locations.tier1Name || "Location Tier 1";
-  const tier2Cost = Number.isFinite(CONFIG.locations.tier2UnlockCost)
-    ? CONFIG.locations.tier2UnlockCost
-    : 0;
-  const tier2RepRequirement = Number.isFinite(CONFIG.locations.tier2ReputationRequirement)
-    ? CONFIG.locations.tier2ReputationRequirement
-    : 0;
-  const tier2Unlocked = isLocationTierUnlocked(gameState, "tier2");
-  const canBuyTier2 = !tier2Unlocked && gameState.player.cash >= tier2Cost && gameState.player.reputation >= tier2RepRequirement;
-  const tier2Name = CONFIG.locations.tier2Name || "Location Tier 2";
 
-  const equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
+function renderShop(gameState) {
+  var screen = qs("#screen-shop");
+  if (!screen) return;
+
+  var cash = gameState.player.cash;
+
+  // Location unlocks
+  var tier1Unlocked = isLocationTierUnlocked(gameState, "tier1");
+  var tier2Unlocked = isLocationTierUnlocked(gameState, "tier2");
+  var tier1Cost = CONFIG.locations.tier1UnlockCost || 500;
+  var tier2Cost = CONFIG.locations.tier2UnlockCost || 2000;
+  var tier2RepReq = CONFIG.locations.tier2ReputationRequirement || 50;
+  var canBuyTier1 = !tier1Unlocked && cash >= tier1Cost;
+  var canBuyTier2 = !tier2Unlocked && cash >= tier2Cost && gameState.player.reputation >= tier2RepReq;
+
+  var locationCardsHtml = '<div class="shop-card' + (tier1Unlocked ? ' shop-card--owned' : '') + '">' +
+    '<div class="shop-card__title">Tier 1 Locations</div>' +
+    '<div class="shop-card__description">Unlock Shower and other Tier 1 locations for your shoots.</div>' +
+    (tier1Unlocked ?
+      '<div class="shop-card__status shop-card__status--owned">✓ Owned</div>' :
+      '<div class="shop-card__price">' + formatCurrency(tier1Cost) + '</div><button class="button primary" data-action="buy-tier1-location"' + (canBuyTier1 ? '' : ' disabled') + '>Unlock</button>'
+    ) +
+  '</div>' +
+  '<div class="shop-card' + (tier2Unlocked ? ' shop-card--owned' : (!canBuyTier2 && !tier2Unlocked ? ' shop-card--locked' : '')) + '">' +
+    '<div class="shop-card__title">Tier 2 Locations</div>' +
+    '<div class="shop-card__description">Unlock Office and premium Tier 2 locations. Requires ' + tier2RepReq + ' reputation.</div>' +
+    (tier2Unlocked ?
+      '<div class="shop-card__status shop-card__status--owned">✓ Owned</div>' :
+      '<div class="shop-card__price">' + formatCurrency(tier2Cost) + '</div>' +
+      (gameState.player.reputation < tier2RepReq ? '<div class="shop-card__status shop-card__status--locked">Requires Rep ' + tier2RepReq + '</div>' : '') +
+      '<button class="button primary" data-action="unlock-location-tier" data-tier="tier2"' + (canBuyTier2 ? '' : ' disabled') + '>Unlock</button>'
+    ) +
+  '</div>';
+
+  // Equipment upgrades
+  var equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
     ? CONFIG.equipment.upgradeOrder
     : [];
-  const unlockedEquipmentOrder = equipmentOrder.filter(function (upgradeId) {
+  var unlockedEquipmentOrder = equipmentOrder.filter(function(upgradeId) {
     if (typeof isScheduledUnlockAvailable !== "function") {
       return true;
     }
     return isScheduledUnlockAvailable(gameState, "equipment", upgradeId);
   });
 
-  const equipmentRows = unlockedEquipmentOrder.length
-    ? unlockedEquipmentOrder.map(function (upgradeId) {
-      const upgrade = CONFIG.equipment.upgrades[upgradeId];
+  var equipmentCardsHtml = unlockedEquipmentOrder.length
+    ? unlockedEquipmentOrder.map(function(upgradeId) {
+      var upgrade = CONFIG.equipment.upgrades[upgradeId];
       if (!upgrade) {
-        return "";
+        return '';
       }
-      const levelKey = getEquipmentLevelKey(upgradeId);
-      const currentLevel = levelKey && gameState.equipment && Number.isFinite(gameState.equipment[levelKey])
+      var levelKey = getEquipmentLevelKey(upgradeId);
+      var currentLevel = levelKey && gameState.equipment && Number.isFinite(gameState.equipment[levelKey])
         ? gameState.equipment[levelKey]
         : 0;
-      const maxLevel = Number.isFinite(upgrade.maxLevel) ? upgrade.maxLevel : 0;
-      const isMaxed = currentLevel >= maxLevel;
-      const nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
-      const costLabel = isMaxed ? "MAX" : formatCurrency(nextCost);
+      var maxLevel = Number.isFinite(upgrade.maxLevel) ? upgrade.maxLevel : 0;
+      var isMaxed = currentLevel >= maxLevel;
+      var nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
+      var canBuy = nextCost !== null && cash >= nextCost;
+      var title = getEquipmentUpgradeLabel(upgradeId);
+      return '<div class="shop-card' + (isMaxed ? ' shop-card--owned' : '') + '">' +
+        '<div class="shop-card__title">' + title + ' (Level ' + currentLevel + ')</div>' +
+        '<div class="shop-card__description">Upgrade to improve shoot performance and growth multipliers.</div>' +
+        (isMaxed
+          ? '<div class="shop-card__status shop-card__status--owned">✓ Maxed</div>'
+          : '<div class="shop-card__price">' + formatCurrency(nextCost) + '</div><button class="button primary" data-action="upgrade-equipment" data-id="' + upgradeId + '"' + (canBuy ? '' : ' disabled') + '>Upgrade to L' + (currentLevel + 1) + '</button>'
+        ) +
+      '</div>';
+    }).join('')
+    : '<div class="empty-state"><div class="empty-state__description">No equipment upgrades available.</div></div>';
 
-      const buttonClass = "button vip" + (isMaxed ? " is-disabled" : "");
-      const buttonLabel = isMaxed ? "Maxed" : "Upgrade";
-      const buttonAttributes = isMaxed ? " aria-disabled=\"true\" data-disabled=\"true\"" : "";
-
-      return "<div class=\"list-item\">" +
-        "<p><strong>" + getEquipmentUpgradeLabel(upgradeId) + "</strong></p>" +
-        "<p class=\"helper-text\">Level " + currentLevel + " / " + maxLevel + "</p>" +
-        "<p><strong>Next Cost:</strong> " + costLabel + "</p>" +
-        "<div class=\"button-row\">" +
-        "<button class=\"" + buttonClass + "\" data-action=\"upgrade-equipment\" data-id=\"" + upgradeId + "\"" +
-        buttonAttributes + ">" + buttonLabel + "</button>" +
-        "</div>" +
-        "</div>";
-    }).join("")
-    : "<p class=\"helper-text\">No equipment upgrades available.</p>";
-
-  const body = renderStatusMessage() +
-    "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Location Tiers</h3>" +
-    "<div class=\"list-item\">" +
-    "<p><strong>Tier 0 — Starter Locations</strong></p>" +
-    "<p class=\"helper-text\">Status: Unlocked</p>" +
-    "</div>" +
-    "<div class=\"list-item\">" +
-    "<p><strong>" + tier1Name + "</strong></p>" +
-    "<p class=\"helper-text\">Cost: " + formatCurrency(cost) + " | Status: " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
-    "<div class=\"button-row\">" +
-    createButton("Unlock", "unlock-location-tier", "vip", !canBuy, "data-tier=\"tier1\"") +
-    "</div>" +
-    "</div>" +
-    "<div class=\"list-item\">" +
-    "<p><strong>" + tier2Name + "</strong></p>" +
-    "<p class=\"helper-text\">Cost: " + formatCurrency(tier2Cost) + " | Rep ≥ " + tier2RepRequirement +
-    " | Status: " + (tier2Unlocked ? "Unlocked" : "Locked") + "</p>" +
-    "<div class=\"button-row\">" +
-    createButton("Unlock", "unlock-location-tier", "vip", !canBuyTier2, "data-tier=\"tier2\"") +
-    "</div>" +
-    "</div>" +
-    "</div>" +
-    "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Equipment Upgrades</h3>" +
-    renderEquipmentMessage() +
-    equipmentRows +
-    "</div>" +
-    "<div class=\"button-row\">" +
-    createButton("Back to Hub", "nav-hub") +
-    "</div>";
-  screen.innerHTML = createPanel("Shop", body, "screen-shop-title");
+  // Layout
+  screen.innerHTML = '<h2 class="screen-title">Shop</h2>' +
+    '<div class="shop-layout">' +
+      '<div class="panel"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
+      '<div class="panel"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
+    '</div>' +
+    renderStatusMessage() +
+    '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 }
+
+
 
 function getLatestContentEntry(gameState) {
   if (!gameState.content.lastContentId) {
