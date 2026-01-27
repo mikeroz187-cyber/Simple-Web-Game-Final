@@ -210,10 +210,6 @@ const STORY_EVENT_COPY = {
     title: "Unlocked!",
     message: "New gear available: Lighting upgrades."
   },
-  unlock_location_shower: {
-    title: "Unlocked!",
-    message: "New location available: Shower (Tier 1)."
-  },
   unlock_performer_aria_lux: {
     title: "Unlocked!",
     message: "New performer available: Aria Lux."

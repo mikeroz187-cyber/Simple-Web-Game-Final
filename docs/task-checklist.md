@@ -66,6 +66,7 @@
 - [x] Social footprint bonus boosts Premium gains (capped, config-driven, visible in Analytics).
 - [x] Promo posts show OF Pipeline progress (carry) + clear post results messaging.
 - [x] Day-based unlock cadence (config schedule) + one-time unlock messages + persists.
+- [x] Shower/Tier 1 locations are no longer auto-unlocked by day schedule; Tier 1 unlock is purchase-only.
 - [x] Daily OF payout adds cash on day advance (subs-based, config-driven).
 - [x] Scalable daily overhead deducts cash on day advance (tiered by subs, config-driven).
 - [x] Balance Pass v1: increased debt to 25,000 and retuned overhead tiers for post-payout economy.
