@@ -4,7 +4,6 @@ function advanceDay(gameState) {
   gameState.player.day += 1;
   recoverAllPerformers(gameState);
   advancePerformerManagementDay(gameState);
-  rerollFreelancerProfilesOnNewDay(gameState);
   const subs = Number.isFinite(gameState.player.onlyFansSubscribers)
     ? gameState.player.onlyFansSubscribers
     : 0;

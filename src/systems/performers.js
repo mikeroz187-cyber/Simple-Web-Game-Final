@@ -38,9 +38,6 @@ function getContractDaysByType(performerType) {
   if (performerType && Number.isFinite(daysByType[performerType])) {
     return daysByType[performerType];
   }
-  if (Number.isFinite(daysByType.freelance)) {
-    return daysByType.freelance;
-  }
   return 0;
 }
 
@@ -50,68 +47,7 @@ function getRenewalCostByType(performerType) {
   if (performerType && Number.isFinite(costByType[performerType])) {
     return costByType[performerType];
   }
-  if (Number.isFinite(costByType.freelance)) {
-    return costByType.freelance;
-  }
   return 0;
-}
-
-function getFreelancerConfig() {
-  if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
-    return CONFIG.freelancers;
-  }
-  return {};
-}
-
-function getFreelancerProfileIds() {
-  const config = getFreelancerConfig();
-  const profiles = Array.isArray(config.profiles) ? config.profiles : [];
-  return profiles.map(function (profile) {
-    return profile.id;
-  }).filter(function (profileId) {
-    return typeof profileId === "string" && profileId.length > 0;
-  });
-}
-
-function getRandomFreelancerProfileId(avoidId) {
-  const profileIds = getFreelancerProfileIds();
-  if (profileIds.length === 0) {
-    return null;
-  }
-  let candidates = profileIds;
-  if (avoidId) {
-    const filtered = profileIds.filter(function (profileId) {
-      return profileId !== avoidId;
-    });
-    candidates = filtered.length ? filtered : profileIds;
-  }
-  const index = Math.floor(Math.random() * candidates.length);
-  return candidates[index] || profileIds[0];
-}
-
-function rerollFreelancerProfilesOnNewDay(gameState) {
-  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
-    return;
-  }
-  const profileIds = getFreelancerProfileIds();
-  if (profileIds.length === 0) {
-    return;
-  }
-  if (!gameState.roster.freelancerProfiles || typeof gameState.roster.freelancerProfiles !== "object") {
-    gameState.roster.freelancerProfiles = {};
-  }
-  const assignments = gameState.roster.freelancerProfiles;
-  gameState.roster.performers.forEach(function (performer) {
-    if (!performer || performer.type !== "freelance") {
-      return;
-    }
-    const currentProfileId = assignments[performer.id];
-    const nextProfileId = getRandomFreelancerProfileId(currentProfileId);
-    if (!nextProfileId) {
-      return;
-    }
-    assignments[performer.id] = nextProfileId;
-  });
 }
 
 function ensurePerformerManagementForId(gameState, performer) {
@@ -142,7 +78,7 @@ function ensurePerformerManagementForId(gameState, performer) {
       return entry.id === performer;
     }) || null;
   }
-  const performerType = performerData && performerData.type ? performerData.type : "freelance";
+  const performerType = performerData && performerData.type ? performerData.type : "core";
   const contractDays = getContractDaysByType(performerType);
 
   if (!management.contracts[performerId] || typeof management.contracts[performerId] !== "object") {

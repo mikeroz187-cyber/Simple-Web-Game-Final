@@ -15,7 +15,7 @@ function getContractedRosterCount(gameState) {
     return 0;
   }
   return gameState.roster.performers.filter(function (performer) {
-    return performer && performer.type !== "freelance";
+    return performer && performer.type === "core";
   }).length;
 }
 

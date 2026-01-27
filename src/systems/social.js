@@ -389,22 +389,6 @@ function postPromoContent(gameState, platform, contentId) {
       : 1;
     socialFollowersGained = Math.round(socialFollowersGained * promoFollowersMult);
   }
-  const isFreelancer = performerIds.some(function (performerId) {
-    const performer = gameState.roster.performers.find(function (rosterEntry) {
-      return rosterEntry.id === performerId;
-    });
-    return performer && performer.type === "freelance";
-  });
-  const freelancerConfig = CONFIG.freelancers && typeof CONFIG.freelancers === "object" ? CONFIG.freelancers : {};
-  const promoBonus = Number.isFinite(freelancerConfig.promoFollowersBonusFlat)
-    ? freelancerConfig.promoFollowersBonusFlat
-    : 0;
-  const subscriberMultiplier = Number.isFinite(freelancerConfig.freelancerSocialSubMultiplier)
-    ? freelancerConfig.freelancerSocialSubMultiplier
-    : 1;
-  if (isFreelancer && promoBonus > 0) {
-    socialFollowersGained += promoBonus;
-  }
   const competitionMultipliers = getCompetitionMultipliers(gameState, gameState.player.day);
   socialFollowersGained = Math.round(socialFollowersGained * competitionMultipliers.promoFollowerMult);
   const reputationMultiplier = getReputationFollowersMultiplier(gameState);
@@ -413,9 +397,6 @@ function postPromoContent(gameState, platform, contentId) {
   let socialSubscribersGained = activeStrategy
     ? Math.max(0, Math.round(baseSubscribers * activeStrategy.subscriberConversionMult))
     : baseSubscribers;
-  if (isFreelancer && subscriberMultiplier >= 0) {
-    socialSubscribersGained = Math.floor(socialSubscribersGained * subscriberMultiplier);
-  }
   if (!Number.isFinite(gameState.player.onlyFansSubCarry)) {
     gameState.player.onlyFansSubCarry = 0;
   }

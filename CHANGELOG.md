@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed freelancer profile/rotation remnants from state, save/load, booking day advance, and social bonuses.
+  - Why: Fully retire the freelancer system now that Agency Sample Packs handle non-core booking variation.
+  - Files touched: src/state.js, src/save.js, src/systems/performers.js, src/systems/booking.js, src/systems/social.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Consolidated competition settings under CONFIG.market.competition and removed the legacy CONFIG.competition block.
   - Why: Keep competition unlock logic, market shifts, and UI messaging aligned to a single source of truth.
   - Files touched: src/config.js, src/systems/competition.js, src/state.js, src/save.js, src/ui/render.js, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/task-checklist.md, CHANGELOG.md.
