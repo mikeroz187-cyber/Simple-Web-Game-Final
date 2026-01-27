@@ -192,9 +192,7 @@ function ensureRosterCompleteness(candidate) {
   const rosterIds = roster.performers.map(function (entry) {
     return entry.id;
   });
-  const catalogIds = CONFIG.performers.core_ids
-    .concat(CONFIG.performers.freelance_ids)
-    .concat(CONFIG.performers.act2_ids || []);
+  const catalogIds = CONFIG.performers.core_ids;
   const missingIds = catalogIds.filter(function (performerId) {
     return rosterIds.indexOf(performerId) === -1;
   });
@@ -204,6 +202,48 @@ function ensureRosterCompleteness(candidate) {
       roster.performers.push(entry);
       rosterIds.push(entry.id);
     }
+  });
+}
+
+function pruneFreelanceRosterEntries(candidate) {
+  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
+    return;
+  }
+  const removedIds = new Set();
+  candidate.roster.performers = candidate.roster.performers.filter(function (entry) {
+    if (!entry || entry.type !== "freelance") {
+      return true;
+    }
+    if (entry.id) {
+      removedIds.add(entry.id);
+    }
+    return false;
+  });
+  if (removedIds.size === 0) {
+    return;
+  }
+  const profiles = candidate.roster.freelancerProfiles;
+  if (profiles && typeof profiles === "object" && !Array.isArray(profiles)) {
+    Object.keys(profiles).forEach(function (performerId) {
+      if (removedIds.has(performerId)) {
+        delete profiles[performerId];
+      }
+    });
+  }
+  const management = candidate.performerManagement;
+  if (!management || typeof management !== "object") {
+    return;
+  }
+  ["contracts", "availability", "retentionFlags"].forEach(function (key) {
+    const bucket = management[key];
+    if (!bucket || typeof bucket !== "object") {
+      return;
+    }
+    removedIds.forEach(function (performerId) {
+      if (bucket[performerId] !== undefined) {
+        delete bucket[performerId];
+      }
+    });
   });
 }
 
@@ -551,6 +591,7 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.storyLog)) {
     candidate.storyLog = [];
   }
+  pruneFreelanceRosterEntries(candidate);
   ensureRosterCompleteness(candidate);
   ensurePerformerStarPowerProgress(candidate);
   ensureFreelancerProfilesState(candidate);

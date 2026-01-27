@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed freelance/Act 2 performers from roster initialization and save normalization, with load-time cleanup to prune legacy freelancer entries.
+  - Why: Keep roster limited to contracted performers now that Agency Sample Packs cover non-core booking flavor.
+  - Files touched: src/state.js, src/save.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Removed the scheduled Day 7 Shower unlock so Tier 1 locations unlock only via the purchase flow.
   - Why: Prevent free auto-unlocks from bypassing the Tier 1 purchase gate.
   - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.

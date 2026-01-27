@@ -977,7 +977,9 @@ function renderAnalytics(gameState) {
 
 function renderRoster(gameState) {
   const screen = qs("#screen-roster");
-  const performers = gameState.roster.performers;
+  const performers = gameState.roster && Array.isArray(gameState.roster.performers)
+    ? gameState.roster.performers
+    : [];
   const portraitSize = getPerformerPortraitSizePx();
   const portraitRadius = getPerformerPortraitRadiusPx();
   const portraitStyle = "width:" + portraitSize + "px;height:" + portraitSize + "px;object-fit:cover;border-radius:" + portraitRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
