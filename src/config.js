@@ -579,7 +579,6 @@ const CONFIG = {
   },
   progression: {
     starting_reputation: 0,
-    location_tier_1_unlock_cost: 2000,
     unlockSchedule: [
       { day: 4, type: "equipment", id: "lighting", storyId: "unlock_equipment_lighting" },
       { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" },

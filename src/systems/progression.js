@@ -55,10 +55,9 @@ function unlockLocationTier(gameState, tierId) {
     return { ok: true, message: tierName + " unlocked." };
   }
 
-  const fallbackCost = CONFIG.progression.location_tier_1_unlock_cost;
   const cost = Number.isFinite(CONFIG.locations.tier1UnlockCost)
     ? CONFIG.locations.tier1UnlockCost
-    : fallbackCost;
+    : 0;
   if (gameState.player.cash < cost) {
     return { ok: false, message: "Not enough cash to unlock Location Tier 1." };
   }

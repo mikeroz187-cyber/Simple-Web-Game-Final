@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Consolidated Tier 1 location unlock cost to CONFIG.locations.tier1UnlockCost and removed the legacy progression key.
+  - Why: Eliminate duplicate config sources and keep Tier 1 unlock pricing consistent.
+  - Files touched: src/config.js, src/systems/progression.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Removed freelance/Act 2 performers from roster initialization and save normalization, with load-time cleanup to prune legacy freelancer entries.
   - Why: Keep roster limited to contracted performers now that Agency Sample Packs cover non-core booking flavor.
   - Files touched: src/state.js, src/save.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
