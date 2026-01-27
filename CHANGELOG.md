@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Applied neon VIP lounge visual polish with Bebas Neue headings, laminated card styling, and a Hub dashboard/feed layout.
+  - Why: Deliver the requested cohesive art direction and improve Hub readability without changing gameplay.
+  - Files touched: index.html, styles.css, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Refreshed competition and performer unlock messaging to match debt-gated unlocks and reputation-driven recruitment, plus updated checklist notes.
   - Why: Remove legacy day-based unlock confusion and keep UI/story copy aligned with current systems.
   - Files touched: src/ui/render.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.

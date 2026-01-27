@@ -86,6 +86,11 @@
 
 ---
 
+## UI / Cosmetic / QoL — Implemented
+- [x] UI Polish Pass v1 (Neon VIP Lounge + Bebas Neue + Hub dashboard + event feed cards).
+
+---
+
 ## Act 1+ Content Expansion — Implemented
 - [x] Reputation gains via milestone rewards (followers, OF subs, MRR).
 - [x] Recruitment panel with rep-gated candidates and meet slideshow.
