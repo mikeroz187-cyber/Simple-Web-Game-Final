@@ -12,6 +12,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Act 2 and Act 3 story events, Story Log screen, and legacy milestones.
 - Premium variance rolls, equipment upgrades, Tier 2 locations, and analytics rollups.
 - Post-debt Market Saturation tiers for Premium OF subs with Act 2 activation messaging.
+- Daily OF cash payouts on day advance plus tiered overhead scaling.
 
 ## Currently Working On
 - Documentation reconciliation so every doc matches the current implementation.

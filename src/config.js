@@ -113,6 +113,18 @@ const CONFIG = {
       promo: 1.0,
       premium: 1.6
     },
+    cashflow: {
+      ofNetMonthlyPerSub: 20,
+      daysPerMonth: 30,
+      enableDailyOfPayout: true,
+      enableDailyOverhead: true,
+      overheadTiers: [
+        { minSubs: 0, dailyOverhead: 5, label: "Basics" },
+        { minSubs: 100, dailyOverhead: 10, label: "Growing" },
+        { minSubs: 250, dailyOverhead: 18, label: "Scaling" },
+        { minSubs: 500, dailyOverhead: 28, label: "Big League" }
+      ]
+    },
     netWorth: {
       enabled: true,
       valuationMultiple: 12,

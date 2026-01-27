@@ -5,12 +5,19 @@ function advanceDay(gameState) {
   recoverAllPerformers(gameState);
   advancePerformerManagementDay(gameState);
   rerollFreelancerProfilesOnNewDay(gameState);
-  const daysPerMonth = CONFIG.onlyfans && Number.isFinite(CONFIG.onlyfans.daysPerMonth)
-    ? CONFIG.onlyfans.daysPerMonth
-    : 30;
-  const dailyIncome = daysPerMonth > 0 ? Math.floor(getMRR(gameState) / daysPerMonth) : 0;
-  if (dailyIncome > 0) {
-    gameState.player.cash = Math.max(0, gameState.player.cash + dailyIncome);
+  const subs = Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
+  const dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  if (dailyPayout > 0) {
+    gameState.player.cash = Math.max(0, gameState.player.cash + dailyPayout);
+  }
+  const overheadResult = typeof getDailyOverhead === "function"
+    ? getDailyOverhead(gameState)
+    : { amount: 0, label: null };
+  const overheadAmount = Number.isFinite(overheadResult.amount) ? overheadResult.amount : 0;
+  if (overheadAmount > 0) {
+    gameState.player.cash = Math.max(0, gameState.player.cash - overheadAmount);
   }
   recordAnalyticsSnapshot(gameState);
   maybeApplyWeeklyCompetitionCheck(gameState, gameState.player.day);
@@ -20,7 +27,15 @@ function advanceDay(gameState) {
   const storyResult = checkStoryEvents(gameState);
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
-  return unlockEvents.concat(storyEvents);
+  return {
+    storyEvents: unlockEvents.concat(storyEvents),
+    cashflow: {
+      subs: subs,
+      payout: dailyPayout,
+      overheadAmount: overheadAmount,
+      overheadLabel: overheadResult.label || null
+    }
+  };
 }
 
 function getBookingComboConfig() {

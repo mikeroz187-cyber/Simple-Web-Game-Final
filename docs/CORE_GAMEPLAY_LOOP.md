@@ -12,7 +12,8 @@ This document describes the **current implemented loop** and rules as they exist
 - **Promo vs Premium:**
   - **Promo** content generates results only when posted on Social.
   - **Premium** content immediately adds OnlyFans subscribers and increases MRR.
-- **MRR → daily cash:** Daily cash income is `floor(MRR / daysPerMonth)` and is applied on day advance.
+- **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
+- **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance.
 - **Reputation:** Increases from milestone rewards (followers, OF subs, MRR thresholds). It gates Tier 2 location unlocks, recruitment candidates, and studio identity selection.
 - **Automation (optional):** If enabled, auto-book or auto-post can run once per day when you click **Advance Day**.
 - **Competition & variance:** After Day 181, competition standings and market shifts can modify Promo/Premium outputs, and Premium content may roll variance.
@@ -22,7 +23,7 @@ This document describes the **current implemented loop** and rules as they exist
 2. **Review Content** (five-image slideshow preview, metadata).
 3. **Review Analytics** (today totals, latest shoot results, rollups, snapshots).
 4. **Post Promo** on Social (Instagram and/or X) to convert Promo content into followers/subscribers.
-5. **Advance Day** to reset daily availability and apply daily MRR cash.
+5. **Advance Day** to reset daily availability and apply daily OF payout plus overhead.
 
 ## Daily Pacing Rules
 - **Performer caps:** Daily booking caps are per performer (default 1/day, max 3/day). High‑stamina recruits can exceed the default.
