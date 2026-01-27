@@ -39,8 +39,41 @@ function getUiState() {
   return window.uiState;
 }
 
+function renderHeaderStats(gameState) {
+  var container = document.getElementById("header-stats");
+  if (!container) {
+    return;
+  }
+
+  var day = gameState.player.day;
+  var cash = gameState.player.cash;
+  var debt = gameState.player.debtRemaining;
+  var ofSubs = gameState.player.onlyFansSubscribers;
+  var rep = gameState.player.reputation;
+  var daysLeft = Math.max(0, gameState.player.debtDueDay - day + 1);
+
+  var stats = [
+    { label: "Day", value: day, className: "" },
+    { label: "Cash", value: formatCurrency(cash), className: "header-stat--gold" },
+    { label: "OF Subs", value: ofSubs.toLocaleString(), className: "header-stat--accent" },
+    { label: "Debt", value: formatCurrency(debt), className: debt > 0 ? "header-stat--danger" : "" },
+    { label: "Days Left", value: daysLeft, className: daysLeft <= 14 ? "header-stat--danger" : "" },
+    { label: "Rep", value: rep, className: "" }
+  ];
+
+  var html = stats.map(function (stat) {
+    return "<div class=\"header-stat " + stat.className + "\">" +
+      "<span class=\"header-stat__label\">" + stat.label + "</span>" +
+      "<span class=\"header-stat__value\">" + stat.value + "</span>" +
+      "</div>";
+  }).join("");
+
+  container.innerHTML = html;
+}
+
 function renderApp(gameState) {
   getUiState();
+  renderHeaderStats(gameState);
   renderHub(gameState);
   renderBooking(gameState);
   renderContent(gameState);
@@ -190,10 +223,6 @@ function getAvailabilitySummary(gameState, performerId) {
 
 function renderHub(gameState) {
   const hub = qs("#screen-hub");
-  const hasContent = Boolean(gameState.content.lastContentId);
-  const hasPromo = gameState.content.entries.some(function (entry) {
-    return entry.contentType === "Promo";
-  });
   const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
   const nextAction = getNextActionLabel(gameState);
   const competitionConfig = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
@@ -410,32 +439,7 @@ function renderHub(gameState) {
     "<div class=\"event-feed\">" + eventCards + "</div>" +
     "</div>";
 
-  const navButtons = [
-    createButton("Booking", "nav-booking", "primary"),
-    createButton("Analytics", "nav-analytics", "", !hasContent),
-    createButton("Social", "nav-social", "", !hasPromo),
-    createButton("Gallery", "nav-gallery"),
-    createButton("Story Log", "nav-story-log"),
-    createButton("Roster", "nav-roster"),
-    createButton("Shop", "nav-shop")
-  ].join("");
-
   const uiState = getUiState();
-  const activeSlotId = uiState.save.selectedSlotId || CONFIG.save.default_slot_id;
-  const slotOptions = CONFIG.save.slots.map(function (slot) {
-    const selectedAttr = slot.id === activeSlotId ? " selected" : "";
-    return "<option value=\"" + slot.id + "\"" + selectedAttr + ">" + slot.label + "</option>";
-  }).join("");
-  const saveSlotControl = "<div class=\"panel\">" +
-    "<h3 class=\"panel-title\">Save Slot</h3>" +
-    "<div class=\"field-row\">" +
-    "<label class=\"field-label\" for=\"save-slot-select\">Active Slot</label>" +
-    "<select id=\"save-slot-select\" class=\"select-control\" data-action=\"select-save-slot\">" +
-    slotOptions +
-    "</select>" +
-    "</div>" +
-    "<p class=\"helper-text\">Save Now and Load Save use the selected slot. Autosave writes to the Autosave slot.</p>" +
-    "</div>";
 
   const automationConfig = CONFIG.automation || {};
   const autoBookCount = Number.isFinite(automationConfig.maxActionsPerDay)
@@ -471,15 +475,6 @@ function renderHub(gameState) {
     "</div>" +
     "<p class=\"helper-text\">Runs only when you click Advance Day. Max " + automationCapLabel + " per day.</p>" +
     "</div>";
-
-  const advanceDayButton = "<button class=\"button\" data-action=\"advance-day\" title=\"Manually advance to the next day.\">Advance Day</button>";
-  const saveButtons = [
-    createButton("Save Now", "save-now"),
-    createButton("Load Save", "load-save"),
-    createButton("Export Save", "export-save"),
-    createButton("Import Save", "import-save"),
-    advanceDayButton
-  ].join("");
 
   const canPayDebt = gameState.player.debtRemaining > 0 && gameState.player.cash >= gameState.player.debtRemaining;
   const debtButtonRow = "<div class=\"button-row\">" + createButton("Pay Debt", "pay-debt", "primary", !canPayDebt) + "</div>";
@@ -592,11 +587,8 @@ function renderHub(gameState) {
     legacyPanel +
     debtButtonRow +
     managerPanel +
-    "<div class=\"button-row\">" + navButtons + "</div>" +
     renderStatusMessage() +
     automationPanel +
-    saveSlotControl +
-    "<div class=\"button-row\">" + saveButtons + "</div>" +
     debugPanel;
 }
 
