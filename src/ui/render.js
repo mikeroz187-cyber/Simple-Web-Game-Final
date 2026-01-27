@@ -219,6 +219,11 @@ function renderHub(gameState) {
   const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
   const nextAction = getNextActionLabel(gameState);
   const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const marketCompetitionConfig = typeof getMarketCompetitionConfig === "function"
+    ? getMarketCompetitionConfig()
+    : (CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
+      ? CONFIG.market.competition
+      : {});
   const competitionDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
   const competitionStartDay = typeof getCompetitionStartDay === "function"
     ? getCompetitionStartDay(competitionConfig)
@@ -280,7 +285,18 @@ function renderHub(gameState) {
   ].join("");
 
   let competitionPanelBody = "";
-  if (competitionEnabled) {
+  const competitionUnlockAfterDebt = marketCompetitionConfig && marketCompetitionConfig.unlockAfterDebt === true;
+  if (competitionUnlockAfterDebt) {
+    if (!competitionUnlocked) {
+      competitionPanelBody = "<p class=\"helper-text\">Locked until debt is cleared.</p>";
+    } else if (competitionEnabled) {
+      competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
+        "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
+        "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
+    } else {
+      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks when debt is cleared.</p>";
+    }
+  } else if (competitionEnabled) {
     competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
       "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
       "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
