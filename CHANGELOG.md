@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Premium UI redesign Phase 3 — Hub transformed into dashboard layout with hero metrics (4 large glowing stat cards), live tabloid feed (scrollable news), horizontal card strip (Competition/Identity/Legacy/Manager), and footer controls (Pay Debt + automation toggles).
+  - Why: Create a premium "command center" dashboard that displays key information at a glance without scrolling.
+  - Files touched: styles.css, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Premium UI redesign Phase 2 — persistent header bar with key stats and Advance Day button, left navigation rail, full-viewport layout with internal scrolling, relocated save controls to nav dropdown.
   - Why: Eliminate vertical page scrolling by using a fixed viewport layout with persistent navigation and key stats always visible.
   - Files touched: index.html, styles.css, src/ui/render.js, src/ui/events.js, src/ui/router.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
