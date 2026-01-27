@@ -229,6 +229,11 @@ function renderHub(gameState) {
   const netWorthMultiple = netWorthConfig && Number.isFinite(netWorthConfig.valuationMultiple)
     ? netWorthConfig.valuationMultiple
     : 0;
+  const dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  const dailyOverhead = typeof getDailyOverhead === "function"
+    ? getDailyOverhead(gameState)
+    : { amount: 0, label: null };
+  const overheadLabel = dailyOverhead.label ? " (" + dailyOverhead.label + ")" : "";
   const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
     ? CONFIG.legacyMilestones
     : { milestoneOrder: [], milestones: {} };
@@ -244,6 +249,8 @@ function renderHub(gameState) {
     "<p><strong>Social Subscribers:</strong> " + gameState.player.socialSubscribers + "</p>",
     "<p><strong>OnlyFans Subscribers:</strong> " + gameState.player.onlyFansSubscribers + "</p>",
     "<p><strong>MRR:</strong> " + formatCurrency(getMRR(gameState)) + "/mo</p>",
+    "<p><strong>Daily OF Payout (est):</strong> +" + formatCurrency(dailyPayout) + "/day</p>",
+    "<p><strong>Daily Overhead:</strong> -" + formatCurrency(dailyOverhead.amount) + "/day" + overheadLabel + "</p>",
     "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>",
     "<p class=\"helper-text\">Cash + (MRR × " + netWorthMultiple + ")</p>",
     "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",

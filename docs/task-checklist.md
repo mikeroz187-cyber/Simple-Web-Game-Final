@@ -64,6 +64,8 @@
 - [x] Social footprint bonus boosts Premium gains (capped, config-driven, visible in Analytics).
 - [x] Promo posts show OF Pipeline progress (carry) + clear post results messaging.
 - [x] Day-based unlock cadence (config schedule) + one-time unlock messages + persists.
+- [x] Daily OF payout adds cash on day advance (subs-based, config-driven).
+- [x] Scalable daily overhead deducts cash on day advance (tiered by subs, config-driven).
 
 ---
 

@@ -19,6 +19,20 @@ function setEquipmentMessage(message) {
   uiState.shop.equipmentMessage = message || "";
 }
 
+function buildDailyCashflowMessage(cashflow) {
+  if (!cashflow || typeof cashflow !== "object") {
+    return "";
+  }
+  const subs = Number.isFinite(cashflow.subs) ? cashflow.subs : 0;
+  const payout = Number.isFinite(cashflow.payout) ? cashflow.payout : 0;
+  const overheadAmount = Number.isFinite(cashflow.overheadAmount) ? cashflow.overheadAmount : 0;
+  const overheadLabel = typeof cashflow.overheadLabel === "string" ? cashflow.overheadLabel : "";
+  const payoutLine = "OF Payout: +" + formatCurrency(payout) + " (" + subs + " subs)";
+  const overheadLabelSuffix = overheadLabel ? (" - " + overheadLabel) : "";
+  const overheadLine = "Overhead (Scaling" + overheadLabelSuffix + "): -" + formatCurrency(overheadAmount);
+  return payoutLine + "<br>" + overheadLine;
+}
+
 function clearSlideshowState() {
   const uiState = getUiState();
   uiState.slideshow = { mode: null, id: null, index: 0 };
@@ -730,9 +744,16 @@ function setupEventHandlers() {
 
     if (action === "advance-day") {
       ensureAutomationState(window.gameState);
-      const storyEvents = advanceDay(window.gameState);
+      const advanceResult = advanceDay(window.gameState);
+      const storyEvents = advanceResult && Array.isArray(advanceResult.storyEvents)
+        ? advanceResult.storyEvents
+        : [];
+      const cashflowMessage = buildDailyCashflowMessage(advanceResult ? advanceResult.cashflow : null);
       const automationResult = runAutomationOnDayAdvance(window.gameState);
       appendStoryLogEntries(window.gameState, storyEvents);
+      if (cashflowMessage) {
+        setUiMessage(cashflowMessage);
+      }
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");

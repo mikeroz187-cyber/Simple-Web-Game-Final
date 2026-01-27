@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added daily OF cash payouts and tiered overhead deductions on day advance, with hub readouts and daily messaging.
+  - Why: Make OF subscriber cashflow explicit while keeping tension from scalable overhead.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/events.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Extended the late-game unlock schedule with the remaining recruit performers and the set dressing equipment upgrade, plus matching unlock story copy.
   - Why: Pace meaningful unlocks later in the run using existing content IDs without duplicating entries or adding story-only unlocks.
   - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.

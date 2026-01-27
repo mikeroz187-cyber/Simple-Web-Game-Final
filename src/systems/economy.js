@@ -73,6 +73,67 @@ function getMRR(gameState) {
   return Math.max(0, subs * price);
 }
 
+function getDailyOfPayout(gameState) {
+  const cashflowConfig = CONFIG.economy && CONFIG.economy.cashflow
+    ? CONFIG.economy.cashflow
+    : {};
+  if (!cashflowConfig.enableDailyOfPayout) {
+    return 0;
+  }
+  if (!gameState || !gameState.player) {
+    return 0;
+  }
+  const subs = Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
+  const netMonthlyPerSub = Number.isFinite(cashflowConfig.ofNetMonthlyPerSub)
+    ? cashflowConfig.ofNetMonthlyPerSub
+    : 0;
+  const daysPerMonth = Number.isFinite(cashflowConfig.daysPerMonth)
+    ? cashflowConfig.daysPerMonth
+    : 30;
+  if (daysPerMonth <= 0) {
+    return 0;
+  }
+  const payout = subs * (netMonthlyPerSub / daysPerMonth);
+  return Math.max(0, Math.round(payout));
+}
+
+function getDailyOverhead(gameState) {
+  const cashflowConfig = CONFIG.economy && CONFIG.economy.cashflow
+    ? CONFIG.economy.cashflow
+    : {};
+  if (!cashflowConfig.enableDailyOverhead) {
+    return { amount: 0, label: null };
+  }
+  if (!gameState || !gameState.player) {
+    return { amount: 0, label: null };
+  }
+  const subs = Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
+  const tiers = Array.isArray(cashflowConfig.overheadTiers)
+    ? cashflowConfig.overheadTiers
+    : [];
+  let selectedTier = null;
+  tiers.forEach(function (tier) {
+    if (!tier || typeof tier !== "object") {
+      return;
+    }
+    const minSubs = Number.isFinite(tier.minSubs) ? tier.minSubs : 0;
+    if (subs >= minSubs && (!selectedTier || minSubs > selectedTier.minSubs)) {
+      selectedTier = tier;
+    }
+  });
+  const amount = selectedTier && Number.isFinite(selectedTier.dailyOverhead)
+    ? selectedTier.dailyOverhead
+    : 0;
+  const label = selectedTier && typeof selectedTier.label === "string"
+    ? selectedTier.label
+    : null;
+  return { amount: Math.max(0, Math.round(amount)), label: label };
+}
+
 function getNetWorth(gameState) {
   const cash = (gameState && gameState.player && Number.isFinite(gameState.player.cash))
     ? gameState.player.cash
