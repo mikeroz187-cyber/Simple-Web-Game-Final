@@ -1,11 +1,4 @@
 function getCompetitionConfig() {
-  if (CONFIG.competition && typeof CONFIG.competition === "object") {
-    return CONFIG.competition;
-  }
-  return {};
-}
-
-function getMarketCompetitionConfig() {
   if (CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object") {
     return CONFIG.market.competition;
   }
@@ -13,7 +6,7 @@ function getMarketCompetitionConfig() {
 }
 
 function isCompetitionUnlocked(gameState) {
-  const config = getMarketCompetitionConfig();
+  const config = getCompetitionConfig();
   if (config && config.enabled === false) {
     return false;
   }
@@ -30,24 +23,24 @@ function isCompetitionUnlocked(gameState) {
 }
 
 function getCompetitionStartDay(config) {
-  if (config && Number.isFinite(config.startDay)) {
+  if (config && config.unlockAfterDebt === false && Number.isFinite(config.startDay)) {
     return config.startDay;
   }
   return Infinity;
 }
 
 function isCompetitionEnabled(config, day, gameState) {
-  const marketConfig = getMarketCompetitionConfig();
-  if (marketConfig && marketConfig.enabled === false) {
+  const resolvedConfig = config || getCompetitionConfig();
+  if (resolvedConfig && resolvedConfig.enabled === false) {
     return false;
   }
-  if (marketConfig && marketConfig.unlockAfterDebt === true) {
+  if (resolvedConfig && resolvedConfig.unlockAfterDebt === true) {
     return isCompetitionUnlocked(gameState);
   }
-  if (config && config.enabled === true) {
+  if (resolvedConfig && resolvedConfig.enabled === true) {
     return true;
   }
-  const startDay = getCompetitionStartDay(config);
+  const startDay = getCompetitionStartDay(resolvedConfig);
   if (!Number.isFinite(day)) {
     return false;
   }

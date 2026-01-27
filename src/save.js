@@ -389,8 +389,8 @@ function ensureContentEntryPhotoPaths(candidate) {
 }
 
 function getCompetitionConfigForSave() {
-  if (CONFIG.competition && typeof CONFIG.competition === "object") {
-    return CONFIG.competition;
+  if (CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object") {
+    return CONFIG.market.competition;
   }
   return {};
 }

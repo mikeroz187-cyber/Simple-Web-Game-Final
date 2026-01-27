@@ -22,4 +22,4 @@ This catalog defines market shift timing and multipliers used by the competition
 
 ## Config Mapping
 Values map to:
-- `CONFIG.competition.marketShifts.*`
+- `CONFIG.market.competition.marketShifts.*`

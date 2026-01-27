@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Consolidated competition settings under CONFIG.market.competition and removed the legacy CONFIG.competition block.
+  - Why: Keep competition unlock logic, market shifts, and UI messaging aligned to a single source of truth.
+  - Files touched: src/config.js, src/systems/competition.js, src/state.js, src/save.js, src/ui/render.js, docs/DATA_RIVALS.md, docs/DATA_MARKET_SHIFTS.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Consolidated Tier 1 location unlock cost to CONFIG.locations.tier1UnlockCost and removed the legacy progression key.
   - Why: Eliminate duplicate config sources and keep Tier 1 unlock pricing consistent.
   - Files touched: src/config.js, src/systems/progression.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
