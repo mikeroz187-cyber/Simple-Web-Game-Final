@@ -363,16 +363,6 @@ function setupEventHandlers() {
       return;
     }
 
-    if (action === "toggle-freelancer-pool") {
-      if (!uiState.roster) {
-        uiState.roster = { showFreelancers: false };
-      }
-      uiState.roster.showFreelancers = !uiState.roster.showFreelancers;
-      setUiMessage("");
-      renderApp(window.gameState);
-      return;
-    }
-
     if (action === "select-reputation-branch") {
       const branchId = target.dataset.id;
       const result = selectReputationBranch(window.gameState, branchId);

@@ -134,39 +134,6 @@ function importSaveFromFile() {
   });
 }
 
-function getFreelancerProfilesConfig() {
-  if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
-    return CONFIG.freelancers;
-  }
-  return {};
-}
-
-function getFreelancerProfileIds() {
-  const config = getFreelancerProfilesConfig();
-  const profiles = Array.isArray(config.profiles) ? config.profiles : [];
-  return profiles.map(function (profile) {
-    return profile.id;
-  }).filter(function (profileId) {
-    return typeof profileId === "string" && profileId.length > 0;
-  });
-}
-
-function getRandomFreelancerProfileId(avoidId) {
-  const profileIds = getFreelancerProfileIds();
-  if (profileIds.length === 0) {
-    return null;
-  }
-  let candidates = profileIds;
-  if (avoidId) {
-    const filtered = profileIds.filter(function (profileId) {
-      return profileId !== avoidId;
-    });
-    candidates = filtered.length ? filtered : profileIds;
-  }
-  const index = Math.floor(Math.random() * candidates.length);
-  return candidates[index] || profileIds[0];
-}
-
 function buildRosterPerformer(performerId) {
   const performer = CONFIG.performers.catalog[performerId];
   if (!performer) {
@@ -244,32 +211,6 @@ function pruneFreelanceRosterEntries(candidate) {
         delete bucket[performerId];
       }
     });
-  });
-}
-
-function ensureFreelancerProfilesState(candidate) {
-  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
-    return;
-  }
-  if (!candidate.roster.freelancerProfiles || typeof candidate.roster.freelancerProfiles !== "object" || Array.isArray(candidate.roster.freelancerProfiles)) {
-    candidate.roster.freelancerProfiles = {};
-  }
-  const profileIds = getFreelancerProfileIds();
-  if (profileIds.length === 0) {
-    return;
-  }
-  const assignments = candidate.roster.freelancerProfiles;
-  candidate.roster.performers.forEach(function (performer) {
-    if (!performer || performer.type !== "freelance") {
-      return;
-    }
-    const current = assignments[performer.id];
-    if (profileIds.indexOf(current) === -1) {
-      const profileId = getRandomFreelancerProfileId();
-      if (profileId) {
-        assignments[performer.id] = profileId;
-      }
-    }
   });
 }
 
@@ -592,9 +533,11 @@ function migrateGameState(candidate) {
     candidate.storyLog = [];
   }
   pruneFreelanceRosterEntries(candidate);
+  if (candidate.roster && candidate.roster.freelancerProfiles !== undefined) {
+    delete candidate.roster.freelancerProfiles;
+  }
   ensureRosterCompleteness(candidate);
   ensurePerformerStarPowerProgress(candidate);
-  ensureFreelancerProfilesState(candidate);
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
   ensureContentEntryPhotoPaths(candidate);
@@ -706,9 +649,6 @@ function validateGameState(candidate) {
   if (!roster || !Array.isArray(roster.performers)) {
     return { ok: false, message: "Roster data invalid." };
   }
-  if (roster.freelancerProfiles !== undefined && (typeof roster.freelancerProfiles !== "object" || roster.freelancerProfiles === null || Array.isArray(roster.freelancerProfiles))) {
-    return { ok: false, message: "Roster freelancer profiles invalid." };
-  }
 
   const performerIds = roster.performers.map(function (entry) {
     return entry.id;
@@ -726,7 +666,7 @@ function validateGameState(candidate) {
     if (CONFIG.performers.catalog[performer.id] === undefined) {
       return { ok: false, message: "Unknown performer detected." };
     }
-    if (["core", "freelance"].indexOf(performer.type) === -1) {
+    if (performer.type !== "core") {
       return { ok: false, message: "Performer type invalid." };
     }
     if (!Number.isFinite(performer.starPower) ||
@@ -743,18 +683,6 @@ function validateGameState(candidate) {
       return { ok: false, message: "Performer star power progress invalid." };
     }
   }
-  if (roster.freelancerProfiles) {
-    const profileIds = getFreelancerProfileIds();
-    const profileKeys = Object.keys(roster.freelancerProfiles);
-    for (let index = 0; index < profileKeys.length; index += 1) {
-      const performerId = profileKeys[index];
-      const profileId = roster.freelancerProfiles[performerId];
-      if (profileIds.length && profileIds.indexOf(profileId) === -1) {
-        return { ok: false, message: "Freelancer profile invalid." };
-      }
-    }
-  }
-
   const content = candidate.content;
   if (!content || !Array.isArray(content.entries)) {
     return { ok: false, message: "Content data invalid." };

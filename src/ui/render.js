@@ -15,9 +15,6 @@ function getUiState() {
       gallery: {
         selectedContentId: null
       },
-      roster: {
-        showFreelancers: false
-      },
       bookingSlideshowIndex: 0,
       slideshow: {
         mode: null,
@@ -109,55 +106,18 @@ function getDebtEstimateLine(gameState) {
 }
 
 function getPerformerTypeLabel(type) {
-  if (type === "freelance") {
-    return "Freelance";
+  if (type === "core") {
+    return "Core";
   }
-  return "Core";
-}
-
-function getFreelancerProfilesConfig() {
-  if (CONFIG.freelancers && typeof CONFIG.freelancers === "object") {
-    return CONFIG.freelancers;
+  if (type === "agency_pack") {
+    return "Agency Pack";
   }
-  return {};
-}
-
-function getFreelancerProfiles() {
-  const config = getFreelancerProfilesConfig();
-  return Array.isArray(config.profiles) ? config.profiles : [];
-}
-
-function getFreelancerProfileById(profileId) {
-  if (!profileId) {
-    return null;
-  }
-  const profiles = getFreelancerProfiles();
-  return profiles.find(function (profile) {
-    return profile && profile.id === profileId;
-  }) || null;
-}
-
-function getFreelancerProfileId(gameState, performerId) {
-  if (!gameState || !gameState.roster || !performerId) {
-    return null;
-  }
-  const profiles = gameState.roster.freelancerProfiles || {};
-  return profiles[performerId] || null;
+  return "Performer";
 }
 
 function getPerformerDisplayProfile(gameState, performer) {
   if (!performer) {
     return { name: "Unknown", description: "" };
-  }
-  if (performer.type === "freelance") {
-    const profileId = getFreelancerProfileId(gameState, performer.id);
-    const profile = getFreelancerProfileById(profileId);
-    if (profile) {
-      return {
-        name: profile.name || performer.name,
-        description: profile.description || ""
-      };
-    }
   }
   const catalogEntry = CONFIG.performers.catalog[performer.id];
   return {
@@ -581,7 +541,7 @@ function renderBooking(gameState) {
   const isAgencyPack = bookingMode === "agency_pack";
   const allPerformers = gameState.roster.performers;
   const performers = allPerformers.filter(function (performer) {
-    return performer.type !== "freelance";
+    return performer.type === "core";
   });
   const hasPerformers = performers.length > 0;
   const portraitSize = getPerformerPortraitSizePx();
@@ -1002,7 +962,7 @@ function renderRoster(gameState) {
   getUiState();
 
   const contractedPerformers = performers.filter(function (performer) {
-    return performer.type !== "freelance";
+    return performer.type === "core";
   });
 
   const rosterSize = getContractedRosterCount(gameState);
