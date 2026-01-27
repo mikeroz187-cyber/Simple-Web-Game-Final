@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Premium UI redesign Phase 4 — comprehensive component library with refined buttons (primary/VIP/secondary/ghost/danger/small variants), selection cards, performer cards, location cards, content cards, compact stat displays, form controls, progress bars with shimmer animation, pills/badges/tags, empty states, and list items.
+  - Why: Establish consistent, reusable component styles for all screens to ensure visual cohesion across the entire game.
+  - Files touched: styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Premium UI redesign Phase 3 — Hub transformed into dashboard layout with hero metrics (4 large glowing stat cards), live tabloid feed (scrollable news), horizontal card strip (Competition/Identity/Legacy/Manager), and footer controls (Pay Debt + automation toggles).
   - Why: Create a premium "command center" dashboard that displays key information at a glance without scrolling.
   - Files touched: styles.css, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
