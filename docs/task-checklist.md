@@ -66,6 +66,7 @@
 - [x] Day-based unlock cadence (config schedule) + one-time unlock messages + persists.
 - [x] Daily OF payout adds cash on day advance (subs-based, config-driven).
 - [x] Scalable daily overhead deducts cash on day advance (tiered by subs, config-driven).
+- [x] Balance Pass v1: increased debt to 25,000 and retuned overhead tiers for post-payout economy.
 
 ---
 

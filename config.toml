@@ -74,7 +74,7 @@ shoots_per_day = 5
 # Debt framing for Act 1 (The Debt)
 starting_cash = 5000
 loan_principal = 5000
-loan_total_due = 10000
+loan_total_due = 25000
 debt_due_day = 90
 
 [economy]

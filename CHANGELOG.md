@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Retuned Act 1 debt to $25,000 and replaced the subs-based daily overhead tier table.
+  - Why: Align early debt pressure and late-game overhead pacing with the post-payout economy targets.
+  - Files touched: config.toml, src/config.js, docs/CORE_GAMEPLAY_LOOP.md, docs/CURRENT_SCOPE.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_STATE_MODEL.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/SCOPE_MVP.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Added daily OF cash payouts and tiered overhead deductions on day advance, with hub readouts and daily messaging.
   - Why: Make OF subscriber cashflow explicit while keeping tension from scalable overhead.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/events.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

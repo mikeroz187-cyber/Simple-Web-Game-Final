@@ -215,7 +215,7 @@ If MVP UI **requires** a stored total (e.g., lifetime MRR), store it once in `pl
   "player": {
     "day": 1,
     "cash": 5000,
-    "debtRemaining": 10000,
+    "debtRemaining": 25000,
     "debtDueDay": 90,
     "shootsToday": 0,
     "followers": 0,
@@ -316,7 +316,7 @@ If MVP UI **requires** a stored total (e.g., lifetime MRR), store it once in `pl
   "player": {
     "day": 2,
     "cash": 5150,
-    "debtRemaining": 10000,
+    "debtRemaining": 25000,
     "debtDueDay": 90,
     "followers": 120,
     "subscribers": 2,
