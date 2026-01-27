@@ -135,6 +135,9 @@ This changelog is optimized for:
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
+- What: FIX: Removed day-based competition start messaging in the Hub when competition is debt-gated.
+  - Why: Prevent the Hub panel from implying a fixed start day when competition unlocks immediately after debt is cleared.
+  - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Added a debug milestone check runner and ensured milestone completions persist with completed days.
   - Why: Let milestone thresholds mark Complete, grant rewards once, and be tested deterministically from the debug panel.
   - Files touched: src/systems/progression.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
