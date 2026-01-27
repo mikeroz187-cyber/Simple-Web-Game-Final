@@ -43,7 +43,9 @@ function buildDefaultContentVarianceState() {
 }
 
 function buildDefaultRivalStudiosState() {
-  const config = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const config = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
+    ? CONFIG.market.competition
+    : {};
   const rivals = Array.isArray(config.rivals) ? config.rivals : [];
   return rivals.map(function (rival) {
     const baseScore = Number.isFinite(rival.baseReputationScore) ? rival.baseReputationScore : 0;

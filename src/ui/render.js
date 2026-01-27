@@ -218,12 +218,9 @@ function renderHub(gameState) {
   });
   const daysLeft = Math.max(0, gameState.player.debtDueDay - gameState.player.day + 1);
   const nextAction = getNextActionLabel(gameState);
-  const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
-  const marketCompetitionConfig = typeof getMarketCompetitionConfig === "function"
-    ? getMarketCompetitionConfig()
-    : (CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
-      ? CONFIG.market.competition
-      : {});
+  const competitionConfig = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
+    ? CONFIG.market.competition
+    : {};
   const competitionDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
   const competitionStartDay = typeof getCompetitionStartDay === "function"
     ? getCompetitionStartDay(competitionConfig)
@@ -285,7 +282,7 @@ function renderHub(gameState) {
   ].join("");
 
   let competitionPanelBody = "";
-  const competitionUnlockAfterDebt = marketCompetitionConfig && marketCompetitionConfig.unlockAfterDebt === true;
+  const competitionUnlockAfterDebt = competitionConfig && competitionConfig.unlockAfterDebt === true;
   if (competitionUnlockAfterDebt) {
     if (!competitionUnlocked) {
       competitionPanelBody = "<p class=\"helper-text\">Locked until debt is cleared.</p>";
@@ -877,7 +874,9 @@ function renderAnalytics(gameState) {
     ? gameState.player.day
     : 0;
   const todaySummary = getWindowedSummary(gameState, 1);
-  const competitionConfig = CONFIG.competition && typeof CONFIG.competition === "object" ? CONFIG.competition : {};
+  const competitionConfig = CONFIG.market && CONFIG.market.competition && typeof CONFIG.market.competition === "object"
+    ? CONFIG.market.competition
+    : {};
   const competitionEnabled = typeof isCompetitionEnabled === "function"
     ? isCompetitionEnabled(competitionConfig, dayNumber, gameState)
     : Boolean(competitionConfig.enabled);

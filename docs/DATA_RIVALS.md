@@ -10,11 +10,12 @@ This catalog defines rival studios used by the competition system. Values mirror
 | rival_luxe_pixel | Luxe Pixel Studios | 48 | 0.9 |
 
 ## Behavior Notes
-- Competition auto‑enables on **Day 181** (unless `CONFIG.competition.enabled` is manually set to `true`).
+- Competition unlocks after debt by default (controlled by `CONFIG.market.competition.unlockAfterDebt`).
+- If `unlockAfterDebt` is `false`, competition can start on a specific day via `CONFIG.market.competition.startDay`.
 - Rival scores increase every **7 days** by `weeklyGrowthRate`.
 
 ## Config Mapping
 Values map to:
-- `CONFIG.competition.rivals`
-- `CONFIG.competition.startDay`
-- `CONFIG.competition.weeklyCheckCadenceDays`
+- `CONFIG.market.competition.rivals`
+- `CONFIG.market.competition.startDay`
+- `CONFIG.market.competition.weeklyCheckCadenceDays`
