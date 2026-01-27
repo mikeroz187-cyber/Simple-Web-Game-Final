@@ -6,7 +6,7 @@
 
 ## UI Premium Redesign — In Progress
 - [x] Phase 1: Foundation (colors, typography, atmosphere, glassmorphism)
-- [ ] Phase 2: Layout infrastructure (header bar, nav rail, viewport)
+- [x] Phase 2: Layout infrastructure (header bar, nav rail, viewport)
 - [ ] Phase 3: Hub screen redesign (hero metrics, live feed, card strip)
 - [ ] Phase 4: Component library (buttons, stat cards, selection cards)
 - [ ] Phase 5: Screen polish (Booking, Gallery, Roster, Analytics, Shop)

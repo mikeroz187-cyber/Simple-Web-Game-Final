@@ -186,6 +186,34 @@ function getSlideshowImagePaths(gameState, slideshow) {
 function setupEventHandlers() {
   ensureAutomationValidation();
 
+  document.querySelectorAll("[data-action=\"nav-screen\"]").forEach(function (el) {
+    el.addEventListener("click", function (event) {
+      event.preventDefault();
+      var screenId = el.getAttribute("data-screen");
+      if (screenId) {
+        showScreen(screenId);
+        document.querySelectorAll(".nav-item[data-action=\"nav-screen\"]").forEach(function (navItem) {
+          navItem.classList.remove("is-active");
+        });
+        el.classList.add("is-active");
+      }
+    });
+  });
+
+  var saveToggle = document.querySelector("[data-action=\"toggle-save-menu\"]");
+  var saveDropdown = document.getElementById("nav-save-dropdown");
+  if (saveToggle && saveDropdown) {
+    saveToggle.addEventListener("click", function (event) {
+      event.preventDefault();
+      saveDropdown.classList.toggle("is-open");
+    });
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".nav-rail__save-section")) {
+        saveDropdown.classList.remove("is-open");
+      }
+    });
+  }
+
   document.body.addEventListener("click", function (event) {
     const target = event.target.closest("[data-action]");
     const action = target && target.dataset ? target.dataset.action : null;

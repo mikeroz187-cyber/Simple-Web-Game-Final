@@ -21,21 +21,75 @@
       <div class="particle"></div>
     </div>
     <div id="app" class="app-shell">
-      <header class="app-header">
-        <h1 class="app-title">Studio Empire</h1>
+      <header id="header-bar" class="header-bar">
+        <h1 class="header-bar__title">STUDIO EMPIRE</h1>
+        <div class="header-bar__stats" id="header-stats"></div>
+        <button class="button primary header-bar__action" data-action="advance-day">⚡ ADVANCE DAY</button>
       </header>
-      <main class="app-main">
-        <section id="screen-hub" class="screen is-active" aria-labelledby="screen-hub-title"></section>
-        <section id="screen-booking" class="screen" aria-labelledby="screen-booking-title"></section>
-        <section id="screen-content" class="screen" aria-labelledby="screen-content-title"></section>
-        <section id="screen-analytics" class="screen" aria-labelledby="screen-analytics-title"></section>
-        <section id="screen-roster" class="screen" aria-labelledby="screen-roster-title"></section>
-        <section id="screen-social" class="screen" aria-labelledby="screen-social-title"></section>
-        <section id="screen-gallery" class="screen" aria-labelledby="screen-gallery-title"></section>
-        <section id="screen-slideshow" class="screen" aria-labelledby="screen-slideshow-title"></section>
-        <section id="screen-story-log" class="screen" aria-labelledby="screen-story-log-title"></section>
-        <section id="screen-shop" class="screen" aria-labelledby="screen-shop-title"></section>
-      </main>
+
+      <div class="main-layout">
+        <nav class="nav-rail" id="nav-rail">
+          <a class="nav-item is-active" data-screen="screen-hub" data-action="nav-screen">
+            <span class="nav-item__icon">🏠</span>
+            <span class="nav-item__label">Hub</span>
+          </a>
+          <a class="nav-item" data-screen="screen-booking" data-action="nav-screen">
+            <span class="nav-item__icon">📷</span>
+            <span class="nav-item__label">Booking</span>
+          </a>
+          <a class="nav-item" data-screen="screen-analytics" data-action="nav-screen">
+            <span class="nav-item__icon">📊</span>
+            <span class="nav-item__label">Analytics</span>
+          </a>
+          <a class="nav-item" data-screen="screen-social" data-action="nav-screen">
+            <span class="nav-item__icon">📱</span>
+            <span class="nav-item__label">Social</span>
+          </a>
+          <a class="nav-item" data-screen="screen-gallery" data-action="nav-screen">
+            <span class="nav-item__icon">🖼️</span>
+            <span class="nav-item__label">Gallery</span>
+          </a>
+          <a class="nav-item" data-screen="screen-roster" data-action="nav-screen">
+            <span class="nav-item__icon">⭐</span>
+            <span class="nav-item__label">Roster</span>
+          </a>
+          <a class="nav-item" data-screen="screen-shop" data-action="nav-screen">
+            <span class="nav-item__icon">🛒</span>
+            <span class="nav-item__label">Shop</span>
+          </a>
+          <a class="nav-item" data-screen="screen-story-log" data-action="nav-screen">
+            <span class="nav-item__icon">📜</span>
+            <span class="nav-item__label">Story</span>
+          </a>
+          <div class="nav-rail__spacer"></div>
+          <div class="nav-rail__save-section" id="nav-save-section">
+            <a class="nav-item" data-action="toggle-save-menu">
+              <span class="nav-item__icon">💾</span>
+              <span class="nav-item__label">Save</span>
+            </a>
+            <div class="nav-save-dropdown" id="nav-save-dropdown">
+              <button class="nav-save-btn" data-action="save-now">Save Now</button>
+              <button class="nav-save-btn" data-action="load-save">Load</button>
+              <button class="nav-save-btn" data-action="export-save">Export</button>
+              <button class="nav-save-btn" data-action="import-save">Import</button>
+            </div>
+          </div>
+        </nav>
+
+        <main class="content-area" id="content-area">
+          <section id="screen-hub" class="screen is-active" aria-labelledby="screen-hub-title"></section>
+          <section id="screen-booking" class="screen" aria-labelledby="screen-booking-title"></section>
+          <section id="screen-content" class="screen" aria-labelledby="screen-content-title"></section>
+          <section id="screen-analytics" class="screen" aria-labelledby="screen-analytics-title"></section>
+          <section id="screen-roster" class="screen" aria-labelledby="screen-roster-title"></section>
+          <section id="screen-social" class="screen" aria-labelledby="screen-social-title"></section>
+          <section id="screen-gallery" class="screen" aria-labelledby="screen-gallery-title"></section>
+          <section id="screen-slideshow" class="screen" aria-labelledby="screen-slideshow-title"></section>
+          <section id="screen-story-log" class="screen" aria-labelledby="screen-story-log-title"></section>
+          <section id="screen-shop" class="screen" aria-labelledby="screen-shop-title"></section>
+        </main>
+      </div>
+
       <div id="modal-root" class="modal-root" aria-live="polite"></div>
     </div>
 

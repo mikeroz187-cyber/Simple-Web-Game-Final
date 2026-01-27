@@ -19,7 +19,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 
 ## Currently Working On
-- Premium UI redesign Phase 1: Foundation (dark theme, glassmorphism, atmosphere)
+- Premium UI redesign Phase 2: Layout infrastructure (header bar, nav rail, full-viewport layout)
 
 ## Next 3–7 Candidate Tasks
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.
