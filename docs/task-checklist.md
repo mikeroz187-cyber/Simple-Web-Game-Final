@@ -81,6 +81,8 @@
 - [x] Scheduled unlocks enforce equipment/location only (unsupported types ignored; no story events).
 - [x] Save/load prunes legacy scheduled unlock IDs; removes freelancer remnants when Agency Packs enabled.
 - [x] Save-load no longer re-injects freelance performers into roster.
+- [x] Legacy UI copy cleaned (no freelancer/day-based performer unlock/competition start day confusion).
+- [x] Config/story integrity sweep completed (no orphan story IDs, no missing referenced copy).
 
 ---
 

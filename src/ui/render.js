@@ -245,13 +245,13 @@ function renderHub(gameState) {
   const competitionUnlockAfterDebt = competitionConfig && competitionConfig.unlockAfterDebt === true;
   if (competitionUnlockAfterDebt) {
     if (!competitionUnlocked) {
-      competitionPanelBody = "<p class=\"helper-text\">Locked until debt is cleared.</p>";
+      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks once debt is cleared.</p>";
     } else if (competitionEnabled) {
       competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
         "<p><strong>Standing:</strong> " + standingLabel + "</p>" +
         "<p><strong>Market Shift:</strong> " + marketShiftLabel + "</p>";
     } else {
-      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks when debt is cleared.</p>";
+      competitionPanelBody = "<p class=\"helper-text\">Competition unlocks once debt is cleared.</p>";
     }
   } else if (competitionEnabled) {
     competitionPanelBody = "<p><strong>Status:</strong> Enabled</p>" +
