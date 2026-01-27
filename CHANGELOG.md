@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX clarified performer unlock story messages to reflect reputation-gated recruitment steps and roster location.
+  - Why: Prevent unlock toasts from implying immediate booking access when reputation gating still applies.
+  - Files touched: src/systems/story.js, src/ui/events.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Added the post-debt Hire Manager upgrade in the Hub that permanently reduces daily overhead.
   - Why: Provide a simple, config-driven money sink after debt is cleared while easing late-game overhead.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/economy.js, src/ui/render.js, src/ui/events.js, src/main.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/CORE_GAMEPLAY_LOOP.md, docs/GAMESTATE_DATA_MODEL.md, CHANGELOG.md.

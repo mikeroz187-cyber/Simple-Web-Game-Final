@@ -87,7 +87,7 @@ function buildStoryEventCards(events) {
     return [];
   }
   return events.map(function (event) {
-    const copy = getStoryEventCopy(event.id);
+    const copy = getStoryEventCopy(event.id, typeof window !== "undefined" ? window.gameState : null);
     return {
       title: copy.title,
       message: copy.message
