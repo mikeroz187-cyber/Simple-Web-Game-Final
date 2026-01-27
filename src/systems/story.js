@@ -342,11 +342,65 @@ function applyAct3EventEffects(gameState, eventId) {
   return buildEffectSummaryText(summaryParts);
 }
 
-function getStoryEventCopy(eventId) {
-  if (!eventId || !STORY_EVENT_COPY[eventId]) {
-    return { title: "Story Update", message: "A story event occurred." };
+function getPerformerUnlockContext(eventId) {
+  if (!eventId || eventId.indexOf("unlock_performer_") !== 0) {
+    return null;
   }
-  const baseCopy = STORY_EVENT_COPY[eventId];
+  const schedule = CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)
+    ? CONFIG.progression.unlockSchedule
+    : [];
+  const unlockEntry = schedule.find(function (entry) {
+    return entry && entry.storyId === eventId && entry.type === "performer" && typeof entry.id === "string";
+  });
+  if (!unlockEntry) {
+    return null;
+  }
+  const performerId = unlockEntry.id;
+  const candidates = CONFIG.recruitment && Array.isArray(CONFIG.recruitment.candidates)
+    ? CONFIG.recruitment.candidates
+    : [];
+  const candidate = candidates.find(function (entry) {
+    return entry && entry.performerId === performerId;
+  }) || null;
+  const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
+  const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
+  const catalog = CONFIG.performers && CONFIG.performers.catalog ? CONFIG.performers.catalog : {};
+  const performer = catalog && catalog[performerId];
+  const performerName = performer && performer.name ? performer.name : performerId;
+  return {
+    performerId: performerId,
+    performerName: performerName,
+    repRequired: repRequired,
+    hireCost: hireCost
+  };
+}
+
+function getStoryEventCopy(eventId, gameState) {
+  const unlockContext = getPerformerUnlockContext(eventId);
+  if (unlockContext) {
+    const baseCopy = STORY_EVENT_COPY[eventId] || {
+      title: "Unlocked!",
+      message: "New performer lead: " + unlockContext.performerName + "."
+    };
+    const resolvedState = gameState || (typeof window !== "undefined" ? window.gameState : null);
+    const currentRep = resolvedState && resolvedState.player && Number.isFinite(resolvedState.player.reputation)
+      ? resolvedState.player.reputation
+      : 0;
+    const repRequired = Number.isFinite(unlockContext.repRequired) ? unlockContext.repRequired : 0;
+    const hireCost = Number.isFinite(unlockContext.hireCost) ? unlockContext.hireCost : 0;
+    const repStatusText = currentRep >= repRequired
+      ? "Ready to recruit now (Reputation ≥ " + repRequired + ")."
+      : "Requires Reputation ≥ " + repRequired + ".";
+    const costText = "Hire cost: " + formatCurrency(hireCost) + ".";
+    const callToAction = "Go to Roster → Recruitment to sign her.";
+    const recruitmentText = "Recruitment: " + repStatusText + " " + costText + " " + callToAction;
+    return {
+      title: baseCopy.title,
+      message: baseCopy.message + "\n\n" + recruitmentText
+    };
+  }
+
+  const baseCopy = STORY_EVENT_COPY[eventId] || { title: "Story Update", message: "A story event occurred." };
   const summaryText = buildEffectSummaryText(buildAct3EffectSummaryParts(getAct3EventEffects(eventId)));
   if (!summaryText) {
     return baseCopy;
@@ -373,7 +427,7 @@ function appendStoryLogEntries(gameState, events) {
     if (exists) {
       return;
     }
-    const copy = getStoryEventCopy(event.id);
+    const copy = getStoryEventCopy(event.id, gameState);
     const dayNumber = Number.isFinite(event.day)
       ? event.day
       : (gameState.player && Number.isFinite(gameState.player.day) ? gameState.player.day : 0);
