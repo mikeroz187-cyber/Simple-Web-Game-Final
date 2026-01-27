@@ -105,6 +105,24 @@ function getDebtEstimateLine(gameState) {
     " days <span class=\"helper-text\">(" + netLabel + ")</span></p>";
 }
 
+function getDebtEstimateMetric(gameState) {
+  const player = gameState && gameState.player ? gameState.player : null;
+  const debtRemaining = player && Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+  const estimate = typeof getDaysToAffordDebtEstimate === "function"
+    ? getDaysToAffordDebtEstimate(gameState)
+    : { days: null, dailyNet: 0 };
+  const dailyNet = Number.isFinite(estimate.dailyNet) ? estimate.dailyNet : 0;
+  const netSign = dailyNet >= 0 ? "+" : "-";
+  const netLabel = "Net " + netSign + formatCurrency(Math.abs(dailyNet)) + "/day from OF payout − overhead";
+  if (estimate.days === 0 && debtRemaining <= 0) {
+    return { label: "Est. days to afford debt", value: "Paid", sub: netLabel };
+  }
+  if (estimate.days === null) {
+    return { label: "Est. days to afford debt", value: "—", sub: "Cashflow negative; " + netLabel };
+  }
+  return { label: "Est. days to afford debt", value: estimate.days + " days", sub: netLabel };
+}
+
 function getPerformerTypeLabel(type) {
   if (type === "core") {
     return "Core";
@@ -215,31 +233,53 @@ function renderHub(gameState) {
   const dailyOverhead = typeof getDailyOverhead === "function"
     ? getDailyOverhead(gameState)
     : { amount: 0, label: null };
-  const overheadLabel = dailyOverhead.label ? " (" + dailyOverhead.label + ")" : "";
-  const debtEstimateLine = getDebtEstimateLine(gameState);
+  const debtEstimateMetric = getDebtEstimateMetric(gameState);
   const legacyConfig = CONFIG.legacyMilestones && typeof CONFIG.legacyMilestones === "object"
     ? CONFIG.legacyMilestones
     : { milestoneOrder: [], milestones: {} };
   const legacyOrder = Array.isArray(legacyConfig.milestoneOrder) ? legacyConfig.milestoneOrder : [];
 
-  const statusHtml = [
-    "<p><strong>Day:</strong> " + gameState.player.day + "</p>",
-    "<p><strong>Days Left:</strong> " + daysLeft + "</p>",
-    "<p><strong>Shoots Today:</strong> " + gameState.player.shootsToday + "</p>",
-    "<p><strong>Cash:</strong> " + formatCurrency(gameState.player.cash) + "</p>",
-    "<p><strong>Debt Remaining:</strong> " + formatCurrency(gameState.player.debtRemaining) + " (Due Day " + gameState.player.debtDueDay + ")</p>",
-    debtEstimateLine,
-    "<p><strong>Social Followers:</strong> " + gameState.player.socialFollowers + "</p>",
-    "<p><strong>Social Subscribers:</strong> " + gameState.player.socialSubscribers + "</p>",
-    "<p><strong>OnlyFans Subscribers:</strong> " + gameState.player.onlyFansSubscribers + "</p>",
-    "<p><strong>MRR:</strong> " + formatCurrency(getMRR(gameState)) + "/mo</p>",
-    "<p><strong>Daily OF Payout (est):</strong> +" + formatCurrency(dailyPayout) + "/day</p>",
-    "<p><strong>Daily Overhead:</strong> -" + formatCurrency(dailyOverhead.amount) + "/day" + overheadLabel + "</p>",
-    "<p><strong>Net Worth:</strong> " + formatCurrency(getNetWorth(gameState)) + "</p>",
-    "<p class=\"helper-text\">Cash + (MRR × " + netWorthMultiple + ")</p>",
-    "<p><strong>Reputation:</strong> " + gameState.player.reputation + "</p>",
-    "<p><strong>Next Action:</strong> " + nextAction + "</p>"
-  ].join("");
+  const metrics = [
+    { label: "Day", value: gameState.player.day },
+    { label: "Days Left", value: daysLeft },
+    { label: "Shoots Today", value: gameState.player.shootsToday },
+    { label: "Cash", value: formatCurrency(gameState.player.cash) },
+    {
+      label: "Debt Remaining",
+      value: formatCurrency(gameState.player.debtRemaining),
+      sub: "Due Day " + gameState.player.debtDueDay
+    },
+    debtEstimateMetric,
+    { label: "Social Followers", value: gameState.player.socialFollowers },
+    { label: "Social Subscribers", value: gameState.player.socialSubscribers },
+    { label: "OnlyFans Subscribers", value: gameState.player.onlyFansSubscribers },
+    { label: "MRR", value: formatCurrency(getMRR(gameState)) + "/mo" },
+    { label: "Daily OF Payout (est)", value: "+" + formatCurrency(dailyPayout) + "/day" },
+    {
+      label: "Daily Overhead",
+      value: "-" + formatCurrency(dailyOverhead.amount) + "/day",
+      sub: dailyOverhead.label ? dailyOverhead.label : null
+    },
+    {
+      label: "Net Worth",
+      value: formatCurrency(getNetWorth(gameState)),
+      sub: "Cash + (MRR × " + netWorthMultiple + ")"
+    },
+    { label: "Reputation", value: gameState.player.reputation },
+    { label: "Next Action", value: nextAction }
+  ];
+  const metricsHtml = metrics.map(function (metric) {
+    const subLine = metric.sub ? "<div class=\"metric-sub\">" + metric.sub + "</div>" : "";
+    return "<div class=\"metric-card\">" +
+      "<div class=\"metric-label\">" + metric.label + "</div>" +
+      "<div class=\"metric-value\">" + metric.value + "</div>" +
+      subLine +
+      "</div>";
+  }).join("");
+  const metricsPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
+    "<div class=\"metric-grid\">" + metricsHtml + "</div>" +
+    "</div>";
 
   let competitionPanelBody = "";
   const competitionUnlockAfterDebt = competitionConfig && competitionConfig.unlockAfterDebt === true;
@@ -348,6 +388,26 @@ function renderHub(gameState) {
   const legacyPanel = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Legacy Milestones</h3>" +
     legacyPanelBody +
+    "</div>";
+
+  const storyEntries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
+  const feedEntries = storyEntries.slice(0, 5);
+  const eventCards = feedEntries.length
+    ? feedEntries.map(function (entry) {
+      const headline = entry.title || "Studio Update";
+      const preview = getStoryLogPreview(entry.body || "").replace(/\\s+/g, " ").trim();
+      const dayLabel = Number.isFinite(entry.dayNumber) ? "Day " + entry.dayNumber : "";
+      const dayLine = dayLabel ? "<div class=\"event-meta\">" + dayLabel + "</div>" : "";
+      return "<div class=\"event-card\">" +
+        "<div class=\"event-headline\">" + headline + "</div>" +
+        "<div class=\"event-preview\">" + preview + "</div>" +
+        dayLine +
+        "</div>";
+    }).join("")
+    : "<p class=\"helper-text\">No story events logged yet.</p>";
+  const eventsPanel = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Tabloid Feed</h3>" +
+    "<div class=\"event-feed\">" + eventCards + "</div>" +
     "</div>";
 
   const navButtons = [
@@ -519,7 +579,14 @@ function renderHub(gameState) {
     : "";
 
   hub.innerHTML = "<h2 id=\"screen-hub-title\" class=\"screen-title\">Hub</h2>" +
-    "<div class=\"panel\">" + statusHtml + "</div>" +
+    "<div class=\"hub-layout\">" +
+    "<div class=\"hub-column\">" +
+    metricsPanel +
+    "</div>" +
+    "<div class=\"hub-column\">" +
+    eventsPanel +
+    "</div>" +
+    "</div>" +
     competitionPanel +
     reputationPanel +
     legacyPanel +
@@ -1481,7 +1548,7 @@ function renderShop(gameState) {
       const nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
       const costLabel = isMaxed ? "MAX" : formatCurrency(nextCost);
 
-      const buttonClass = "button primary" + (isMaxed ? " is-disabled" : "");
+      const buttonClass = "button vip" + (isMaxed ? " is-disabled" : "");
       const buttonLabel = isMaxed ? "Maxed" : "Upgrade";
       const buttonAttributes = isMaxed ? " aria-disabled=\"true\" data-disabled=\"true\"" : "";
 
@@ -1508,7 +1575,7 @@ function renderShop(gameState) {
     "<p><strong>" + tier1Name + "</strong></p>" +
     "<p class=\"helper-text\">Cost: " + formatCurrency(cost) + " | Status: " + (unlocked ? "Unlocked" : "Locked") + "</p>" +
     "<div class=\"button-row\">" +
-    createButton("Unlock", "unlock-location-tier", "primary", !canBuy, "data-tier=\"tier1\"") +
+    createButton("Unlock", "unlock-location-tier", "vip", !canBuy, "data-tier=\"tier1\"") +
     "</div>" +
     "</div>" +
     "<div class=\"list-item\">" +
@@ -1516,7 +1583,7 @@ function renderShop(gameState) {
     "<p class=\"helper-text\">Cost: " + formatCurrency(tier2Cost) + " | Rep ≥ " + tier2RepRequirement +
     " | Status: " + (tier2Unlocked ? "Unlocked" : "Locked") + "</p>" +
     "<div class=\"button-row\">" +
-    createButton("Unlock", "unlock-location-tier", "primary", !canBuyTier2, "data-tier=\"tier2\"") +
+    createButton("Unlock", "unlock-location-tier", "vip", !canBuyTier2, "data-tier=\"tier2\"") +
     "</div>" +
     "</div>" +
     "</div>" +
