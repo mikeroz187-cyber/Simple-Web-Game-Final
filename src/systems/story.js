@@ -221,6 +221,34 @@ const STORY_EVENT_COPY = {
   unlock_equipment_camera: {
     title: "Unlocked!",
     message: "New gear available: Camera upgrades."
+  },
+  unlock_performer_bryn_sterling: {
+    title: "Unlocked!",
+    message: "New performer available: Bryn Sterling."
+  },
+  unlock_performer_dahlia_slate: {
+    title: "Unlocked!",
+    message: "New performer available: Dahlia Slate."
+  },
+  unlock_performer_eden_frost: {
+    title: "Unlocked!",
+    message: "New performer available: Eden Frost."
+  },
+  unlock_performer_fern_kestrel: {
+    title: "Unlocked!",
+    message: "New performer available: Fern Kestrel."
+  },
+  unlock_performer_celeste_noir: {
+    title: "Unlocked!",
+    message: "New performer available: Celeste Noir."
+  },
+  unlock_performer_gigi_blade: {
+    title: "Unlocked!",
+    message: "New performer available: Gigi Blade."
+  },
+  unlock_equipment_set_dressing: {
+    title: "Unlocked!",
+    message: "New gear available: Set Dressing upgrades."
   }
 };
 
