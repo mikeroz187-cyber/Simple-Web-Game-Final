@@ -397,56 +397,50 @@ function applyAct3EventEffects(gameState, eventId) {
   return buildEffectSummaryText(summaryParts);
 }
 
-function getPerformerUnlockContext(eventId) {
+function resolvePerformerUnlockCopy(eventId, gameState) {
   if (!eventId || eventId.indexOf("unlock_performer_") !== 0) {
     return null;
   }
+  const schedule = CONFIG.progression && Array.isArray(CONFIG.progression.unlockSchedule)
+    ? CONFIG.progression.unlockSchedule
+    : [];
+  const scheduleEntry = schedule.find(function (entry) {
+    return entry && entry.type === "performer" && entry.storyId === eventId;
+  });
+  if (!scheduleEntry || typeof scheduleEntry.id !== "string") {
+    return null;
+  }
+  const performerId = scheduleEntry.id;
   const candidates = CONFIG.recruitment && Array.isArray(CONFIG.recruitment.candidates)
     ? CONFIG.recruitment.candidates
     : [];
   const candidate = candidates.find(function (entry) {
-    return entry && entry.storyId === eventId && typeof entry.performerId === "string";
-  }) || null;
+    return entry && entry.performerId === performerId;
+  });
   if (!candidate) {
     return null;
   }
-  const performerId = candidate.performerId;
-  const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
-  const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
+  const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
+  const hireCost = Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
   const catalog = CONFIG.performers && CONFIG.performers.catalog ? CONFIG.performers.catalog : {};
   const performer = catalog && catalog[performerId];
-  const performerName = performer && performer.name ? performer.name : performerId;
-  return {
-    performerId: performerId,
-    performerName: performerName,
-    repRequired: repRequired,
-    hireCost: hireCost
-  };
+  const performerName = performer && performer.name ? performer.name : (performerId || "New performer");
+  const resolvedState = gameState || (typeof window !== "undefined" ? window.gameState : null);
+  const currentRep = resolvedState && resolvedState.player && Number.isFinite(resolvedState.player.reputation)
+    ? resolvedState.player.reputation
+    : 0;
+  const costText = "Hire cost: " + formatCurrency(hireCost) + ".";
+  const callToAction = "Go to Roster → Recruitment.";
+  const message = currentRep < repRequired
+    ? "New talent lead: " + performerName + ". Requires Reputation ≥ " + repRequired + " to recruit. " + costText + " " + callToAction
+    : performerName + " is ready to recruit now. " + costText + " " + callToAction;
+  return { title: "Unlocked!", message: message };
 }
 
 function getStoryEventCopy(eventId, gameState) {
-  const unlockContext = getPerformerUnlockContext(eventId);
-  if (unlockContext) {
-    const baseCopy = STORY_EVENT_COPY[eventId] || {
-      title: "Unlocked!",
-      message: "New performer lead: " + unlockContext.performerName + "."
-    };
-    const resolvedState = gameState || (typeof window !== "undefined" ? window.gameState : null);
-    const currentRep = resolvedState && resolvedState.player && Number.isFinite(resolvedState.player.reputation)
-      ? resolvedState.player.reputation
-      : 0;
-    const repRequired = Number.isFinite(unlockContext.repRequired) ? unlockContext.repRequired : 0;
-    const hireCost = Number.isFinite(unlockContext.hireCost) ? unlockContext.hireCost : 0;
-    const repStatusText = currentRep >= repRequired
-      ? "Ready to recruit now (Reputation ≥ " + repRequired + ")."
-      : "Requires Reputation ≥ " + repRequired + ".";
-    const costText = "Hire cost: " + formatCurrency(hireCost) + ".";
-    const callToAction = "Go to Roster → Recruitment to sign her.";
-    const recruitmentText = "Recruitment: " + repStatusText + " " + costText + " " + callToAction;
-    return {
-      title: baseCopy.title,
-      message: baseCopy.message + "\n\n" + recruitmentText
-    };
+  const performerUnlockCopy = resolvePerformerUnlockCopy(eventId, gameState);
+  if (performerUnlockCopy) {
+    return performerUnlockCopy;
   }
 
   const baseCopy = STORY_EVENT_COPY[eventId] || { title: "Story Update", message: "A story event occurred." };

@@ -147,6 +147,9 @@ This changelog is optimized for:
   - Why: Align scope documentation with the task checklist and set the next Act 3 slice.
   - Files touched: docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 ### Fixed
+- What: FIX: Made performer unlock story toasts rep-aware and explicit about recruitment requirements.
+  - Why: Ensure unlock messaging never implies immediate availability when reputation gating still applies.
+  - Files touched: src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX: Removed day-based competition start messaging in the Hub when competition is debt-gated.
   - Why: Prevent the Hub panel from implying a fixed start day when competition unlocks immediately after debt is cleared.
   - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
