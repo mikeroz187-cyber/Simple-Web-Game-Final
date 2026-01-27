@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Premium UI redesign Phase 5 — complete visual overhaul of Booking (two-column layout with selection cards), Analytics (dashboard grid), Roster (performer card grid + recruitment sidebar), Gallery (content card grid), Social (post management panels), Shop (upgrade cards), and Story Log (timeline layout).
+  - Why: Apply the premium component library to all screens for a cohesive, polished visual experience throughout the entire game.
+  - Files touched: styles.css, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Premium UI redesign Phase 4 — comprehensive component library with refined buttons (primary/VIP/secondary/ghost/danger/small variants), selection cards, performer cards, location cards, content cards, compact stat displays, form controls, progress bars with shimmer animation, pills/badges/tags, empty states, and list items.
   - Why: Establish consistent, reusable component styles for all screens to ensure visual cohesion across the entire game.
   - Files touched: styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

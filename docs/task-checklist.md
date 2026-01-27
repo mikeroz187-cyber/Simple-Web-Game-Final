@@ -9,7 +9,7 @@
 - [x] Phase 2: Layout infrastructure (header bar, nav rail, viewport)
 - [x] Phase 3: Hub screen redesign (hero metrics, live feed, card strip)
 - [x] Phase 4: Component library (buttons, cards, forms, progress bars)
-- [ ] Phase 5: Screen polish (Booking, Gallery, Roster, Analytics, Shop)
+- [x] Phase 5: Screen polish (Booking, Gallery, Roster, Analytics, Shop, Social, Story Log)
 - [ ] Phase 6: Micro-interactions (number animations, transitions, toasts)
 
 ---

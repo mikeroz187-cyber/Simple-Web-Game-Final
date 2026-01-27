@@ -19,7 +19,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 
 ## Currently Working On
-- Premium UI redesign Phase 4: Component library (buttons, selection cards, form controls, progress bars)
+- Premium UI redesign Phase 5: Screen polish for all game screens
 
 ## Next 3–7 Candidate Tasks
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.
