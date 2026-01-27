@@ -582,7 +582,6 @@ const CONFIG = {
     location_tier_1_unlock_cost: 2000,
     unlockSchedule: [
       { day: 4, type: "equipment", id: "lighting", storyId: "unlock_equipment_lighting" },
-      { day: 7, type: "location", id: "shower", storyId: "unlock_location_shower" },
       { day: 18, type: "equipment", id: "camera", storyId: "unlock_equipment_camera" },
       { day: 180, type: "equipment", id: "set_dressing", storyId: "unlock_equipment_set_dressing" }
     ]

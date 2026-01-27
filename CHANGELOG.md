@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed the scheduled Day 7 Shower unlock so Tier 1 locations unlock only via the purchase flow.
+  - Why: Prevent free auto-unlocks from bypassing the Tier 1 purchase gate.
+  - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Made performer recruitment purely reputation-driven and added one-time eligibility story notifications.
   - Why: Remove day-based gating confusion and only notify when recruits are actually available.
   - Files touched: src/config.js, src/state.js, src/systems/recruitment.js, src/systems/booking.js, src/systems/story.js, docs/task-checklist.md, CHANGELOG.md.
