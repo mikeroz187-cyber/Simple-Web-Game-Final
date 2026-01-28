@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX nav save dropdown positioning and expand slideshow preview sizing.
+  - Why: Prevent dropdown clipping in the nav rail and give content previews more viewport space.
+  - Files touched: styles.css, src/ui/events.js, CHANGELOG.md.
 - What: FIX slideshow layout constraints, remove agency pack thumbnails, and resize save dropdown for readability.
   - Why: Prevent overflow in content previews, keep agency packs consistent with other shoots, and make save controls usable.
   - Files touched: styles.css, src/ui/render.js, CHANGELOG.md.
