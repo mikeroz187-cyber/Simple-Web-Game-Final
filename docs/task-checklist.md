@@ -94,6 +94,7 @@
 - [x] Save-load no longer re-injects freelance performers into roster.
 - [x] Legacy UI copy cleaned (no freelancer/day-based performer unlock/competition start day confusion).
 - [x] Config/story integrity sweep completed (no orphan story IDs, no missing referenced copy).
+- [x] FIX Booking preview placeholder scales to fill the slideshow frame; info panel scrolls internally to avoid page scroll.
 
 ---
 
