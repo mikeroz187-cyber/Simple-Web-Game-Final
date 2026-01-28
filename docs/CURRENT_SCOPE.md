@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 27, 2026
 
 ## Recently Completed
+- Ambient Art Phase 1.5: Wired real mascot/background images to config and render system.
 - Recruitment flow with rep-gated candidates, meet slideshow, and hire/decline outcomes.
 - Agency Sample Pack booking mode with daily limit and five-image bundle output.
 - Manual social strategy (budget + channel allocation) and social strategy selection.
@@ -21,7 +22,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Premium UI redesign complete — all phases finished
 
 ## Currently Working On
-- Ambient Character Art System — Phase 1 (infrastructure + placeholders)
+- Ambient Character Art System — testing real artwork integration
 
 ## Next 3–7 Candidate Tasks
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state

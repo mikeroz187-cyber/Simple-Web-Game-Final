@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Wired real ambient artwork paths and dynamic rendering for mascot/background layers across screens.
+  - Why: Replace placeholder ambient art with actual assets and centralized rendering helpers.
+  - Files touched: src/config.js, src/ui/render.js, index.html, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Add ambient imagery layer infrastructure, placeholder mascots/backgrounds, and config stubs for Phase 1.
   - Why: Establish the ambient art scaffolding with safe placeholders before real artwork integration.
   - Files touched: styles.css, index.html, src/ui/render.js, src/config.js, assets/images/mascots/placeholder.svg, assets/images/backgrounds/placeholder.svg, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
