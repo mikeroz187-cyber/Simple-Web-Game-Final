@@ -1,6 +1,11 @@
 function showScreen(screenId) {
   var screens = document.querySelectorAll(".screen");
   var targetScreen = document.getElementById(screenId);
+  var applyMascotUpdate = function() {
+    if (typeof updateMascot === "function") {
+      updateMascot(screenId);
+    }
+  };
 
   if (!targetScreen) return;
 
@@ -17,6 +22,7 @@ function showScreen(screenId) {
       });
 
       targetScreen.classList.add("is-active", "screen--entering");
+      applyMascotUpdate();
 
       // Remove entering class after animation
       setTimeout(function() {
@@ -25,6 +31,9 @@ function showScreen(screenId) {
     }, 150);
   } else if (!activeScreen) {
     targetScreen.classList.add("is-active");
+    applyMascotUpdate();
+  } else {
+    applyMascotUpdate();
   }
 
   // Sync nav rail active state
