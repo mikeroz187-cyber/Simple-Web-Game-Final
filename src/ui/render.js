@@ -955,7 +955,15 @@ function renderSocial(gameState) {
   var recentPosts = posts.slice().reverse().slice(0, 5);
   var recentPostsHtml = recentPosts.map(function(post) {
     var entry = entries.find(function(e) { return e.id === post.contentId; });
-    var title = entry ? entry.title : 'Content #' + post.contentId;
+    var title = 'Content #' + post.contentId;
+    if (entry) {
+      var entryTitle = entry.title ? entry.title.trim() : '';
+      if (entryTitle) {
+        title = entryTitle;
+      } else if (entry.contentType === 'Promo') {
+        title = 'Promo #' + post.contentId;
+      }
+    }
     return '<div class="post-item">' +
       '<div class="post-item__info">' +
         '<div class="post-item__title">' + title + '</div>' +
