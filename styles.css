@@ -333,21 +333,21 @@ body {
   position: absolute;
   left: calc(100% + var(--gap-sm));
   bottom: 0;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-deep);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: var(--border-width) solid var(--glass-border);
-  border-radius: var(--radius-sm);
-  padding: var(--gap-xs);
-  min-width: 100px;
+  border-radius: var(--radius-md);
+  padding: var(--gap-sm);
+  min-width: 120px;
   box-shadow: var(--shadow-md);
-  z-index: 10;
+  z-index: 100;
 }
 
 .nav-save-dropdown.is-open {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--gap-xs);
 }
 
 .nav-save-btn {
@@ -355,11 +355,13 @@ body {
   border: none;
   color: var(--text-body);
   padding: var(--gap-sm) var(--gap-md);
-  font-size: 12px;
+  font-size: 13px;
+  font-family: var(--font-body);
   text-align: left;
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: background 0.15s ease;
+  white-space: nowrap;
 }
 
 .nav-save-btn:hover {
@@ -1853,11 +1855,10 @@ body {
 .slideshow-layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: var(--gap-md);
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .slideshow-image-container {
@@ -1866,12 +1867,15 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 0;
-  width: 100%;
+  overflow: hidden;
+  padding: var(--gap-md);
 }
 
 .slideshow-image {
   max-width: 100%;
   max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: var(--radius-md);
   border: var(--border-width) solid var(--glass-border);
@@ -1880,13 +1884,24 @@ body {
 .slideshow-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--gap-md);
+  flex-shrink: 0;
+  padding: var(--gap-sm) 0;
 }
 
 .slideshow-counter {
   font-size: 13px;
   color: var(--text-muted);
   font-family: var(--font-mono);
+}
+
+.slideshow-info {
+  flex-shrink: 0;
+  padding: var(--gap-md);
+  background: rgba(0, 0, 0, 0.2);
+  border: var(--border-width) solid var(--glass-border);
+  border-radius: var(--radius-md);
 }
 
 .hub-dashboard {

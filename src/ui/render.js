@@ -700,20 +700,15 @@ function renderContent(gameState) {
     const prevDisabled = safeIndex <= 0;
     const nextDisabled = safeIndex >= maxIndex;
     uiState.bookingSlideshowIndex = safeIndex;
-    const bundleThumbs = renderBundleThumbs(entry.bundleThumbs);
-    const bundlePanel = bundleThumbs
-      ? "<p><strong>Sample Pack:</strong></p>" + bundleThumbs
-      : "";
-    const slideshowPanel = "<div class=\"slideshow-frame\">" +
+    const imageHtml = "<div class=\"slideshow-image-container\">" +
       "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Shoot preview " + (safeIndex + 1) + "\" />" +
-      "</div>" +
-      "<div class=\"button-row\">" +
+      "</div>";
+    const controlsHtml = "<div class=\"slideshow-controls\">" +
       createButton("Prev", "booking-slideshow-prev", "", prevDisabled) +
       createButton("Next", "booking-slideshow-next", "primary", nextDisabled) +
-      "<span class=\"helper-text\">" + counterLabel + "</span>" +
+      "<span class=\"slideshow-counter\">" + counterLabel + "</span>" +
       "</div>";
-    contentBody = slideshowPanel +
-      "<div class=\"panel\">" +
+    const infoHtml = "<div class=\"slideshow-info\">" +
       "<p><strong>Performer:</strong> " + performer + "</p>" +
       "<div style=\"" + locationRowStyle + "\">" +
       "<img src=\"" + locationThumbPath + "\" alt=\"" + locationAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + locationFallbackPath + "';\" />" +
@@ -723,7 +718,11 @@ function renderContent(gameState) {
       "<p><strong>Content Type:</strong> " + entry.contentType + "</p>" +
       "<p><strong>Day Created:</strong> " + entry.dayCreated + "</p>" +
       "<p><strong>Shoot Cost:</strong> " + formatCurrency(entry.shootCost) + "</p>" +
-      bundlePanel +
+      "</div>";
+    contentBody = "<div class=\"slideshow-layout\">" +
+      imageHtml +
+      controlsHtml +
+      infoHtml +
       "</div>";
   }
 
@@ -1109,13 +1108,19 @@ function renderSlideshow(gameState) {
         createButton("Decline", "recruit-decline", "", false, "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
         "</div>"
       : "";
+    const imageHtml = "<div class=\"slideshow-image-container\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Audition slide " + (safeIndex + 1) + "\" />" +
+      "</div>";
+    const controlsHtml = "<div class=\"slideshow-controls\">" +
+      "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
+      "</div>";
     const body = "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Private Audition — " + name + "</h3>" +
       "<p class=\"helper-text\">" + pitchText + "</p>" +
-      "<div class=\"slideshow-frame\">" +
-      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Audition slide " + (safeIndex + 1) + "\" />" +
+      "<div class=\"slideshow-layout\">" +
+      imageHtml +
+      controlsHtml +
       "</div>" +
-      "<p class=\"helper-text\">Slide " + slideNumber + " of " + slideCount + "</p>" +
       nextButton +
       decisionButtons +
       "<div class=\"button-row\">" +
@@ -1137,15 +1142,21 @@ function renderSlideshow(gameState) {
     const slideNumber = slideCount ? safeIndex + 1 : 0;
     const prevDisabled = safeIndex <= 0;
     const nextDisabled = safeIndex >= slideCount - 1;
-    const body = "<div class=\"panel\">" +
-      "<h3 class=\"panel-title\">Shoot Photos</h3>" +
-      "<div class=\"slideshow-frame\">" +
+    const imageHtml = "<div class=\"slideshow-image-container\">" +
       "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Shoot photo " + (safeIndex + 1) + "\" />" +
-      "</div>" +
-      "<p class=\"helper-text\">Photo " + slideNumber + " of " + slideCount + "</p>" +
-      "<div class=\"button-row\">" +
+      "</div>";
+    const controlsHtml = "<div class=\"slideshow-controls\">" +
       createButton("Prev", "slideshow-prev", "", prevDisabled) +
       createButton("Next", "slideshow-next", "primary", nextDisabled) +
+      "<span class=\"slideshow-counter\">Photo " + slideNumber + " of " + slideCount + "</span>" +
+      "</div>";
+    const body = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Shoot Photos</h3>" +
+      "<div class=\"slideshow-layout\">" +
+      imageHtml +
+      controlsHtml +
+      "</div>" +
+      "<div class=\"button-row\">" +
       createButton("Close", "slideshow-close") +
       "</div>" +
       "</div>";
@@ -1279,27 +1290,6 @@ function getLatestContentEntry(gameState) {
   return gameState.content.entries.find(function (entry) {
     return entry.id === gameState.content.lastContentId;
   }) || null;
-}
-
-function getBundleThumbSizePx() {
-  return CONFIG.ui.main_padding_px * 3;
-}
-
-function renderBundleThumbs(bundleThumbs) {
-  if (!Array.isArray(bundleThumbs) || bundleThumbs.length === 0) {
-    return "";
-  }
-  const thumbSize = getBundleThumbSizePx();
-  const thumbRadius = Math.round(CONFIG.ui.panel_gap_px / 2);
-  const thumbStyle = "width:" + thumbSize + "px;height:" + thumbSize + "px;object-fit:cover;border-radius:" +
-    thumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);";
-  const thumbs = bundleThumbs.map(function (thumbPath) {
-    const resolvedPath = thumbPath || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
-    const fallbackPath = CONFIG.SHOOT_OUTPUT_PLACEHOLDER_THUMB_PATH;
-    return "<img src=\"" + resolvedPath + "\" alt=\"Sample pack thumbnail\" width=\"" + thumbSize + "\" height=\"" + thumbSize +
-      "\" style=\"" + thumbStyle + "\" onerror=\"this.onerror=null;this.src='" + fallbackPath + "';\" />";
-  }).join("");
-  return "<div class=\"bundle-thumbs\">" + thumbs + "</div>";
 }
 
 function getPerformerName(gameState, performerId) {
