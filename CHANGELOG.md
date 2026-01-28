@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX move the save dropdown out of the nav rail, elevate its layering, and keep outside clicks closing it.
+  - Why: Ensure the save menu appears above the hub content without stacking context clipping.
+  - Files touched: index.html, styles.css, src/ui/events.js, CHANGELOG.md.
 - What: FIX nav save dropdown positioning and expand slideshow preview sizing.
   - Why: Prevent dropdown clipping in the nav rail and give content previews more viewport space.
   - Files touched: styles.css, src/ui/events.js, CHANGELOG.md.
