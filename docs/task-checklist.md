@@ -103,6 +103,16 @@
 
 ---
 
+## Ambient Character Art System — In Progress
+- [x] Phase 1: CSS infrastructure (layers, positioning, animations)
+- [x] Phase 1: Placeholder containers added to all screens
+- [x] Phase 1: Config stub for mascot/background paths
+- [ ] Phase 2: Reactive mascot logic (pose selection based on game state)
+- [ ] Phase 3: Art production specifications finalized
+- [ ] Phase 4: Real artwork integration
+
+---
+
 ## Act 1+ Content Expansion — Implemented
 - [x] Reputation gains via milestone rewards (followers, OF subs, MRR).
 - [x] Recruitment panel with rep-gated candidates and meet slideshow.

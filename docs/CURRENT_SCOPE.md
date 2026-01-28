@@ -18,11 +18,15 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Balance Pass v1 retuning debt to $25,000 and overhead tiers for post-payout economy pacing.
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 - Premium UI Redesign (all 6 phases) — transformed the entire game UI to a "Neon Noir VIP" dark glass aesthetic with animations.
-
-## Currently Working On
 - Premium UI redesign complete — all phases finished
 
+## Currently Working On
+- Ambient Character Art System — Phase 1 (infrastructure + placeholders)
+
 ## Next 3–7 Candidate Tasks
+- Ambient Art Phase 2: Reactive mascot pose logic based on game state
+- Ambient Art Phase 3: Generate test artwork for mascot positions
+- Ambient Art Phase 4: Replace placeholders with final artwork
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.
 - Tune economy values in `src/config.js` (MRR pacing, costs, conversions).
 - Expand theme catalog once art + balance targets are defined.

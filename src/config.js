@@ -87,6 +87,60 @@ const CONFIG = {
     main_padding_px: 16,
     story_log_preview_length: 120
   },
+  ambientArt: {
+    enabled: true,
+    mascots: {
+      assistant: {
+        id: "assistant",
+        name: "The Assistant",
+        poses: {
+          welcome: { path: "assets/images/mascots/placeholder.svg", label: "Welcome" },
+          concerned: { path: "assets/images/mascots/placeholder.svg", label: "Concerned" },
+          celebratory: { path: "assets/images/mascots/placeholder.svg", label: "Celebratory" },
+          presenting: { path: "assets/images/mascots/placeholder.svg", label: "Presenting" },
+          reflective: { path: "assets/images/mascots/placeholder.svg", label: "Reflective" }
+        }
+      },
+      producer: {
+        id: "producer",
+        name: "The Producer",
+        poses: {
+          ready: { path: "assets/images/mascots/placeholder.svg", label: "Ready" },
+          thumbsUp: { path: "assets/images/mascots/placeholder.svg", label: "Thumbs Up" },
+          admiring: { path: "assets/images/mascots/placeholder.svg", label: "Admiring" }
+        }
+      },
+      talentScout: {
+        id: "talentScout",
+        name: "The Talent Scout",
+        poses: {
+          introducing: { path: "assets/images/mascots/placeholder.svg", label: "Introducing" },
+          impressed: { path: "assets/images/mascots/placeholder.svg", label: "Impressed" },
+          phone: { path: "assets/images/mascots/placeholder.svg", label: "On Phone" }
+        }
+      },
+      saleswoman: {
+        id: "saleswoman",
+        name: "The Saleswoman",
+        poses: {
+          welcoming: { path: "assets/images/mascots/placeholder.svg", label: "Welcoming" },
+          presenting: { path: "assets/images/mascots/placeholder.svg", label: "Presenting" },
+          sold: { path: "assets/images/mascots/placeholder.svg", label: "Sold!" }
+        }
+      }
+    },
+    backgrounds: {
+      hub: { path: "assets/images/backgrounds/placeholder.svg" },
+      booking: { path: "assets/images/backgrounds/placeholder.svg" },
+      gallery: { path: "assets/images/backgrounds/placeholder.svg" },
+      roster: { path: "assets/images/backgrounds/placeholder.svg" },
+      recruitment: { path: "assets/images/backgrounds/placeholder.svg" },
+      analytics: { path: "assets/images/backgrounds/placeholder.svg" },
+      shop: { path: "assets/images/backgrounds/placeholder.svg" },
+      social: { path: "assets/images/backgrounds/placeholder.svg" },
+      storyLog: { path: "assets/images/backgrounds/placeholder.svg" }
+    }
+  },
   debug: {
     enabled: true,
     queryParam: "debug",
