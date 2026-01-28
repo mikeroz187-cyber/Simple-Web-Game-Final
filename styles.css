@@ -2518,3 +2518,168 @@ body {
 .social-panel__content::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
+
+/* === AMBIENT IMAGERY LAYERS === */
+
+/* Container for all ambient layers - added to each screen */
+.ambient-layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Background atmosphere layer - full screen, behind everything */
+.ambient-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.4;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Mascot layer - positioned per screen */
+.ambient-mascot {
+  position: absolute;
+  z-index: 2;
+  max-height: 50vh;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.3));
+}
+
+/* Accent layer - for small decorative elements */
+.ambient-accent {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Ensure screen content stays above ambient layers */
+.screen-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* === MASCOT POSITIONING === */
+
+/* Right side, vertically centered (default) */
+.mascot-pos-right-center {
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Right side, bottom-aligned (feet at bottom edge) */
+.mascot-pos-right-bottom {
+  right: 2rem;
+  bottom: 0;
+  transform: translateY(0);
+}
+
+/* Right side, lower third */
+.mascot-pos-right-lower {
+  right: 2rem;
+  bottom: 10%;
+}
+
+/* Bottom-right corner, cropped (figure extends below viewport) */
+.mascot-pos-corner-br {
+  right: 5%;
+  bottom: -5%;
+}
+
+/* Left side after nav rail (for Recruitment if needed) */
+.mascot-pos-left-center {
+  left: calc(var(--nav-rail-width, 72px) + 2rem);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* === AMBIENT ANIMATIONS === */
+
+@keyframes ambient-breathe {
+  0%, 100% { transform: scale(1) translateY(-50%); }
+  50% { transform: scale(1.015) translateY(-50%); }
+}
+
+@keyframes ambient-breathe-no-ty {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+@keyframes ambient-sway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+@keyframes ambient-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.ambient-breathe {
+  animation: ambient-breathe 4s ease-in-out infinite;
+}
+
+.ambient-breathe-static {
+  animation: ambient-breathe-no-ty 4s ease-in-out infinite;
+}
+
+.ambient-sway {
+  animation: ambient-sway 6s ease-in-out infinite;
+}
+
+.ambient-float {
+  animation: ambient-float 5s ease-in-out infinite;
+}
+
+/* Hover interaction - slight lean toward cursor */
+.hover-lean {
+  transition: transform 0.3s ease;
+}
+
+.hover-lean:hover {
+  transform: rotate(2deg) scale(1.02);
+}
+
+/* Parallax-ready classes (JS will adjust on scroll if implemented later) */
+.parallax-slow {
+  will-change: transform;
+}
+
+.parallax-fast {
+  will-change: transform;
+}
+
+/* === PLACEHOLDER STYLES (remove when real art is added) === */
+
+.placeholder-mascot {
+  width: 200px;
+  height: 45vh;
+  background: linear-gradient(135deg, rgba(255, 0, 128, 0.2) 0%, rgba(255, 0, 128, 0.05) 100%);
+  border: 2px dashed rgba(255, 0, 128, 0.4);
+  border-radius: 100px 100px 40px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 0, 128, 0.6);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.placeholder-bg {
+  background: radial-gradient(ellipse at center, rgba(255, 0, 128, 0.08) 0%, transparent 70%);
+}
+
+.placeholder-accent {
+  width: 80px;
+  height: 120px;
+  background: rgba(255, 0, 128, 0.1);
+  border: 1px dashed rgba(255, 0, 128, 0.3);
+  border-radius: 8px;
+}

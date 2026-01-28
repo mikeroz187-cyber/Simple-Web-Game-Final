@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Add ambient imagery layer infrastructure, placeholder mascots/backgrounds, and config stubs for Phase 1.
+  - Why: Establish the ambient art scaffolding with safe placeholders before real artwork integration.
+  - Files touched: styles.css, index.html, src/ui/render.js, src/config.js, assets/images/mascots/placeholder.svg, assets/images/backgrounds/placeholder.svg, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX enlarge slideshow preview placeholder and constrain info panel scrolling.
   - Why: Ensure Booking preview placeholders scale up without triggering page scroll.
   - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.

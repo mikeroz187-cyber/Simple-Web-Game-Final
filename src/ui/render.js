@@ -264,7 +264,7 @@ function getAvailabilitySummary(gameState, performerId) {
 }
 
 function renderHub(gameState) {
-  var hub = qs("#screen-hub");
+  var hub = qs("#screen-hub .screen-content") || qs("#screen-hub");
   if (!hub) return;
 
   var player = gameState.player;
@@ -501,7 +501,7 @@ function renderHub(gameState) {
 }
 
 function renderBooking(gameState) {
-  var screen = qs("#screen-booking");
+  var screen = qs("#screen-booking .screen-content") || qs("#screen-booking");
   if (!screen) return;
 
   var uiState = getUiState();
@@ -668,7 +668,7 @@ function renderBooking(gameState) {
 
 
 function renderContent(gameState) {
-  const screen = qs("#screen-content");
+  const screen = qs("#screen-content .screen-content") || qs("#screen-content");
   const uiState = getUiState();
   const entry = getLatestContentEntry(gameState);
   const locationThumbSize = getLocationThumbnailSizePx();
@@ -736,7 +736,7 @@ function renderContent(gameState) {
 }
 
 function renderAnalytics(gameState) {
-  var screen = qs("#screen-analytics");
+  var screen = qs("#screen-analytics .screen-content") || qs("#screen-analytics");
   if (!screen) return;
 
   var player = gameState.player;
@@ -799,7 +799,7 @@ function renderAnalytics(gameState) {
 
 
 function renderRoster(gameState) {
-  var screen = qs("#screen-roster");
+  var screen = qs("#screen-roster .screen-content") || qs("#screen-roster");
   if (!screen) return;
 
   var performers = gameState.roster.performers || [];
@@ -843,13 +843,21 @@ function renderRoster(gameState) {
   var recruitmentHeader = '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + gameState.player.reputation + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Roster Size</span><span class="stat-row__value">' + rosterSize + ' / ' + maxRosterSize + '</span></div>';
   var recruitmentHtml = '';
+  var recruitmentAmbient = '<div class="ambient-layers">' +
+    '<div class="ambient-bg placeholder-bg"></div>' +
+    '<div class="ambient-mascot mascot-pos-right-center placeholder-mascot ambient-breathe">' +
+      '<span>TALENT SCOUT<br>Mascot Zone</span>' +
+    '</div>' +
+  '</div>';
 
   if (isRosterFull) {
-    recruitmentHtml = '<div class="panel"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
-      '<p style="color:var(--text-muted);font-size:12px;">Roster full. Release a contract to recruit more talent.</p></div>';
+    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+      '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
+      '<p style="color:var(--text-muted);font-size:12px;">Roster full. Release a contract to recruit more talent.</p></div></div>';
   } else if (!activeCandidate) {
-    recruitmentHtml = '<div class="panel"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
-      '<p style="color:var(--text-muted);font-size:12px;">No recruits available. Increase reputation to attract talent.</p></div>';
+    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+      '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
+      '<p style="color:var(--text-muted);font-size:12px;">No recruits available. Increase reputation to attract talent.</p></div></div>';
   } else {
     var performer = CONFIG.performers.catalog[activeCandidate.performerId];
     var name = performer ? performer.name : "Unknown";
@@ -858,24 +866,25 @@ function renderRoster(gameState) {
     var dailyCap = performer ? getPerformerDailyBookingCap(performer) : '?';
     var repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
     var hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
-    recruitmentHtml = '<div class="panel"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
-      '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
-        '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + name + '">' +
-        '<div class="performer-card__info">' +
-          '<div class="performer-card__name">' + name + '</div>' +
-          '<div class="performer-card__stats">' +
-            '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + starPower + '</span></span>' +
-            '<span class="performer-card__stat">🎯 <span class="performer-card__stat-value">' + dailyCap + '</span></span>' +
-          '</div>' +
-          '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Rep Required: ' + repRequired + '</div>' +
-          '<div style="font-size:10px;color:var(--text-muted);">Hire Cost: ' + formatCurrency(hireCost) + '</div>' +
-          '<div class="button-row" style="margin-top:6px;">' +
-            '<button class="button small primary" data-action="open-meet-recruit" data-id="' + activeCandidate.performerId + '">Meet</button>' +
-            '<button class="button small" data-action="recruit-decline" data-id="' + activeCandidate.performerId + '">Decline</button>' +
+    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+      '<div class="screen-content"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
+        '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
+          '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + name + '">' +
+          '<div class="performer-card__info">' +
+            '<div class="performer-card__name">' + name + '</div>' +
+            '<div class="performer-card__stats">' +
+              '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + starPower + '</span></span>' +
+              '<span class="performer-card__stat">🎯 <span class="performer-card__stat-value">' + dailyCap + '</span></span>' +
+            '</div>' +
+            '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Rep Required: ' + repRequired + '</div>' +
+            '<div style="font-size:10px;color:var(--text-muted);">Hire Cost: ' + formatCurrency(hireCost) + '</div>' +
+            '<div class="button-row" style="margin-top:6px;">' +
+              '<button class="button small primary" data-action="open-meet-recruit" data-id="' + activeCandidate.performerId + '">Meet</button>' +
+              '<button class="button small" data-action="recruit-decline" data-id="' + activeCandidate.performerId + '">Decline</button>' +
+            '</div>' +
           '</div>' +
         '</div>' +
-      '</div>' +
-    '</div>';
+      '</div></div>';
   }
 
   // Contract renewals
@@ -905,7 +914,7 @@ function renderRoster(gameState) {
 
 
 function renderSocial(gameState) {
-  var screen = qs("#screen-social");
+  var screen = qs("#screen-social .screen-content") || qs("#screen-social");
   if (!screen) return;
 
   var uiState = getUiState();
@@ -1010,7 +1019,7 @@ function renderSocial(gameState) {
 
 
 function renderGallery(gameState) {
-  var screen = qs("#screen-gallery");
+  var screen = qs("#screen-gallery .screen-content") || qs("#screen-gallery");
   if (!screen) return;
 
   var uiState = getUiState();
@@ -1077,7 +1086,7 @@ function renderGallery(gameState) {
 
 
 function renderSlideshow(gameState) {
-  const screen = qs("#screen-slideshow");
+  const screen = qs("#screen-slideshow .screen-content") || qs("#screen-slideshow");
   if (!screen) {
     return;
   }
@@ -1178,7 +1187,7 @@ function renderSlideshow(gameState) {
 }
 
 function renderStoryLog(gameState) {
-  var screen = qs("#screen-story-log");
+  var screen = qs("#screen-story-log .screen-content") || qs("#screen-story-log");
   if (!screen) return;
 
   var entries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
@@ -1209,7 +1218,7 @@ function renderStoryLog(gameState) {
 
 
 function renderShop(gameState) {
-  var screen = qs("#screen-shop");
+  var screen = qs("#screen-shop .screen-content") || qs("#screen-shop");
   if (!screen) return;
 
   var cash = gameState.player.cash;
