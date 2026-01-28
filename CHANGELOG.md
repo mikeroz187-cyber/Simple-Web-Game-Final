@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX booking performer card clicks now resolve the nearest data-action element and update selection on click.
+  - Why: Ensure performer cards select properly even when clicking child elements like portraits or stats.
+  - Files touched: src/ui/events.js, CHANGELOG.md.
 - What: Premium UI redesign Phase 6 (FINAL) — micro-interactions including animated number counting for cash/stats, smooth screen transitions, toast notification system for action feedback, value change flash indicators, staggered entrance animations for cards, button press feedback, and custom styled scrollbars.
   - Why: Add the final polish that makes the UI feel alive and premium, providing satisfying feedback for every player action.
   - Files touched: styles.css, src/utils/animations.js (new), src/ui/render.js, src/ui/events.js, src/ui/router.js, index.html, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
