@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX add explicit click handlers for save dropdown buttons.
+  - Why: Ensure save/load/export/import actions work after moving the dropdown outside the nav rail.
+  - Files touched: src/ui/events.js, CHANGELOG.md.
 - What: FIX move the save dropdown out of the nav rail, elevate its layering, and keep outside clicks closing it.
   - Why: Ensure the save menu appears above the hub content without stacking context clipping.
   - Files touched: index.html, styles.css, src/ui/events.js, CHANGELOG.md.
