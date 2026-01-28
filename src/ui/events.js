@@ -1087,9 +1087,9 @@ function setupEventHandlers() {
   document.addEventListener("click", function (event) {
     var saveDropdown = document.getElementById("nav-save-dropdown");
     if (saveDropdown && saveDropdown.classList.contains("is-open")) {
-      var clickedInside = event.target.closest(".nav-rail__save-section") ||
-        event.target.closest(".nav-save-dropdown");
-      if (!clickedInside) {
+      var clickedToggle = event.target.closest("[data-action=\"toggle-save-menu\"]");
+      var clickedDropdown = event.target.closest(".nav-save-dropdown");
+      if (!clickedToggle && !clickedDropdown) {
         saveDropdown.classList.remove("is-open");
       }
     }
