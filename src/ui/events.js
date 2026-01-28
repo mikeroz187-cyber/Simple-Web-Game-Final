@@ -215,8 +215,13 @@ function setupEventHandlers() {
   }
 
   document.body.addEventListener("click", function (event) {
-    const target = event.target.closest("[data-action]");
-    const action = target && target.dataset ? target.dataset.action : null;
+    const actionEl = event.target.closest("[data-action]");
+    if (!actionEl) {
+      return;
+    }
+    const action = actionEl.getAttribute("data-action");
+    const actionId = actionEl.getAttribute("data-id");
+    const actionTier = actionEl.getAttribute("data-tier");
     if (!action) {
       return;
     }
@@ -249,7 +254,7 @@ function setupEventHandlers() {
     }
 
     if (action === "open-meet-recruit") {
-      const performerId = target.dataset.id;
+      const performerId = actionId;
       uiState.slideshow = { mode: "recruit", id: performerId, index: 0 };
       uiState.recruitMeet = { performerId: performerId, slideIndex: 0 };
       setUiMessage("");
@@ -273,7 +278,7 @@ function setupEventHandlers() {
     }
 
     if (action === "recruit-hire") {
-      const performerId = target.dataset.id;
+      const performerId = actionId;
       const result = hireRecruitCandidate(window.gameState, performerId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -289,7 +294,7 @@ function setupEventHandlers() {
     }
 
     if (action === "recruit-decline") {
-      const performerId = target.dataset.id || (uiState.recruitMeet && uiState.recruitMeet.performerId);
+      const performerId = actionId || (uiState.recruitMeet && uiState.recruitMeet.performerId);
       const result = declineRecruitCandidate(window.gameState, performerId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -307,7 +312,7 @@ function setupEventHandlers() {
     }
 
     if (action === "view-shoot-photos") {
-      const contentId = target.dataset.id;
+      const contentId = actionId;
       uiState.slideshow = { mode: "shoot", id: contentId, index: 0 };
       setUiMessage("");
       showScreen("screen-slideshow");
@@ -412,7 +417,7 @@ function setupEventHandlers() {
     }
 
     if (action === "select-reputation-branch") {
-      const branchId = target.dataset.id;
+      const branchId = actionId;
       const result = selectReputationBranch(window.gameState, branchId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -430,7 +435,7 @@ function setupEventHandlers() {
     }
 
     if (action === "select-booking-mode") {
-      const mode = target.dataset.id;
+      const mode = actionId;
       uiState.booking.bookingMode = mode;
       if (mode === "agency_pack") {
         uiState.booking.performerIdA = null;
@@ -440,22 +445,29 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "select-performer-a") {
+      uiState.booking.performerIdA = actionId || null;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "select-location") {
-      uiState.booking.locationId = target.dataset.id;
+      uiState.booking.locationId = actionId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
     }
 
     if (action === "select-theme") {
-      uiState.booking.themeId = target.dataset.id;
+      uiState.booking.themeId = actionId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
     }
 
     if (action === "select-content-type") {
-      uiState.booking.contentType = target.dataset.id;
+      uiState.booking.contentType = actionId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
@@ -490,7 +502,7 @@ function setupEventHandlers() {
     }
 
     if (action === "renew-contract") {
-      const performerId = target.dataset.id;
+      const performerId = actionId;
       const result = renewPerformerContract(window.gameState, performerId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -504,14 +516,14 @@ function setupEventHandlers() {
     }
 
     if (action === "select-social-content") {
-      uiState.social.selectedContentId = target.dataset.id;
+      uiState.social.selectedContentId = actionId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
     }
 
     if (action === "select-social-strategy") {
-      const strategyId = target.dataset.id;
+      const strategyId = actionId;
       const result = setSocialStrategy(window.gameState, strategyId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -601,14 +613,14 @@ function setupEventHandlers() {
     }
 
     if (action === "select-gallery-entry") {
-      uiState.gallery.selectedContentId = target.dataset.id;
+      uiState.gallery.selectedContentId = actionId;
       setUiMessage("");
       renderApp(window.gameState);
       return;
     }
 
     if (action === "unlock-location-tier") {
-      const tierId = target.dataset.tier;
+      const tierId = actionTier;
       const result = unlockLocationTier(window.gameState, tierId);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -641,7 +653,7 @@ function setupEventHandlers() {
     }
 
     if (action === "upgrade-equipment") {
-      const upgradeId = target.dataset.id;
+      const upgradeId = actionId;
       const result = purchaseEquipmentUpgrade(window.gameState, upgradeId);
       setEquipmentMessage(result.message || "");
       setUiMessage("");
@@ -949,7 +961,7 @@ function setupEventHandlers() {
     }
 
     if (action === "view-story-log-entry") {
-      const entryId = target.dataset.id;
+      const entryId = actionId;
       const entry = Array.isArray(window.gameState.storyLog)
         ? window.gameState.storyLog.find(function (logEntry) {
           return logEntry.id === entryId;
