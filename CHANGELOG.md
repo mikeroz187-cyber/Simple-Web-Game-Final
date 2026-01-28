@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX rework ambient mascot layout to anchor bottom-right, keep mascots above panels, and add mascot-aware content spacing.
+  - Why: Give mascots dedicated screen space with subtler backgrounds and prevent panel overlap.
+  - Files touched: styles.css, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Wired real ambient artwork paths and dynamic rendering for mascot/background layers across screens.
   - Why: Replace placeholder ambient art with actual assets and centralized rendering helpers.
   - Files touched: src/config.js, src/ui/render.js, index.html, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

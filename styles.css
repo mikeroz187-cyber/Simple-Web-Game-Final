@@ -2526,7 +2526,7 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
   z-index: 0;
 }
 
@@ -2535,20 +2535,24 @@ body {
   position: absolute;
   inset: 0;
   z-index: 1;
-  opacity: 0.4;
+  opacity: 0.18;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  filter: brightness(0.7) saturate(0.6);
 }
 
 /* Mascot layer - positioned per screen */
 .ambient-mascot {
-  position: absolute;
-  z-index: 2;
-  max-height: 50vh;
+  position: fixed;
+  z-index: 100;
+  max-height: 55vh;
   width: auto;
+  max-width: 280px;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.3));
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
+  animation: ambient-breathe-bottom 4s ease-in-out infinite;
 }
 
 /* Accent layer - for small decorative elements */
@@ -2564,51 +2568,65 @@ body {
   z-index: 10;
 }
 
+/* === MASCOT-AWARE CONTENT SPACING === */
+
+/* Apply to screen-content containers that need mascot clearance */
+.mascot-clearance {
+  padding-right: 260px;
+}
+
+@media (max-width: 1400px) {
+  .mascot-clearance {
+    padding-right: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .mascot-clearance {
+    padding-right: 160px;
+  }
+}
+
+/* For screens where mascot should not affect layout (like Roster) */
+.no-mascot-clearance {
+  padding-right: 0;
+}
+
 /* === MASCOT POSITIONING === */
 
-/* Right side, vertically centered (default) */
-.mascot-pos-right-center {
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Right side, bottom-aligned (feet at bottom edge) */
-.mascot-pos-right-bottom {
+/* Bottom-right anchored (DEFAULT - most screens) */
+.mascot-pos-bottom-right {
   right: 2rem;
   bottom: 0;
-  transform: translateY(0);
+  transform-origin: bottom center;
 }
 
-/* Right side, lower third */
-.mascot-pos-right-lower {
+/* Bottom-right, slightly inset (for screens with right-side panels) */
+.mascot-pos-bottom-right-inset {
+  right: 3rem;
+  bottom: 0;
+  transform-origin: bottom center;
+}
+
+/* Bottom-right, partial crop (feet cut off - more dramatic) */
+.mascot-pos-bottom-right-crop {
   right: 2rem;
-  bottom: 10%;
+  bottom: -5vh;
+  transform-origin: bottom center;
 }
 
-/* Bottom-right corner, cropped (figure extends below viewport) */
-.mascot-pos-corner-br {
-  right: 5%;
-  bottom: -5%;
-}
-
-/* Left side after nav rail (for Recruitment if needed) */
-.mascot-pos-left-center {
-  left: calc(var(--nav-rail-width, 72px) + 2rem);
-  top: 50%;
-  transform: translateY(-50%);
+/* Centered bottom (for wide screens like Gallery) */
+.mascot-pos-bottom-center {
+  right: 15%;
+  bottom: 0;
+  transform-origin: bottom center;
 }
 
 /* === AMBIENT ANIMATIONS === */
 
-@keyframes ambient-breathe {
-  0%, 100% { transform: scale(1) translateY(-50%); }
-  50% { transform: scale(1.015) translateY(-50%); }
-}
-
-@keyframes ambient-breathe-no-ty {
+@keyframes ambient-breathe-bottom {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.015); }
+  50% { transform: scale(1.012); }
 }
 
 @keyframes ambient-sway {
@@ -2619,14 +2637,6 @@ body {
 @keyframes ambient-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
-}
-
-.ambient-breathe {
-  animation: ambient-breathe 4s ease-in-out infinite;
-}
-
-.ambient-breathe-static {
-  animation: ambient-breathe-no-ty 4s ease-in-out infinite;
 }
 
 .ambient-sway {
