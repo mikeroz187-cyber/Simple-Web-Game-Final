@@ -68,6 +68,7 @@
 - [x] Promo gains apply only on posting (no double-counting).
 - [x] Promo OF conversion uses fractional carry.
 - [x] Promo list hides fully posted entries; Recent Posts capped at 5.
+- [x] FIX Recent Posts titles fall back when Promo entries lack saved titles.
 - [x] Agency Sample Pack booking mode (promo-strong, premium-weak).
 - [x] Booking locations reduced to 3 tiers (Bedroom/Shower/Office) with unlock gating.
 - [x] Themes locked to 4 MVP themes.

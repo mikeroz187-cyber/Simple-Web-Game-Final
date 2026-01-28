@@ -557,9 +557,11 @@ function confirmBooking(gameState, selection) {
     ? "Promo shot complete. Post it to generate reach."
     : "Premium release boosted OF subscribers.";
 
-  const contentId = "content_" + (gameState.content.entries.length + 1);
+  const contentIndex = gameState.content.entries.length + 1;
+  const contentId = "content_" + contentIndex;
   const entry = {
     id: contentId,
+    title: selection.contentType + " #" + contentIndex,
     dayCreated: gameState.player.day,
     performerId: isAgencyPack ? null : performer.id,
     performerIds: isAgencyPack ? [] : performerSelection.performerIds,

@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX add content titles for newly booked shoots and safe fallbacks in Social recent posts.
+  - Why: Prevent "undefined" post titles for new and legacy saves.
+  - Files touched: src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX add explicit click handlers for save dropdown buttons.
   - Why: Ensure save/load/export/import actions work after moving the dropdown outside the nav rail.
   - Files touched: src/ui/events.js, CHANGELOG.md.
