@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX enlarge slideshow preview placeholder and constrain info panel scrolling.
+  - Why: Ensure Booking preview placeholders scale up without triggering page scroll.
+  - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX add content titles for newly booked shoots and safe fallbacks in Social recent posts.
   - Why: Prevent "undefined" post titles for new and legacy saves.
   - Files touched: src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
