@@ -94,51 +94,62 @@ const CONFIG = {
         id: "assistant",
         name: "The Assistant",
         poses: {
-          welcome: { path: "assets/images/mascots/placeholder.svg", label: "Welcome" },
-          concerned: { path: "assets/images/mascots/placeholder.svg", label: "Concerned" },
-          celebratory: { path: "assets/images/mascots/placeholder.svg", label: "Celebratory" },
-          presenting: { path: "assets/images/mascots/placeholder.svg", label: "Presenting" },
-          reflective: { path: "assets/images/mascots/placeholder.svg", label: "Reflective" }
+          welcome: { path: "assets/images/mascots/assistant_welcome.png", label: "Welcome" },
+          concerned: { path: "assets/images/mascots/assistant_concerned.png", label: "Concerned" },
+          celebratory: { path: "assets/images/mascots/assistant_celebratory.png", label: "Celebratory" },
+          presenting: { path: "assets/images/mascots/assistant_presenting.png", label: "Presenting" },
+          reflective: { path: "assets/images/mascots/assistant_reflective.png", label: "Reflective" }
         }
       },
       producer: {
         id: "producer",
         name: "The Producer",
         poses: {
-          ready: { path: "assets/images/mascots/placeholder.svg", label: "Ready" },
-          thumbsUp: { path: "assets/images/mascots/placeholder.svg", label: "Thumbs Up" },
-          admiring: { path: "assets/images/mascots/placeholder.svg", label: "Admiring" }
+          ready: { path: "assets/images/mascots/producer_ready.png", label: "Ready" },
+          thumbsUp: { path: "assets/images/mascots/producer_thumbsup.png", label: "Thumbs Up" },
+          admiring: { path: "assets/images/mascots/producer_admiring.png", label: "Admiring" }
         }
       },
       talentScout: {
         id: "talentScout",
         name: "The Talent Scout",
         poses: {
-          introducing: { path: "assets/images/mascots/placeholder.svg", label: "Introducing" },
-          impressed: { path: "assets/images/mascots/placeholder.svg", label: "Impressed" },
-          phone: { path: "assets/images/mascots/placeholder.svg", label: "On Phone" }
+          introducing: { path: "assets/images/mascots/talentscout_introducing.png", label: "Introducing" },
+          impressed: { path: "assets/images/mascots/talentscout_impressed.png", label: "Impressed" },
+          phone: { path: "assets/images/mascots/talentscout_phone.png", label: "On Phone" }
         }
       },
       saleswoman: {
         id: "saleswoman",
         name: "The Saleswoman",
         poses: {
-          welcoming: { path: "assets/images/mascots/placeholder.svg", label: "Welcoming" },
-          presenting: { path: "assets/images/mascots/placeholder.svg", label: "Presenting" },
-          sold: { path: "assets/images/mascots/placeholder.svg", label: "Sold!" }
+          welcoming: { path: "assets/images/mascots/saleswoman_welcoming.png", label: "Welcoming" },
+          presenting: { path: "assets/images/mascots/saleswoman_presenting.png", label: "Presenting" },
+          sold: { path: "assets/images/mascots/saleswoman_sold.png", label: "Sold!" }
         }
       }
     },
     backgrounds: {
-      hub: { path: "assets/images/backgrounds/placeholder.svg" },
-      booking: { path: "assets/images/backgrounds/placeholder.svg" },
-      gallery: { path: "assets/images/backgrounds/placeholder.svg" },
-      roster: { path: "assets/images/backgrounds/placeholder.svg" },
-      recruitment: { path: "assets/images/backgrounds/placeholder.svg" },
-      analytics: { path: "assets/images/backgrounds/placeholder.svg" },
-      shop: { path: "assets/images/backgrounds/placeholder.svg" },
-      social: { path: "assets/images/backgrounds/placeholder.svg" },
-      storyLog: { path: "assets/images/backgrounds/placeholder.svg" }
+      hub: { path: "assets/images/backgrounds/bg_hub.png" },
+      booking: { path: "assets/images/backgrounds/bg_booking.png" },
+      gallery: { path: "assets/images/backgrounds/bg_gallery.png" },
+      roster: { path: "assets/images/backgrounds/bg_roster.png" },
+      recruitment: { path: "assets/images/backgrounds/bg_recruitment.png" },
+      analytics: { path: "assets/images/backgrounds/bg_analytics.png" },
+      shop: { path: "assets/images/backgrounds/bg_shop.png" },
+      social: { path: "assets/images/backgrounds/bg_social.png" },
+      storyLog: { path: "assets/images/backgrounds/bg_storylog.png" }
+    },
+    screenMascots: {
+      hub: { character: "assistant", defaultPose: "welcome" },
+      booking: { character: "producer", defaultPose: "ready" },
+      gallery: { character: "producer", defaultPose: "admiring" },
+      roster: null,
+      recruitment: { character: "talentScout", defaultPose: "introducing" },
+      analytics: { character: "assistant", defaultPose: "presenting" },
+      shop: { character: "saleswoman", defaultPose: "welcoming" },
+      social: { character: "talentScout", defaultPose: "phone" },
+      storyLog: { character: "assistant", defaultPose: "reflective" }
     }
   },
   debug: {

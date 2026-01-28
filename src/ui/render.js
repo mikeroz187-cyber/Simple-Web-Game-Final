@@ -39,6 +39,68 @@ function getUiState() {
   return window.uiState;
 }
 
+function renderAmbientLayers(screenId) {
+  var config = CONFIG.ambientArt;
+  if (!config || !config.enabled) {
+    return "";
+  }
+
+  var screenKeyMap = {
+    "screen-hub": "hub",
+    "screen-booking": "booking",
+    "screen-gallery": "gallery",
+    "screen-roster": "roster",
+    "screen-recruitment": "recruitment",
+    "screen-analytics": "analytics",
+    "screen-shop": "shop",
+    "screen-social": "social",
+    "screen-story-log": "storyLog"
+  };
+
+  var screenKey = screenKeyMap[screenId];
+  if (!screenKey) {
+    return "";
+  }
+
+  var bgHtml = "";
+  var bgConfig = config.backgrounds && config.backgrounds[screenKey];
+  if (bgConfig && bgConfig.path) {
+    bgHtml = "<div class=\"ambient-bg\" style=\"background-image: url('" + bgConfig.path + "');\"></div>";
+  } else {
+    bgHtml = "<div class=\"ambient-bg placeholder-bg\"></div>";
+  }
+
+  var mascotHtml = "";
+  var screenMascot = config.screenMascots && config.screenMascots[screenKey];
+  if (screenMascot && screenMascot.character) {
+    var characterConfig = config.mascots && config.mascots[screenMascot.character];
+    if (characterConfig && characterConfig.poses) {
+      var poseConfig = characterConfig.poses[screenMascot.defaultPose];
+      if (poseConfig && poseConfig.path) {
+        var positionClass = getMascotPositionClass(screenKey);
+        mascotHtml = "<img src=\"" + poseConfig.path + "\" alt=\"" + characterConfig.name + "\" class=\"ambient-mascot " +
+          positionClass + " ambient-breathe\" />";
+      }
+    }
+  }
+
+  return "<div class=\"ambient-layers\">" + bgHtml + mascotHtml + "</div>";
+}
+
+function getMascotPositionClass(screenKey) {
+  var positionMap = {
+    hub: "mascot-pos-right-center",
+    booking: "mascot-pos-right-bottom",
+    gallery: "mascot-pos-right-lower",
+    recruitment: "mascot-pos-right-center",
+    analytics: "mascot-pos-right-center",
+    shop: "mascot-pos-right-bottom",
+    social: "mascot-pos-corner-br",
+    storyLog: "mascot-pos-right-lower"
+  };
+  return positionMap[screenKey] || "mascot-pos-right-center";
+}
+
 function renderHeaderStats(gameState) {
   var container = document.getElementById("header-stats");
   if (!container) {
@@ -264,8 +326,10 @@ function getAvailabilitySummary(gameState, performerId) {
 }
 
 function renderHub(gameState) {
-  var hub = qs("#screen-hub .screen-content") || qs("#screen-hub");
-  if (!hub) return;
+  var container = document.getElementById("screen-hub");
+  if (!container) {
+    return;
+  }
 
   var player = gameState.player;
   var day = player.day;
@@ -474,7 +538,7 @@ function renderHub(gameState) {
   }
 
   // Assemble Hub
-  hub.innerHTML = "<div class=\"hub-dashboard\">" +
+  var contentHtml = "<div class=\"hub-dashboard\">" +
     "<div class=\"hub-dashboard__metrics\">" +
       "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;\">" +
         "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
@@ -493,16 +557,24 @@ function renderHub(gameState) {
   renderStatusMessage() +
   debugPanel;
 
+  var html = renderAmbientLayers("screen-hub") +
+    "<div class=\"screen-content\">" +
+    contentHtml +
+    "</div>";
+  container.innerHTML = html;
+
   // Stagger entrance animation for hero stats
-  var heroMetrics = hub.querySelector(".hero-metrics");
+  var heroMetrics = container.querySelector(".hero-metrics");
   if (heroMetrics) {
     heroMetrics.classList.add("stagger-enter");
   }
 }
 
 function renderBooking(gameState) {
-  var screen = qs("#screen-booking .screen-content") || qs("#screen-booking");
-  if (!screen) return;
+  var container = document.getElementById("screen-booking");
+  if (!container) {
+    return;
+  }
 
   var uiState = getUiState();
   var bookingMode = uiState.booking.bookingMode || "core";
@@ -649,7 +721,7 @@ function renderBooking(gameState) {
   '</div>';
 
   // Assemble layout
-  screen.innerHTML = '<h2 class="screen-title">Booking</h2>' +
+  var contentHtml = '<h2 class="screen-title">Booking</h2>' +
     '<div class="booking-layout">' +
       '<div class="booking-layout__left">' +
         '<div class="panel"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
@@ -664,11 +736,19 @@ function renderBooking(gameState) {
     '</div>' +
     renderStatusMessage() +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-booking") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 function renderContent(gameState) {
-  const screen = qs("#screen-content .screen-content") || qs("#screen-content");
+  const container = document.getElementById("screen-content");
+  if (!container) {
+    return;
+  }
   const uiState = getUiState();
   const entry = getLatestContentEntry(gameState);
   const locationThumbSize = getLocationThumbnailSizePx();
@@ -732,12 +812,18 @@ function renderContent(gameState) {
     createButton("View Analytics", "nav-analytics", "primary", !entry) +
     createButton("Back to Hub", "nav-hub") +
     "</div>";
-  screen.innerHTML = createPanel("Content", body, "screen-content-title");
+  const contentHtml = createPanel("Content", body, "screen-content-title");
+  container.innerHTML = renderAmbientLayers("screen-content") +
+    "<div class=\"screen-content\">" +
+    contentHtml +
+    "</div>";
 }
 
 function renderAnalytics(gameState) {
-  var screen = qs("#screen-analytics .screen-content") || qs("#screen-analytics");
-  if (!screen) return;
+  var container = document.getElementById("screen-analytics");
+  if (!container) {
+    return;
+  }
 
   var player = gameState.player;
   var cash = player.cash;
@@ -785,7 +871,7 @@ function renderAnalytics(gameState) {
   '</div>';
 
   // Layout
-  screen.innerHTML = '<h2 class="screen-title">Analytics</h2>' +
+  var contentHtml = '<h2 class="screen-title">Analytics</h2>' +
     '<div class="analytics-layout">' +
       topStatsHtml +
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-md);">' +
@@ -795,12 +881,19 @@ function renderAnalytics(gameState) {
       '</div>' +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-analytics") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 function renderRoster(gameState) {
-  var screen = qs("#screen-roster .screen-content") || qs("#screen-roster");
-  if (!screen) return;
+  var container = document.getElementById("screen-roster");
+  if (!container) {
+    return;
+  }
 
   var performers = gameState.roster.performers || [];
   var contractedPerformers = performers.filter(function(p) { return p.type === "core"; });
@@ -843,12 +936,7 @@ function renderRoster(gameState) {
   var recruitmentHeader = '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + gameState.player.reputation + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Roster Size</span><span class="stat-row__value">' + rosterSize + ' / ' + maxRosterSize + '</span></div>';
   var recruitmentHtml = '';
-  var recruitmentAmbient = '<div class="ambient-layers">' +
-    '<div class="ambient-bg placeholder-bg"></div>' +
-    '<div class="ambient-mascot mascot-pos-right-center placeholder-mascot ambient-breathe">' +
-      '<span>TALENT SCOUT<br>Mascot Zone</span>' +
-    '</div>' +
-  '</div>';
+  var recruitmentAmbient = renderAmbientLayers("screen-recruitment");
 
   if (isRosterFull) {
     recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
@@ -903,19 +991,26 @@ function renderRoster(gameState) {
   }
 
   // Layout
-  screen.innerHTML = '<h2 class="screen-title">Roster</h2>' +
+  var contentHtml = '<h2 class="screen-title">Roster</h2>' +
     '<div class="roster-layout">' +
       '<div class="roster-grid">' + performerCardsHtml + '</div>' +
       '<div class="roster-sidebar">' + recruitmentHtml + renewalsHtml + '</div>' +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-roster") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 
 function renderSocial(gameState) {
-  var screen = qs("#screen-social .screen-content") || qs("#screen-social");
-  if (!screen) return;
+  var container = document.getElementById("screen-social");
+  if (!container) {
+    return;
+  }
 
   var uiState = getUiState();
   var entries = gameState.content.entries || [];
@@ -994,7 +1089,7 @@ function renderSocial(gameState) {
   '</div>';
 
   // Layout
-  screen.innerHTML = '<h2 class="screen-title">Social</h2>' +
+  var contentHtml = '<h2 class="screen-title">Social</h2>' +
     '<div class="social-layout">' +
       '<div class="social-panel">' +
         '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
@@ -1015,12 +1110,19 @@ function renderSocial(gameState) {
       '</div>' +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-social") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 function renderGallery(gameState) {
-  var screen = qs("#screen-gallery .screen-content") || qs("#screen-gallery");
-  if (!screen) return;
+  var container = document.getElementById("screen-gallery");
+  if (!container) {
+    return;
+  }
 
   var uiState = getUiState();
   var entries = gameState.content.entries || [];
@@ -1076,18 +1178,23 @@ function renderGallery(gameState) {
   }
 
   // Layout
-  screen.innerHTML = '<h2 class="screen-title">Gallery</h2>' +
+  var contentHtml = '<h2 class="screen-title">Gallery</h2>' +
     '<div class="gallery-layout">' +
       '<div class="gallery-grid">' + contentCardsHtml + '</div>' +
       detailPanel +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-gallery") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 function renderSlideshow(gameState) {
-  const screen = qs("#screen-slideshow .screen-content") || qs("#screen-slideshow");
-  if (!screen) {
+  const container = document.getElementById("screen-slideshow");
+  if (!container) {
     return;
   }
   const uiState = getUiState();
@@ -1095,7 +1202,11 @@ function renderSlideshow(gameState) {
   if (!slideshow.mode) {
     const emptyBody = "<p class=\"helper-text\">No slideshow selected.</p>" +
       "<div class=\"button-row\">" + createButton("Back to Hub", "nav-hub") + "</div>";
-    screen.innerHTML = createPanel("Slideshow", emptyBody, "screen-slideshow-title");
+    const emptyContent = createPanel("Slideshow", emptyBody, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      emptyContent +
+      "</div>";
     return;
   }
 
@@ -1144,7 +1255,11 @@ function renderSlideshow(gameState) {
       createButton("Back to Roster", "slideshow-close") +
       "</div>" +
       "</div>";
-    screen.innerHTML = createPanel("Meet Recruit", body, "screen-slideshow-title");
+    const slideshowHtml = createPanel("Meet Recruit", body, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      slideshowHtml +
+      "</div>";
     return;
   }
 
@@ -1177,18 +1292,28 @@ function renderSlideshow(gameState) {
       createButton("Close", "slideshow-close") +
       "</div>" +
       "</div>";
-    screen.innerHTML = createPanel("Shoot Photos", body, "screen-slideshow-title");
+    const shootHtml = createPanel("Shoot Photos", body, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      shootHtml +
+      "</div>";
     return;
   }
 
   const fallbackBody = "<p class=\"helper-text\">Slideshow unavailable.</p>" +
     "<div class=\"button-row\">" + createButton("Back to Hub", "nav-hub") + "</div>";
-  screen.innerHTML = createPanel("Slideshow", fallbackBody, "screen-slideshow-title");
+  const fallbackHtml = createPanel("Slideshow", fallbackBody, "screen-slideshow-title");
+  container.innerHTML = renderAmbientLayers("screen-slideshow") +
+    "<div class=\"screen-content\">" +
+    fallbackHtml +
+    "</div>";
 }
 
 function renderStoryLog(gameState) {
-  var screen = qs("#screen-story-log .screen-content") || qs("#screen-story-log");
-  if (!screen) return;
+  var container = document.getElementById("screen-story-log");
+  if (!container) {
+    return;
+  }
 
   var entries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse() : [];
 
@@ -1209,17 +1334,24 @@ function renderStoryLog(gameState) {
     entriesHtml = '<div class="empty-state"><div class="empty-state__icon">📜</div><div class="empty-state__title">No Story Events</div><div class="empty-state__description">Events will appear here as your studio grows.</div></div>';
   }
 
-  screen.innerHTML = '<h2 class="screen-title">Story Log</h2>' +
+  var contentHtml = '<h2 class="screen-title">Story Log</h2>' +
     '<div class="story-log-layout">' +
       '<div class="story-log-list">' + entriesHtml + '</div>' +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-story-log") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
 function renderShop(gameState) {
-  var screen = qs("#screen-shop .screen-content") || qs("#screen-shop");
-  if (!screen) return;
+  var container = document.getElementById("screen-shop");
+  if (!container) {
+    return;
+  }
 
   var cash = gameState.player.cash;
 
@@ -1289,13 +1421,18 @@ function renderShop(gameState) {
     : '<div class="empty-state"><div class="empty-state__description">No equipment upgrades available.</div></div>';
 
   // Layout
-  screen.innerHTML = '<h2 class="screen-title">Shop</h2>' +
+  var contentHtml = '<h2 class="screen-title">Shop</h2>' +
     '<div class="shop-layout">' +
       '<div class="panel"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
       '<div class="panel"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
     '</div>' +
     renderStatusMessage() +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
+
+  container.innerHTML = renderAmbientLayers("screen-shop") +
+    '<div class="screen-content">' +
+    contentHtml +
+    '</div>';
 }
 
 
