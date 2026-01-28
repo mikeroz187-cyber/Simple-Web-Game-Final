@@ -205,10 +205,15 @@ function setupEventHandlers() {
   if (saveToggle && saveDropdown) {
     saveToggle.addEventListener("click", function (event) {
       event.preventDefault();
-      saveDropdown.classList.toggle("is-open");
-    });
-    document.addEventListener("click", function (event) {
-      if (!event.target.closest(".nav-rail__save-section")) {
+      event.stopPropagation();
+      var isOpen = saveDropdown.classList.contains("is-open");
+
+      if (!isOpen) {
+        var rect = saveToggle.getBoundingClientRect();
+        saveDropdown.style.left = (rect.right + 8) + "px";
+        saveDropdown.style.bottom = (window.innerHeight - rect.bottom) + "px";
+        saveDropdown.classList.add("is-open");
+      } else {
         saveDropdown.classList.remove("is-open");
       }
     });
@@ -1076,6 +1081,17 @@ function setupEventHandlers() {
       }
       renderApp(window.gameState);
       return;
+    }
+  });
+
+  document.addEventListener("click", function (event) {
+    var saveDropdown = document.getElementById("nav-save-dropdown");
+    if (saveDropdown && saveDropdown.classList.contains("is-open")) {
+      var clickedInside = event.target.closest(".nav-rail__save-section") ||
+        event.target.closest(".nav-save-dropdown");
+      if (!clickedInside) {
+        saveDropdown.classList.remove("is-open");
+      }
     }
   });
 }
