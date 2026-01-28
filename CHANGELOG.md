@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX slideshow layout constraints, remove agency pack thumbnails, and resize save dropdown for readability.
+  - Why: Prevent overflow in content previews, keep agency packs consistent with other shoots, and make save controls usable.
+  - Files touched: styles.css, src/ui/render.js, CHANGELOG.md.
 - What: FIX booking performer card clicks now resolve the nearest data-action element and update selection on click.
   - Why: Ensure performer cards select properly even when clicking child elements like portraits or stats.
   - Files touched: src/ui/events.js, CHANGELOG.md.
