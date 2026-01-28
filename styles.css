@@ -2542,17 +2542,49 @@ body {
   filter: brightness(0.7) saturate(0.6);
 }
 
-/* Mascot layer - positioned per screen */
-.ambient-mascot {
+/* === PERSISTENT MASCOT CONTAINER === */
+.ambient-mascot-container {
   position: fixed;
+  bottom: 0;
+  right: 2rem;
   z-index: 100;
-  max-height: 55vh;
-  width: auto;
-  max-width: 280px;
-  object-fit: contain;
   pointer-events: none;
+}
+
+.ambient-mascot-container .ambient-mascot {
+  position: relative;
+  display: block;
+  max-height: 55vh;
+  max-width: 280px;
+  width: auto;
+  object-fit: contain;
   filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
   animation: ambient-breathe-bottom 4s ease-in-out infinite;
+}
+
+.ambient-mascot-container:empty {
+  display: none;
+}
+
+.ambient-mascot-container.pos-right {
+  right: 2rem;
+}
+
+.ambient-mascot-container.pos-right-inset {
+  right: 3rem;
+}
+
+.ambient-mascot-container.pos-crop {
+  bottom: -5vh;
+}
+
+.ambient-mascot.mascot-pos-bottom-right,
+.ambient-mascot.mascot-pos-bottom-right-inset,
+.ambient-mascot.mascot-pos-bottom-right-crop,
+.ambient-mascot.mascot-pos-bottom-center {
+  position: relative;
+  right: auto;
+  bottom: auto;
 }
 
 /* Accent layer - for small decorative elements */
@@ -2590,36 +2622,6 @@ body {
 /* For screens where mascot should not affect layout (like Roster) */
 .no-mascot-clearance {
   padding-right: 0;
-}
-
-/* === MASCOT POSITIONING === */
-
-/* Bottom-right anchored (DEFAULT - most screens) */
-.mascot-pos-bottom-right {
-  right: 2rem;
-  bottom: 0;
-  transform-origin: bottom center;
-}
-
-/* Bottom-right, slightly inset (for screens with right-side panels) */
-.mascot-pos-bottom-right-inset {
-  right: 3rem;
-  bottom: 0;
-  transform-origin: bottom center;
-}
-
-/* Bottom-right, partial crop (feet cut off - more dramatic) */
-.mascot-pos-bottom-right-crop {
-  right: 2rem;
-  bottom: -5vh;
-  transform-origin: bottom center;
-}
-
-/* Centered bottom (for wide screens like Gallery) */
-.mascot-pos-bottom-center {
-  right: 15%;
-  bottom: 0;
-  transform-origin: bottom center;
 }
 
 /* === AMBIENT ANIMATIONS === */

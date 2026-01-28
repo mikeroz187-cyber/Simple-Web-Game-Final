@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX make ambient mascots persist across screen navigation using a dedicated container and updated render logic.
+  - Why: Prevent mascots from disappearing when screens re-render or transition.
+  - Files touched: index.html, styles.css, src/ui/render.js, src/ui/router.js, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX rework ambient mascot layout to anchor bottom-right, keep mascots above panels, and add mascot-aware content spacing.
   - Why: Give mascots dedicated screen space with subtler backgrounds and prevent panel overlap.
   - Files touched: styles.css, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

@@ -39,13 +39,91 @@ function getUiState() {
   return window.uiState;
 }
 
-function clearFixedMascots() {
-  var existingMascots = document.querySelectorAll(".ambient-mascot");
-  existingMascots.forEach(function (el) {
-    el.remove();
-  });
+/**
+ * Updates the persistent mascot container with the appropriate mascot for the given screen.
+ * Call this whenever the active screen changes.
+ * @param {string} screenId - The screen ID (e.g., 'screen-hub')
+ */
+function updateMascot(screenId) {
+  var container = document.getElementById("ambient-mascot-container");
+  if (!container) {
+    console.warn("Mascot container not found");
+    return;
+  }
+
+  var config = CONFIG.ambientArt;
+  if (!config || !config.enabled) {
+    container.innerHTML = "";
+    return;
+  }
+
+  var screenKeyMap = {
+    "screen-hub": "hub",
+    "screen-booking": "booking",
+    "screen-gallery": "gallery",
+    "screen-roster": "roster",
+    "screen-recruitment": "recruitment",
+    "screen-analytics": "analytics",
+    "screen-shop": "shop",
+    "screen-social": "social",
+    "screen-story-log": "storyLog"
+  };
+
+  var screenKey = screenKeyMap[screenId];
+  if (!screenKey) {
+    container.innerHTML = "";
+    return;
+  }
+
+  var screenMascot = config.screenMascots && config.screenMascots[screenKey];
+  if (!screenMascot || !screenMascot.character) {
+    container.innerHTML = "";
+    container.className = "ambient-mascot-container";
+    return;
+  }
+
+  var characterConfig = config.mascots && config.mascots[screenMascot.character];
+  if (!characterConfig || !characterConfig.poses) {
+    container.innerHTML = "";
+    return;
+  }
+
+  var poseConfig = characterConfig.poses[screenMascot.defaultPose];
+  if (!poseConfig || !poseConfig.path) {
+    container.innerHTML = "";
+    return;
+  }
+
+  var positionClass = getMascotContainerPositionClass(screenKey);
+  container.className = "ambient-mascot-container " + positionClass;
+
+  var existingImg = container.querySelector("img");
+  if (existingImg && existingImg.src.endsWith(poseConfig.path)) {
+    return;
+  }
+
+  container.innerHTML = "<img src=\"" + poseConfig.path + "\" alt=\"" + characterConfig.name +
+    "\" class=\"ambient-mascot\" />";
 }
 
+function getMascotContainerPositionClass(screenKey) {
+  var positionMap = {
+    hub: "pos-right",
+    booking: "pos-right",
+    gallery: "pos-right",
+    recruitment: "pos-right",
+    analytics: "pos-right",
+    shop: "pos-right",
+    social: "pos-right pos-crop",
+    storyLog: "pos-right"
+  };
+  return positionMap[screenKey] || "pos-right";
+}
+
+/**
+ * Renders ONLY the background ambient layer for a screen.
+ * Mascots are handled separately via updateMascot().
+ */
 function renderAmbientLayers(screenId) {
   var config = CONFIG.ambientArt;
   if (!config || !config.enabled) {
@@ -75,37 +153,7 @@ function renderAmbientLayers(screenId) {
     bgHtml = "<div class=\"ambient-bg\" style=\"background-image: url('" + bgConfig.path + "');\"></div>";
   }
 
-  var mascotHtml = "";
-  var screenMascot = config.screenMascots && config.screenMascots[screenKey];
-  var activeScreen = document.querySelector(".screen.is-active");
-  var isActiveScreen = activeScreen && activeScreen.id === screenId;
-  if (isActiveScreen && screenMascot && screenMascot.character) {
-    var characterConfig = config.mascots && config.mascots[screenMascot.character];
-    if (characterConfig && characterConfig.poses) {
-      var poseConfig = characterConfig.poses[screenMascot.defaultPose];
-      if (poseConfig && poseConfig.path) {
-        var positionClass = getMascotPositionClass(screenKey);
-        mascotHtml = "<img src=\"" + poseConfig.path + "\" alt=\"" + characterConfig.name + "\" class=\"ambient-mascot " +
-          positionClass + "\" data-screen=\"" + screenId + "\" />";
-      }
-    }
-  }
-
-  return "<div class=\"ambient-layers\">" + bgHtml + "</div>" + mascotHtml;
-}
-
-function getMascotPositionClass(screenKey) {
-  var positionMap = {
-    hub: "mascot-pos-bottom-right",
-    booking: "mascot-pos-bottom-right",
-    gallery: "mascot-pos-bottom-right",
-    recruitment: "mascot-pos-bottom-right",
-    analytics: "mascot-pos-bottom-right",
-    shop: "mascot-pos-bottom-right",
-    social: "mascot-pos-bottom-right-crop",
-    storyLog: "mascot-pos-bottom-right"
-  };
-  return positionMap[screenKey] || "mascot-pos-bottom-right";
+  return "<div class=\"ambient-layers\">" + bgHtml + "</div>";
 }
 
 function renderHeaderStats(gameState) {
@@ -183,7 +231,6 @@ function formatMultiplier(value) {
 }
 
 function renderApp(gameState) {
-  clearFixedMascots();
   getUiState();
   renderHeaderStats(gameState);
   renderHub(gameState);
