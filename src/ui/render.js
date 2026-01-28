@@ -39,6 +39,13 @@ function getUiState() {
   return window.uiState;
 }
 
+function clearFixedMascots() {
+  var existingMascots = document.querySelectorAll(".ambient-mascot");
+  existingMascots.forEach(function (el) {
+    el.remove();
+  });
+}
+
 function renderAmbientLayers(screenId) {
   var config = CONFIG.ambientArt;
   if (!config || !config.enabled) {
@@ -66,39 +73,39 @@ function renderAmbientLayers(screenId) {
   var bgConfig = config.backgrounds && config.backgrounds[screenKey];
   if (bgConfig && bgConfig.path) {
     bgHtml = "<div class=\"ambient-bg\" style=\"background-image: url('" + bgConfig.path + "');\"></div>";
-  } else {
-    bgHtml = "<div class=\"ambient-bg placeholder-bg\"></div>";
   }
 
   var mascotHtml = "";
   var screenMascot = config.screenMascots && config.screenMascots[screenKey];
-  if (screenMascot && screenMascot.character) {
+  var activeScreen = document.querySelector(".screen.is-active");
+  var isActiveScreen = activeScreen && activeScreen.id === screenId;
+  if (isActiveScreen && screenMascot && screenMascot.character) {
     var characterConfig = config.mascots && config.mascots[screenMascot.character];
     if (characterConfig && characterConfig.poses) {
       var poseConfig = characterConfig.poses[screenMascot.defaultPose];
       if (poseConfig && poseConfig.path) {
         var positionClass = getMascotPositionClass(screenKey);
         mascotHtml = "<img src=\"" + poseConfig.path + "\" alt=\"" + characterConfig.name + "\" class=\"ambient-mascot " +
-          positionClass + " ambient-breathe\" />";
+          positionClass + "\" data-screen=\"" + screenId + "\" />";
       }
     }
   }
 
-  return "<div class=\"ambient-layers\">" + bgHtml + mascotHtml + "</div>";
+  return "<div class=\"ambient-layers\">" + bgHtml + "</div>" + mascotHtml;
 }
 
 function getMascotPositionClass(screenKey) {
   var positionMap = {
-    hub: "mascot-pos-right-center",
-    booking: "mascot-pos-right-bottom",
-    gallery: "mascot-pos-right-lower",
-    recruitment: "mascot-pos-right-center",
-    analytics: "mascot-pos-right-center",
-    shop: "mascot-pos-right-bottom",
-    social: "mascot-pos-corner-br",
-    storyLog: "mascot-pos-right-lower"
+    hub: "mascot-pos-bottom-right",
+    booking: "mascot-pos-bottom-right",
+    gallery: "mascot-pos-bottom-right",
+    recruitment: "mascot-pos-bottom-right",
+    analytics: "mascot-pos-bottom-right",
+    shop: "mascot-pos-bottom-right",
+    social: "mascot-pos-bottom-right-crop",
+    storyLog: "mascot-pos-bottom-right"
   };
-  return positionMap[screenKey] || "mascot-pos-right-center";
+  return positionMap[screenKey] || "mascot-pos-bottom-right";
 }
 
 function renderHeaderStats(gameState) {
@@ -176,6 +183,7 @@ function formatMultiplier(value) {
 }
 
 function renderApp(gameState) {
+  clearFixedMascots();
   getUiState();
   renderHeaderStats(gameState);
   renderHub(gameState);
@@ -558,7 +566,7 @@ function renderHub(gameState) {
   debugPanel;
 
   var html = renderAmbientLayers("screen-hub") +
-    "<div class=\"screen-content\">" +
+    "<div class=\"screen-content mascot-clearance\">" +
     contentHtml +
     "</div>";
   container.innerHTML = html;
@@ -738,7 +746,7 @@ function renderBooking(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-booking") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -883,7 +891,7 @@ function renderAnalytics(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-analytics") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -936,14 +944,12 @@ function renderRoster(gameState) {
   var recruitmentHeader = '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + gameState.player.reputation + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Roster Size</span><span class="stat-row__value">' + rosterSize + ' / ' + maxRosterSize + '</span></div>';
   var recruitmentHtml = '';
-  var recruitmentAmbient = renderAmbientLayers("screen-recruitment");
-
   if (isRosterFull) {
-    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+    recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
       '<p style="color:var(--text-muted);font-size:12px;">Roster full. Release a contract to recruit more talent.</p></div></div>';
   } else if (!activeCandidate) {
-    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+    recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
       '<p style="color:var(--text-muted);font-size:12px;">No recruits available. Increase reputation to attract talent.</p></div></div>';
   } else {
@@ -954,7 +960,7 @@ function renderRoster(gameState) {
     var dailyCap = performer ? getPerformerDailyBookingCap(performer) : '?';
     var repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
     var hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
-    recruitmentHtml = '<div class="panel">' + recruitmentAmbient +
+    recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
         '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
           '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + name + '">' +
@@ -999,7 +1005,7 @@ function renderRoster(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-roster") +
-    '<div class="screen-content">' +
+    '<div class="screen-content no-mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -1112,7 +1118,7 @@ function renderSocial(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-social") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -1186,7 +1192,7 @@ function renderGallery(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-gallery") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -1341,7 +1347,7 @@ function renderStoryLog(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-story-log") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }
@@ -1430,7 +1436,7 @@ function renderShop(gameState) {
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-shop") +
-    '<div class="screen-content">' +
+    '<div class="screen-content mascot-clearance">' +
     contentHtml +
     '</div>';
 }

@@ -109,6 +109,9 @@
 - [x] Phase 1: Config stub for mascot/background paths
 - [x] Phase 1.5: Real artwork paths wired into config
 - [x] Phase 1.5: Dynamic ambient layer rendering from config
+- [x] Phase 1.6: Layout fix — mascots get dedicated space (bottom-right anchored)
+- [x] Phase 1.6: Background opacity reduced for subtlety
+- [x] Phase 1.6: Content padding added for mascot clearance
 - [ ] Phase 2: Reactive mascot logic (pose selection based on game state)
 - [ ] Phase 3: Final artwork polish and optimization
 
