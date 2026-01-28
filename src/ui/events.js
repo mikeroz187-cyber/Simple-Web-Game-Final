@@ -217,6 +217,104 @@ function setupEventHandlers() {
         saveDropdown.classList.remove("is-open");
       }
     });
+
+    // Add explicit handlers for save dropdown buttons
+    var saveNowBtn = saveDropdown.querySelector("[data-action=\"save-now\"]");
+    var loadSaveBtn = saveDropdown.querySelector("[data-action=\"load-save\"]");
+    var exportSaveBtn = saveDropdown.querySelector("[data-action=\"export-save\"]");
+    var importSaveBtn = saveDropdown.querySelector("[data-action=\"import-save\"]");
+
+    if (saveNowBtn) {
+      saveNowBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        saveDropdown.classList.remove("is-open");
+        var uiState = getUiState();
+        var result = saveGame(window.gameState, uiState.save.selectedSlotId);
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+        if (typeof showToast === "function") {
+          showToast(result.ok ? "Game saved!" : "Save failed", result.ok ? "success" : "error");
+        }
+      });
+    }
+
+    if (loadSaveBtn) {
+      loadSaveBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        saveDropdown.classList.remove("is-open");
+        var uiState = getUiState();
+        var result = loadGame(uiState.save.selectedSlotId);
+        if (result.ok) {
+          window.gameState = result.gameState;
+          ensureAutomationState(window.gameState);
+          ensureUnlocksState(window.gameState);
+          ensureShootOutputsState(window.gameState);
+          ensureStoryLogState(window.gameState);
+          ensureSocialManualStrategyState(window.gameState);
+          ensureReputationState(window.gameState);
+          ensureRecruitmentState(window.gameState);
+          ensurePlayerUpgradesState(window.gameState);
+          if (typeof initCompetitionStateIfMissing === "function") {
+            initCompetitionStateIfMissing(window.gameState);
+          }
+          if (typeof showToast === "function") {
+            showToast("Game loaded!", "success");
+          }
+        } else {
+          if (typeof showToast === "function") {
+            showToast(result.message || "Load failed", "error");
+          }
+        }
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+      });
+    }
+
+    if (exportSaveBtn) {
+      exportSaveBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        saveDropdown.classList.remove("is-open");
+        var result = exportSaveToFile(window.gameState);
+        setUiMessage(result.message || "");
+        renderApp(window.gameState);
+        if (typeof showToast === "function") {
+          showToast(result.ok ? "Save exported!" : "Export failed", result.ok ? "success" : "error");
+        }
+      });
+    }
+
+    if (importSaveBtn) {
+      importSaveBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        saveDropdown.classList.remove("is-open");
+        importSaveFromFile().then(function (result) {
+          if (result.ok) {
+            window.gameState = result.gameState;
+            ensureAutomationState(window.gameState);
+            ensureUnlocksState(window.gameState);
+            ensureShootOutputsState(window.gameState);
+            ensureStoryLogState(window.gameState);
+            ensureSocialManualStrategyState(window.gameState);
+            ensureReputationState(window.gameState);
+            ensureRecruitmentState(window.gameState);
+            ensurePlayerUpgradesState(window.gameState);
+            if (typeof showToast === "function") {
+              showToast("Save imported!", "success");
+            }
+          } else {
+            if (typeof showToast === "function") {
+              showToast(result.message || "Import failed", "error");
+            }
+          }
+          setUiMessage(result.message || "");
+          renderApp(window.gameState);
+        });
+      });
+    }
   }
 
   document.body.addEventListener("click", function (event) {
