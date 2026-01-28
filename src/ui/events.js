@@ -480,6 +480,9 @@ function setupEventHandlers() {
         }
         renderApp(window.gameState);
         showScreen("screen-content");
+        if (typeof showToast === "function") {
+          showToast("Shoot booked!", "success");
+        }
         return;
       }
       renderApp(window.gameState);
@@ -590,6 +593,9 @@ function setupEventHandlers() {
       if (milestoneCards.length) {
         showEventCards(milestoneCards);
       }
+      if (typeof showToast === "function") {
+        showToast("Posted to social media!", "success");
+      }
       renderApp(window.gameState);
       return;
     }
@@ -610,6 +616,9 @@ function setupEventHandlers() {
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
+        if (typeof showToast === "function") {
+          showToast("Upgrade purchased!", "unlock");
+        }
       }
       renderApp(window.gameState);
       return;
@@ -622,6 +631,9 @@ function setupEventHandlers() {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
+        }
+        if (typeof showToast === "function") {
+          showToast("Upgrade purchased!", "unlock");
         }
       }
       renderApp(window.gameState);
@@ -637,6 +649,9 @@ function setupEventHandlers() {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
+        }
+        if (typeof showToast === "function") {
+          showToast("Upgrade purchased!", "unlock");
         }
       }
       renderApp(window.gameState);
@@ -801,6 +816,9 @@ function setupEventHandlers() {
         showEventCards(eventCards);
       }
       renderApp(window.gameState);
+      if (typeof showToast === "function") {
+        showToast("Day " + window.gameState.player.day, "info");
+      }
       return;
     }
 
@@ -906,6 +924,9 @@ function setupEventHandlers() {
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
+        if (typeof showToast === "function") {
+          showToast("Debt paid in full!", "success");
+        }
       }
       renderApp(window.gameState);
       return;
@@ -918,6 +939,9 @@ function setupEventHandlers() {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message || "");
+        }
+        if (typeof showToast === "function") {
+          showToast("Manager hired!", "unlock");
         }
       }
       renderApp(window.gameState);

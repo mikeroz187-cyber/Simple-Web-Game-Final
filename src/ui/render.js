@@ -47,6 +47,8 @@ function renderHeaderStats(gameState) {
 
   var day = gameState.player.day;
   var cash = gameState.player.cash;
+  var prevCash = typeof getPreviousValue === "function" ? getPreviousValue("header-cash") : undefined;
+  var cashChanged = prevCash !== undefined && prevCash !== cash;
   var debt = gameState.player.debtRemaining;
   var ofSubs = gameState.player.onlyFansSubscribers;
   var rep = gameState.player.reputation;
@@ -69,6 +71,20 @@ function renderHeaderStats(gameState) {
   }).join("");
 
   container.innerHTML = html;
+
+  // Animate cash if changed
+  if (cashChanged && typeof animateCurrency === "function") {
+    var cashValueEl = container.querySelector(".header-stat--gold .header-stat__value");
+    if (cashValueEl) {
+      animateCurrency(cashValueEl, prevCash, cash, 600);
+      if (typeof flashValueChange === "function") {
+        flashValueChange(cashValueEl, cash > prevCash ? "positive" : "negative");
+      }
+    }
+  }
+  if (typeof setPreviousValue === "function") {
+    setPreviousValue("header-cash", cash);
+  }
 }
 
 function getEventIcon(entry) {
@@ -476,6 +492,12 @@ function renderHub(gameState) {
   footerHtml +
   renderStatusMessage() +
   debugPanel;
+
+  // Stagger entrance animation for hero stats
+  var heroMetrics = hub.querySelector(".hero-metrics");
+  if (heroMetrics) {
+    heroMetrics.classList.add("stagger-enter");
+  }
 }
 
 function renderBooking(gameState) {
