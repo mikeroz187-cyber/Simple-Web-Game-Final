@@ -17,9 +17,10 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Daily OF cash payouts on day advance plus tiered overhead scaling.
 - Balance Pass v1 retuning debt to $25,000 and overhead tiers for post-payout economy pacing.
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
+- Premium UI Redesign (all 6 phases) — transformed the entire game UI to a "Neon Noir VIP" dark glass aesthetic with animations.
 
 ## Currently Working On
-- Premium UI redesign Phase 5: Screen polish for all game screens
+- Premium UI redesign complete — all phases finished
 
 ## Next 3–7 Candidate Tasks
 - Add real artwork for performer portraits, location thumbnails, and slideshow images.
