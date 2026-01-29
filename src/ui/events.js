@@ -35,7 +35,7 @@ function buildDailyCashflowMessage(cashflow) {
 
 function clearSlideshowState() {
   const uiState = getUiState();
-  uiState.slideshow = { mode: null, id: null, index: 0 };
+  uiState.slideshow = { mode: null, id: null, index: 0, origin: null };
   uiState.recruitMeet = { performerId: null, slideIndex: 0 };
 }
 
@@ -364,7 +364,7 @@ function setupEventHandlers() {
 
     if (action === "open-meet-recruit") {
       const performerId = actionId;
-      uiState.slideshow = { mode: "recruit", id: performerId, index: 0 };
+      uiState.slideshow = { mode: "recruit", id: performerId, index: 0, origin: null };
       uiState.recruitMeet = { performerId: performerId, slideIndex: 0 };
       setUiMessage("");
       showScreen("screen-slideshow");
@@ -422,7 +422,7 @@ function setupEventHandlers() {
 
     if (action === "view-shoot-photos") {
       const contentId = actionId;
-      uiState.slideshow = { mode: "shoot", id: contentId, index: 0 };
+      uiState.slideshow = { mode: "shoot", id: contentId, index: 0, origin: null };
       setUiMessage("");
       showScreen("screen-slideshow");
       renderApp(window.gameState);
@@ -444,13 +444,14 @@ function setupEventHandlers() {
 
     if (action === "slideshow-close") {
       const mode = uiState.slideshow && uiState.slideshow.mode ? uiState.slideshow.mode : null;
+      const origin = uiState.slideshow && uiState.slideshow.origin ? uiState.slideshow.origin : null;
       clearSlideshowState();
       if (mode === "recruit") {
         showScreen("screen-roster");
       } else if (mode === "shoot") {
         showScreen("screen-gallery");
       } else if (mode === "conquest") {
-        showScreen("screen-conquests");
+        showScreen(origin === "gallery" ? "screen-gallery" : "screen-conquests");
       } else {
         showScreen("screen-hub");
       }
@@ -730,6 +731,19 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "gallery-mode") {
+      const mode = actionEl.getAttribute("data-mode");
+      if (!uiState.gallery) {
+        uiState.gallery = { selectedContentId: null, mode: "shoots" };
+      }
+      if (mode === "shoots" || mode === "conquests") {
+        uiState.gallery.mode = mode;
+      }
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "select-conquest-message") {
       if (!uiState.conquests) {
         uiState.conquests = { selectedMessageId: null };
@@ -771,7 +785,15 @@ function setupEventHandlers() {
     }
 
     if (action === "conquest-view-reward") {
-      uiState.slideshow = { mode: "conquest", id: actionId, index: 0 };
+      uiState.slideshow = { mode: "conquest", id: actionId, index: 0, origin: "conquests" };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "gallery-view-conquest") {
+      uiState.slideshow = { mode: "conquest", id: actionId, index: 0, origin: "gallery" };
       setUiMessage("");
       showScreen("screen-slideshow");
       renderApp(window.gameState);

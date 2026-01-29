@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a Shoots/Conquests toggle to Gallery with unlocked Conquest packs list and gallery-aware slideshow back navigation.
+  - Why: Let players browse Conquest reward packs directly from Gallery while keeping the slideshow return path clear.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Expanded Conquests with Assistant, Talent Scout, and Saleswoman stages plus standardized stage-specific mascot portraits and fallback handling.
   - Why: Deliver the Act 1+ content expansion and ensure portrait swaps are asset-only with safe fallbacks.
   - Files touched: src/config.js, src/systems/conquests.js, src/ui/render.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

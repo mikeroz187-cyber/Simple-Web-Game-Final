@@ -2,9 +2,10 @@
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-**Last Updated:** February 6, 2026
+**Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Gallery update: Added Shoots/Conquests toggle with unlocked Conquest packs viewable from the Gallery.
 - Conquests expansion: Assistant, Talent Scout, and Saleswoman characters added with 4-stage reward packs and trigger thresholds.
 - Conquests mascot portraits standardized to stage-specific filenames with fallback handling for missing images.
 - Hub pay-down-debt quick buttons (Pay Max + presets) to let debt-based Conquests progress naturally.
