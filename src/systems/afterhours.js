@@ -47,19 +47,18 @@ function getAfterHoursEligiblePerformers(gameState) {
 function rollForKnock(gameState) {
   if (!isAfterHoursEnabled()) return null;
 
+  var minDay = CONFIG.afterHours.minDayForKnock || 10;
+  if (gameState.player.day < minDay) return null;
+
   var eligible = getAfterHoursEligiblePerformers(gameState);
   if (eligible.length === 0) return null;
 
-  var chance = CONFIG.afterHours.knockChancePerEligible || 0.3;
+  var chance = CONFIG.afterHours.knockChancePerEligible || 0.12;
 
-  var knockers = eligible.filter(function () {
-    return Math.random() < chance;
-  });
+  if (Math.random() >= chance) return null;
 
-  if (knockers.length === 0) return null;
-
-  var index = Math.floor(Math.random() * knockers.length);
-  return knockers[index];
+  var index = Math.floor(Math.random() * eligible.length);
+  return eligible[index];
 }
 
 function getPerformerFolderName(performer) {

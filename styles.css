@@ -3012,6 +3012,19 @@ body {
   background: rgba(26, 20, 18, 0.95);
 }
 
+/* Hide mascot during After Hours */
+.after-hours-modal ~ .mascot-container,
+.after-hours-modal ~ * .mascot-container,
+body:has(.after-hours-modal) .mascot-container {
+  display: none !important;
+}
+
+body.after-hours-active .mascot-container,
+body.after-hours-active .ambient-mascot {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 .after-hours-card {
   background: linear-gradient(135deg, rgba(40, 30, 25, 0.98), rgba(30, 22, 18, 0.98));
   border: 1px solid rgba(212, 175, 55, 0.3);
@@ -3129,9 +3142,17 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.after-hours-slideshow-frame {
+  background: linear-gradient(135deg, rgba(20, 15, 12, 0.95), rgba(30, 22, 18, 0.95));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.1);
+  padding: 1.5rem;
+  max-width: 800px;
+  max-height: 90vh;
+  margin: 2rem;
 }
 
 .after-hours-slideshow-container {
@@ -3139,32 +3160,28 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  max-width: 90vw;
-  max-height: 90vh;
 }
 
 .after-hours-slideshow-image-wrapper {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
+  min-height: 300px;
+  max-height: 60vh;
 }
 
 .after-hours-slideshow-image {
   max-width: 100%;
-  max-height: 70vh;
+  max-height: 60vh;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
 }
 
 .after-hours-slideshow-progress {
   display: flex;
   gap: 8px;
   justify-content: center;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
 }
 
 .slideshow-dot {
@@ -3181,17 +3198,19 @@ body {
 
 .after-hours-slideshow-deal {
   color: #d4af37;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 0.75rem 1.5rem;
-  background: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 4px;
+  text-align: center;
 }
 
 .after-hours-slideshow-next {
   padding: 0.75rem 2rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
 }
 
 /* After Hours Outcomes */

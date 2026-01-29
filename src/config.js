@@ -1369,8 +1369,9 @@ const CONFIG = {
   },
   afterHours: {
     enabled: true,
-    knockChancePerEligible: 0.30,
+    knockChancePerEligible: 0.12,
     cooldownDays: 7,
+    minDayForKnock: 10,
     starBonusReputationRequired: 50,
     recruitHelpReputationRequired: 100,
     recruitMapping: {
