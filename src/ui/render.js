@@ -1525,6 +1525,9 @@ function renderConquests(gameState) {
     var statusLabel = getConquestMessageStatusLabel(selectedMessage.status);
     var sceneTitle = stageConfig && stageConfig.sceneTitle ? stageConfig.sceneTitle : "New message";
     var sceneBody = stageConfig && stageConfig.sceneBody ? stageConfig.sceneBody : "";
+    if (typeof formatSceneText === "function") {
+      sceneBody = formatSceneText(sceneBody, gameState);
+    }
     var rewardPack = stageConfig && stageConfig.rewardPack ? stageConfig.rewardPack : null;
     var rewardImageCount = rewardPack && Array.isArray(rewardPack.imagePaths) ? rewardPack.imagePaths.length : 0;
     var rewardSummary = rewardPack

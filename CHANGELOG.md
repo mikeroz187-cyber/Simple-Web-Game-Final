@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Rewrote Conquests scene copy with tokenized stats and retuned Conquests pacing thresholds for earlier progression.
+  - Why: Deliver a punchier power-fantasy arc while ensuring Stage 1–3 unlocks land without grind and scene text reflects player progress.
+  - Files touched: src/config.js, src/systems/conquests.js, src/ui/render.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added a Shoots/Conquests toggle to Gallery with unlocked Conquest packs list and gallery-aware slideshow back navigation.
   - Why: Let players browse Conquest reward packs directly from Gallery while keeping the slideshow return path clear.
   - Files touched: src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

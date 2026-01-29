@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Conquests story & pacing pass: tokenized scene copy, punchier progression text, and retuned thresholds for earlier Stage 1–3 pacing.
 - Gallery update: Added Shoots/Conquests toggle with unlocked Conquest packs viewable from the Gallery.
 - Conquests expansion: Assistant, Talent Scout, and Saleswoman characters added with 4-stage reward packs and trigger thresholds.
 - Conquests mascot portraits standardized to stage-specific filenames with fallback handling for missing images.
