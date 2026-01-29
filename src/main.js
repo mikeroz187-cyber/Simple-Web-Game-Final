@@ -20,6 +20,9 @@
     ensureReputationState(window.gameState);
     ensureRecruitmentState(window.gameState);
     ensurePlayerUpgradesState(window.gameState);
+    if (typeof ensureConquestsState === "function") {
+      ensureConquestsState(window.gameState);
+    }
     initCompetitionStateIfMissing(window.gameState);
     const storyResult = checkStoryEvents(window.gameState);
     if (CONFIG.save.autosave_enabled) {

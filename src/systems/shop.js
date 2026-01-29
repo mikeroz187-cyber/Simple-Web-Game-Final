@@ -112,9 +112,13 @@ function purchaseEquipmentUpgrade(gameState, upgradeId) {
     bonusMessage,
     nextCostMessage
   ].filter(Boolean);
+  const conquestResult = typeof checkConquests === "function"
+    ? checkConquests(gameState)
+    : { cards: [] };
 
   return {
     ok: true,
-    message: messageParts.join(" ")
+    message: messageParts.join(" "),
+    conquestEvents: conquestResult.cards || []
   };
 }

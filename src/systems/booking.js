@@ -27,11 +27,15 @@ function advanceDay(gameState) {
   const recruitResult = typeof getNewRecruitEligibilityEvents === "function"
     ? getNewRecruitEligibilityEvents(gameState)
     : [];
+  const conquestResult = typeof checkConquests === "function"
+    ? checkConquests(gameState)
+    : { cards: [] };
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
   const recruitEvents = Array.isArray(recruitResult) ? recruitResult : [];
   return {
     storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents),
+    conquestEvents: conquestResult.cards || [],
     cashflow: {
       subs: subs,
       payout: dailyPayout,

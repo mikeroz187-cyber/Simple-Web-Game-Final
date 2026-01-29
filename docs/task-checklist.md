@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 27, 2026 (premium UI redesign Phase 1)
+**Last Updated:** January 29, 2026 (Conquests MVP feature set)
 
 ---
 
@@ -120,6 +120,15 @@
 - [x] Shared slideshow viewer for recruit meets and shoot photos.
 - [x] Booking result slideshow (5 images) for Promo/Premium shoots.
 - [x] Late-game unlock cadence extended using only remaining meaningful unlocks (limited by available content; no duplicates; no story-only unlocks).
+
+---
+
+## Conquests System — MVP
+- [x] Conquests config with character stages, triggers, and reward packs.
+- [x] Conquests gameState (inbox, unlocked packs) with save schema update.
+- [x] Conquests screen with inbox list, message detail, accept/dismiss flow.
+- [x] Reward packs viewable via the shared slideshow viewer.
+- [x] Conquest notifications fire on day advance and equipment upgrades.
 
 ---
 

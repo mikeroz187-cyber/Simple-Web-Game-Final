@@ -481,24 +481,24 @@ function migrateGameState(candidate) {
       ok: true,
       gameState: newGameState(),
       didReset: true,
-      message: "Major update: resetting save for v4 schema."
+      message: "Major update: resetting save for v5 schema."
     };
   }
 
   if (candidateVersion !== currentVersion) {
-    if (candidateVersion === 3 && currentVersion === 4) {
+    if (candidateVersion === 4 && currentVersion === 5) {
       candidate.version = currentVersion;
     } else {
       return {
         ok: true,
         gameState: newGameState(),
         didReset: true,
-        message: "Major update: resetting save for v4 schema."
+        message: "Major update: resetting save for v5 schema."
       };
     }
   }
 
-  // Version 4 migration: ensure new performer star power progression fields.
+  // Version 5 migration: ensure new performer star power progression fields and conquests state.
   if (candidate.player && !Number.isFinite(candidate.player.shootsToday)) {
     candidate.player.shootsToday = 0;
   }
@@ -581,6 +581,9 @@ function migrateGameState(candidate) {
   ensureRecruitmentState(candidate);
   ensureLegacyMilestonesState(candidate);
   ensurePlayerUpgradesState(candidate);
+  if (typeof ensureConquestsState === "function") {
+    ensureConquestsState(candidate);
+  }
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -624,7 +627,8 @@ function validateGameState(candidate) {
     "rivals",
     "market",
     "reputation",
-    "recruitment"
+    "recruitment",
+    "conquests"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
@@ -951,6 +955,63 @@ function validateGameState(candidate) {
     });
     if (hasBadDeclined || hasBadHired) {
       return { ok: false, message: "Recruitment data invalid." };
+    }
+  }
+
+  const conquests = candidate.conquests;
+  if (typeof conquests !== "object" || conquests === null || Array.isArray(conquests)) {
+    return { ok: false, message: "Conquests data invalid." };
+  }
+  if (typeof conquests.enabled !== "boolean") {
+    return { ok: false, message: "Conquests enabled flag invalid." };
+  }
+  if (!conquests.characters || typeof conquests.characters !== "object" || Array.isArray(conquests.characters)) {
+    return { ok: false, message: "Conquests characters invalid." };
+  }
+  const conquestCharacterIds = Object.keys(conquests.characters);
+  for (let index = 0; index < conquestCharacterIds.length; index += 1) {
+    const characterState = conquests.characters[conquestCharacterIds[index]];
+    if (!characterState || !Number.isFinite(characterState.stageUnlocked) || characterState.stageUnlocked < 0) {
+      return { ok: false, message: "Conquest character progress invalid." };
+    }
+  }
+  if (!Array.isArray(conquests.inbox)) {
+    return { ok: false, message: "Conquest inbox invalid." };
+  }
+  for (let index = 0; index < conquests.inbox.length; index += 1) {
+    const message = conquests.inbox[index];
+    if (!message || typeof message.id !== "string" || typeof message.characterId !== "string") {
+      return { ok: false, message: "Conquest message invalid." };
+    }
+    if (!Number.isFinite(message.stageIndex) || message.stageIndex < 1) {
+      return { ok: false, message: "Conquest message stage invalid." };
+    }
+    if (!Number.isFinite(message.createdDay) || message.createdDay < 0) {
+      return { ok: false, message: "Conquest message day invalid." };
+    }
+    if (message.status !== "unread" && message.status !== "accepted" && message.status !== "dismissed") {
+      return { ok: false, message: "Conquest message status invalid." };
+    }
+  }
+  if (!Array.isArray(conquests.unlockedPacks)) {
+    return { ok: false, message: "Conquest packs invalid." };
+  }
+  for (let index = 0; index < conquests.unlockedPacks.length; index += 1) {
+    const pack = conquests.unlockedPacks[index];
+    if (!pack || typeof pack.packId !== "string" || typeof pack.characterId !== "string") {
+      return { ok: false, message: "Conquest pack invalid." };
+    }
+    if (!Number.isFinite(pack.stageIndex) || pack.stageIndex < 1) {
+      return { ok: false, message: "Conquest pack stage invalid." };
+    }
+    if (typeof pack.title !== "string" || typeof pack.description !== "string") {
+      return { ok: false, message: "Conquest pack text invalid." };
+    }
+    if (!Array.isArray(pack.imagePaths)) {
+      return { ok: false, message: "Conquest pack images invalid." };
+    }
+    if (!Number.isFinite(pack.unlockedDay) || pack.unlockedDay < 0) {
+      return { ok: false, message: "Conquest pack day invalid." };
     }
   }
 
