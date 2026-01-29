@@ -24,7 +24,7 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 ## 2) Booking Scenario (Promo Shoot)
 
 **Given** a Promo booking with:
-- Performer: **Lena Watts** (`starPower = 3`)
+- Performer: **Kendra Lynn** (`starPower = 3`)
 - Location: **Bedroom (Tier 0)** (`location cost = 50`)
 - Theme: **Nightlife** (`followersMult = 1.00`)
 
@@ -37,7 +37,7 @@ This document lists simple **Given X, expect Y** checks to verify MVP gameplay b
 ## 3) Premium OF Subs Scenario
 
 **Given** a Premium booking with:
-- Performer: **Milo Park** (`starPower = 2`)
+- Performer: **Abella Banks** (`starPower = 2`)
 - Theme: **Nightlife** (`ofSubsMult = 1.00`)
 
 **Expect**:

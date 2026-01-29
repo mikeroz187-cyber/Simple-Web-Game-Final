@@ -208,7 +208,7 @@ const STORY_EVENT_COPY = {
   },
   unlock_performer_aria_lux: {
     title: "Unlocked!",
-    message: "New talent lead: Aria Lux. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Aria Afterdark. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_equipment_camera: {
     title: "Unlocked!",
@@ -216,23 +216,23 @@ const STORY_EVENT_COPY = {
   },
   unlock_performer_bryn_sterling: {
     title: "Unlocked!",
-    message: "New talent lead: Bryn Sterling. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Scarlett Sterling. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_dahlia_slate: {
     title: "Unlocked!",
-    message: "New talent lead: Dahlia Slate. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Dahlia Kane. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_eden_frost: {
     title: "Unlocked!",
-    message: "New talent lead: Eden Frost. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Eden Ivy. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_fern_kestrel: {
     title: "Unlocked!",
-    message: "New talent lead: Fern Kestrel. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Raven Foxx. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_celeste_noir: {
     title: "Unlocked!",
-    message: "New talent lead: Celeste Noir. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
+    message: "New talent lead: Celeste Sin. New talent becomes available as your Reputation grows. Check Roster → Recruitment."
   },
   unlock_performer_gigi_blade: {
     title: "Unlocked!",

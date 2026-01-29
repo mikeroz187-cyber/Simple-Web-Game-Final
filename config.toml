@@ -123,56 +123,56 @@ max_star_power = 6
 
 [performers.catalog.core_lena_watts]
 id = "core_lena_watts"
-name = "Lena Watts"
+name = "Kendra Lynn"
 type = "core"
 star_power = 3
 description = "Polished lead with calm authority and a steady fanbase."
 
 [performers.catalog.core_milo_park]
 id = "core_milo_park"
-name = "Milo Park"
+name = "Abella Banks"
 type = "core"
 star_power = 2
 description = "Warm, versatile collaborator who fits any concept."
 
 [performers.catalog.core_tess_rowan]
 id = "core_tess_rowan"
-name = "Tess Rowan"
+name = "Jessie Star"
 type = "core"
 star_power = 1
 description = "Scrappy newcomer with raw energy and room to grow."
 
 [performers.catalog.free_jade_voss]
 id = "free_jade_voss"
-name = "Jade Voss"
+name = "Candy Blaze"
 type = "freelance"
 star_power = 3
 description = "Seasoned pro who delivers instantly but keeps it professional."
 
 [performers.catalog.free_nico_blade]
 id = "free_nico_blade"
-name = "Nico Blade"
+name = "Skye Ryder"
 type = "freelance"
 star_power = 2
 description = "Flashy specialist known for bold aesthetics and fast turnarounds."
 
 [performers.catalog.free_rin_holt]
 id = "free_rin_holt"
-name = "Rin Holt"
+name = "Nova Quinn"
 type = "freelance"
 star_power = 2
 description = "Reliable utility hire with a clean, consistent style."
 
 [performers.catalog.free_kira_sol]
 id = "free_kira_sol"
-name = "Kira Sol"
+name = "Tiffany Heat"
 type = "freelance"
 star_power = 1
 description = "Quiet wildcard who surprises when the concept is right."
 
 [performers.catalog.free_eli_hart]
 id = "free_eli_hart"
-name = "Eli Hart"
+name = "Mila Rush"
 type = "freelance"
 star_power = 1
 description = "Budget-friendly helper with earnest charm and limited reach."
