@@ -52,9 +52,11 @@ This document describes the **current UI layout and interaction behavior** imple
 - **Actions:** Post to Instagram or X (each once per platform).
 
 ## Gallery
+- **Mode toggle:** Shoots (default) or Conquests.
 - **Entry list:** Shows all content entries (day, performer, location, theme, type).
 - **Details panel:** Selected entry metadata + **View Shoot Photos** button.
 - **Output cards:** Summary cards for recent shoot results.
+- **Conquests view:** Lists unlocked Conquest packs with **View** buttons when the Conquests mode is active.
 
 ## Conquests
 - **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).

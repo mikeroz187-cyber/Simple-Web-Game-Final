@@ -13,7 +13,8 @@ function getUiState() {
         selectedContentId: null
       },
       gallery: {
-        selectedContentId: null
+        selectedContentId: null,
+        mode: "shoots"
       },
       conquests: {
         selectedMessageId: null
@@ -22,7 +23,8 @@ function getUiState() {
       slideshow: {
         mode: null,
         id: null,
-        index: 0
+        index: 0,
+        origin: null
       },
       recruitMeet: {
         performerId: null,
@@ -1225,6 +1227,78 @@ function renderGallery(gameState) {
   }
 
   var uiState = getUiState();
+  if (!uiState.gallery) {
+    uiState.gallery = { selectedContentId: null, mode: "shoots" };
+  }
+  if (!uiState.gallery.mode) {
+    uiState.gallery.mode = "shoots";
+  }
+  var galleryMode = uiState.gallery.mode === "conquests" ? "conquests" : "shoots";
+  var modeToggleHtml = "<div class=\"button-row\">" +
+    createButton(
+      "Shoots",
+      "gallery-mode",
+      galleryMode === "shoots" ? "small primary" : "small secondary",
+      false,
+      "data-mode=\"shoots\""
+    ) +
+    createButton(
+      "Conquests",
+      "gallery-mode",
+      galleryMode === "conquests" ? "small primary" : "small secondary",
+      false,
+      "data-mode=\"conquests\""
+    ) +
+    "</div>";
+
+  if (galleryMode === "conquests") {
+    var conquests = gameState.conquests || { unlockedPacks: [] };
+    var unlockedPacks = Array.isArray(conquests.unlockedPacks) ? conquests.unlockedPacks.slice() : [];
+    unlockedPacks.sort(function (a, b) {
+      var dayA = Number.isFinite(a.unlockedDay) ? a.unlockedDay : 0;
+      var dayB = Number.isFinite(b.unlockedDay) ? b.unlockedDay : 0;
+      return dayB - dayA;
+    });
+    var packsHtml = "";
+    if (!unlockedPacks.length) {
+      packsHtml = "<div class=\"empty-state\">" +
+        "<div class=\"empty-state__description\">No conquests yet. Make money. Make moves.</div>" +
+        "</div>";
+    } else {
+      packsHtml = unlockedPacks.map(function (pack) {
+        var characterConfig = typeof getConquestCharacterConfig === "function"
+          ? getConquestCharacterConfig(pack.characterId)
+          : null;
+        var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
+        var stageLabel = "Stage " + pack.stageIndex;
+        var imageCount = Array.isArray(pack.imagePaths) ? pack.imagePaths.length : 0;
+        return "<div class=\"conquest-pack\">" +
+          "<div class=\"conquest-pack__text\">" +
+          "<div class=\"conquest-pack__title\">" + pack.title + "</div>" +
+          "<div class=\"conquest-pack__meta\">" + characterName + " · " + stageLabel + " · " + imageCount + " images</div>" +
+          "</div>" +
+          createButton("View", "gallery-view-conquest", "small", false, "data-id=\"" + pack.packId + "\"") +
+          "</div>";
+      }).join("");
+    }
+
+    var conquestsHtml = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Unlocked Conquests</h3>" +
+      packsHtml +
+      "</div>";
+
+    var conquestContentHtml = "<h2 class=\"screen-title\">Gallery</h2>" +
+      modeToggleHtml +
+      conquestsHtml +
+      "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
+
+    container.innerHTML = renderAmbientLayers("screen-gallery") +
+      "<div class=\"screen-content mascot-clearance\">" +
+      conquestContentHtml +
+      "</div>";
+    return;
+  }
+
   var entries = gameState.content.entries || [];
   var reversedEntries = entries.slice().reverse();
   var selectedEntryId = uiState.gallery.selectedContentId;
@@ -1279,6 +1353,7 @@ function renderGallery(gameState) {
 
   // Layout
   var contentHtml = '<h2 class="screen-title">Gallery</h2>' +
+    modeToggleHtml +
     '<div class="gallery-layout">' +
       '<div class="gallery-grid">' + contentCardsHtml + '</div>' +
       detailPanel +
@@ -1531,7 +1606,7 @@ function renderSlideshow(gameState) {
     return;
   }
   const uiState = getUiState();
-  const slideshow = uiState.slideshow || { mode: null, id: null, index: 0 };
+  const slideshow = uiState.slideshow || { mode: null, id: null, index: 0, origin: null };
   if (!slideshow.mode) {
     const emptyBody = "<p class=\"helper-text\">No slideshow selected.</p>" +
       "<div class=\"button-row\">" + createButton("Back to Hub", "nav-hub") + "</div>";
@@ -1644,6 +1719,8 @@ function renderSlideshow(gameState) {
     const slideNumber = slideCount ? safeIndex + 1 : 0;
     const prevDisabled = safeIndex <= 0;
     const nextDisabled = safeIndex >= slideCount - 1;
+    const origin = slideshow.origin === "gallery" ? "gallery" : "conquests";
+    const backLabel = origin === "gallery" ? "Back to Gallery" : "Back to Conquests";
     const imageHtml = "<div class=\"slideshow-image-container\">" +
       "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Conquest reward " + (safeIndex + 1) + "\" />" +
       "</div>";
@@ -1653,7 +1730,7 @@ function renderSlideshow(gameState) {
       "<span class=\"slideshow-counter\">Photo " + slideNumber + " of " + slideCount + "</span>" +
       "</div>";
     const backButtonRow = "<div class=\"slideshow-back-row\">" +
-      createButton("Back to Conquests", "slideshow-close", "secondary slideshow-back-button") +
+      createButton(backLabel, "slideshow-close", "secondary slideshow-back-button") +
       "</div>";
     const body = "<div class=\"panel\">" +
       backButtonRow +

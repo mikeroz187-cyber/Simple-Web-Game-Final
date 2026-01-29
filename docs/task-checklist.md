@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 29, 2026 (Conquests MVP feature set)
+**Last Updated:** January 29, 2026 (Conquests packs in Gallery)
 
 ---
 
@@ -129,6 +129,7 @@
 - [x] Conquests gameState (inbox, unlocked packs) with save schema update.
 - [x] Conquests screen with inbox list, message detail, accept/dismiss flow.
 - [x] Reward packs viewable via the shared slideshow viewer.
+- [x] Gallery: Conquests tab lists unlocked conquest packs + view in slideshow.
 - [x] Conquest notifications fire on day advance and equipment upgrades.
 - [x] Stage-specific portraits + slideshow back button visibility fix.
 - [x] Bank Manager Conquest character added (4 stages, debt payoff triggers, packs).
