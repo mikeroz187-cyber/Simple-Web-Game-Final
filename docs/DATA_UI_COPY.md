@@ -33,6 +33,7 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 
 ## Booking
 - Booking Mode: **Core Performer**, **Agency Sample Pack**
+- Booking Summary: **Diva Fee** (when active), **Star Power Multiplier**
 - Confirm Shoot
 - Back to Hub
 
@@ -45,7 +46,8 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 - Meet
 - Decline
 - Hire (cost shown on final slide)
-- Renew Contract (cost shown)
+- Renew Contract (cost shown, includes Diva Fee when active)
+- ❤️ icon label represents **Loyalty** (low loyalty triggers Diva Fees)
 
 ## Social
 - Select Strategy / Active Strategy

@@ -32,6 +32,133 @@ function getPerformerManagementConfig() {
   return {};
 }
 
+function getRetentionRules() {
+  const config = getPerformerManagementConfig();
+  if (config.retentionRules && typeof config.retentionRules === "object") {
+    return config.retentionRules;
+  }
+  return {
+    loyaltyMin: 0,
+    loyaltyMax: 100,
+    loyaltyGainPerBooking: 0,
+    loyaltyDecayPerWeekIdle: 0
+  };
+}
+
+function clampLoyalty(value) {
+  const rules = getRetentionRules();
+  const min = Number.isFinite(rules.loyaltyMin) ? rules.loyaltyMin : 0;
+  const max = Number.isFinite(rules.loyaltyMax) ? rules.loyaltyMax : 100;
+  const safeValue = Number.isFinite(value) ? value : min;
+  return Math.min(max, Math.max(min, safeValue));
+}
+
+function applyLoyaltyGainOnBooking(gameState, performer) {
+  if (!gameState || !performer) {
+    return;
+  }
+  const rules = getRetentionRules();
+  const gain = Number.isFinite(rules.loyaltyGainPerBooking) ? rules.loyaltyGainPerBooking : 0;
+  if (!Number.isFinite(performer.loyalty)) {
+    performer.loyalty = CONFIG.performers.starting_loyalty;
+  }
+  performer.loyalty = clampLoyalty(performer.loyalty + gain);
+  performer.lastBookedDay = Number.isFinite(gameState.player.day) ? gameState.player.day : null;
+  performer.lastLoyaltyDecayDay = performer.lastBookedDay;
+}
+
+function applyLoyaltyDecayOnDayAdvance(gameState, performer) {
+  if (!gameState || !performer) {
+    return;
+  }
+  const currentDay = Number.isFinite(gameState.player.day) ? gameState.player.day : null;
+  if (!Number.isFinite(currentDay)) {
+    return;
+  }
+  const lastBookedDay = Number.isFinite(performer.lastBookedDay) ? performer.lastBookedDay : null;
+  if (!Number.isFinite(lastBookedDay)) {
+    return;
+  }
+  const lastDecayAnchor = Number.isFinite(performer.lastLoyaltyDecayDay)
+    ? performer.lastLoyaltyDecayDay
+    : lastBookedDay;
+  if (currentDay - lastBookedDay < 7 || currentDay - lastDecayAnchor < 7) {
+    return;
+  }
+  const rules = getRetentionRules();
+  const decayPerWeek = Number.isFinite(rules.loyaltyDecayPerWeekIdle) ? rules.loyaltyDecayPerWeekIdle : 0;
+  if (decayPerWeek <= 0) {
+    return;
+  }
+  const weeksIdle = Math.floor((currentDay - lastDecayAnchor) / 7);
+  if (weeksIdle <= 0) {
+    return;
+  }
+  if (!Number.isFinite(performer.loyalty)) {
+    performer.loyalty = CONFIG.performers.starting_loyalty;
+  }
+  performer.loyalty = clampLoyalty(performer.loyalty - (decayPerWeek * weeksIdle));
+  performer.lastLoyaltyDecayDay = lastDecayAnchor + (weeksIdle * 7);
+}
+
+function getDivaFeeRules() {
+  const config = getPerformerManagementConfig();
+  if (config.divaFeeRules && typeof config.divaFeeRules === "object") {
+    return config.divaFeeRules;
+  }
+  return { enabled: false, tiers: [] };
+}
+
+function getDivaFeeTierForPerformer(performer) {
+  if (!performer) {
+    return null;
+  }
+  const rules = getDivaFeeRules();
+  if (!rules.enabled) {
+    return null;
+  }
+  const tiers = Array.isArray(rules.tiers) ? rules.tiers : [];
+  const loyalty = Number.isFinite(performer.loyalty) ? performer.loyalty : CONFIG.performers.starting_loyalty;
+  for (let index = 0; index < tiers.length; index += 1) {
+    const tier = tiers[index];
+    if (!tier || typeof tier !== "object") {
+      continue;
+    }
+    const maxLoyalty = Number.isFinite(tier.maxLoyalty) ? tier.maxLoyalty : null;
+    if (maxLoyalty === null) {
+      continue;
+    }
+    if (loyalty <= maxLoyalty) {
+      return tier;
+    }
+  }
+  return null;
+}
+
+function getDivaShootFeeForPerformer(performer) {
+  const tier = getDivaFeeTierForPerformer(performer);
+  if (!tier) {
+    return 0;
+  }
+  return Number.isFinite(tier.shootFee) ? tier.shootFee : 0;
+}
+
+function getDivaRenewalFeeForPerformer(performer) {
+  const tier = getDivaFeeTierForPerformer(performer);
+  if (!tier) {
+    return 0;
+  }
+  return Number.isFinite(tier.renewalFee) ? tier.renewalFee : 0;
+}
+
+function getDivaFeeLabelForPerformer(performer) {
+  const tier = getDivaFeeTierForPerformer(performer);
+  if (!tier) {
+    return null;
+  }
+  return typeof tier.label === "string" ? tier.label : null;
+}
+
 function getContractDaysByType(performerType) {
   const config = getPerformerManagementConfig();
   const daysByType = config.contractDaysByType || {};
@@ -209,6 +336,7 @@ function advancePerformerManagementDay(gameState) {
       availability.restDaysRemaining = Math.max(0, availability.restDaysRemaining - 1);
       availability.consecutiveBookings = 0;
     }
+    applyLoyaltyDecayOnDayAdvance(gameState, performer);
   });
 }
 
@@ -226,20 +354,28 @@ function renewPerformerContract(gameState, performerId) {
   }
   ensurePerformerManagementForId(gameState, performer);
   const contract = getContractState(gameState, performerId);
-  const cost = getRenewalCostByType(performer.type);
-  if (!Number.isFinite(cost)) {
+  const baseCost = getRenewalCostByType(performer.type);
+  if (!Number.isFinite(baseCost)) {
     return { ok: false, message: "Renewal unavailable." };
   }
-  if (gameState.player.cash < cost) {
+  const divaFee = getDivaRenewalFeeForPerformer(performer);
+  const totalCost = baseCost + divaFee;
+  if (gameState.player.cash < totalCost) {
     return { ok: false, message: "Not enough cash to renew this contract." };
   }
   const daysRemaining = getContractDaysByType(performer.type);
   if (daysRemaining <= 0) {
     return { ok: false, message: "No contract term configured." };
   }
-  gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+  gameState.player.cash = Math.max(0, gameState.player.cash - totalCost);
   contract.daysRemaining = daysRemaining;
   contract.status = "active";
+  if (divaFee > 0) {
+    return {
+      ok: true,
+      message: "Contract renewed. She slid the paperwork over\u2014and the Diva Fee: " + formatCurrency(divaFee) + "."
+    };
+  }
   return { ok: true, message: "Contract renewed for " + daysRemaining + " days." };
 }
 

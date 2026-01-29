@@ -6,8 +6,12 @@ This document mirrors the performer catalog in `src/config.js`.
 - **type**: `core` or `freelance` (contracted roster shows non‑freelance performers).
 - **starPower**: Base Star Power at start.
 - **starPowerShoots**: Per‑performer counter for Star Power progression (5 shoots → +1 Star Power, max 6).
+- **loyalty**: Relationship score (0–100) that rises on bookings and decays by full idle weeks.
+- **loyalty gain/decay**: Booking a core performer adds `loyaltyGainPerBooking`; each full week idle removes `loyaltyDecayPerWeekIdle`.
+- **diva fee tiers**: Low loyalty triggers added shoot + renewal fees based on `performerManagement.divaFeeRules`.
 - **maxBookingsPerDay**: Optional per‑performer daily cap override (defaults to 1/day, max 3/day).
 - **portraitPath**: Derived from the performer ID; placeholders are used when no art is available.
+- **starPowerExponent**: Economy multiplier that boosts effective star power using `starPower ^ starPowerExponent`.
 
 ## Core Performers (Starting Team)
 
@@ -56,3 +60,6 @@ This document mirrors the performer catalog in `src/config.js`.
 Values map to:
 - `CONFIG.performers.*`
 - `CONFIG.freelancers.profiles`
+- `CONFIG.performerManagement.retentionRules`
+- `CONFIG.performerManagement.divaFeeRules`
+- `CONFIG.economy.starPowerExponent`

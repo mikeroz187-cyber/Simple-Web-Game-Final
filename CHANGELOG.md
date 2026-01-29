@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added loyalty retention/decay, Diva Fee costs, and boosted Star Power with clear booking/roster callouts.
+  - Why: Make loyalty and Star Power carry tangible economic consequences and communicate them in UI.
+  - Files touched: src/config.js, config.toml, src/systems/performers.js, src/systems/booking.js, src/systems/economy.js, src/save.js, src/state.js, src/ui/render.js, docs/DATA_PERFORMERS.md, docs/DATA_UI_COPY.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX recruit meet modal buttons to be available immediately and constrain slideshow sizing.
   - Why: Remove forced slide-gating and keep the modal media area predictable without pushing actions off-screen.
   - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.

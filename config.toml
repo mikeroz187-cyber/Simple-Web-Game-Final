@@ -90,6 +90,9 @@ premium_base_of_subs = 23 # Placeholder
 # Fixed conversion rate from followers to subscribers.
 subscriber_conversion_rate = 0.01 # Placeholder (1%)
 
+# Star Power scaling exponent (boosts higher star ratings).
+starPowerExponent = 1.15
+
 # Base shoot costs (location-specific costs can override this).
 base_shoot_cost = 100 # Placeholder
 
@@ -282,9 +285,16 @@ act1_end_day = 90
 # --- Act 2 Config (inactive until scope expands to Act 2) ---
 
 [performerManagement]
-availabilityRules = { maxConsecutiveBookings = 2, restDaysAfterMax = 1 }
-retentionRules = { loyaltyWarningThreshold = 40, loyaltyLeaveThreshold = 25, loyaltyGainPerBooking = 1, loyaltyDecayPerWeekIdle = 2 }
-contractRules = { coreLengthDays = 90, freelanceLengthDays = 30, coreRenewalCost = 500, freelanceRenewalCost = 250 }
+contractDaysByType = { core = 90, freelance = 30, act2 = 30 }
+renewalCostByType = { core = 0, freelance = 500, act2 = 500 }
+retentionRules = { loyaltyMin = 0, loyaltyMax = 100, loyaltyGainPerBooking = 2, loyaltyDecayPerWeekIdle = 2 }
+divaFeeRules = { enabled = true, tiers = [
+  { maxLoyalty = 40, shootFee = 100, renewalFee = 200, label = "Diva Fee" },
+  { maxLoyalty = 25, shootFee = 250, renewalFee = 500, label = "Full Diva Fee" }
+] }
+maxConsecutiveBookings = 3
+restDaysOnMaxFatigue = 1
+contractWarningThresholdDays = 5
 
 [analytics]
 rollupWindowsDays = [7, 30]
