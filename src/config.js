@@ -383,56 +383,56 @@ const CONFIG = {
     catalog: {
       core_lena_watts: {
         id: "core_lena_watts",
-        name: "Lena Watts",
+        name: "Kendra Lynn",
         type: "core",
         starPower: 3,
         description: "Polished lead with calm authority and a steady fanbase."
       },
       core_milo_park: {
         id: "core_milo_park",
-        name: "Milo Park",
+        name: "Abella Banks",
         type: "core",
         starPower: 2,
         description: "Warm, versatile collaborator who fits any concept."
       },
       core_tess_rowan: {
         id: "core_tess_rowan",
-        name: "Tess Rowan",
+        name: "Jessie Star",
         type: "core",
         starPower: 1,
         description: "Scrappy newcomer with raw energy and room to grow."
       },
       free_jade_voss: {
         id: "free_jade_voss",
-        name: "Jade Voss",
+        name: "Candy Blaze",
         type: "freelance",
         starPower: 3,
         description: "Seasoned pro who delivers instantly but keeps it professional."
       },
       free_nico_blade: {
         id: "free_nico_blade",
-        name: "Nico Blade",
+        name: "Skye Ryder",
         type: "freelance",
         starPower: 2,
         description: "Flashy specialist known for bold aesthetics and fast turnarounds."
       },
       free_rin_holt: {
         id: "free_rin_holt",
-        name: "Rin Holt",
+        name: "Nova Quinn",
         type: "freelance",
         starPower: 2,
         description: "Reliable utility hire with a clean, consistent style."
       },
       free_kira_sol: {
         id: "free_kira_sol",
-        name: "Kira Sol",
+        name: "Tiffany Heat",
         type: "freelance",
         starPower: 1,
         description: "Quiet wildcard who surprises when the concept is right."
       },
       free_eli_hart: {
         id: "free_eli_hart",
-        name: "Eli Hart",
+        name: "Mila Rush",
         type: "freelance",
         starPower: 1,
         description: "Budget-friendly helper with earnest charm and limited reach."
@@ -446,7 +446,7 @@ const CONFIG = {
       },
       act2_dex_marion: {
         id: "act2_dex_marion",
-        name: "Dex Marion",
+        name: "Dex Malone",
         type: "freelance",
         starPower: 3,
         description: "Over-prepared specialist who still improvises to steal the scene."
@@ -460,14 +460,14 @@ const CONFIG = {
       },
       act2_joel_riggs: {
         id: "act2_joel_riggs",
-        name: "Joel Riggs",
+        name: "Eli Black",
         type: "freelance",
         starPower: 2,
         description: "Deadpan support who makes chaos look like a deliberate choice."
       },
       recruit_aria_lux: {
         id: "recruit_aria_lux",
-        name: "Aria Lux",
+        name: "Aria Afterdark",
         type: "core",
         starPower: 3,
         maxBookingsPerDay: 2,
@@ -475,14 +475,14 @@ const CONFIG = {
       },
       recruit_bryn_sterling: {
         id: "recruit_bryn_sterling",
-        name: "Bryn Sterling",
+        name: "Scarlett Sterling",
         type: "core",
         starPower: 2,
         description: "Quick study with a sharp camera instinct and easy chemistry."
       },
       recruit_celeste_noir: {
         id: "recruit_celeste_noir",
-        name: "Celeste Noir",
+        name: "Celeste Sin",
         type: "core",
         starPower: 4,
         maxBookingsPerDay: 3,
@@ -490,14 +490,14 @@ const CONFIG = {
       },
       recruit_dahlia_slate: {
         id: "recruit_dahlia_slate",
-        name: "Dahlia Slate",
+        name: "Dahlia Kane",
         type: "core",
         starPower: 3,
         description: "Glossy brand-builder who keeps the vibe premium and polished."
       },
       recruit_eden_frost: {
         id: "recruit_eden_frost",
-        name: "Eden Frost",
+        name: "Eden Ivy",
         type: "core",
         starPower: 2,
         maxBookingsPerDay: 2,
@@ -505,7 +505,7 @@ const CONFIG = {
       },
       recruit_fern_kestrel: {
         id: "recruit_fern_kestrel",
-        name: "Fern Kestrel",
+        name: "Raven Foxx",
         type: "core",
         starPower: 3,
         description: "Hyper-competent closer with a knack for turning concepts into buzz."
@@ -1014,12 +1014,12 @@ const CONFIG = {
     profiles: [
       { id: "persona_midnight_muse", name: "Midnight Muse", description: "Late-night icon with velvet confidence and an algorithm-ready wink." },
       { id: "persona_glass_hearts", name: "Glass Hearts", description: "Glam auteur who treats every shoot like a glossy editorial." },
-      { id: "persona_arcade_angel", name: "Arcade Angel", description: "Bright retro pulse who turns nostalgia into instant chatter." },
+      { id: "persona_arcade_angel", name: "Pixel Vixen", description: "Bright retro pulse who turns nostalgia into instant chatter." },
       { id: "persona_velvet_riot", name: "Velvet Riot", description: "Stylish troublemaker with a loyal cult following and bold instincts." },
       { id: "persona_neon_paper", name: "Neon Paper", description: "Sharp, buzzy newcomer who wins crowds with effortless swagger." },
       { id: "persona_spark_syntax", name: "Spark Syntax", description: "Tech-chic performer who sells the vibe with crisp precision." },
       { id: "persona_satin_ace", name: "Satin Ace", description: "Cool tactician who keeps the shoot smooth and the fans curious." },
-      { id: "persona_cosmic_rose", name: "Cosmic Rose", description: "Dreamy headliner with a cosmic edge and contagious momentum." },
+      { id: "persona_cosmic_rose", name: "Neon Siren", description: "Dreamy headliner with a cosmic edge and contagious momentum." },
       { id: "persona_polaroid_heat", name: "Polaroid Heat", description: "Flash-frame favorite who sparks fast buzz with playful flair." },
       { id: "persona_moondust_viper", name: "Moondust Viper", description: "Sultry mystique with a bite, built for short-term spikes." }
     ],

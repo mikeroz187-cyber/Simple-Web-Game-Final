@@ -42,7 +42,7 @@ This document summarizes the **current** `gameState` structure as implemented in
   "performers": [
     {
       "id": "core_lena_watts",
-      "name": "Lena Watts",
+      "name": "Kendra Lynn",
       "type": "core",
       "starPower": 3,
       "starPowerShoots": 0,

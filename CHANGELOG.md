@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Updated performer, recruit, and persona display names to the locked sexy list across config, UI copy, and documentation.
+  - Why: Align all player-facing names with the approved fantasy naming pass before further content tuning.
+  - Files touched: src/config.js, config.toml, src/systems/story.js, src/save.js, docs/DATA_PERFORMERS.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/GAMESTATE_DATA_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added loyalty retention/decay, Diva Fee costs, and boosted Star Power with clear booking/roster callouts.
   - Why: Make loyalty and Star Power carry tangible economic consequences and communicate them in UI.
   - Files touched: src/config.js, config.toml, src/systems/performers.js, src/systems/booking.js, src/systems/economy.js, src/save.js, src/state.js, src/ui/render.js, docs/DATA_PERFORMERS.md, docs/DATA_UI_COPY.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, CHANGELOG.md.

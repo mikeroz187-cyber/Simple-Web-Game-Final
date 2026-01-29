@@ -174,6 +174,22 @@ function ensureRosterCompleteness(candidate) {
   });
 }
 
+function syncRosterDisplayNames(candidate) {
+  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
+    return;
+  }
+  candidate.roster.performers.forEach(function (performer) {
+    if (!performer || typeof performer.id !== "string") {
+      return;
+    }
+    const catalogEntry = CONFIG.performers.catalog[performer.id];
+    if (!catalogEntry || typeof catalogEntry.name !== "string") {
+      return;
+    }
+    performer.name = catalogEntry.name;
+  });
+}
+
 function pruneAppliedUnlockIds(candidate) {
   if (!candidate || !candidate.unlocks || !Array.isArray(candidate.unlocks.appliedUnlockIds)) {
     return;
@@ -613,6 +629,7 @@ function migrateGameState(candidate) {
   }
   pruneFreelancerRemnants(candidate);
   ensureRosterCompleteness(candidate);
+  syncRosterDisplayNames(candidate);
   ensurePerformerStarPowerProgress(candidate);
   ensurePerformerRetentionState(candidate);
   ensurePerformerManagementState(candidate);
