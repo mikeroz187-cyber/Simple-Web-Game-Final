@@ -27,12 +27,13 @@ This document summarizes the **current** `gameState` structure as implemented in
 ## Key Buckets
 
 ### `player`
-- `day`, `cash`, `debtRemaining`, `debtDueDay`
+- `day`, `cash`, `debtRemaining`, `debtInitialPrincipal`, `debtDueDay`
 - `shootsToday`, `agencyPackUsedToday`
 - `upgrades` (player upgrade flags like `managerHired`)
 - `socialFollowers`, `socialSubscribers`
 - `onlyFansSubscribers`, `onlyFansSubCarry`
 - `reputation`
+- `debtInitialPrincipal` captures the day-one debt baseline for payoff-based unlocks.
 
 ### `roster`
 ```json
@@ -154,6 +155,9 @@ This document summarizes the **current** `gameState` structure as implemented in
   "characters": {
     "producer": {
       "stageUnlocked": 2
+    },
+    "bankManager": {
+      "stageUnlocked": 1
     }
   },
   "inbox": [

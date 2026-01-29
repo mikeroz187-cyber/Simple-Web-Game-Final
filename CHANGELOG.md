@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Bank Manager Conquest character with debt payoff stages, packs, and loan baseline tracking.
+  - Why: Expand Conquests with debt-based progression while keeping save data and UI expectations aligned.
+  - Files touched: src/config.js, src/systems/conquests.js, src/state.js, src/save.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX add stage-specific Conquests portraits with safe fallback and make the Conquest reward slideshow back button visibly clickable.
   - Why: Allow per-stage portrait swaps without breaking when placeholder images are missing and ensure the back control reads as active.
   - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

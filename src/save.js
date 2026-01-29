@@ -468,6 +468,20 @@ function ensurePlayerUpgradesState(candidate) {
   }
 }
 
+function ensureDebtInitialPrincipal(candidate) {
+  if (!candidate || !candidate.player || typeof candidate.player !== "object") {
+    return;
+  }
+  const debtRemaining = Number.isFinite(candidate.player.debtRemaining) ? candidate.player.debtRemaining : 0;
+  if (!Number.isFinite(candidate.player.debtInitialPrincipal)) {
+    candidate.player.debtInitialPrincipal = Math.max(0, debtRemaining);
+    return;
+  }
+  if (candidate.player.debtInitialPrincipal < 0) {
+    candidate.player.debtInitialPrincipal = Math.max(0, debtRemaining);
+  }
+}
+
 function migrateGameState(candidate) {
   if (!candidate || typeof candidate !== "object") {
     return { ok: false, message: "Save data missing." };
@@ -581,6 +595,7 @@ function migrateGameState(candidate) {
   ensureRecruitmentState(candidate);
   ensureLegacyMilestonesState(candidate);
   ensurePlayerUpgradesState(candidate);
+  ensureDebtInitialPrincipal(candidate);
   if (typeof ensureConquestsState === "function") {
     ensureConquestsState(candidate);
   }
@@ -655,6 +670,7 @@ function validateGameState(candidate) {
     "day",
     "cash",
     "debtRemaining",
+    "debtInitialPrincipal",
     "debtDueDay",
     "shootsToday",
     "socialFollowers",
