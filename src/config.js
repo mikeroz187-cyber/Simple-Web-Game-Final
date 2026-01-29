@@ -103,7 +103,13 @@ const CONFIG = {
     base_font_size_px: 14,
     panel_gap_px: 12,
     main_padding_px: 16,
-    story_log_preview_length: 120
+    story_log_preview_length: 120,
+    recruitModal: {
+      modalMaxHeightVh: 80,
+      modalMaxWidthPx: 1100,
+      modalMaxWidthVw: 92,
+      imageMaxHeightVh: 55
+    }
   },
   ambientArt: {
     enabled: true,

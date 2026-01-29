@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX recruit meet modal buttons to be available immediately and constrain slideshow sizing.
+  - Why: Remove forced slide-gating and keep the modal media area predictable without pushing actions off-screen.
+  - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX Conquests assistant portrait assets, add late-game trigger gates, and refresh reward pack copy.
   - Why: Ensure assistant portraits render from the mascots directory, pace late Conquest starts around day 60, and align reward text with in-fiction tone.
   - Files touched: assets/images/mascots/assistant_stage1.png, assets/images/mascots/assistant_stage2.png, assets/images/mascots/assistant_stage3.png, assets/images/mascots/assistant_stage4.png, src/config.js, src/systems/conquests.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

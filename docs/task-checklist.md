@@ -101,6 +101,7 @@
 
 ## UI / Cosmetic / QoL — Implemented
 - [x] UI Polish Pass v1 (Neon VIP Lounge + Bebas Neue + Hub dashboard + event feed cards).
+- [x] Recruit meet modal: Hire/Decline available immediately and slideshow media stays within the modal.
 
 ---
 

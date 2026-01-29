@@ -1640,33 +1640,52 @@ function renderSlideshow(gameState) {
     const nextButton = safeIndex < slideCount - 1
       ? "<div class=\"button-row\">" + createButton("Next", "recruit-next-slide", "primary") + "</div>"
       : "";
-    const decisionButtons = safeIndex === slideCount - 1
-      ? "<div class=\"button-row\">" +
-        createButton("Hire (" + formatCurrency(hireCost) + ")", "recruit-hire", "primary", !canHire,
-          "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
-        createButton("Decline", "recruit-decline", "", false, "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
-        "</div>"
-      : "";
+    const decisionButtons = "<div class=\"button-row\">" +
+      createButton("Hire (" + formatCurrency(hireCost) + ")", "recruit-hire", "primary", !canHire,
+        "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
+      createButton("Decline", "recruit-decline", "", false, "data-id=\"" + (candidate ? candidate.performerId : "") + "\"") +
+      "</div>";
     const imageHtml = "<div class=\"slideshow-image-container\">" +
       "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Audition slide " + (safeIndex + 1) + "\" />" +
       "</div>";
     const controlsHtml = "<div class=\"slideshow-controls\">" +
       "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
       "</div>";
-    const body = "<div class=\"panel\">" +
+    const recruitModalConfig = CONFIG.ui && CONFIG.ui.recruitModal ? CONFIG.ui.recruitModal : {};
+    const modalMaxHeightVh = Number.isFinite(recruitModalConfig.modalMaxHeightVh) ? recruitModalConfig.modalMaxHeightVh : 80;
+    const modalMaxWidthPx = Number.isFinite(recruitModalConfig.modalMaxWidthPx) ? recruitModalConfig.modalMaxWidthPx : 1100;
+    const modalMaxWidthVw = Number.isFinite(recruitModalConfig.modalMaxWidthVw) ? recruitModalConfig.modalMaxWidthVw : 92;
+    const imageMaxHeightVh = Number.isFinite(recruitModalConfig.imageMaxHeightVh) ? recruitModalConfig.imageMaxHeightVh : 55;
+    const modalStyle = "style=\"--recruit-modal-max-height-vh:" + modalMaxHeightVh + "vh;" +
+      "--recruit-modal-max-width-px:" + modalMaxWidthPx + "px;" +
+      "--recruit-modal-max-width-vw:" + modalMaxWidthVw + "vw;" +
+      "--recruit-modal-image-max-height-vh:" + imageMaxHeightVh + "vh;\"";
+    const headerHtml = "<div class=\"recruit-slideshow-header\">" +
       "<h3 class=\"panel-title\">Private Audition — " + name + "</h3>" +
       "<p class=\"helper-text\">" + pitchText + "</p>" +
+      "</div>";
+    const mediaHtml = "<div class=\"recruit-slideshow-media\">" +
       "<div class=\"slideshow-layout\">" +
       imageHtml +
       controlsHtml +
       "</div>" +
+      "</div>";
+    const footerHtml = "<div class=\"recruit-slideshow-footer\">" +
       nextButton +
       decisionButtons +
       "<div class=\"button-row\">" +
       createButton("Back to Roster", "slideshow-close") +
       "</div>" +
       "</div>";
-    const slideshowHtml = createPanel("Meet Recruit", body, "screen-slideshow-title");
+    const body = "<div class=\"recruit-slideshow-content\">" +
+      headerHtml +
+      mediaHtml +
+      footerHtml +
+      "</div>";
+    const slideshowHtml = "<div class=\"panel recruit-slideshow-panel\" " + modalStyle + ">" +
+      "<h2 class=\"screen-title\" id=\"screen-slideshow-title\">Meet Recruit</h2>" +
+      body +
+      "</div>";
     container.innerHTML = renderAmbientLayers("screen-slideshow") +
       "<div class=\"screen-content\">" +
       slideshowHtml +
