@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX add After Hours recruit performer content and remove gallery mention from aftermath results.
+  - Why: Ensure every recruit has bespoke After Hours copy and outcomes avoid referencing the gallery.
+  - Files touched: src/ui/afterhours-render.js, CHANGELOG.md.
 - What: FIX After Hours slideshow frame, mascot hiding, and knock timing/frequency.
   - Why: Frame the slideshow visuals, prevent mascots from overlaying modal content, and reduce early knock spam.
   - Files touched: src/ui/afterhours-render.js, src/ui/events.js, styles.css, config.toml, src/config.js, src/systems/afterhours.js, CHANGELOG.md.
