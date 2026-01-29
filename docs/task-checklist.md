@@ -134,6 +134,7 @@
 - [x] Stage-specific portraits + slideshow back button visibility fix.
 - [x] Bank Manager Conquest character added (4 stages, debt payoff triggers, packs).
 - [x] Conquests: add Assistant, Talent Scout, Saleswoman + standardize mascot stage portrait paths.
+- [x] Conquests Phase 2: Copy pass + pacing tuning + tokenized scene text.
 
 ---
 

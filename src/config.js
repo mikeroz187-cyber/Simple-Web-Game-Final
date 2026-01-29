@@ -14,20 +14,20 @@ const LOCATION_PLACEHOLDER_THUMB_PATH = "assets/images/placeholders/location_pla
 const SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH = "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG);
 const CONQUEST_THRESHOLDS = {
   assistant: {
-    reputation: { tier1: 5, tier2: 15 },
-    followers: { tier1: 800, tier2: 2500 },
-    onlyFansSubscribers: { tier3: 75, tier4: 250 },
-    netWorth: { tier3: 15000, tier4: 50000 }
+    reputation: { tier1: 3, tier2: 10 },
+    followers: { tier1: 300, tier2: 1200 },
+    onlyFansSubscribers: { tier3: 150, tier4: 400 },
+    netWorth: { tier3: 25000, tier4: 80000 }
   },
   talentscout: {
     recruits: { stage1: 1, stage2: 2, stage3: 3, stage4: 4 },
-    reputation: { tier1: 8, tier3: 25 },
-    followers: { tier2: 2000 },
-    milestones: { stage3: 3 }
+    reputation: { tier1: 6, tier3: 22 },
+    followers: { tier2: 1500 },
+    milestones: { stage3: 2 }
   },
   saleswoman: {
-    upgrades: { stage1: 1, stage2: 2, stage3: 3, stage4: 5 },
-    shopSpend: { stage2: 2000 }
+    upgrades: { stage1: 1, stage2: 2, stage3: 4, stage4: 6 },
+    shopSpend: { stage2: 1200 }
   }
 };
 
@@ -593,12 +593,12 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "lightingLevel", minLevel: 1 }]
             },
-            message: "Lighting upgrade noticed",
-            sceneTitle: "She noticed the glow",
-            sceneBody: "Your new lighting makes the set look expensive. The Producer slides into your inbox with a slow, appreciative grin. “Clean, bright, and dangerous. Consider this a thank-you.” She drops a few selfies to keep you hungry.",
+            message: "Lighting check: you leveled up",
+            sceneTitle: "The glow makes you look dangerous",
+            sceneBody: "Lighting Level {{lightingLevel}} just turned the set into a spotlight.<br>“You made me look expensive,” she purrs.<br>“So I’m paying you back in previews.”",
             rewardPack: {
               packId: "producer_stage1",
-              title: "Thank-You Selfies",
+              title: "Producer Preview Pack",
               description: "A tight trio of glossy selfies—soft glow, sharp eyes, quiet promises.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -610,12 +610,12 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "cameraLevel", minLevel: 1 }]
             },
-            message: "Camera upgrade on her radar",
-            sceneTitle: "Sharper lens, bolder poses",
-            sceneBody: "The Producer knows when a lens gets hungry. “If you’re going to shoot like this, I’m going to give you something worth framing.” The selfies are bolder, closer, and very deliberate.",
+            message: "Lens upgrade, private preview",
+            sceneTitle: "Sharper lens, closer focus",
+            sceneBody: "Camera Level {{cameraLevel}} has her hovering by the monitor.<br>“If you’re shooting this crisp, I’m giving you something worth zooming.”<br>She sends a tighter set—no wasted angles.",
             rewardPack: {
               packId: "producer_stage2",
-              title: "Momentum Selfies",
+              title: "Focus Pull Set",
               description: "A confident set of four shots, dialed in for your new lens.",
               imagePaths: buildPlaceholderImagePaths(4, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -627,9 +627,9 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "setDressingLevel", minLevel: 1 }]
             },
-            message: "After-hours set access",
-            sceneTitle: "She’s been watching",
-            sceneBody: "She admits she’s been lingering after wrap, tracing the set with her eyes. “You built a vibe I can’t stop walking into.” The after-hours set opens, all velvet shadows and a tease of control.",
+            message: "Set dressing kept her late",
+            sceneTitle: "You built a set she can’t leave",
+            sceneBody: "Set Dressing {{setDressingLevel}} turned the studio into a trap she likes.<br>“You made the room feel like a scene,” she says, staying after wrap.<br>“So I gave you the after-hours cut.”",
             rewardPack: {
               packId: "producer_stage3",
               title: "After-Hours Set",
@@ -647,12 +647,12 @@ const CONFIG = {
                 { key: "cameraLevel", minLevel: 2 }
               ]
             },
-            message: "Private production offer",
-            sceneTitle: "VIP: private production",
-            sceneBody: "“You’ve proved you can handle pressure,” she says, locking the door behind her. “So let’s make something for the vault.” It’s a private production—exclusive, polished, and unmistakably hers.",
+            message: "VIP production greenlit",
+            sceneTitle: "Private production, locked door",
+            sceneBody: "Lighting {{lightingLevel}} and Camera {{cameraLevel}}—you’re running a real production now.<br>“You can handle pressure,” she whispers, sliding the bolt.<br>“So this one goes in the vault.”",
             rewardPack: {
               packId: "producer_stage4",
-              title: "VIP Private Production",
+              title: "VIP Production Vault",
               description: "Twenty high-status shots from the Producer’s private vault.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -674,9 +674,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier1 }
               ]
             },
-            message: "Momentum check-in ready",
-            sceneTitle: "Metrics, mood, and a lingering look",
-            sceneBody: "She slides into your chair like she owns it and spins the dashboard toward you. “Reputation is climbing. People are starting to whisper your name.” Her voice softens into a smirk. “If you want me to keep the momentum… I’ll need a closer seat.”",
+            message: "Dashboard ping: you’re trending",
+            sceneTitle: "She’s watching your rise",
+            sceneBody: "Reputation {{reputation}} and followers {{followers}} just spiked on her dashboard.<br>“I’ve been watching your numbers,” she says, sliding closer.<br>“Keep winning and I’ll keep you… prioritized.”",
             rewardPack: {
               packId: "assistant_stage1",
               title: "Momentum Memo",
@@ -693,9 +693,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier2 }
               ]
             },
-            message: "Dashboard trendline: you",
-            sceneTitle: "She charts your rise",
-            sceneBody: "She leans over your shoulder, index finger tracing your growth curve. “This line? That’s you. And I’m very good at keeping it climbing.” She leaves a set of images that feel like a private forecast you’re not supposed to share.",
+            message: "Trendline alert: all up",
+            sceneTitle: "She keeps the climb tight",
+            sceneBody: "Followers {{followers}} are climbing and she’s already updating your calendar.<br>“I control the schedule,” she murmurs, “and you’re all over it.”<br>She leaves a forecast you’re not supposed to share.",
             rewardPack: {
               packId: "assistant_stage2",
               title: "Trendline Tease",
@@ -712,9 +712,9 @@ const CONFIG = {
                 { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier3 }
               ]
             },
-            message: "Executive focus requested",
-            sceneTitle: "She tightens the schedule",
-            sceneBody: "“You’ve crossed into real money territory,” she says, locking the office door with a knowing glance. “We should talk about… premium attention.” The pack she sends is sleek, controlled, and a little too close for comfort.",
+            message: "Executive slot reserved",
+            sceneTitle: "She schedules you after hours",
+            sceneBody: "OF subs {{ofSubs}} crossed into real money and she notices.<br>“Premium attention costs extra,” she says, locking the door.<br>“Lucky for you, I’m on the payroll.”",
             rewardPack: {
               packId: "assistant_stage3",
               title: "Executive Focus",
@@ -731,12 +731,12 @@ const CONFIG = {
                 { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier4 }
               ]
             },
-            message: "Boardroom after hours",
-            sceneTitle: "Private session: metrics and mischief",
-            sceneBody: "She closes the blinds, heels clicking as she approaches. “You’ve built an empire. Now let me show you what a loyal assistant looks like after hours.” The vault opens—twenty frames of slow confidence and power-laced devotion.",
+            message: "Boardroom access: after-hours",
+            sceneTitle: "She opens the private calendar",
+            sceneBody: "Cash {{cash}} and followers {{followers}} scream empire-builder.<br>She closes the blinds. “You built this. I keep it running.”<br>“Now let me show you what loyalty looks like.”",
             rewardPack: {
               packId: "assistant_stage4",
-              title: "After-Hours Assistant",
+              title: "Executive After-Hours Vault",
               description: "Twenty high-status shots for the boss who keeps winning.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -758,9 +758,9 @@ const CONFIG = {
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier1 }
               ]
             },
-            message: "Fresh talent just pinged you",
-            sceneTitle: "She brought you a lead—and a look",
-            sceneBody: "The Talent Scout leans on your desk, all charm and appraisal. “I’ve got a line on someone special. But I like working with winners.” She sends a teaser set—playful, cocky, and full of potential energy.",
+            message: "Roster ping: first name locked",
+            sceneTitle: "She smells a winner",
+            sceneBody: "Recruits on file: {{recruitsCount}}. She grins anyway.<br>“I bring winners to winners,” she says, leaning in.<br>“You feel like my next favorite story.”",
             rewardPack: {
               packId: "talentscout_stage1",
               title: "Talent Teaser",
@@ -777,9 +777,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.talentscout.followers.tier2 }
               ]
             },
-            message: "Your roster reputation is spreading",
+            message: "Buzz check: your roster is hot",
             sceneTitle: "She plays the spotlight",
-            sceneBody: "“You’re getting buzz,” she says, sliding a card across the table. “That makes my job fun.” The images she sends are sharper—spotlight-ready, built to fuel gossip and attention.",
+            sceneBody: "Followers {{followers}} are loud and she rides the noise.<br>“That kind of buzz makes my phone glow,” she smirks.<br>She sends a set built for gossip.",
             rewardPack: {
               packId: "talentscout_stage2",
               title: "Spotlight Scout",
@@ -796,9 +796,9 @@ const CONFIG = {
                 { type: "stat", stat: "milestoneCount", min: CONQUEST_THRESHOLDS.talentscout.milestones.stage3 }
               ]
             },
-            message: "She wants a private audition",
-            sceneTitle: "Audition, but make it personal",
-            sceneBody: "“You’ve got momentum,” she whispers, closing the door behind her. “So let me show you what I scout for.” The set is intimate, measured, and just daring enough to get your pulse up.",
+            message: "Private audition request",
+            sceneTitle: "She auditions herself for you",
+            sceneBody: "Recruits {{recruitsCount}} deep and she still wants your attention.<br>“Let me show you what I scout for,” she whispers.<br>“Consider it a personal audition.”",
             rewardPack: {
               packId: "talentscout_stage3",
               title: "Private Audition",
@@ -815,12 +815,12 @@ const CONFIG = {
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier3 }
               ]
             },
-            message: "Top-tier talent, top-tier rewards",
+            message: "Top-tier roster, top-tier perks",
             sceneTitle: "She signs, then seals it",
-            sceneBody: "She snaps her pen closed with a smile. “Your roster is elite now. So am I.” The vault opens with twenty glossy shots—luxury, leverage, and a promise of more.",
+            sceneBody: "Reputation {{reputation}} and recruits {{recruitsCount}} put you in the top lane.<br>She snaps her pen shut. “Elite rosters get elite access.”<br>“This pack is your trophy.”",
             rewardPack: {
               packId: "talentscout_stage4",
-              title: "Roster Elite",
+              title: "Roster Trophy Vault",
               description: "Twenty images of high-status charm and dealmaker allure.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -841,9 +841,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage1 }
               ]
             },
-            message: "First upgrade, first flirt",
-            sceneTitle: "She seals the first deal",
-            sceneBody: "“Upgrades already?” She arches a brow. “That’s the kind of buyer I like.” The images she sends are sharp, teasing, and just a little bit transactional in the best way.",
+            message: "First upgrade, first taste",
+            sceneTitle: "She likes how you buy",
+            sceneBody: "Upgrades purchased: {{upgradesPurchased}}. She notices.<br>“You don’t hesitate,” she purrs.<br>“So I won’t either.”",
             rewardPack: {
               packId: "saleswoman_stage1",
               title: "First Sale",
@@ -860,9 +860,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalShopSpend", min: CONQUEST_THRESHOLDS.saleswoman.shopSpend.stage2 }
               ]
             },
-            message: "She brought a premium offer",
-            sceneTitle: "Upgrades look good on you",
-            sceneBody: "She taps your receipt and smiles. “Big spenders get priority.” The set she sends is richer, closer, and confident enough to feel like a promise.",
+            message: "Receipt check: you went premium",
+            sceneTitle: "She rewards big spenders",
+            sceneBody: "Shop spend {{shopSpend}} has her leaning over the counter.<br>“That’s the kind of receipt I frame,” she smiles.<br>She sends a richer, closer set.",
             rewardPack: {
               packId: "saleswoman_stage2",
               title: "Premium Offer",
@@ -881,9 +881,9 @@ const CONFIG = {
                 { type: "equipment", key: "setDressingLevel", minLevel: 2 }
               ]
             },
-            message: "Tier 2 just unlocked her smile",
-            sceneTitle: "She likes higher tiers",
-            sceneBody: "“Tier 2? Now we’re talking.” She steps closer, voice low. “Let me show you what premium service looks like.” The images are bold, indulgent, and framed like a luxury catalog.",
+            message: "Tier 2 unlocked her attention",
+            sceneTitle: "She sells you the upgrade",
+            sceneBody: "Upgrades purchased {{upgradesPurchased}} and she’s already next to you.<br>“Premium service is hands-on,” she whispers.<br>“Lucky you.”",
             rewardPack: {
               packId: "saleswoman_stage3",
               title: "Tier 2 Treatment",
@@ -908,11 +908,11 @@ const CONFIG = {
               ]
             },
             message: "Closed deals, open vault",
-            sceneTitle: "The closer goes all in",
-            sceneBody: "She shuts the showroom door and clicks the lock. “You bought everything worth owning.” Her grin is wicked. “Now let me collect my commission.” Twenty images drop like signed contracts—luxury, control, and a promise of more deals.",
+            sceneTitle: "The closer takes her cut",
+            sceneBody: "Total spend {{shopSpend}} and upgrades {{upgradesPurchased}} make you her favorite client.<br>She locks the showroom. “You bought everything worth owning.”<br>“Now I collect.”",
             rewardPack: {
               packId: "saleswoman_stage4",
-              title: "Commission Collected",
+              title: "Platinum Closer Vault",
               description: "Twenty premium shots from the ultimate closer.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
@@ -932,9 +932,9 @@ const CONFIG = {
               type: "debtPaidRatio",
               minRatio: 0.25
             },
-            message: "Quarter paid, attention earned",
+            message: "Quarter paid. She noticed.",
             sceneTitle: "Quarter paid, account watched",
-            sceneBody: "She calls you in with a clean smile and a ledger that doesn’t blink. “Twenty-five percent down. You’re either disciplined or dangerous.” Her tone softens, almost playful. “Keep going. I want to see how you handle pressure.” She leaves a sleek “receipt” selfie in your inbox.",
+            sceneBody: "Debt remaining: {{debtRemaining}}. She taps the ledger.<br>“Twenty-five percent down—disciplined or dangerous.”<br>“Keep going. I like clients who deliver.”",
             rewardPack: {
               packId: "bank_manager_stage1",
               title: "Receipt Selfies",
@@ -949,9 +949,9 @@ const CONFIG = {
               type: "debtPaidRatio",
               minRatio: 0.5
             },
-            message: "Halfway. She’s re-evaluating",
-            sceneTitle: "Halfway to paid — halfway to hers",
-            sceneBody: "Her voice drops when she signs the update. “Fifty percent. At this point, I’ve stopped calling it a loan.” She lets the pen linger, eyes fixed on you. “It’s an investment. In your focus. In your… control.” The photos are closer, sharper, and very intentional.",
+            message: "Half paid. She’s recalculating.",
+            sceneTitle: "Halfway paid, fully watched",
+            sceneBody: "Debt remaining: {{debtRemaining}}.<br>“At fifty percent, this stops being a loan.”<br>“It becomes leverage.”",
             rewardPack: {
               packId: "bank_manager_stage2",
               title: "Investment Proof",
@@ -966,9 +966,9 @@ const CONFIG = {
               type: "debtPaidRatio",
               minRatio: 0.75
             },
-            message: "Three quarters paid. She’s intrigued",
-            sceneTitle: "Three quarters, full control",
-            sceneBody: "She studies the numbers, then you. “Seventy-five percent. You keep delivering under pressure.” Her smile turns into a challenge. “I can tell when someone can take direction. And when someone deserves it.” The set she sends is composed, controlled, and unapologetically hers.",
+            message: "Seventy-five. She wants a meeting.",
+            sceneTitle: "Pressure makes you interesting",
+            sceneBody: "Debt remaining: {{debtRemaining}} and she doesn’t blink.<br>“You perform under pressure,” she says, leaning in.<br>“So do I.”",
             rewardPack: {
               packId: "bank_manager_stage3",
               title: "Pressure Test",
@@ -983,12 +983,12 @@ const CONFIG = {
               type: "debtPaidRatio",
               minRatio: 1
             },
-            message: "Debt cleared. Private renegotiation",
-            sceneTitle: "Debt cleared, terms renegotiated",
-            sceneBody: "She locks the office door after hours and slides the paid ledger across the desk. “Zero balance.” Her eyes don’t move. “Come here. I want to renegotiate… privately.” The VIP pack is all velvet control and moneyed power fantasy, framed as your final reward.",
+            message: "Debt cleared. Terms change.",
+            sceneTitle: "Zero balance, private terms",
+            sceneBody: "Debt remaining: {{debtRemaining}}.<br>She locks the office. “Zero balance.”<br>“So let’s renegotiate in private.”",
             rewardPack: {
               packId: "bank_manager_stage4",
-              title: "After-Hours Renegotiation",
+              title: "Private Ledger Vault",
               description: "Twenty exclusive images from her private office session.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }

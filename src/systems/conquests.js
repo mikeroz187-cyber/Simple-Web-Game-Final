@@ -99,6 +99,34 @@ function getConquestStatValue(gameState, stat) {
   return 0;
 }
 
+function formatSceneText(text, gameState) {
+  if (typeof text !== "string") {
+    return "";
+  }
+  const player = gameState && gameState.player ? gameState.player : {};
+  const equipment = gameState && gameState.equipment ? gameState.equipment : {};
+  const stats = gameState && gameState.stats ? gameState.stats : {};
+  const recruitsCount = gameState && gameState.recruitment && Array.isArray(gameState.recruitment.hiredIds)
+    ? gameState.recruitment.hiredIds.length
+    : 0;
+  const replacements = {
+    "{{reputation}}": Number.isFinite(player.reputation) ? player.reputation : 0,
+    "{{followers}}": Number.isFinite(player.socialFollowers) ? player.socialFollowers : 0,
+    "{{ofSubs}}": Number.isFinite(player.onlyFansSubscribers) ? player.onlyFansSubscribers : 0,
+    "{{cash}}": Number.isFinite(player.cash) ? player.cash : 0,
+    "{{debtRemaining}}": Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0,
+    "{{lightingLevel}}": Number.isFinite(equipment.lightingLevel) ? equipment.lightingLevel : 0,
+    "{{cameraLevel}}": Number.isFinite(equipment.cameraLevel) ? equipment.cameraLevel : 0,
+    "{{setDressingLevel}}": Number.isFinite(equipment.setDressingLevel) ? equipment.setDressingLevel : 0,
+    "{{recruitsCount}}": Number.isFinite(recruitsCount) ? recruitsCount : 0,
+    "{{shopSpend}}": Number.isFinite(stats.totalShopSpend) ? stats.totalShopSpend : 0,
+    "{{upgradesPurchased}}": Number.isFinite(stats.totalUpgradesPurchased) ? stats.totalUpgradesPurchased : 0
+  };
+  return Object.keys(replacements).reduce(function (result, token) {
+    return result.replaceAll(token, String(replacements[token]));
+  }, text);
+}
+
 function isConquestTriggerMet(gameState, trigger) {
   if (!trigger || typeof trigger !== "object") {
     return false;
