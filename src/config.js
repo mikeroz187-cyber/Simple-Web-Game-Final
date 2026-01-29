@@ -598,8 +598,8 @@ const CONFIG = {
             sceneBody: "Lighting Level {{lightingLevel}} just turned the set into a spotlight.<br>“You made me look expensive,” she purrs.<br>“So I’m paying you back in previews.”",
             rewardPack: {
               packId: "producer_stage1",
-              title: "Producer Preview Pack",
-              description: "A tight trio of glossy selfies—soft glow, sharp eyes, quiet promises.",
+              title: "Lighting Check DMs",
+              description: "You made her look expensive, so she returns the favor. Three glow-lit selfies that feel like a private thank-you.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -615,8 +615,8 @@ const CONFIG = {
             sceneBody: "Camera Level {{cameraLevel}} has her hovering by the monitor.<br>“If you’re shooting this crisp, I’m giving you something worth zooming.”<br>She sends a tighter set—no wasted angles.",
             rewardPack: {
               packId: "producer_stage2",
-              title: "Focus Pull Set",
-              description: "A confident set of four shots, dialed in for your new lens.",
+              title: "Focus Pull Tease",
+              description: "She leans into the monitor and sends four tight shots made for your new lens. Every frame says you’re in control.",
               imagePaths: buildPlaceholderImagePaths(4, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -632,8 +632,8 @@ const CONFIG = {
             sceneBody: "Set Dressing {{setDressingLevel}} turned the studio into a trap she likes.<br>“You made the room feel like a scene,” she says, staying after wrap.<br>“So I gave you the after-hours cut.”",
             rewardPack: {
               packId: "producer_stage3",
-              title: "After-Hours Set",
-              description: "Five moody frames, all atmosphere and authority.",
+              title: "After-Hours Cut",
+              description: "She stays late and sends five moody frames from the locked set. All atmosphere, all yours.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -652,8 +652,8 @@ const CONFIG = {
             sceneBody: "Lighting {{lightingLevel}} and Camera {{cameraLevel}}—you’re running a real production now.<br>“You can handle pressure,” she whispers, sliding the bolt.<br>“So this one goes in the vault.”",
             rewardPack: {
               packId: "producer_stage4",
-              title: "VIP Production Vault",
-              description: "Twenty high-status shots from the Producer’s private vault.",
+              title: "Director's Vault",
+              description: "A VIP private set with twenty shots she only sends to the one running the room.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }
@@ -679,8 +679,8 @@ const CONFIG = {
             sceneBody: "Reputation {{reputation}} and followers {{followers}} just spiked on her dashboard.<br>“I’ve been watching your numbers,” she says, sliding closer.<br>“Keep winning and I’ll keep you… prioritized.”",
             rewardPack: {
               packId: "assistant_stage1",
-              title: "Momentum Memo",
-              description: "Three polished shots, all sharp angles and private confidence.",
+              title: "Priority Ping",
+              description: "Your numbers spike, and she makes you her top priority. Three crisp selfies with a quiet power you can feel.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -698,8 +698,8 @@ const CONFIG = {
             sceneBody: "Followers {{followers}} are climbing and she’s already updating your calendar.<br>“I control the schedule,” she murmurs, “and you’re all over it.”<br>She leaves a forecast you’re not supposed to share.",
             rewardPack: {
               packId: "assistant_stage2",
-              title: "Trendline Tease",
-              description: "Five images, poised and precise, built for the spotlight you’re earning.",
+              title: "Calendar Control",
+              description: "She blocks out an after-hours slot just for you. Five poised shots that feel like an invitation you can’t decline.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -717,8 +717,8 @@ const CONFIG = {
             sceneBody: "OF subs {{ofSubs}} crossed into real money and she notices.<br>“Premium attention costs extra,” she says, locking the door.<br>“Lucky for you, I’m on the payroll.”",
             rewardPack: {
               packId: "assistant_stage3",
-              title: "Executive Focus",
-              description: "Five intimate angles of calm control and whispered authority.",
+              title: "Executive Slot",
+              description: "She books you after hours and sends five controlled, revealing selfies. It reads like a private briefing just for you.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -736,8 +736,8 @@ const CONFIG = {
             sceneBody: "Cash {{cash}} and followers {{followers}} scream empire-builder.<br>She closes the blinds. “You built this. I keep it running.”<br>“Now let me show you what loyalty looks like.”",
             rewardPack: {
               packId: "assistant_stage4",
-              title: "Executive After-Hours Vault",
-              description: "Twenty high-status shots for the boss who keeps winning.",
+              title: "Loyalty Ledger",
+              description: "She opens the private calendar and sends a VIP pack of twenty shots. It’s a trophy set for the boss she’s sworn to.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }
@@ -753,6 +753,7 @@ const CONFIG = {
             stageIndex: 1,
             portraitPath: "assets/images/mascots/talentscout_stage1.png",
             trigger: {
+              minDay: 60,
               anyOf: [
                 { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage1 },
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier1 }
@@ -763,8 +764,8 @@ const CONFIG = {
             sceneBody: "Recruits on file: {{recruitsCount}}. She grins anyway.<br>“I bring winners to winners,” she says, leaning in.<br>“You feel like my next favorite story.”",
             rewardPack: {
               packId: "talentscout_stage1",
-              title: "Talent Teaser",
-              description: "Three playful shots from the scout who finds what you want.",
+              title: "Scout's Teaser",
+              description: "She smells a winner and sends three playful backstage selfies. It’s her way of saying you’ve caught her eye.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -782,8 +783,8 @@ const CONFIG = {
             sceneBody: "Followers {{followers}} are loud and she rides the noise.<br>“That kind of buzz makes my phone glow,” she smirks.<br>She sends a set built for gossip.",
             rewardPack: {
               packId: "talentscout_stage2",
-              title: "Spotlight Scout",
-              description: "Five confident frames that scream industry heat.",
+              title: "Buzz Tape",
+              description: "She rides the noise and drops five gossip-ready shots into your DMs. Status looks good on her.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -791,6 +792,7 @@ const CONFIG = {
             stageIndex: 3,
             portraitPath: "assets/images/mascots/talentscout_stage3.png",
             trigger: {
+              requiresDebtCleared: true,
               anyOf: [
                 { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage3 },
                 { type: "stat", stat: "milestoneCount", min: CONQUEST_THRESHOLDS.talentscout.milestones.stage3 }
@@ -801,8 +803,8 @@ const CONFIG = {
             sceneBody: "Recruits {{recruitsCount}} deep and she still wants your attention.<br>“Let me show you what I scout for,” she whispers.<br>“Consider it a personal audition.”",
             rewardPack: {
               packId: "talentscout_stage3",
-              title: "Private Audition",
-              description: "Five slow-burn frames, equal parts control and temptation.",
+              title: "Personal Audition",
+              description: "She wants your approval and sends five slow-burn audition selfies. It’s an invitation to pick favorites.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -810,6 +812,7 @@ const CONFIG = {
             stageIndex: 4,
             portraitPath: "assets/images/mascots/talentscout_stage4.png",
             trigger: {
+              requiresDebtCleared: true,
               anyOf: [
                 { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage4 },
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier3 }
@@ -820,8 +823,8 @@ const CONFIG = {
             sceneBody: "Reputation {{reputation}} and recruits {{recruitsCount}} put you in the top lane.<br>She snaps her pen shut. “Elite rosters get elite access.”<br>“This pack is your trophy.”",
             rewardPack: {
               packId: "talentscout_stage4",
-              title: "Roster Trophy Vault",
-              description: "Twenty images of high-status charm and dealmaker allure.",
+              title: "Roster Trophy Set",
+              description: "She makes it official with a VIP set of twenty shots. This is the private pack she reserves for top-tier owners.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }
@@ -837,6 +840,7 @@ const CONFIG = {
             stageIndex: 1,
             portraitPath: "assets/images/mascots/saleswoman_stage1.png",
             trigger: {
+              minDay: 60,
               anyOf: [
                 { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage1 }
               ]
@@ -846,8 +850,8 @@ const CONFIG = {
             sceneBody: "Upgrades purchased: {{upgradesPurchased}}. She notices.<br>“You don’t hesitate,” she purrs.<br>“So I won’t either.”",
             rewardPack: {
               packId: "saleswoman_stage1",
-              title: "First Sale",
-              description: "Three crisp shots—polished, playful, and eager to close.",
+              title: "First Close",
+              description: "You made your first buy, and she answers with three teasing sales-floor selfies. She wants you coming back.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -865,8 +869,8 @@ const CONFIG = {
             sceneBody: "Shop spend {{shopSpend}} has her leaning over the counter.<br>“That’s the kind of receipt I frame,” she smiles.<br>She sends a richer, closer set.",
             rewardPack: {
               packId: "saleswoman_stage2",
-              title: "Premium Offer",
-              description: "Five high-gloss frames from your favorite closer.",
+              title: "Premium Receipt",
+              description: "It turns out big spenders are her type. She sends five revealing pics with a note: you don’t ask the price.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -874,6 +878,7 @@ const CONFIG = {
             stageIndex: 3,
             portraitPath: "assets/images/mascots/saleswoman_stage3.png",
             trigger: {
+              requiresDebtCleared: true,
               anyOf: [
                 { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage3 },
                 { type: "equipment", key: "lightingLevel", minLevel: 2 },
@@ -886,8 +891,8 @@ const CONFIG = {
             sceneBody: "Upgrades purchased {{upgradesPurchased}} and she’s already next to you.<br>“Premium service is hands-on,” she whispers.<br>“Lucky you.”",
             rewardPack: {
               packId: "saleswoman_stage3",
-              title: "Tier 2 Treatment",
-              description: "Five seductive frames, sleek and high-end.",
+              title: "Backroom Upsell",
+              description: "She calls it premium service and sends five sleek, close-range selfies from the back office. You’re her favorite client now.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -895,6 +900,7 @@ const CONFIG = {
             stageIndex: 4,
             portraitPath: "assets/images/mascots/saleswoman_stage4.png",
             trigger: {
+              requiresDebtCleared: true,
               anyOf: [
                 { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage4 },
                 {
@@ -912,8 +918,8 @@ const CONFIG = {
             sceneBody: "Total spend {{shopSpend}} and upgrades {{upgradesPurchased}} make you her favorite client.<br>She locks the showroom. “You bought everything worth owning.”<br>“Now I collect.”",
             rewardPack: {
               packId: "saleswoman_stage4",
-              title: "Platinum Closer Vault",
-              description: "Twenty premium shots from the ultimate closer.",
+              title: "Platinum Private Vault",
+              description: "She locks the showroom and sends a VIP pack of twenty shots. It’s the trophy set for her biggest spender.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }
@@ -937,8 +943,8 @@ const CONFIG = {
             sceneBody: "Debt remaining: {{debtRemaining}}. She taps the ledger.<br>“Twenty-five percent down—disciplined or dangerous.”<br>“Keep going. I like clients who deliver.”",
             rewardPack: {
               packId: "bank_manager_stage1",
-              title: "Receipt Selfies",
-              description: "Three polished shots, all quiet authority and unspoken leverage.",
+              title: "Quarterly Statement",
+              description: "She rewards discipline with three polished office selfies. The power dynamic is written between the lines.",
               imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -954,8 +960,8 @@ const CONFIG = {
             sceneBody: "Debt remaining: {{debtRemaining}}.<br>“At fifty percent, this stops being a loan.”<br>“It becomes leverage.”",
             rewardPack: {
               packId: "bank_manager_stage2",
-              title: "Investment Proof",
-              description: "Five refined frames that feel more like a contract than a favor.",
+              title: "Leverage File",
+              description: "She sends five after-hours shots from her office. The note reads like a contract—signed in private.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -971,8 +977,8 @@ const CONFIG = {
             sceneBody: "Debt remaining: {{debtRemaining}} and she doesn’t blink.<br>“You perform under pressure,” she says, leaning in.<br>“So do I.”",
             rewardPack: {
               packId: "bank_manager_stage3",
-              title: "Pressure Test",
-              description: "Five deliberate shots, strict lines and a slow burn under the surface.",
+              title: "Risk Review",
+              description: "She sends five controlled, slow-burn selfies and calls it a risk review. You feel the leverage even in the lighting.",
               imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           },
@@ -988,8 +994,8 @@ const CONFIG = {
             sceneBody: "Debt remaining: {{debtRemaining}}.<br>She locks the office. “Zero balance.”<br>“So let’s renegotiate in private.”",
             rewardPack: {
               packId: "bank_manager_stage4",
-              title: "Private Ledger Vault",
-              description: "Twenty exclusive images from her private office session.",
+              title: "Zero Balance Session",
+              description: "Debt cleared means private terms. She delivers a VIP pack of twenty office-hour shots you’re not supposed to have.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }

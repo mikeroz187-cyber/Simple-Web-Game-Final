@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX Conquests assistant portrait assets, add late-game trigger gates, and refresh reward pack copy.
+  - Why: Ensure assistant portraits render from the mascots directory, pace late Conquest starts around day 60, and align reward text with in-fiction tone.
+  - Files touched: assets/images/mascots/assistant_stage1.png, assets/images/mascots/assistant_stage2.png, assets/images/mascots/assistant_stage3.png, assets/images/mascots/assistant_stage4.png, src/config.js, src/systems/conquests.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Rewrote Conquests scene copy with tokenized stats and retuned Conquests pacing thresholds for earlier progression.
   - Why: Deliver a punchier power-fantasy arc while ensuring Stage 1–3 unlocks land without grind and scene text reflects player progress.
   - Files touched: src/config.js, src/systems/conquests.js, src/ui/render.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
