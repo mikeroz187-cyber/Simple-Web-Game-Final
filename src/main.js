@@ -20,6 +20,7 @@
     ensureReputationState(window.gameState);
     ensureRecruitmentState(window.gameState);
     ensurePlayerUpgradesState(window.gameState);
+    ensureStatsState(window.gameState);
     if (typeof ensureConquestsState === "function") {
       ensureConquestsState(window.gameState);
     }

@@ -1301,6 +1301,39 @@ function getConquestMessageStatusLabel(status) {
   return "Unread";
 }
 
+function getConquestStage1PortraitPath(characterConfig) {
+  if (!characterConfig || !Array.isArray(characterConfig.stages)) {
+    return "";
+  }
+  var stage1 = characterConfig.stages.find(function (stage) {
+    return stage && stage.stageIndex === 1;
+  });
+  return stage1 && stage1.portraitPath ? stage1.portraitPath : "";
+}
+
+function handleConquestPortraitError(img) {
+  if (!img) {
+    return;
+  }
+  var fallbackStage1 = img.getAttribute("data-fallback-stage1") || "";
+  var fallbackPlaceholder = img.getAttribute("data-fallback-placeholder") || "";
+  var step = Number(img.getAttribute("data-fallback-step")) || 0;
+
+  if (step === 0 && fallbackStage1) {
+    img.setAttribute("data-fallback-step", "1");
+    img.src = fallbackStage1;
+    return;
+  }
+
+  if (step <= 1 && fallbackPlaceholder) {
+    img.setAttribute("data-fallback-step", "2");
+    img.src = fallbackPlaceholder;
+    return;
+  }
+
+  img.onerror = null;
+}
+
 function renderConquests(gameState) {
   var container = document.getElementById("screen-conquests");
   if (!container) {
@@ -1403,11 +1436,14 @@ function renderConquests(gameState) {
       : null;
     var basePortraitPath = characterConfig && characterConfig.portraitPath ? characterConfig.portraitPath : "";
     var stagePortraitPath = stageConfig && stageConfig.portraitPath ? stageConfig.portraitPath : "";
-    var portraitPath = stagePortraitPath || basePortraitPath;
-    var portraitFallbackAttr = "";
-    if (stagePortraitPath && basePortraitPath && stagePortraitPath !== basePortraitPath) {
-      portraitFallbackAttr = " onerror=\"this.onerror=null;this.src='" + basePortraitPath + "';\"";
-    }
+    var stage1PortraitPath = getConquestStage1PortraitPath(characterConfig);
+    var placeholderPortraitPath = config.placeholderPortraitPath || "assets/images/mascots/placeholder.svg";
+    var portraitPath = stagePortraitPath || stage1PortraitPath || basePortraitPath || placeholderPortraitPath;
+    var fallbackStage1 = stage1PortraitPath && stage1PortraitPath !== portraitPath ? stage1PortraitPath : "";
+    var fallbackPlaceholder = placeholderPortraitPath && placeholderPortraitPath !== portraitPath ? placeholderPortraitPath : "";
+    var portraitFallbackAttr = " data-fallback-stage1=\"" + fallbackStage1 +
+      "\" data-fallback-placeholder=\"" + fallbackPlaceholder +
+      "\" data-fallback-step=\"0\" onerror=\"handleConquestPortraitError(this)\"";
     var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
     var roleLabel = characterConfig && characterConfig.roleLabel ? characterConfig.roleLabel : "";
     var stageLabel = "Stage " + selectedMessage.stageIndex;

@@ -101,6 +101,13 @@ function purchaseEquipmentUpgrade(gameState, upgradeId) {
   gameState.player.cash = Math.max(0, gameState.player.cash - cost);
   const nextLevel = currentLevel + 1;
   gameState.equipment[levelKey] = nextLevel;
+  if (typeof ensureStatsState === "function") {
+    ensureStatsState(gameState);
+  }
+  if (gameState.stats) {
+    gameState.stats.totalShopSpend = Math.max(0, (gameState.stats.totalShopSpend || 0) + cost);
+    gameState.stats.totalUpgradesPurchased = Math.max(0, (gameState.stats.totalUpgradesPurchased || 0) + 1);
+  }
 
   const bonusMessage = buildEquipmentBonusMessage(upgrade, nextLevel);
   const upcomingCost = nextLevel < maxLevel ? upgrade.levelCosts[nextLevel] : null;

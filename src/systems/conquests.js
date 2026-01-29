@@ -56,12 +56,65 @@ function ensureConquestsState(gameState) {
   }
 }
 
+function getConquestStatValue(gameState, stat) {
+  if (!gameState || typeof gameState !== "object") {
+    return 0;
+  }
+  if (stat === "reputation") {
+    return Number.isFinite(gameState.player && gameState.player.reputation) ? gameState.player.reputation : 0;
+  }
+  if (stat === "socialFollowers" || stat === "totalFollowers") {
+    return Number.isFinite(gameState.player && gameState.player.socialFollowers) ? gameState.player.socialFollowers : 0;
+  }
+  if (stat === "socialSubscribers") {
+    return Number.isFinite(gameState.player && gameState.player.socialSubscribers) ? gameState.player.socialSubscribers : 0;
+  }
+  if (stat === "onlyFansSubscribers" || stat === "onlyfansSubs") {
+    return Number.isFinite(gameState.player && gameState.player.onlyFansSubscribers) ? gameState.player.onlyFansSubscribers : 0;
+  }
+  if (stat === "netWorth") {
+    if (typeof getNetWorth === "function") {
+      return getNetWorth(gameState);
+    }
+    return 0;
+  }
+  if (stat === "recruitCount") {
+    const hired = gameState.recruitment && Array.isArray(gameState.recruitment.hiredIds)
+      ? gameState.recruitment.hiredIds
+      : [];
+    return hired.length;
+  }
+  if (stat === "milestoneCount") {
+    const milestones = Array.isArray(gameState.milestones) ? gameState.milestones : [];
+    return milestones.length;
+  }
+  if (stat === "totalShopSpend") {
+    return Number.isFinite(gameState.stats && gameState.stats.totalShopSpend) ? gameState.stats.totalShopSpend : 0;
+  }
+  if (stat === "totalUpgradesPurchased") {
+    return Number.isFinite(gameState.stats && gameState.stats.totalUpgradesPurchased)
+      ? gameState.stats.totalUpgradesPurchased
+      : 0;
+  }
+  return 0;
+}
+
 function isConquestTriggerMet(gameState, trigger) {
   if (!trigger || typeof trigger !== "object") {
     return false;
   }
   if (!gameState || typeof gameState !== "object") {
     return false;
+  }
+  if (Array.isArray(trigger.anyOf)) {
+    return trigger.anyOf.some(function (entry) {
+      return isConquestTriggerMet(gameState, entry);
+    });
+  }
+  if (Array.isArray(trigger.allOf)) {
+    return trigger.allOf.every(function (entry) {
+      return isConquestTriggerMet(gameState, entry);
+    });
   }
   if (trigger.type === "equipment") {
     if (!gameState.equipment) {
@@ -96,6 +149,12 @@ function isConquestTriggerMet(gameState, trigger) {
     const ratio = paidDown / initialPrincipal;
     const minRatio = Number.isFinite(trigger.minRatio) ? trigger.minRatio : 0;
     return ratio >= minRatio;
+  }
+  if (trigger.type === "stat") {
+    const statKey = typeof trigger.stat === "string" ? trigger.stat : "";
+    const minValue = Number.isFinite(trigger.min) ? trigger.min : 0;
+    const value = getConquestStatValue(gameState, statKey);
+    return value >= minValue;
   }
   return false;
 }

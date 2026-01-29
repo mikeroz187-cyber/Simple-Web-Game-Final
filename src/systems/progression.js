@@ -50,6 +50,12 @@ function unlockLocationTier(gameState, tierId) {
       return { ok: false, message: "Not enough cash to unlock Location Tier 2." };
     }
     gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+    if (typeof ensureStatsState === "function") {
+      ensureStatsState(gameState);
+    }
+    if (gameState.stats) {
+      gameState.stats.totalShopSpend = Math.max(0, (gameState.stats.totalShopSpend || 0) + cost);
+    }
     gameState.unlocks.locationTiers.tier2 = true;
     const tierName = CONFIG.locations.tier2Name || "Location Tier 2";
     return { ok: true, message: tierName + " unlocked." };
@@ -63,6 +69,12 @@ function unlockLocationTier(gameState, tierId) {
   }
 
   gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+  if (typeof ensureStatsState === "function") {
+    ensureStatsState(gameState);
+  }
+  if (gameState.stats) {
+    gameState.stats.totalShopSpend = Math.max(0, (gameState.stats.totalShopSpend || 0) + cost);
+  }
   gameState.unlocks.locationTiers.tier1 = true;
   gameState.unlocks.locationTier1Unlocked = true;
 

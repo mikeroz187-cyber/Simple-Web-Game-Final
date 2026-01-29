@@ -15,6 +15,7 @@ This document summarizes the **current** `gameState` structure as implemented in
 - `performerManagement`
 - `analyticsHistory`
 - `equipment`
+- `stats`
 - `milestones`
 - `legacyMilestones`
 - `automation`
@@ -126,6 +127,10 @@ This document summarizes the **current** `gameState` structure as implemented in
 - `contracts` (days remaining + status)
 - `availability` (rest days + consecutive bookings)
 - `retentionFlags` (warned/left)
+
+### `stats`
+- `totalShopSpend` (aggregate cash spent on shop purchases, including location unlocks and equipment upgrades)
+- `totalUpgradesPurchased` (count of equipment upgrades purchased)
 
 ### `automation`
 - `enabled`, `autoBookEnabled`, `autoPostEnabled`

@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Expanded Conquests with Assistant, Talent Scout, and Saleswoman stages plus standardized stage-specific mascot portraits and fallback handling.
+  - Why: Deliver the Act 1+ content expansion and ensure portrait swaps are asset-only with safe fallbacks.
+  - Files touched: src/config.js, src/systems/conquests.js, src/ui/render.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
+- What: Added shop spend/upgrade tracking for Conquests triggers and documented the new gameState stats.
+  - Why: Support saleswoman progression without new systems while keeping save/load validation stable.
+  - Files touched: src/state.js, src/systems/shop.js, src/systems/progression.js, src/main.js, src/save.js, docs/GAMESTATE_DATA_MODEL.md, CHANGELOG.md.
 - What: Added a config-driven Hub debt payment panel with quick-pay buttons and Pay Max, plus partial debt payment logic that triggers Conquests immediately.
   - Why: Let players pay down debt early to progress Bank Manager Conquests without waiting for a full payoff.
   - Files touched: src/config.js, src/systems/economy.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
