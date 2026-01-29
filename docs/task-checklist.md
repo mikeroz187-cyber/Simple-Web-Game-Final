@@ -129,6 +129,7 @@
 - [x] Conquests screen with inbox list, message detail, accept/dismiss flow.
 - [x] Reward packs viewable via the shared slideshow viewer.
 - [x] Conquest notifications fire on day advance and equipment upgrades.
+- [x] Stage-specific portraits + slideshow back button visibility fix.
 
 ---
 
