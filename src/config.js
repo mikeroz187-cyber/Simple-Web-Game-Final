@@ -197,6 +197,7 @@ const CONFIG = {
     promo_followers_gain: 115,
     premium_base_of_subs: 23,
     subscriber_conversion_rate: 0.01,
+    starPowerExponent: 1.15,
     base_shoot_cost: 100,
     contentTypeCostMult: {
       promo: 1.0,
@@ -1044,6 +1045,19 @@ const CONFIG = {
       core: 0,
       freelance: 500,
       act2: 500
+    },
+    retentionRules: {
+      loyaltyMin: 0,
+      loyaltyMax: 100,
+      loyaltyGainPerBooking: 2,
+      loyaltyDecayPerWeekIdle: 2
+    },
+    divaFeeRules: {
+      enabled: true,
+      tiers: [
+        { maxLoyalty: 40, shootFee: 100, renewalFee: 200, label: "Diva Fee" },
+        { maxLoyalty: 25, shootFee: 250, renewalFee: 500, label: "Full Diva Fee" }
+      ]
     },
     maxConsecutiveBookings: 3,
     restDaysOnMaxFatigue: 1,

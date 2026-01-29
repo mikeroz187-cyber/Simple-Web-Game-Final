@@ -147,7 +147,9 @@ function buildRosterPerformer(performerId) {
     starPowerShoots: 0,
     portraitPath: getPerformerPortraitPath(performer),
     fatigue: 0,
-    loyalty: CONFIG.performers.starting_loyalty
+    loyalty: CONFIG.performers.starting_loyalty,
+    lastBookedDay: null,
+    lastLoyaltyDecayDay: null
   };
 }
 
@@ -276,6 +278,26 @@ function ensurePerformerStarPowerProgress(candidate) {
     }
     if (!Number.isFinite(performer.starPowerShoots) || performer.starPowerShoots < 0) {
       performer.starPowerShoots = 0;
+    }
+  });
+}
+
+function ensurePerformerRetentionState(candidate) {
+  if (!candidate || !candidate.roster || !Array.isArray(candidate.roster.performers)) {
+    return;
+  }
+  candidate.roster.performers.forEach(function (performer) {
+    if (!performer) {
+      return;
+    }
+    if (!Number.isFinite(performer.loyalty)) {
+      performer.loyalty = CONFIG.performers.starting_loyalty;
+    }
+    if (!Number.isFinite(performer.lastBookedDay)) {
+      performer.lastBookedDay = null;
+    }
+    if (!Number.isFinite(performer.lastLoyaltyDecayDay)) {
+      performer.lastLoyaltyDecayDay = null;
     }
   });
 }
@@ -592,6 +614,7 @@ function migrateGameState(candidate) {
   pruneFreelancerRemnants(candidate);
   ensureRosterCompleteness(candidate);
   ensurePerformerStarPowerProgress(candidate);
+  ensurePerformerRetentionState(candidate);
   ensurePerformerManagementState(candidate);
   ensureContentVarianceState(candidate);
   ensureContentEntryPhotoPaths(candidate);

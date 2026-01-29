@@ -233,14 +233,23 @@ function applyEquipmentOfSubsMultiplier(baseOfSubs, gameState) {
   return Math.round(safeOfSubs * (1 + multiplier));
 }
 
+function getEffectiveStarPower(performer) {
+  const baseStar = performer && Number.isFinite(performer.starPower) ? performer.starPower : 1;
+  const exponent = CONFIG.economy && Number.isFinite(CONFIG.economy.starPowerExponent)
+    ? CONFIG.economy.starPowerExponent
+    : 1;
+  return Math.pow(baseStar, exponent);
+}
+
 function calculatePromoFollowers(performer, theme) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };
   }
+  const effectiveStar = getEffectiveStarPower(performer);
   const followersGained = Math.round(
     CONFIG.economy.promo_followers_gain *
     theme.modifiers.followersMult *
-    performer.starPower
+    effectiveStar
   );
   return { ok: true, value: Math.max(0, followersGained) };
 }
@@ -249,10 +258,11 @@ function calculatePremiumOfSubs(performer, theme) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };
   }
+  const effectiveStar = getEffectiveStarPower(performer);
   const ofSubs = Math.round(
     CONFIG.economy.premium_base_of_subs *
     theme.modifiers.ofSubsMult *
-    performer.starPower
+    effectiveStar
   );
   return { ok: true, value: Math.max(0, ofSubs) };
 }
