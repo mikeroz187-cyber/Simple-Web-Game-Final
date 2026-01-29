@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX removed redundant After Hours uiState redeclarations in the main click handler.
+  - Why: Prevent const redeclaration SyntaxError when clicking After Hours actions.
+  - Files touched: src/ui/events.js, CHANGELOG.md.
 - What: Added After Hours Phase 1-2 system config, state, modal flow, and styling hooks.
   - Why: Enable knock detection and the initial accept/counter/dismiss flow after day advance per current scope.
   - Files touched: config.toml, src/config.js, src/systems/afterhours.js, src/ui/afterhours-render.js, src/ui/events.js, src/state.js, src/main.js, src/save.js, index.html, styles.css, docs/CURRENT_SCOPE.md, CHANGELOG.md.

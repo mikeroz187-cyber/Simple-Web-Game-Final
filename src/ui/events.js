@@ -992,7 +992,6 @@ function setupEventHandlers() {
     }
 
     if (action === "advance-day") {
-      var uiState = getUiState();
       if (uiState.afterHoursSkip) {
         uiState.afterHoursSkip = false;
       } else if (typeof isAfterHoursEnabled === "function" && isAfterHoursEnabled()) {
@@ -1207,7 +1206,6 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-answer") {
-      var uiState = getUiState();
       var performer = uiState.afterHours.performer;
       var content = getAfterHoursContent(performer.id);
       uiState.afterHours.phase = "ask";
@@ -1217,7 +1215,6 @@ function setupEventHandlers() {
 
     if (action === "after-hours-ignore") {
       clearModal();
-      var uiState = getUiState();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
@@ -1225,7 +1222,6 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-engage") {
-      var uiState = getUiState();
       var performer = uiState.afterHours.performer;
       var content = getAfterHoursContent(performer.id);
       uiState.afterHours.phase = "offer";
@@ -1235,7 +1231,6 @@ function setupEventHandlers() {
 
     if (action === "after-hours-dismiss") {
       clearModal();
-      var uiState = getUiState();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
@@ -1243,7 +1238,6 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-counter") {
-      var uiState = getUiState();
       var performer = uiState.afterHours.performer;
       var content = getAfterHoursContent(performer.id);
       uiState.afterHours.phase = "counter";
@@ -1252,7 +1246,6 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-submit-counter") {
-      var uiState = getUiState();
       var performer = uiState.afterHours.performer;
       var selectedRadio = document.querySelector('input[name="counter-type"]:checked');
 
@@ -1286,7 +1279,6 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-accept") {
-      var uiState = getUiState();
       var performer = uiState.afterHours.performer;
       uiState.afterHours.phase = "accepted";
 
@@ -1304,7 +1296,6 @@ function setupEventHandlers() {
 
     if (action === "after-hours-end") {
       clearModal();
-      var uiState = getUiState();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
