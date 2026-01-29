@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the four-beat After Hours accept flow with lock/build/slideshow/aftermath screens and outcomes.
+  - Why: Replace the instant-complete accept path with the requested encounter sequence and gallery reveal beats.
+  - Files touched: src/ui/afterhours-render.js, src/ui/events.js, styles.css, CHANGELOG.md.
 - What: FIX removed redundant After Hours uiState redeclarations in the main click handler.
   - Why: Prevent const redeclaration SyntaxError when clicking After Hours actions.
   - Files touched: src/ui/events.js, CHANGELOG.md.
