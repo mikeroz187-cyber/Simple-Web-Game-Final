@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Clarified Diva Fee as a low-loyalty surcharge across roster cards, renewal prompts, and booking cost breakdowns.
+  - Why: Make the extra fees for low loyalty explicit in the UI so players understand shoot and renewal costs.
+  - Files touched: src/systems/performers.js, src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: Updated performer, recruit, and persona display names to the locked sexy list across config, UI copy, and documentation.
   - Why: Align all player-facing names with the approved fantasy naming pass before further content tuning.
   - Files touched: src/config.js, config.toml, src/systems/story.js, src/save.js, docs/DATA_PERFORMERS.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/GAMESTATE_DATA_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

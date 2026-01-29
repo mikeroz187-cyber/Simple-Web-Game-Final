@@ -692,6 +692,9 @@ function renderBooking(gameState) {
   var selectedPerformer = selectedPerformerId ? corePerformers.find(function(p) { return p.id === selectedPerformerId; }) : null;
   var divaFee = (!isAgencyPack && selectedPerformer) ? getDivaShootFeeForPerformer(selectedPerformer) : 0;
   var divaLabel = (!isAgencyPack && selectedPerformer) ? getDivaFeeLabelForPerformer(selectedPerformer) : null;
+  var divaLoyaltyValue = (!isAgencyPack && selectedPerformer)
+    ? (Number.isFinite(selectedPerformer.loyalty) ? selectedPerformer.loyalty : CONFIG.performers.starting_loyalty)
+    : null;
   var effectiveStar = (!isAgencyPack && selectedPerformer) ? getEffectiveStarPower(selectedPerformer) : null;
 
   // Get locations
@@ -816,8 +819,11 @@ function renderBooking(gameState) {
   var canConfirm = performerValid && locationValid && selectedTheme && selectedContentType && canAfford && !(isAgencyPack && agencyPackUsedToday);
 
   // Summary
+  var divaFeeReason = (!isAgencyPack && divaFee > 0 && selectedPerformer)
+    ? "Low loyalty " + divaLoyaltyValue + (divaLabel ? " \u2014 " + divaLabel : "")
+    : "";
   var divaFeeRow = (!isAgencyPack && divaFee > 0)
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Diva Fee</span><span class="booking-summary__value">+' + formatCurrency(divaFee) + (divaLabel ? ' (' + divaLabel + ')' : '') + '</span></div>'
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Diva Fee</span><span class="booking-summary__value">+' + formatCurrency(divaFee) + (divaFeeReason ? ' (' + divaFeeReason + ')' : '') + '</span></div>'
     : '';
   var starRow = (!isAgencyPack && selectedPerformer && Number.isFinite(effectiveStar))
     ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Power Multiplier</span><span class="booking-summary__value">x' + effectiveStar.toFixed(2) + '</span></div>'
@@ -1024,6 +1030,7 @@ function renderRoster(gameState) {
     var contractSummary = getContractSummary(gameState, p.id);
     var availSummary = getAvailabilitySummary(gameState, p);
     var divaLabelText = getDivaFeeLabelForPerformer(p);
+    var divaFeeExplanation = getDivaFeeExplanationForPerformer(p);
 
     return '<div class="performer-card">' +
       '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
@@ -1035,7 +1042,7 @@ function renderRoster(gameState) {
           '<span class="performer-card__stat">😓 <span class="performer-card__stat-value">' + p.fatigue + '</span></span>' +
           '<span class="performer-card__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ <span class="performer-card__stat-value">' + p.loyalty + '</span></span>' +
         '</div>' +
-        (divaLabelText ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">⚠ ' + divaLabelText + ' Active</div>' : '') +
+        (divaFeeExplanation ? '<div class="diva-fee-note" style="margin-top:4px;">⚠ ' + divaFeeExplanation + '</div>' : (divaLabelText ? '<div class="diva-fee-note" style="margin-top:4px;">⚠ ' + divaLabelText + ' Active</div>' : '')) +
         '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + contractSummary.label + '</div>' +
         '<div style="font-size:10px;color:var(--text-muted);">' + availSummary.label + '</div>' +
         '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
@@ -1103,11 +1110,15 @@ function renderRoster(gameState) {
       var contract = getContractState(gameState, p.id);
       var baseRenewalCost = getRenewalCostByType(p.type);
       var divaRenewalFee = getDivaRenewalFeeForPerformer(p);
+      var divaFeeExplanation = getDivaFeeExplanationForPerformer(p);
       var renewalLabel = divaRenewalFee > 0
         ? 'Renew (' + formatCurrency(baseRenewalCost) + ' + Diva Fee ' + formatCurrency(divaRenewalFee) + ')'
         : 'Renew (' + formatCurrency(baseRenewalCost) + ')';
       return '<div class="post-item"><div class="post-item__info"><div class="post-item__title">' + p.name + '</div><div class="post-item__meta">' + contract.daysRemaining + ' days remaining</div></div>' +
-        '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">' + renewalLabel + '</button></div>';
+        '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">' +
+          '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">' + renewalLabel + '</button>' +
+          (divaFeeExplanation ? '<div class="diva-fee-note">⚠ ' + divaFeeExplanation + '</div>' : '') +
+        '</div></div>';
     }).join('');
     renewalsHtml = '<div class="panel"><h3 class="panel-title">⚠️ Expiring Contracts</h3>' + renewalItemsHtml + '</div>';
   }

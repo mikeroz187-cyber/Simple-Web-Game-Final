@@ -159,6 +159,22 @@ function getDivaFeeLabelForPerformer(performer) {
   return typeof tier.label === "string" ? tier.label : null;
 }
 
+function getDivaFeeExplanationForPerformer(performer) {
+  if (!performer) {
+    return null;
+  }
+  const tier = getDivaFeeTierForPerformer(performer);
+  if (!tier) {
+    return null;
+  }
+  const loyaltyValue = Number.isFinite(performer.loyalty) ? performer.loyalty : CONFIG.performers.starting_loyalty;
+  const label = typeof tier.label === "string" && tier.label.trim() ? tier.label : "Diva Fee";
+  const shootFee = Number.isFinite(tier.shootFee) ? tier.shootFee : 0;
+  const renewalFee = Number.isFinite(tier.renewalFee) ? tier.renewalFee : 0;
+  return "Low loyalty (" + loyaltyValue + ") \u2014 " + label + ": +" + formatCurrency(shootFee) +
+    "/shoot, +" + formatCurrency(renewalFee) + " on renewal.";
+}
+
 function getContractDaysByType(performerType) {
   const config = getPerformerManagementConfig();
   const daysByType = config.contractDaysByType || {};
@@ -373,7 +389,7 @@ function renewPerformerContract(gameState, performerId) {
   if (divaFee > 0) {
     return {
       ok: true,
-      message: "Contract renewed. She slid the paperwork over\u2014and the Diva Fee: " + formatCurrency(divaFee) + "."
+      message: "Contract renewed. Low loyalty surcharge applied: +" + formatCurrency(divaFee) + " Diva Fee."
     };
   }
   return { ok: true, message: "Contract renewed for " + daysRemaining + " days." };
