@@ -21,6 +21,9 @@
     ensureRecruitmentState(window.gameState);
     ensurePlayerUpgradesState(window.gameState);
     ensureStatsState(window.gameState);
+    if (typeof ensureAfterHoursState === "function") {
+      ensureAfterHoursState(window.gameState);
+    }
     if (typeof ensureConquestsState === "function") {
       ensureConquestsState(window.gameState);
     }

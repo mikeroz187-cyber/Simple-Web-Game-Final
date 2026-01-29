@@ -38,7 +38,9 @@ function getUiState() {
       },
       debug: {
         dayStatus: ""
-      }
+      },
+      afterHours: null,
+      afterHoursSkip: false
     };
   }
   return window.uiState;

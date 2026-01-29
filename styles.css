@@ -2995,3 +2995,107 @@ body {
   border: 1px dashed rgba(255, 0, 128, 0.3);
   border-radius: 8px;
 }
+
+/* After Hours Modal Styling */
+.after-hours-modal {
+  background: rgba(26, 20, 18, 0.95);
+}
+
+.after-hours-card {
+  background: linear-gradient(135deg, rgba(40, 30, 25, 0.98), rgba(30, 22, 18, 0.98));
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.1);
+  max-width: 500px;
+}
+
+.after-hours-title {
+  color: #d4af37;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.after-hours-text {
+  color: #f5f0e6;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.after-hours-knock-text {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.after-hours-knock-text p {
+  margin: 0.5rem 0;
+  color: #f5f0e6;
+}
+
+.knock-sound {
+  font-size: 1.5rem;
+  color: #d4af37;
+  margin-top: 1.5rem !important;
+  font-style: italic;
+}
+
+.after-hours-want,
+.after-hours-offer-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  color: #f5f0e6;
+}
+
+.after-hours-offer-box div {
+  margin: 0.5rem 0;
+}
+
+.counter-options {
+  margin: 1.5rem 0;
+}
+
+.counter-option {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.counter-option.disabled {
+  opacity: 0.5;
+}
+
+.counter-option label {
+  color: #f5f0e6;
+  cursor: pointer;
+}
+
+.counter-option small {
+  color: #d4af37;
+}
+
+.rep-warning {
+  color: #ff6b6b !important;
+}
+
+.after-hours-card .button-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.after-hours-card .button.primary {
+  background: linear-gradient(135deg, #d4af37, #b8962e);
+  color: #1a1412;
+}
+
+.after-hours-card .button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f5f0e6;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
