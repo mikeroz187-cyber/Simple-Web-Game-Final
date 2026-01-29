@@ -57,30 +57,47 @@ function ensureConquestsState(gameState) {
 }
 
 function isConquestTriggerMet(gameState, trigger) {
-  if (!gameState || !gameState.equipment) {
-    return false;
-  }
   if (!trigger || typeof trigger !== "object") {
     return false;
   }
-  if (trigger.type !== "equipment") {
+  if (!gameState || typeof gameState !== "object") {
     return false;
   }
-  let requirements = [];
-  if (Array.isArray(trigger.requirements)) {
-    requirements = trigger.requirements;
-  } else if (trigger.key) {
-    requirements = [{ key: trigger.key, minLevel: trigger.minLevel }];
+  if (trigger.type === "equipment") {
+    if (!gameState.equipment) {
+      return false;
+    }
+    let requirements = [];
+    if (Array.isArray(trigger.requirements)) {
+      requirements = trigger.requirements;
+    } else if (trigger.key) {
+      requirements = [{ key: trigger.key, minLevel: trigger.minLevel }];
+    }
+    if (!requirements.length) {
+      return false;
+    }
+    return requirements.every(function (requirement) {
+      const key = requirement.key;
+      const minLevel = Number.isFinite(requirement.minLevel) ? requirement.minLevel : 0;
+      const currentLevel = Number.isFinite(gameState.equipment[key]) ? gameState.equipment[key] : 0;
+      return currentLevel >= minLevel;
+    });
   }
-  if (!requirements.length) {
-    return false;
+  if (trigger.type === "debtPaidRatio") {
+    const player = gameState.player || {};
+    const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+    const initialPrincipal = Number.isFinite(player.debtInitialPrincipal)
+      ? player.debtInitialPrincipal
+      : debtRemaining;
+    if (initialPrincipal <= 0) {
+      return debtRemaining <= 0;
+    }
+    const paidDown = Math.max(0, initialPrincipal - debtRemaining);
+    const ratio = paidDown / initialPrincipal;
+    const minRatio = Number.isFinite(trigger.minRatio) ? trigger.minRatio : 0;
+    return ratio >= minRatio;
   }
-  return requirements.every(function (requirement) {
-    const key = requirement.key;
-    const minLevel = Number.isFinite(requirement.minLevel) ? requirement.minLevel : 0;
-    const currentLevel = Number.isFinite(gameState.equipment[key]) ? gameState.equipment[key] : 0;
-    return currentLevel >= minLevel;
-  });
+  return false;
 }
 
 function buildConquestMessageId(characterId, stageIndex, day) {

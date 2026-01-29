@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Bank Manager Conquest character with debt payoff stages and reward packs.
 - Conquests MVP system: Producer message flow, reward packs, and slideshow viewing.
 - Conquests UI polish: stage-specific portrait overrides with fallback and visible slideshow back button.
 - Ambient Art Phase 1.6: Fixed mascot positioning (dedicated space, bottom-anchored, content clearance).

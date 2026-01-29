@@ -120,6 +120,7 @@ function newGameState() {
       day: CONFIG.game.starting_day,
       cash: CONFIG.game.starting_cash,
       debtRemaining: CONFIG.game.loan_total_due,
+      debtInitialPrincipal: CONFIG.game.loan_total_due,
       debtDueDay: CONFIG.game.debt_due_day,
       shootsToday: 0,
       agencyPackUsedToday: false,

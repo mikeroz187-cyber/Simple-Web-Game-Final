@@ -631,6 +631,82 @@ const CONFIG = {
             }
           }
         ]
+      },
+      bankManager: {
+        id: "bankManager",
+        name: "The Bank Manager",
+        roleLabel: "Senior Account Manager",
+        portraitPath: "assets/images/mascots/bank_manager_stage1.png",
+        stages: [
+          {
+            stageIndex: 1,
+            portraitPath: "assets/images/mascots/bank_manager_stage1.png",
+            trigger: {
+              type: "debtPaidRatio",
+              minRatio: 0.25
+            },
+            message: "Quarter paid, attention earned",
+            sceneTitle: "Quarter paid, account watched",
+            sceneBody: "She calls you in with a clean smile and a ledger that doesn’t blink. “Twenty-five percent down. You’re either disciplined or dangerous.” Her tone softens, almost playful. “Keep going. I want to see how you handle pressure.” She leaves a sleek “receipt” selfie in your inbox.",
+            rewardPack: {
+              packId: "bank_manager_stage1",
+              title: "Receipt Selfies",
+              description: "Three polished shots, all quiet authority and unspoken leverage.",
+              imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 2,
+            portraitPath: "assets/images/mascots/bank_manager_stage2.png",
+            trigger: {
+              type: "debtPaidRatio",
+              minRatio: 0.5
+            },
+            message: "Halfway. She’s re-evaluating",
+            sceneTitle: "Halfway to paid — halfway to hers",
+            sceneBody: "Her voice drops when she signs the update. “Fifty percent. At this point, I’ve stopped calling it a loan.” She lets the pen linger, eyes fixed on you. “It’s an investment. In your focus. In your… control.” The photos are closer, sharper, and very intentional.",
+            rewardPack: {
+              packId: "bank_manager_stage2",
+              title: "Investment Proof",
+              description: "Five refined frames that feel more like a contract than a favor.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 3,
+            portraitPath: "assets/images/mascots/bank_manager_stage3.png",
+            trigger: {
+              type: "debtPaidRatio",
+              minRatio: 0.75
+            },
+            message: "Three quarters paid. She’s intrigued",
+            sceneTitle: "Three quarters, full control",
+            sceneBody: "She studies the numbers, then you. “Seventy-five percent. You keep delivering under pressure.” Her smile turns into a challenge. “I can tell when someone can take direction. And when someone deserves it.” The set she sends is composed, controlled, and unapologetically hers.",
+            rewardPack: {
+              packId: "bank_manager_stage3",
+              title: "Pressure Test",
+              description: "Five deliberate shots, strict lines and a slow burn under the surface.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 4,
+            portraitPath: "assets/images/mascots/bank_manager_stage4.png",
+            trigger: {
+              type: "debtPaidRatio",
+              minRatio: 1
+            },
+            message: "Debt cleared. Private renegotiation",
+            sceneTitle: "Debt cleared, terms renegotiated",
+            sceneBody: "She locks the office door after hours and slides the paid ledger across the desk. “Zero balance.” Her eyes don’t move. “Come here. I want to renegotiate… privately.” The VIP pack is all velvet control and moneyed power fantasy, framed as your final reward.",
+            rewardPack: {
+              packId: "bank_manager_stage4",
+              title: "After-Hours Renegotiation",
+              description: "Twenty exclusive images from her private office session.",
+              imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          }
+        ]
       }
     }
   },

@@ -1100,9 +1100,15 @@ function setupEventHandlers() {
           appendStoryLogEntries(window.gameState, storyEvents);
           showStoryEvents(storyEvents);
         }
+        const conquestResult = typeof checkConquests === "function"
+          ? checkConquests(window.gameState)
+          : { cards: [] };
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
+        }
+        if (conquestResult.cards && conquestResult.cards.length) {
+          showEventCards(conquestResult.cards);
         }
         if (typeof showToast === "function") {
           showToast("Debt paid in full!", "success");
