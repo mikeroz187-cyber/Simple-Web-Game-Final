@@ -1073,7 +1073,40 @@ function setupEventHandlers() {
     }
 
     if (action === "pay-debt") {
-      const result = payDebt(window.gameState);
+      const amountAttr = actionEl.getAttribute("data-amount");
+      let amount = null;
+      if (amountAttr === "max") {
+        amount = "max";
+      } else if (amountAttr !== null) {
+        const parsedAmount = Number(amountAttr);
+        amount = Number.isFinite(parsedAmount) ? parsedAmount : null;
+      }
+      const debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment
+        ? CONFIG.economy.debtPayment
+        : {};
+      const confirmThreshold = Number.isFinite(debtPaymentConfig.confirmForPaymentsAbove)
+        ? debtPaymentConfig.confirmForPaymentsAbove
+        : null;
+      if (confirmThreshold !== null && window.gameState && window.gameState.player) {
+        const player = window.gameState.player;
+        const cash = Number.isFinite(player.cash) ? player.cash : 0;
+        const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+        const maxPay = Math.min(cash, debtRemaining);
+        const minPayment = Number.isFinite(debtPaymentConfig.minPayment)
+          ? debtPaymentConfig.minPayment
+          : 0;
+        let expectedPay = maxPay;
+        if (amount !== null && amount !== "max" && Number.isFinite(amount)) {
+          expectedPay = Math.min(Math.max(amount, minPayment), maxPay);
+        }
+        if (expectedPay > confirmThreshold) {
+          const confirmMessage = "Pay " + formatCurrency(expectedPay) + " toward your debt?";
+          if (!window.confirm(confirmMessage)) {
+            return;
+          }
+        }
+      }
+      const result = payDebt(window.gameState, amount);
       setUiMessage(result.message || "");
       if (result.ok) {
         const storyEvents = [];
@@ -1100,18 +1133,16 @@ function setupEventHandlers() {
           appendStoryLogEntries(window.gameState, storyEvents);
           showStoryEvents(storyEvents);
         }
-        const conquestResult = typeof checkConquests === "function"
-          ? checkConquests(window.gameState)
-          : { cards: [] };
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message);
         }
-        if (conquestResult.cards && conquestResult.cards.length) {
-          showEventCards(conquestResult.cards);
+        if (result.conquestResult && result.conquestResult.cards && result.conquestResult.cards.length) {
+          showEventCards(result.conquestResult.cards);
         }
         if (typeof showToast === "function") {
-          showToast("Debt paid in full!", "success");
+          const toastMessage = result.debtCleared ? "Debt paid in full!" : (result.message || "Debt payment made.");
+          showToast(toastMessage, "success");
         }
       }
       renderApp(window.gameState);

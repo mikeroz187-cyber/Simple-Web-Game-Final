@@ -9,7 +9,7 @@ This document describes the **current UI layout and interaction behavior** imple
 - **Legacy Milestones panel:** Progress list with status (Complete/In Progress).
 - **Automation panel:** Toggles for Automation Enabled, Auto‑Book, Auto‑Post with daily cap note.
 - **Save slot panel:** Select active slot; Save Now / Load Save use the selected slot; Autosave writes to Autosave.
-- **Primary actions:** Booking, Analytics, Social, Gallery, Story Log, Roster, Shop, Pay Debt.
+- **Primary actions:** Booking, Analytics, Social, Gallery, Story Log, Roster, Shop, Pay Down Debt quick buttons on the Hub.
 - **Global actions:** Save Now, Load Save, Export Save, Import Save, Advance Day.
 - **Debug panel (optional):** Only visible with `?debug=1`.
 

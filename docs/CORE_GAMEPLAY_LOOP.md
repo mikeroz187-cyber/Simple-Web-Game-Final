@@ -6,6 +6,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Day flow is manual.** The player advances the day by clicking **Advance Day** on the Hub.
 - **Day limit for booking:** New shoots cannot be booked once `player.day >= player.debtDueDay` (default Day 90).
 - **Debt target:** Act 1 starts with **$25,000** due by Day 90; clearing it is the Act 1 gate that unlocks post-debt systems.
+- **Debt payoff controls:** The Hub includes config-driven quick-pay buttons plus Pay Max to reduce debt in chunks before Day 90.
 - **No global shoots/day cap.** The game tracks `shootsToday`, but booking is limited by performer availability and contracts.
 - **Per‑performer daily cap:** Each contracted performer has a daily booking cap (default 1/day, max 3/day) tracked as consecutive bookings and reset on day advance.
 - **Agency Sample Pack:** Optional booking mode available once per day (flat fee + location cost, five-image bundle output).
