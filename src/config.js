@@ -1367,6 +1367,22 @@ const CONFIG = {
       themes: {}
     }
   },
+  afterHours: {
+    enabled: true,
+    knockChancePerEligible: 0.30,
+    cooldownDays: 7,
+    starBonusReputationRequired: 50,
+    recruitHelpReputationRequired: 100,
+    recruitMapping: {
+      core_lena_watts: "recruit_aria_lux",
+      core_milo_park: "recruit_celeste_noir",
+      core_tess_rowan: "recruit_dahlia_slate"
+    },
+    imagePaths: {
+      systemBackground: "assets/images/afterdark/system/office_night_bg.png",
+      encountersBase: "assets/images/afterdark/encounters/"
+    }
+  },
   story: {
     act1: {
       act1_intro_day: 1,

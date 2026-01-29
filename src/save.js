@@ -641,6 +641,9 @@ function migrateGameState(candidate) {
   ensureLegacyMilestonesState(candidate);
   ensurePlayerUpgradesState(candidate);
   ensureDebtInitialPrincipal(candidate);
+  if (typeof ensureAfterHoursState === "function") {
+    ensureAfterHoursState(candidate);
+  }
   if (typeof ensureConquestsState === "function") {
     ensureConquestsState(candidate);
   }
@@ -689,7 +692,8 @@ function validateGameState(candidate) {
     "market",
     "reputation",
     "recruitment",
-    "conquests"
+    "conquests",
+    "afterHours"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {

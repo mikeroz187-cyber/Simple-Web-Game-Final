@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added After Hours Phase 1-2 system config, state, modal flow, and styling hooks.
+  - Why: Enable knock detection and the initial accept/counter/dismiss flow after day advance per current scope.
+  - Files touched: config.toml, src/config.js, src/systems/afterhours.js, src/ui/afterhours-render.js, src/ui/events.js, src/state.js, src/main.js, src/save.js, index.html, styles.css, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX Roster now shows Renew buttons for expired contracts in cards and the sidebar.
   - Why: Match the contract-expired CTA requirements so players can immediately renew lapsed performers.
   - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.

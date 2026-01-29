@@ -191,6 +191,12 @@ function newGameState() {
       act3: { eventsShown: [], lastEventId: null }
     },
     storyLog: [],
+    afterHours: {
+      completed: {},
+      cooldowns: {},
+      recruitedBy: {},
+      unlockedPacks: []
+    },
     performerManagement: performerManagement,
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
