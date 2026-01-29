@@ -561,6 +561,7 @@ const CONFIG = {
         stages: [
           {
             stageIndex: 1,
+            portraitPath: "assets/images/mascots/producer_ready.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "lightingLevel", minLevel: 1 }]
@@ -577,6 +578,7 @@ const CONFIG = {
           },
           {
             stageIndex: 2,
+            portraitPath: "assets/mascots/producer_stage2.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "cameraLevel", minLevel: 1 }]
@@ -593,6 +595,7 @@ const CONFIG = {
           },
           {
             stageIndex: 3,
+            portraitPath: "assets/mascots/producer_stage3.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "setDressingLevel", minLevel: 1 }]
@@ -609,6 +612,7 @@ const CONFIG = {
           },
           {
             stageIndex: 4,
+            portraitPath: "assets/mascots/producer_stage4.png",
             trigger: {
               type: "equipment",
               requirements: [

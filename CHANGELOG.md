@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX add stage-specific Conquests portraits with safe fallback and make the Conquest reward slideshow back button visibly clickable.
+  - Why: Allow per-stage portrait swaps without breaking when placeholder images are missing and ensure the back control reads as active.
+  - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added the Conquests MVP system with Producer stages, inbox flow, reward packs, and conquest slideshow viewing.
   - Why: Introduce the new conquest loop and reward gallery while keeping saves stable with a schema bump.
   - Files touched: index.html, styles.css, src/config.js, src/state.js, src/systems/conquests.js, src/systems/booking.js, src/systems/shop.js, src/save.js, src/main.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

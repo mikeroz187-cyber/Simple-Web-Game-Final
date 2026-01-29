@@ -1358,7 +1358,13 @@ function renderConquests(gameState) {
     var stageConfig = typeof getConquestStageConfig === "function"
       ? getConquestStageConfig(characterConfig, selectedMessage.stageIndex)
       : null;
-    var portraitPath = characterConfig && characterConfig.portraitPath ? characterConfig.portraitPath : "";
+    var basePortraitPath = characterConfig && characterConfig.portraitPath ? characterConfig.portraitPath : "";
+    var stagePortraitPath = stageConfig && stageConfig.portraitPath ? stageConfig.portraitPath : "";
+    var portraitPath = stagePortraitPath || basePortraitPath;
+    var portraitFallbackAttr = "";
+    if (stagePortraitPath && basePortraitPath && stagePortraitPath !== basePortraitPath) {
+      portraitFallbackAttr = " onerror=\"this.onerror=null;this.src='" + basePortraitPath + "';\"";
+    }
     var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
     var roleLabel = characterConfig && characterConfig.roleLabel ? characterConfig.roleLabel : "";
     var stageLabel = "Stage " + selectedMessage.stageIndex;
@@ -1382,7 +1388,7 @@ function renderConquests(gameState) {
     var dismissDisabled = selectedMessage.status === "accepted";
     detailHtml = "<div class=\"conquest-detail\">" +
       "<div class=\"conquest-detail__portrait\">" +
-      (portraitPath ? "<img src=\"" + portraitPath + "\" alt=\"" + characterName + "\" />" : "") +
+      (portraitPath ? "<img src=\"" + portraitPath + "\" alt=\"" + characterName + "\"\"" + portraitFallbackAttr + " />" : "") +
       "</div>" +
       "<div class=\"conquest-detail__body\">" +
       "<div class=\"conquest-detail__header\">" +
@@ -1567,15 +1573,16 @@ function renderSlideshow(gameState) {
       createButton("Next", "slideshow-next", "primary", nextDisabled) +
       "<span class=\"slideshow-counter\">Photo " + slideNumber + " of " + slideCount + "</span>" +
       "</div>";
+    const backButtonRow = "<div class=\"slideshow-back-row\">" +
+      createButton("Back to Conquests", "slideshow-close", "secondary slideshow-back-button") +
+      "</div>";
     const body = "<div class=\"panel\">" +
+      backButtonRow +
       "<h3 class=\"panel-title\">" + (pack ? pack.title : "Conquest Reward") + "</h3>" +
       "<p class=\"helper-text\">" + (pack ? pack.description : "Unlock a reward pack to view it here.") + "</p>" +
       "<div class=\"slideshow-layout\">" +
       imageHtml +
       controlsHtml +
-      "</div>" +
-      "<div class=\"button-row\">" +
-      createButton("Back to Conquests", "slideshow-close") +
       "</div>" +
       "</div>";
     const conquestHtml = createPanel(pack ? pack.title : "Conquest Reward", body, "screen-slideshow-title");

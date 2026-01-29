@@ -58,7 +58,7 @@ This document describes the **current UI layout and interaction behavior** imple
 
 ## Conquests
 - **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).
-- **Message detail:** Portrait, scene title/body, stage badge, and status.
+- **Message detail:** Portrait (stage override with fallback to character default), scene title/body, stage badge, and status.
 - **Actions:** Accept (unlocks reward pack), Close (dismisses message), View Reward (opens slideshow).
 - **Unlocked packs list:** Shows unlocked reward packs with **View** button.
 
