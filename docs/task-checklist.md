@@ -98,6 +98,7 @@
 - [x] FIX Booking preview placeholder scales to fill the slideshow frame; info panel scrolls internally to avoid page scroll.
 - [x] Implement Diva Fee Loyalty + boosted star + UI messaging.
 - [x] Low loyalty triggers Diva Fee (shoot + renewal) and UI explains it in Roster + Booking.
+- [x] Roster: expired contracts show Renew CTA (card + sidebar).
 
 ---
 

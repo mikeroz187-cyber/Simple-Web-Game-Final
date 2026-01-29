@@ -1031,6 +1031,17 @@ function renderRoster(gameState) {
     var availSummary = getAvailabilitySummary(gameState, p);
     var divaLabelText = getDivaFeeLabelForPerformer(p);
     var divaFeeExplanation = getDivaFeeExplanationForPerformer(p);
+    var renewalButtonHtml = "";
+    if (contractSummary.isExpired) {
+      var baseRenewalCost = getRenewalCostByType(p.type);
+      var divaRenewalFee = getDivaRenewalFeeForPerformer(p);
+      var renewalLabel = divaRenewalFee > 0
+        ? 'Renew (' + formatCurrency(baseRenewalCost) + ' + Diva Fee ' + formatCurrency(divaRenewalFee) + ')'
+        : 'Renew (' + formatCurrency(baseRenewalCost) + ')';
+      renewalButtonHtml = '<div class="button-row" style="margin-top:6px;">' +
+        '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">' + renewalLabel + '</button>' +
+      '</div>';
+    }
 
     return '<div class="performer-card">' +
       '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
@@ -1046,6 +1057,7 @@ function renderRoster(gameState) {
         '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + contractSummary.label + '</div>' +
         '<div style="font-size:10px;color:var(--text-muted);">' + availSummary.label + '</div>' +
         '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
+        renewalButtonHtml +
       '</div>' +
     '</div>';
   }).join('');
@@ -1099,6 +1111,26 @@ function renderRoster(gameState) {
       '</div></div>';
   }
 
+  // Expired contracts
+  var expiredContracts = contractedPerformers.filter(function(p) {
+    var c = getContractState(gameState, p.id);
+    return c && (c.status === "expired" || c.daysRemaining <= 0);
+  });
+  var expiredContractsHtml = "";
+  if (expiredContracts.length > 0) {
+    var expiredItemsHtml = expiredContracts.map(function(p) {
+      var baseRenewalCost = getRenewalCostByType(p.type);
+      var divaRenewalFee = getDivaRenewalFeeForPerformer(p);
+      var renewalLabel = divaRenewalFee > 0
+        ? 'Renew (' + formatCurrency(baseRenewalCost) + ' + Diva Fee ' + formatCurrency(divaRenewalFee) + ')'
+        : 'Renew (' + formatCurrency(baseRenewalCost) + ')';
+      return '<div class="post-item"><div class="post-item__info"><div class="post-item__title">' + p.name + '</div><div class="post-item__meta">Expired</div></div>' +
+        '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">' + renewalLabel + '</button>' +
+        '</div>';
+    }).join('');
+    expiredContractsHtml = '<div class="panel"><h3 class="panel-title">🔥 Expired Contracts</h3>' + expiredItemsHtml + '</div>';
+  }
+
   // Contract renewals
   var renewalsHtml = '';
   var expiringSoon = contractedPerformers.filter(function(p) {
@@ -1127,7 +1159,7 @@ function renderRoster(gameState) {
   var contentHtml = '<h2 class="screen-title">Roster</h2>' +
     '<div class="roster-layout">' +
       '<div class="roster-grid">' + performerCardsHtml + '</div>' +
-      '<div class="roster-sidebar">' + recruitmentHtml + renewalsHtml + '</div>' +
+      '<div class="roster-sidebar">' + recruitmentHtml + expiredContractsHtml + renewalsHtml + '</div>' +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
