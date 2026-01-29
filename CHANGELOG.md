@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX After Hours slideshow frame, mascot hiding, and knock timing/frequency.
+  - Why: Frame the slideshow visuals, prevent mascots from overlaying modal content, and reduce early knock spam.
+  - Files touched: src/ui/afterhours-render.js, src/ui/events.js, styles.css, config.toml, src/config.js, src/systems/afterhours.js, CHANGELOG.md.
 - What: FIX constrain Content screen slideshow sizing to a preview-scale image panel.
   - Why: Prevent booked shoot slides from dominating the screen while keeping details visible without heavy scrolling.
   - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.

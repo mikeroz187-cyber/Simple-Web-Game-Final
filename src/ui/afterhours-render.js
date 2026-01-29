@@ -176,7 +176,16 @@ function showAfterHoursModal(html) {
   var modalRoot = document.getElementById("modal-root");
   if (modalRoot) {
     modalRoot.innerHTML = html;
+    document.body.classList.add("after-hours-active");
   }
+}
+
+function hideAfterHoursModal() {
+  var modalRoot = document.getElementById("modal-root");
+  if (modalRoot) {
+    modalRoot.innerHTML = "";
+  }
+  document.body.classList.remove("after-hours-active");
 }
 
 function renderAfterHoursLockModal(performer, content) {
@@ -216,15 +225,17 @@ function renderAfterHoursSlideshowModal(performer, content, imagePaths, currentI
   var dealText = content.dealText || "THE DEAL: She gets what she wants. You get this.";
 
   return '<div class="modal-overlay after-hours-modal after-hours-slideshow-overlay" style="background-image: url(\'' + bgPath + '\');">' +
+    '<div class="after-hours-slideshow-frame">' +
     '<div class="after-hours-slideshow-container">' +
     '<div class="after-hours-slideshow-image-wrapper">' +
-    '<img src="' + currentPath + '" class="after-hours-slideshow-image" alt="Image ' + (currentIndex + 1) + ' of ' + totalImages + '">' +
+    '<img src="' + currentPath + '" class="after-hours-slideshow-image" alt="" onerror="this.style.display=\'none\'">' +
     '</div>' +
     '<div class="after-hours-slideshow-progress">' + dots + '</div>' +
     '<div class="after-hours-slideshow-deal">' + dealText + '</div>' +
     '<button class="button primary after-hours-slideshow-next" data-action="after-hours-slideshow-next" data-performer="' + performer.id + '">' +
-    (currentIndex < totalImages - 1 ? '→' : 'Continue') +
+    (currentIndex < totalImages - 1 ? 'Next →' : 'Continue') +
     '</button>' +
+    '</div>' +
     '</div>' +
     '</div>';
 }

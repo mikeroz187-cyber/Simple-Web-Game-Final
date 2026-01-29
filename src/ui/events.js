@@ -1214,7 +1214,7 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-ignore") {
-      clearModal();
+      hideAfterHoursModal();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
@@ -1230,7 +1230,7 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-dismiss") {
-      clearModal();
+      hideAfterHoursModal();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
@@ -1322,7 +1322,7 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-end") {
-      clearModal();
+      hideAfterHoursModal();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
       document.querySelector('[data-action="advance-day"]').click();
