@@ -132,6 +132,7 @@
 - [x] Conquest notifications fire on day advance and equipment upgrades.
 - [x] Stage-specific portraits + slideshow back button visibility fix.
 - [x] Bank Manager Conquest character added (4 stages, debt payoff triggers, packs).
+- [x] Conquests: add Assistant, Talent Scout, Saleswoman + standardize mascot stage portrait paths.
 
 ---
 

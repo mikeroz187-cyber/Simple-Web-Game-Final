@@ -544,6 +544,11 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.milestones)) {
     candidate.milestones = [];
   }
+  if (typeof ensureStatsState === "function") {
+    ensureStatsState(candidate);
+  } else if (!candidate.stats || typeof candidate.stats !== "object") {
+    candidate.stats = { totalShopSpend: 0, totalUpgradesPurchased: 0 };
+  }
   if (!candidate.story || typeof candidate.story !== "object") {
     candidate.story = {};
   }
@@ -636,6 +641,7 @@ function validateGameState(candidate) {
     "performerManagement",
     "analyticsHistory",
     "equipment",
+    "stats",
     "milestones",
     "legacyMilestones",
     "automation",
@@ -943,6 +949,19 @@ function validateGameState(candidate) {
       const key = equipmentLevels[index];
       if (candidate.equipment[key] !== undefined && !Number.isFinite(candidate.equipment[key])) {
         return { ok: false, message: "Equipment levels invalid." };
+      }
+    }
+  }
+
+  if (candidate.stats !== undefined) {
+    if (typeof candidate.stats !== "object" || candidate.stats === null || Array.isArray(candidate.stats)) {
+      return { ok: false, message: "Stats data invalid." };
+    }
+    const statsKeys = ["totalShopSpend", "totalUpgradesPurchased"];
+    for (let index = 0; index < statsKeys.length; index += 1) {
+      const key = statsKeys[index];
+      if (!Number.isFinite(candidate.stats[key]) || candidate.stats[key] < 0) {
+        return { ok: false, message: "Stats data invalid." };
       }
     }
   }

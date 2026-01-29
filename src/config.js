@@ -12,6 +12,24 @@ const SHOOT_OUTPUT_PLACEHOLDER_SVG = [
 
 const LOCATION_PLACEHOLDER_THUMB_PATH = "assets/images/placeholders/location_placeholder.svg";
 const SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH = "data:image/svg+xml;utf8," + encodeURIComponent(SHOOT_OUTPUT_PLACEHOLDER_SVG);
+const CONQUEST_THRESHOLDS = {
+  assistant: {
+    reputation: { tier1: 5, tier2: 15 },
+    followers: { tier1: 800, tier2: 2500 },
+    onlyFansSubscribers: { tier3: 75, tier4: 250 },
+    netWorth: { tier3: 15000, tier4: 50000 }
+  },
+  talentscout: {
+    recruits: { stage1: 1, stage2: 2, stage3: 3, stage4: 4 },
+    reputation: { tier1: 8, tier3: 25 },
+    followers: { tier2: 2000 },
+    milestones: { stage3: 3 }
+  },
+  saleswoman: {
+    upgrades: { stage1: 1, stage2: 2, stage3: 3, stage4: 5 },
+    shopSpend: { stage2: 2000 }
+  }
+};
 
 function buildPlaceholderImagePaths(count, path) {
   const safeCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
@@ -559,16 +577,18 @@ const CONFIG = {
   },
   conquests: {
     enabled: true,
+    placeholderPortraitPath: "assets/images/mascots/placeholder.svg",
+    thresholds: CONQUEST_THRESHOLDS,
     characters: {
       producer: {
         id: "producer",
         name: "The Producer",
         roleLabel: "Executive Producer",
-        portraitPath: "assets/images/mascots/producer_ready.png",
+        portraitPath: "assets/images/mascots/producer_stage1.png",
         stages: [
           {
             stageIndex: 1,
-            portraitPath: "assets/images/mascots/producer_ready.png",
+            portraitPath: "assets/images/mascots/producer_stage1.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "lightingLevel", minLevel: 1 }]
@@ -585,7 +605,7 @@ const CONFIG = {
           },
           {
             stageIndex: 2,
-            portraitPath: "assets/mascots/producer_stage2.png",
+            portraitPath: "assets/images/mascots/producer_stage2.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "cameraLevel", minLevel: 1 }]
@@ -602,7 +622,7 @@ const CONFIG = {
           },
           {
             stageIndex: 3,
-            portraitPath: "assets/mascots/producer_stage3.png",
+            portraitPath: "assets/images/mascots/producer_stage3.png",
             trigger: {
               type: "equipment",
               requirements: [{ key: "setDressingLevel", minLevel: 1 }]
@@ -619,7 +639,7 @@ const CONFIG = {
           },
           {
             stageIndex: 4,
-            portraitPath: "assets/mascots/producer_stage4.png",
+            portraitPath: "assets/images/mascots/producer_stage4.png",
             trigger: {
               type: "equipment",
               requirements: [
@@ -634,6 +654,266 @@ const CONFIG = {
               packId: "producer_stage4",
               title: "VIP Private Production",
               description: "Twenty high-status shots from the Producer’s private vault.",
+              imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          }
+        ]
+      },
+      assistant: {
+        id: "assistant",
+        name: "The Assistant",
+        roleLabel: "Executive Assistant",
+        portraitPath: "assets/images/mascots/assistant_stage1.png",
+        stages: [
+          {
+            stageIndex: 1,
+            portraitPath: "assets/images/mascots/assistant_stage1.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.assistant.reputation.tier1 },
+                { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier1 }
+              ]
+            },
+            message: "Momentum check-in ready",
+            sceneTitle: "Metrics, mood, and a lingering look",
+            sceneBody: "She slides into your chair like she owns it and spins the dashboard toward you. “Reputation is climbing. People are starting to whisper your name.” Her voice softens into a smirk. “If you want me to keep the momentum… I’ll need a closer seat.”",
+            rewardPack: {
+              packId: "assistant_stage1",
+              title: "Momentum Memo",
+              description: "Three polished shots, all sharp angles and private confidence.",
+              imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 2,
+            portraitPath: "assets/images/mascots/assistant_stage2.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.assistant.reputation.tier2 },
+                { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier2 }
+              ]
+            },
+            message: "Dashboard trendline: you",
+            sceneTitle: "She charts your rise",
+            sceneBody: "She leans over your shoulder, index finger tracing your growth curve. “This line? That’s you. And I’m very good at keeping it climbing.” She leaves a set of images that feel like a private forecast you’re not supposed to share.",
+            rewardPack: {
+              packId: "assistant_stage2",
+              title: "Trendline Tease",
+              description: "Five images, poised and precise, built for the spotlight you’re earning.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 3,
+            portraitPath: "assets/images/mascots/assistant_stage3.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "onlyFansSubscribers", min: CONQUEST_THRESHOLDS.assistant.onlyFansSubscribers.tier3 },
+                { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier3 }
+              ]
+            },
+            message: "Executive focus requested",
+            sceneTitle: "She tightens the schedule",
+            sceneBody: "“You’ve crossed into real money territory,” she says, locking the office door with a knowing glance. “We should talk about… premium attention.” The pack she sends is sleek, controlled, and a little too close for comfort.",
+            rewardPack: {
+              packId: "assistant_stage3",
+              title: "Executive Focus",
+              description: "Five intimate angles of calm control and whispered authority.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 4,
+            portraitPath: "assets/images/mascots/assistant_stage4.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "onlyFansSubscribers", min: CONQUEST_THRESHOLDS.assistant.onlyFansSubscribers.tier4 },
+                { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier4 }
+              ]
+            },
+            message: "Boardroom after hours",
+            sceneTitle: "Private session: metrics and mischief",
+            sceneBody: "She closes the blinds, heels clicking as she approaches. “You’ve built an empire. Now let me show you what a loyal assistant looks like after hours.” The vault opens—twenty frames of slow confidence and power-laced devotion.",
+            rewardPack: {
+              packId: "assistant_stage4",
+              title: "After-Hours Assistant",
+              description: "Twenty high-status shots for the boss who keeps winning.",
+              imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          }
+        ]
+      },
+      talentscout: {
+        id: "talentscout",
+        name: "The Talent Scout",
+        roleLabel: "Roster Strategist",
+        portraitPath: "assets/images/mascots/talentscout_stage1.png",
+        stages: [
+          {
+            stageIndex: 1,
+            portraitPath: "assets/images/mascots/talentscout_stage1.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage1 },
+                { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier1 }
+              ]
+            },
+            message: "Fresh talent just pinged you",
+            sceneTitle: "She brought you a lead—and a look",
+            sceneBody: "The Talent Scout leans on your desk, all charm and appraisal. “I’ve got a line on someone special. But I like working with winners.” She sends a teaser set—playful, cocky, and full of potential energy.",
+            rewardPack: {
+              packId: "talentscout_stage1",
+              title: "Talent Teaser",
+              description: "Three playful shots from the scout who finds what you want.",
+              imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 2,
+            portraitPath: "assets/images/mascots/talentscout_stage2.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage2 },
+                { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.talentscout.followers.tier2 }
+              ]
+            },
+            message: "Your roster reputation is spreading",
+            sceneTitle: "She plays the spotlight",
+            sceneBody: "“You’re getting buzz,” she says, sliding a card across the table. “That makes my job fun.” The images she sends are sharper—spotlight-ready, built to fuel gossip and attention.",
+            rewardPack: {
+              packId: "talentscout_stage2",
+              title: "Spotlight Scout",
+              description: "Five confident frames that scream industry heat.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 3,
+            portraitPath: "assets/images/mascots/talentscout_stage3.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage3 },
+                { type: "stat", stat: "milestoneCount", min: CONQUEST_THRESHOLDS.talentscout.milestones.stage3 }
+              ]
+            },
+            message: "She wants a private audition",
+            sceneTitle: "Audition, but make it personal",
+            sceneBody: "“You’ve got momentum,” she whispers, closing the door behind her. “So let me show you what I scout for.” The set is intimate, measured, and just daring enough to get your pulse up.",
+            rewardPack: {
+              packId: "talentscout_stage3",
+              title: "Private Audition",
+              description: "Five slow-burn frames, equal parts control and temptation.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 4,
+            portraitPath: "assets/images/mascots/talentscout_stage4.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "recruitCount", min: CONQUEST_THRESHOLDS.talentscout.recruits.stage4 },
+                { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier3 }
+              ]
+            },
+            message: "Top-tier talent, top-tier rewards",
+            sceneTitle: "She signs, then seals it",
+            sceneBody: "She snaps her pen closed with a smile. “Your roster is elite now. So am I.” The vault opens with twenty glossy shots—luxury, leverage, and a promise of more.",
+            rewardPack: {
+              packId: "talentscout_stage4",
+              title: "Roster Elite",
+              description: "Twenty images of high-status charm and dealmaker allure.",
+              imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          }
+        ]
+      },
+      saleswoman: {
+        id: "saleswoman",
+        name: "The Saleswoman",
+        roleLabel: "Deal Closer",
+        portraitPath: "assets/images/mascots/saleswoman_stage1.png",
+        stages: [
+          {
+            stageIndex: 1,
+            portraitPath: "assets/images/mascots/saleswoman_stage1.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage1 }
+              ]
+            },
+            message: "First upgrade, first flirt",
+            sceneTitle: "She seals the first deal",
+            sceneBody: "“Upgrades already?” She arches a brow. “That’s the kind of buyer I like.” The images she sends are sharp, teasing, and just a little bit transactional in the best way.",
+            rewardPack: {
+              packId: "saleswoman_stage1",
+              title: "First Sale",
+              description: "Three crisp shots—polished, playful, and eager to close.",
+              imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 2,
+            portraitPath: "assets/images/mascots/saleswoman_stage2.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage2 },
+                { type: "stat", stat: "totalShopSpend", min: CONQUEST_THRESHOLDS.saleswoman.shopSpend.stage2 }
+              ]
+            },
+            message: "She brought a premium offer",
+            sceneTitle: "Upgrades look good on you",
+            sceneBody: "She taps your receipt and smiles. “Big spenders get priority.” The set she sends is richer, closer, and confident enough to feel like a promise.",
+            rewardPack: {
+              packId: "saleswoman_stage2",
+              title: "Premium Offer",
+              description: "Five high-gloss frames from your favorite closer.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 3,
+            portraitPath: "assets/images/mascots/saleswoman_stage3.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage3 },
+                { type: "equipment", key: "lightingLevel", minLevel: 2 },
+                { type: "equipment", key: "cameraLevel", minLevel: 2 },
+                { type: "equipment", key: "setDressingLevel", minLevel: 2 }
+              ]
+            },
+            message: "Tier 2 just unlocked her smile",
+            sceneTitle: "She likes higher tiers",
+            sceneBody: "“Tier 2? Now we’re talking.” She steps closer, voice low. “Let me show you what premium service looks like.” The images are bold, indulgent, and framed like a luxury catalog.",
+            rewardPack: {
+              packId: "saleswoman_stage3",
+              title: "Tier 2 Treatment",
+              description: "Five seductive frames, sleek and high-end.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 4,
+            portraitPath: "assets/images/mascots/saleswoman_stage4.png",
+            trigger: {
+              anyOf: [
+                { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage4 },
+                {
+                  type: "equipment",
+                  requirements: [
+                    { key: "lightingLevel", minLevel: 2 },
+                    { key: "cameraLevel", minLevel: 2 },
+                    { key: "setDressingLevel", minLevel: 2 }
+                  ]
+                }
+              ]
+            },
+            message: "Closed deals, open vault",
+            sceneTitle: "The closer goes all in",
+            sceneBody: "She shuts the showroom door and clicks the lock. “You bought everything worth owning.” Her grin is wicked. “Now let me collect my commission.” Twenty images drop like signed contracts—luxury, control, and a promise of more deals.",
+            rewardPack: {
+              packId: "saleswoman_stage4",
+              title: "Commission Collected",
+              description: "Twenty premium shots from the ultimate closer.",
               imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
             }
           }

@@ -70,6 +70,13 @@ function buildDefaultRecruitmentState() {
   };
 }
 
+function buildDefaultStatsState() {
+  return {
+    totalShopSpend: 0,
+    totalUpgradesPurchased: 0
+  };
+}
+
 function buildDefaultPlayerUpgradesState() {
   return {
     managerHired: false
@@ -185,6 +192,7 @@ function newGameState() {
     performerManagement: performerManagement,
     analyticsHistory: [],
     equipment: { lightingLevel: 0, cameraLevel: 0, setDressingLevel: 0 },
+    stats: buildDefaultStatsState(),
     milestones: [],
     legacyMilestones: [],
     automation: buildDefaultAutomationState(),
@@ -426,5 +434,21 @@ function ensureRecruitmentState(gameState) {
   }
   if (!Array.isArray(gameState.recruitment.notifiedIds)) {
     gameState.recruitment.notifiedIds = [];
+  }
+}
+
+function ensureStatsState(gameState) {
+  if (!gameState) {
+    return;
+  }
+  if (!gameState.stats || typeof gameState.stats !== "object") {
+    gameState.stats = buildDefaultStatsState();
+    return;
+  }
+  if (!Number.isFinite(gameState.stats.totalShopSpend) || gameState.stats.totalShopSpend < 0) {
+    gameState.stats.totalShopSpend = 0;
+  }
+  if (!Number.isFinite(gameState.stats.totalUpgradesPurchased) || gameState.stats.totalUpgradesPurchased < 0) {
+    gameState.stats.totalUpgradesPurchased = 0;
   }
 }
