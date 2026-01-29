@@ -406,6 +406,9 @@ function renderHub(gameState) {
   var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
   var dailyNet = dailyPayout - dailyOverhead.amount;
   var debtEstimate = typeof getDaysToAffordDebtEstimate === "function" ? getDaysToAffordDebtEstimate(gameState) : { days: null };
+  var debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment ? CONFIG.economy.debtPayment : null;
+  var debtPaymentEnabled = debtPaymentConfig && debtPaymentConfig.enabled === true;
+  var debtPaymentHtml = "";
 
   // Hero Metrics (4 big stats)
   var heroMetricsHtml = "<div class=\"hero-metrics\">" +
@@ -443,6 +446,48 @@ function renderHub(gameState) {
     "<div class=\"secondary-stat\"><span>Reputation</span><span class=\"secondary-stat__value\">" + reputation + "</span></div>" +
     "<div class=\"secondary-stat\"><span>Shoots Today</span><span class=\"secondary-stat__value\">" + player.shootsToday + "</span></div>" +
   "</div>";
+
+  if (debtPaymentEnabled) {
+    var quickAmounts = Array.isArray(debtPaymentConfig.quickAmounts) ? debtPaymentConfig.quickAmounts : [];
+    var minPayment = Number.isFinite(debtPaymentConfig.minPayment) ? debtPaymentConfig.minPayment : 0;
+    var allowMax = debtPaymentConfig.allowMax === true;
+    var canPayDebt = debt > 0 && cash >= minPayment;
+    var paymentButtons = quickAmounts.filter(function (amount) {
+      return Number.isFinite(amount) && amount > 0;
+    }).map(function (amount) {
+      return createButton(
+        "Pay " + formatCurrency(amount),
+        "pay-debt",
+        "small",
+        !canPayDebt,
+        "data-amount=\"" + amount + "\""
+      );
+    });
+    if (allowMax) {
+      paymentButtons.push(
+        createButton(
+          "Pay Max",
+          "pay-debt",
+          "small primary",
+          !canPayDebt,
+          "data-amount=\"max\""
+        )
+      );
+    }
+    var debtStatusValue = debt > 0 ? formatCurrency(debt) : "Paid";
+    var debtAmountClass = debt > 0 ? "debt-payment__amount debt-payment__amount--danger" : "debt-payment__amount debt-payment__amount--good";
+    var debtStatusSub = debt > 0 ? ("Min payment " + formatCurrency(minPayment)) : "Debt cleared";
+    debtPaymentHtml = "<div class=\"debt-payment-panel\">" +
+      "<div class=\"debt-payment__header\">" +
+        "<div>" +
+          "<div class=\"debt-payment__title\">Pay Down Debt</div>" +
+          "<div class=\"" + debtAmountClass + "\">" + debtStatusValue + "</div>" +
+          "<div class=\"debt-payment__sub\">" + debtStatusSub + "</div>" +
+        "</div>" +
+      "</div>" +
+      "<div class=\"button-row\">" + paymentButtons.join("") + "</div>" +
+    "</div>";
+  }
 
   // Tabloid Feed
   var storyEntries = Array.isArray(gameState.storyLog) ? gameState.storyLog.slice().reverse().slice(0, 8) : [];
@@ -547,14 +592,11 @@ function renderHub(gameState) {
   "</div>";
 
   // Footer controls
-  var canPayDebt = debt > 0 && cash >= debt;
   var autoBookEnabled = gameState.automation && gameState.automation.autoBookEnabled;
   var autoPostEnabled = gameState.automation && gameState.automation.autoPostEnabled;
 
   var footerHtml = "<div class=\"hub-footer\">" +
-    "<div class=\"hub-footer__actions\">" +
-      "<button class=\"button vip\" data-action=\"pay-debt\"" + (canPayDebt ? "" : " disabled") + ">👑 Pay Debt (" + formatCurrency(debt) + ")</button>" +
-    "</div>" +
+    "<div class=\"hub-footer__actions\"></div>" +
     "<div class=\"hub-footer__automation\">" +
       "<span>Automation</span>" +
       "<div class=\"automation-group\">" +
@@ -603,6 +645,7 @@ function renderHub(gameState) {
         "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
         heroMetricsHtml +
         secondaryStatsHtml +
+        debtPaymentHtml +
       "</div>" +
     "</div>" +
     "<div class=\"hub-dashboard__feed\">" +

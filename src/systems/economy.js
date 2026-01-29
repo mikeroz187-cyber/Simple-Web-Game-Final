@@ -265,23 +265,46 @@ function calculateSubscribersGained(followersGained) {
   return Math.max(0, subscribersGained);
 }
 
-function payDebt(gameState) {
+function payDebt(gameState, amount) {
   if (!gameState || !gameState.player) {
     return { ok: false, message: "No game state available." };
   }
-  if (gameState.player.debtRemaining <= 0) {
-    return { ok: false, message: "Debt already paid." };
+  const debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment
+    ? CONFIG.economy.debtPayment
+    : {};
+  const minPayment = Number.isFinite(debtPaymentConfig.minPayment)
+    ? debtPaymentConfig.minPayment
+    : 0;
+  const player = gameState.player;
+  const cash = Number.isFinite(player.cash) ? player.cash : 0;
+  const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+  if (debtRemaining <= 0) {
+    return { ok: false, message: "Debt already cleared." };
   }
-  if (gameState.player.cash < gameState.player.debtRemaining) {
-    return { ok: false, message: "Not enough cash to pay the debt." };
+  if (cash <= 0) {
+    return { ok: false, message: "No cash available." };
   }
-  const debtRemainingBefore = gameState.player.debtRemaining;
-  gameState.player.cash = Math.max(0, gameState.player.cash - gameState.player.debtRemaining);
-  gameState.player.debtRemaining = 0;
-  const competitionUnlocked = debtRemainingBefore > 0 && gameState.player.debtRemaining <= 0;
+  let payAmount = 0;
+  const upperBound = Math.min(cash, debtRemaining);
+  if (amount === null || typeof amount === "undefined" || amount === "max") {
+    payAmount = upperBound;
+  } else {
+    const requested = Number(amount);
+    if (!Number.isFinite(requested)) {
+      return { ok: false, message: "Invalid payment amount." };
+    }
+    payAmount = Math.min(Math.max(requested, minPayment), upperBound);
+  }
+  if (payAmount <= 0) {
+    return { ok: false, message: "No valid payment amount available." };
+  }
+  const debtRemainingBefore = player.debtRemaining;
+  player.cash = Math.max(0, cash - payAmount);
+  player.debtRemaining = Math.max(0, debtRemaining - payAmount);
+  const competitionUnlocked = debtRemainingBefore > 0 && player.debtRemaining <= 0;
   let saturationActivated = false;
   const saturationConfig = CONFIG.market && CONFIG.market.saturation ? CONFIG.market.saturation : null;
-  if (saturationConfig && saturationConfig.enabledAfterDebt === true) {
+  if (competitionUnlocked && saturationConfig && saturationConfig.enabledAfterDebt === true) {
     if (!gameState.market || typeof gameState.market !== "object") {
       gameState.market = { activeShiftId: null, shiftHistory: [], saturation: { active: false, activatedDay: null } };
     }
@@ -290,16 +313,29 @@ function payDebt(gameState) {
     }
     if (!gameState.market.saturation.active) {
       gameState.market.saturation.active = true;
-      gameState.market.saturation.activatedDay = Number.isFinite(gameState.player.day)
-        ? gameState.player.day
+      gameState.market.saturation.activatedDay = Number.isFinite(player.day)
+        ? player.day
         : null;
       saturationActivated = true;
     }
   }
+  const formatValue = typeof formatCurrency === "function"
+    ? formatCurrency
+    : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  const debtCleared = player.debtRemaining <= 0;
+  const message = debtCleared
+    ? "Debt paid in full."
+    : "Paid " + formatValue(payAmount) + " toward your debt.";
+  const conquestResult = typeof checkConquests === "function"
+    ? checkConquests(gameState)
+    : { cards: [] };
   return {
     ok: true,
-    message: "Debt paid in full.",
+    message: message,
+    amountPaid: payAmount,
+    debtCleared: debtCleared,
     saturationActivated: saturationActivated,
-    competitionUnlocked: competitionUnlocked
+    competitionUnlocked: competitionUnlocked,
+    conquestResult: conquestResult
   };
 }

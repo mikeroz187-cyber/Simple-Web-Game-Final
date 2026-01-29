@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a config-driven Hub debt payment panel with quick-pay buttons and Pay Max, plus partial debt payment logic that triggers Conquests immediately.
+  - Why: Let players pay down debt early to progress Bank Manager Conquests without waiting for a full payoff.
+  - Files touched: src/config.js, src/systems/economy.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added the Bank Manager Conquest character with debt payoff stages, packs, and loan baseline tracking.
   - Why: Expand Conquests with debt-based progression while keeping save data and UI expectations aligned.
   - Files touched: src/config.js, src/systems/conquests.js, src/state.js, src/save.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

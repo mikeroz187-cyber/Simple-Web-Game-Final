@@ -178,6 +178,13 @@ const CONFIG = {
       promo: 1.0,
       premium: 1.6
     },
+    debtPayment: {
+      enabled: true,
+      quickAmounts: [500, 1000, 2500],
+      minPayment: 100,
+      allowMax: true,
+      confirmForPaymentsAbove: 5000
+    },
     cashflow: {
       ofNetMonthlyPerSub: 20,
       daysPerMonth: 30,

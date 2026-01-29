@@ -63,6 +63,7 @@
 - [x] MRR derived from OF subs with daily cash income.
 - [x] Net Worth stat (Cash + MRR valuationMultiple) displayed in Hub/Analytics and stored in snapshots.
 - [x] Hub shows “Est. days to afford debt” based on (daily OF payout − daily overhead).
+- [x] Hub: Pay Down Debt quick buttons (enables Bank Manager progression).
 - [x] Star Power progression (per-performer shoots → Star Power).
 - [x] Content-type shoot cost multipliers (Premium costs more) applied in booking + UI shows final cost.
 - [x] Promo gains apply only on posting (no double-counting).
