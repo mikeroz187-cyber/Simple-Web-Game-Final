@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX constrain Content screen slideshow sizing to a preview-scale image panel.
+  - Why: Prevent booked shoot slides from dominating the screen while keeping details visible without heavy scrolling.
+  - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: Added the four-beat After Hours accept flow with lock/build/slideshow/aftermath screens and outcomes.
   - Why: Replace the instant-complete accept path with the requested encounter sequence and gallery reveal beats.
   - Files touched: src/ui/afterhours-render.js, src/ui/events.js, styles.css, CHANGELOG.md.
