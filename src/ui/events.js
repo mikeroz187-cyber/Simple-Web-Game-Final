@@ -1264,33 +1264,60 @@ function setupEventHandlers() {
       }
 
       uiState.afterHours.counterType = counterType;
-      uiState.afterHours.phase = "accepted";
-
-      var result = applyAfterHoursOutcome(window.gameState, performer.id, counterType);
-
-      setUiMessage("After Hours complete. " + (result.bonusApplied || ""));
-      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-      clearModal();
-      uiState.afterHours = null;
-      uiState.afterHoursSkip = true;
-
-      document.querySelector('[data-action="advance-day"]').click();
+      uiState.afterHours.phase = "lock";
+      var content = getAfterHoursContent(performer.id);
+      showAfterHoursModal(renderAfterHoursLockModal(performer, content));
       return;
     }
 
     if (action === "after-hours-accept") {
       var performer = uiState.afterHours.performer;
-      uiState.afterHours.phase = "accepted";
+      var content = getAfterHoursContent(performer.id);
+      uiState.afterHours.phase = "lock";
+      uiState.afterHours.counterType = null;
+      showAfterHoursModal(renderAfterHoursLockModal(performer, content));
+      return;
+    }
 
-      var result = applyAfterHoursOutcome(window.gameState, performer.id, null);
+    if (action === "after-hours-next-beat") {
+      var performer = uiState.afterHours.performer;
+      var content = getAfterHoursContent(performer.id);
+      uiState.afterHours.phase = "build";
+      showAfterHoursModal(renderAfterHoursBuildModal(performer, content));
+      return;
+    }
 
-      setUiMessage("After Hours complete with " + performer.name + ".");
-      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-      clearModal();
-      uiState.afterHours = null;
-      uiState.afterHoursSkip = true;
+    if (action === "after-hours-start-slideshow") {
+      var performer = uiState.afterHours.performer;
+      var content = getAfterHoursContent(performer.id);
+      var imagePaths = getAfterHoursImagePaths(performer);
+      uiState.afterHours.phase = "slideshow";
+      uiState.afterHours.slideIndex = 0;
+      uiState.afterHours.imagePaths = imagePaths;
+      showAfterHoursModal(renderAfterHoursSlideshowModal(performer, content, imagePaths, 0));
+      return;
+    }
 
-      document.querySelector('[data-action="advance-day"]').click();
+    if (action === "after-hours-slideshow-next") {
+      var performer = uiState.afterHours.performer;
+      var content = getAfterHoursContent(performer.id);
+      var imagePaths = uiState.afterHours.imagePaths || [];
+      var currentIndex = uiState.afterHours.slideIndex || 0;
+      var nextIndex = currentIndex + 1;
+
+      if (nextIndex >= imagePaths.length) {
+        // Slideshow complete - apply outcome and show aftermath
+        var counterType = uiState.afterHours.counterType || null;
+        var result = applyAfterHoursOutcome(window.gameState, performer.id, counterType);
+        uiState.afterHours.phase = "aftermath";
+        uiState.afterHours.result = result;
+        saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        showAfterHoursModal(renderAfterHoursAftermathModal(performer, content, result));
+        return;
+      }
+
+      uiState.afterHours.slideIndex = nextIndex;
+      showAfterHoursModal(renderAfterHoursSlideshowModal(performer, content, imagePaths, nextIndex));
       return;
     }
 
