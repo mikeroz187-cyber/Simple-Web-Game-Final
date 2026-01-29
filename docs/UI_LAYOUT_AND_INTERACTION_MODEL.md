@@ -56,9 +56,16 @@ This document describes the **current UI layout and interaction behavior** imple
 - **Details panel:** Selected entry metadata + **View Shoot Photos** button.
 - **Output cards:** Summary cards for recent shoot results.
 
+## Conquests
+- **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).
+- **Message detail:** Portrait, scene title/body, stage badge, and status.
+- **Actions:** Accept (unlocks reward pack), Close (dismisses message), View Reward (opens slideshow).
+- **Unlocked packs list:** Shows unlocked reward packs with **View** button.
+
 ## Slideshow (Shared Screen)
 - **Recruit Meet:** 10‑slide “Private Audition” with Next button and Hire/Decline on final slide.
 - **Shoot Photos:** 5‑slide photo viewer with Prev/Next/Close controls.
+- **Conquest Rewards:** Photo viewer for unlocked conquest packs with Prev/Next/Close controls.
 
 ## Story Log
 - **List view:** Reverse chronological list with previews.

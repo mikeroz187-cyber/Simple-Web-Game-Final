@@ -180,6 +180,12 @@ function getSlideshowImagePaths(gameState, slideshow) {
     }) || null;
     return entry ? getEntryPhotoPaths(entry) : [];
   }
+  if (slideshow.mode === "conquest") {
+    const pack = typeof getConquestPackById === "function"
+      ? getConquestPackById(gameState, slideshow.id)
+      : null;
+    return pack && Array.isArray(pack.imagePaths) ? pack.imagePaths : [];
+  }
   return [];
 }
 
@@ -425,7 +431,7 @@ function setupEventHandlers() {
 
     if (action === "slideshow-prev" || action === "slideshow-next") {
       const slideshow = uiState.slideshow;
-      if (!slideshow || slideshow.mode !== "shoot") {
+      if (!slideshow || (slideshow.mode !== "shoot" && slideshow.mode !== "conquest")) {
         return;
       }
       const slides = getSlideshowImagePaths(window.gameState, slideshow);
@@ -443,6 +449,8 @@ function setupEventHandlers() {
         showScreen("screen-roster");
       } else if (mode === "shoot") {
         showScreen("screen-gallery");
+      } else if (mode === "conquest") {
+        showScreen("screen-conquests");
       } else {
         showScreen("screen-hub");
       }
@@ -722,6 +730,54 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "select-conquest-message") {
+      if (!uiState.conquests) {
+        uiState.conquests = { selectedMessageId: null };
+      }
+      uiState.conquests.selectedMessageId = actionId;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "conquest-accept") {
+      const result = typeof acceptConquestMessage === "function"
+        ? acceptConquestMessage(window.gameState, actionId)
+        : { ok: false, message: "Conquests system unavailable." };
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "conquest-dismiss") {
+      const result = typeof dismissConquestMessage === "function"
+        ? dismissConquestMessage(window.gameState, actionId)
+        : { ok: false, message: "Conquests system unavailable." };
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "conquest-view-reward") {
+      uiState.slideshow = { mode: "conquest", id: actionId, index: 0 };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "unlock-location-tier") {
       const tierId = actionTier;
       const result = unlockLocationTier(window.gameState, tierId);
@@ -767,6 +823,9 @@ function setupEventHandlers() {
         }
         if (typeof showToast === "function") {
           showToast("Upgrade purchased!", "unlock");
+        }
+        if (Array.isArray(result.conquestEvents) && result.conquestEvents.length) {
+          showEventCards(result.conquestEvents);
         }
       }
       renderApp(window.gameState);
@@ -916,6 +975,9 @@ function setupEventHandlers() {
       const storyEvents = advanceResult && Array.isArray(advanceResult.storyEvents)
         ? advanceResult.storyEvents
         : [];
+      const conquestEvents = advanceResult && Array.isArray(advanceResult.conquestEvents)
+        ? advanceResult.conquestEvents
+        : [];
       const cashflowMessage = buildDailyCashflowMessage(advanceResult ? advanceResult.cashflow : null);
       const automationResult = runAutomationOnDayAdvance(window.gameState);
       appendStoryLogEntries(window.gameState, storyEvents);
@@ -926,7 +988,7 @@ function setupEventHandlers() {
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
       }
-      const eventCards = buildStoryEventCards(storyEvents).concat(automationResult.cards);
+      const eventCards = buildStoryEventCards(storyEvents).concat(automationResult.cards).concat(conquestEvents);
       if (eventCards.length) {
         showEventCards(eventCards);
       }
@@ -956,6 +1018,9 @@ function setupEventHandlers() {
         ensureReputationState(window.gameState);
         ensureRecruitmentState(window.gameState);
         ensurePlayerUpgradesState(window.gameState);
+        if (typeof ensureConquestsState === "function") {
+          ensureConquestsState(window.gameState);
+        }
         initCompetitionStateIfMissing(window.gameState);
         const storyResult = checkStoryEvents(window.gameState);
         if (storyResult.ok && storyResult.events.length) {

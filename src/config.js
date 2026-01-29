@@ -68,7 +68,7 @@ const CONFIG = {
     localstorage_key: "studio_empire_save",
     autosave_enabled: true,
     autosave_interval_seconds: 10,
-    save_schema_version: 4,
+    save_schema_version: 5,
     default_slot_id: "slot_1",
     autosave_slot_id: "autosave",
     slots: [
@@ -549,6 +549,86 @@ const CONFIG = {
         pitchText: "A viral magnet with a taste for premium spots and a daring, glamorous edge."
       }
     ]
+  },
+  conquests: {
+    enabled: true,
+    characters: {
+      producer: {
+        id: "producer",
+        name: "The Producer",
+        roleLabel: "Executive Producer",
+        portraitPath: "assets/images/mascots/producer_ready.png",
+        stages: [
+          {
+            stageIndex: 1,
+            trigger: {
+              type: "equipment",
+              requirements: [{ key: "lightingLevel", minLevel: 1 }]
+            },
+            message: "Lighting upgrade noticed",
+            sceneTitle: "She noticed the glow",
+            sceneBody: "Your new lighting makes the set look expensive. The Producer slides into your inbox with a slow, appreciative grin. “Clean, bright, and dangerous. Consider this a thank-you.” She drops a few selfies to keep you hungry.",
+            rewardPack: {
+              packId: "producer_stage1",
+              title: "Thank-You Selfies",
+              description: "A tight trio of glossy selfies—soft glow, sharp eyes, quiet promises.",
+              imagePaths: buildPlaceholderImagePaths(3, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 2,
+            trigger: {
+              type: "equipment",
+              requirements: [{ key: "cameraLevel", minLevel: 1 }]
+            },
+            message: "Camera upgrade on her radar",
+            sceneTitle: "Sharper lens, bolder poses",
+            sceneBody: "The Producer knows when a lens gets hungry. “If you’re going to shoot like this, I’m going to give you something worth framing.” The selfies are bolder, closer, and very deliberate.",
+            rewardPack: {
+              packId: "producer_stage2",
+              title: "Momentum Selfies",
+              description: "A confident set of four shots, dialed in for your new lens.",
+              imagePaths: buildPlaceholderImagePaths(4, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 3,
+            trigger: {
+              type: "equipment",
+              requirements: [{ key: "setDressingLevel", minLevel: 1 }]
+            },
+            message: "After-hours set access",
+            sceneTitle: "She’s been watching",
+            sceneBody: "She admits she’s been lingering after wrap, tracing the set with her eyes. “You built a vibe I can’t stop walking into.” The after-hours set opens, all velvet shadows and a tease of control.",
+            rewardPack: {
+              packId: "producer_stage3",
+              title: "After-Hours Set",
+              description: "Five moody frames, all atmosphere and authority.",
+              imagePaths: buildPlaceholderImagePaths(5, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          },
+          {
+            stageIndex: 4,
+            trigger: {
+              type: "equipment",
+              requirements: [
+                { key: "lightingLevel", minLevel: 2 },
+                { key: "cameraLevel", minLevel: 2 }
+              ]
+            },
+            message: "Private production offer",
+            sceneTitle: "VIP: private production",
+            sceneBody: "“You’ve proved you can handle pressure,” she says, locking the door behind her. “So let’s make something for the vault.” It’s a private production—exclusive, polished, and unmistakably hers.",
+            rewardPack: {
+              packId: "producer_stage4",
+              title: "VIP Private Production",
+              description: "Twenty high-status shots from the Producer’s private vault.",
+              imagePaths: buildPlaceholderImagePaths(20, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH)
+            }
+          }
+        ]
+      }
+    }
   },
   freelancers: {
     profiles: [

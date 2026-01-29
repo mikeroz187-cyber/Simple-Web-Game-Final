@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Conquests MVP system with Producer stages, inbox flow, reward packs, and conquest slideshow viewing.
+  - Why: Introduce the new conquest loop and reward gallery while keeping saves stable with a schema bump.
+  - Files touched: index.html, styles.css, src/config.js, src/state.js, src/systems/conquests.js, src/systems/booking.js, src/systems/shop.js, src/save.js, src/main.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/GAMESTATE_DATA_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX make ambient mascots persist across screen navigation using a dedicated container and updated render logic.
   - Why: Prevent mascots from disappearing when screens re-render or transition.
   - Files touched: index.html, styles.css, src/ui/render.js, src/ui/router.js, docs/task-checklist.md, CHANGELOG.md.

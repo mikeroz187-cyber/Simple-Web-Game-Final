@@ -15,6 +15,9 @@ function getUiState() {
       gallery: {
         selectedContentId: null
       },
+      conquests: {
+        selectedMessageId: null
+      },
       bookingSlideshowIndex: 0,
       slideshow: {
         mode: null,
@@ -240,6 +243,7 @@ function renderApp(gameState) {
   renderRoster(gameState);
   renderSocial(gameState);
   renderGallery(gameState);
+  renderConquests(gameState);
   renderSlideshow(gameState);
   renderStoryLog(gameState);
   renderShop(gameState);
@@ -1244,6 +1248,197 @@ function renderGallery(gameState) {
     '</div>';
 }
 
+function getConquestMessageStatusLabel(status) {
+  if (status === "accepted") {
+    return "Accepted";
+  }
+  if (status === "dismissed") {
+    return "Dismissed";
+  }
+  return "Unread";
+}
+
+function renderConquests(gameState) {
+  var container = document.getElementById("screen-conquests");
+  if (!container) {
+    return;
+  }
+  var config = typeof getConquestsConfig === "function" ? getConquestsConfig() : { enabled: false, characters: {} };
+  if (!config.enabled) {
+    var disabledBody = "<p class=\"helper-text\">Conquests are currently offline.</p>";
+    container.innerHTML = renderAmbientLayers("screen-conquests") +
+      "<div class=\"screen-content mascot-clearance\">" +
+      createPanel("Conquests", disabledBody, "screen-conquests-title") +
+      "</div>";
+    return;
+  }
+  var uiState = getUiState();
+  var conquests = gameState.conquests || { inbox: [], unlockedPacks: [], characters: {} };
+  var inbox = Array.isArray(conquests.inbox) ? conquests.inbox.slice() : [];
+  inbox.sort(function (a, b) {
+    var dayA = Number.isFinite(a.createdDay) ? a.createdDay : 0;
+    var dayB = Number.isFinite(b.createdDay) ? b.createdDay : 0;
+    if (dayA !== dayB) {
+      return dayB - dayA;
+    }
+    var stageA = Number.isFinite(a.stageIndex) ? a.stageIndex : 0;
+    var stageB = Number.isFinite(b.stageIndex) ? b.stageIndex : 0;
+    return stageA - stageB;
+  });
+  var selectedMessageId = uiState.conquests ? uiState.conquests.selectedMessageId : null;
+  var selectedMessage = inbox.find(function (message) {
+    return message && message.id === selectedMessageId;
+  }) || inbox[0] || null;
+  var selectedMessageIdSafe = selectedMessage ? selectedMessage.id : "";
+
+  var inboxHtml = "";
+  if (!inbox.length) {
+    inboxHtml = "<p class=\"helper-text\">No messages yet. Upgrade your studio to attract attention.</p>";
+  } else {
+    inboxHtml = inbox.map(function (message) {
+      var characterConfig = typeof getConquestCharacterConfig === "function"
+        ? getConquestCharacterConfig(message.characterId)
+        : null;
+      var stageConfig = typeof getConquestStageConfig === "function"
+        ? getConquestStageConfig(characterConfig, message.stageIndex)
+        : null;
+      var subject = stageConfig && stageConfig.message ? stageConfig.message : "New message";
+      var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
+      var stageLabel = "Stage " + message.stageIndex;
+      var statusLabel = getConquestMessageStatusLabel(message.status);
+      var classes = ["conquest-message"];
+      if (selectedMessageIdSafe === message.id) {
+        classes.push("is-selected");
+      }
+      if (message.status === "unread") {
+        classes.push("is-unread");
+      }
+      if (message.status === "dismissed") {
+        classes.push("is-dismissed");
+      }
+      if (message.status === "accepted") {
+        classes.push("is-accepted");
+      }
+      return "<button class=\"" + classes.join(" ") + "\" type=\"button\" data-action=\"select-conquest-message\" data-id=\"" +
+        message.id + "\">" +
+        "<div class=\"conquest-message__text\">" +
+        "<div class=\"conquest-message__sender\">" + characterName + "</div>" +
+        "<div class=\"conquest-message__subject\">" + subject + "</div>" +
+        "</div>" +
+        "<div class=\"conquest-message__meta\">" +
+        "<span class=\"badge\">" + stageLabel + "</span>" +
+        "<span class=\"pill\">" + statusLabel + "</span>" +
+        "</div>" +
+        "</button>";
+    }).join("");
+  }
+
+  var unlockedPacks = Array.isArray(conquests.unlockedPacks) ? conquests.unlockedPacks : [];
+  var packsHtml = "";
+  if (!unlockedPacks.length) {
+    packsHtml = "<p class=\"helper-text\">No packs unlocked yet.</p>";
+  } else {
+    packsHtml = unlockedPacks.map(function (pack) {
+      var stageLabel = "Stage " + pack.stageIndex;
+      return "<div class=\"conquest-pack\">" +
+        "<div class=\"conquest-pack__text\">" +
+        "<div class=\"conquest-pack__title\">" + pack.title + "</div>" +
+        "<div class=\"conquest-pack__meta\">" + stageLabel + "</div>" +
+        "</div>" +
+        createButton("View", "conquest-view-reward", "small", false, "data-id=\"" + pack.packId + "\"") +
+        "</div>";
+    }).join("");
+  }
+
+  var detailHtml = "<p class=\"helper-text\">Select a message to see the scene.</p>";
+  if (selectedMessage) {
+    var characterConfig = typeof getConquestCharacterConfig === "function"
+      ? getConquestCharacterConfig(selectedMessage.characterId)
+      : null;
+    var stageConfig = typeof getConquestStageConfig === "function"
+      ? getConquestStageConfig(characterConfig, selectedMessage.stageIndex)
+      : null;
+    var portraitPath = characterConfig && characterConfig.portraitPath ? characterConfig.portraitPath : "";
+    var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
+    var roleLabel = characterConfig && characterConfig.roleLabel ? characterConfig.roleLabel : "";
+    var stageLabel = "Stage " + selectedMessage.stageIndex;
+    var statusLabel = getConquestMessageStatusLabel(selectedMessage.status);
+    var sceneTitle = stageConfig && stageConfig.sceneTitle ? stageConfig.sceneTitle : "New message";
+    var sceneBody = stageConfig && stageConfig.sceneBody ? stageConfig.sceneBody : "";
+    var rewardPack = stageConfig && stageConfig.rewardPack ? stageConfig.rewardPack : null;
+    var rewardImageCount = rewardPack && Array.isArray(rewardPack.imagePaths) ? rewardPack.imagePaths.length : 0;
+    var rewardSummary = rewardPack
+      ? "<div class=\"conquest-reward\">" +
+        "<div class=\"conquest-reward__title\">" + rewardPack.title + "</div>" +
+        "<div class=\"conquest-reward__desc\">" + rewardPack.description + "</div>" +
+        "<div class=\"conquest-reward__meta\">" + rewardImageCount + " images</div>" +
+        "</div>"
+      : "";
+    var viewRewardButton = "";
+    if (selectedMessage.status === "accepted" && rewardPack) {
+      viewRewardButton = createButton("View Reward", "conquest-view-reward", "primary", false, "data-id=\"" + rewardPack.packId + "\"");
+    }
+    var acceptDisabled = selectedMessage.status === "accepted";
+    var dismissDisabled = selectedMessage.status === "accepted";
+    detailHtml = "<div class=\"conquest-detail\">" +
+      "<div class=\"conquest-detail__portrait\">" +
+      (portraitPath ? "<img src=\"" + portraitPath + "\" alt=\"" + characterName + "\" />" : "") +
+      "</div>" +
+      "<div class=\"conquest-detail__body\">" +
+      "<div class=\"conquest-detail__header\">" +
+      "<div>" +
+      "<div class=\"conquest-detail__name\">" + characterName + "</div>" +
+      (roleLabel ? "<div class=\"conquest-detail__role\">" + roleLabel + "</div>" : "") +
+      "</div>" +
+      "<div class=\"conquest-detail__badges\">" +
+      "<span class=\"badge\">" + stageLabel + "</span>" +
+      "<span class=\"pill\">" + statusLabel + "</span>" +
+      "</div>" +
+      "</div>" +
+      "<div class=\"conquest-detail__scene\">" +
+      "<h3>" + sceneTitle + "</h3>" +
+      "<p>" + sceneBody + "</p>" +
+      "</div>" +
+      rewardSummary +
+      "<div class=\"button-row\">" +
+      createButton("Accept", "conquest-accept", "primary", acceptDisabled, "data-id=\"" + selectedMessageIdSafe + "\"") +
+      createButton("Close", "conquest-dismiss", "ghost", dismissDisabled, "data-id=\"" + selectedMessageIdSafe + "\"") +
+      viewRewardButton +
+      "</div>" +
+      "</div>" +
+      "</div>";
+  }
+
+  var contentHtml = "<div class=\"screen-header\">" +
+    "<h2 class=\"screen-title\" id=\"screen-conquests-title\">Conquests</h2>" +
+    "<p class=\"helper-text\">Messages from power players. Accept to unlock exclusive reward packs.</p>" +
+    "</div>" +
+    "<div class=\"conquests-layout\">" +
+    "<div class=\"conquests-panel\">" +
+    "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Inbox</h3>" +
+    "<div class=\"conquest-inbox\">" + inboxHtml + "</div>" +
+    "<div class=\"conquest-unlocked\">" +
+    "<h4>Unlocked Packs</h4>" +
+    packsHtml +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "<div class=\"conquests-panel\">" +
+    "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Message</h3>" +
+    detailHtml +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
+
+  container.innerHTML = renderAmbientLayers("screen-conquests") +
+    "<div class=\"screen-content mascot-clearance\">" +
+    contentHtml +
+    "</div>";
+}
+
 
 function renderSlideshow(gameState) {
   const container = document.getElementById("screen-slideshow");
@@ -1349,6 +1544,44 @@ function renderSlideshow(gameState) {
     container.innerHTML = renderAmbientLayers("screen-slideshow") +
       "<div class=\"screen-content\">" +
       shootHtml +
+      "</div>";
+    return;
+  }
+
+  if (slideshow.mode === "conquest") {
+    const pack = typeof getConquestPackById === "function"
+      ? getConquestPackById(gameState, slideshow.id)
+      : null;
+    const photos = pack && Array.isArray(pack.imagePaths) ? pack.imagePaths : [];
+    const slideCount = photos.length;
+    const safeIndex = Math.min(Math.max(0, slideshow.index), Math.max(0, slideCount - 1));
+    const slidePath = slideCount ? photos[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    const slideNumber = slideCount ? safeIndex + 1 : 0;
+    const prevDisabled = safeIndex <= 0;
+    const nextDisabled = safeIndex >= slideCount - 1;
+    const imageHtml = "<div class=\"slideshow-image-container\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Conquest reward " + (safeIndex + 1) + "\" />" +
+      "</div>";
+    const controlsHtml = "<div class=\"slideshow-controls\">" +
+      createButton("Prev", "slideshow-prev", "", prevDisabled) +
+      createButton("Next", "slideshow-next", "primary", nextDisabled) +
+      "<span class=\"slideshow-counter\">Photo " + slideNumber + " of " + slideCount + "</span>" +
+      "</div>";
+    const body = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">" + (pack ? pack.title : "Conquest Reward") + "</h3>" +
+      "<p class=\"helper-text\">" + (pack ? pack.description : "Unlock a reward pack to view it here.") + "</p>" +
+      "<div class=\"slideshow-layout\">" +
+      imageHtml +
+      controlsHtml +
+      "</div>" +
+      "<div class=\"button-row\">" +
+      createButton("Back to Conquests", "slideshow-close") +
+      "</div>" +
+      "</div>";
+    const conquestHtml = createPanel(pack ? pack.title : "Conquest Reward", body, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      conquestHtml +
       "</div>";
     return;
   }

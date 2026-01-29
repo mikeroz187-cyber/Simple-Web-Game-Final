@@ -2,9 +2,10 @@
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-**Last Updated:** January 27, 2026
+**Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Conquests MVP system: Producer message flow, reward packs, and slideshow viewing.
 - Ambient Art Phase 1.6: Fixed mascot positioning (dedicated space, bottom-anchored, content clearance).
 - Ambient Art Phase 1.5: Wired real mascot/background images to config and render system.
 - Recruitment flow with rep-gated candidates, meet slideshow, and hire/decline outcomes.

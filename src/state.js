@@ -76,6 +76,23 @@ function buildDefaultPlayerUpgradesState() {
   };
 }
 
+function buildDefaultConquestsState() {
+  const config = CONFIG.conquests || {};
+  const charactersConfig = config.characters && typeof config.characters === "object"
+    ? config.characters
+    : {};
+  const characters = {};
+  Object.keys(charactersConfig).forEach(function (characterId) {
+    characters[characterId] = { stageUnlocked: 0 };
+  });
+  return {
+    enabled: Boolean(config.enabled),
+    characters: characters,
+    inbox: [],
+    unlockedPacks: []
+  };
+}
+
 function newGameState() {
   const now = new Date().toISOString();
   const rosterIds = CONFIG.performers.core_ids.slice();
@@ -170,7 +187,8 @@ function newGameState() {
     milestones: [],
     legacyMilestones: [],
     automation: buildDefaultAutomationState(),
-    recruitment: buildDefaultRecruitmentState()
+    recruitment: buildDefaultRecruitmentState(),
+    conquests: buildDefaultConquestsState()
   };
 }
 

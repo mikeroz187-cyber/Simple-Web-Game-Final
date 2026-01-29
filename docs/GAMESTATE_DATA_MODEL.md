@@ -22,6 +22,7 @@ This document summarizes the **current** `gameState` structure as implemented in
 - `market`
 - `reputation`
 - `recruitment`
+- `conquests`
 
 ## Key Buckets
 
@@ -143,6 +144,38 @@ This document summarizes the **current** `gameState` structure as implemented in
 {
   "declinedIds": ["recruit_bryn_sterling"],
   "hiredIds": ["recruit_aria_lux"]
+}
+```
+
+### `conquests`
+```json
+{
+  "enabled": true,
+  "characters": {
+    "producer": {
+      "stageUnlocked": 2
+    }
+  },
+  "inbox": [
+    {
+      "id": "conquest_producer_stage_3_day_42",
+      "characterId": "producer",
+      "stageIndex": 3,
+      "createdDay": 42,
+      "status": "unread"
+    }
+  ],
+  "unlockedPacks": [
+    {
+      "packId": "producer_stage2",
+      "characterId": "producer",
+      "stageIndex": 2,
+      "title": "Momentum Selfies",
+      "description": "A confident set of four shots, dialed in for your new lens.",
+      "imagePaths": ["data:image/svg+xml;..."],
+      "unlockedDay": 30
+    }
+  ]
 }
 ```
 
