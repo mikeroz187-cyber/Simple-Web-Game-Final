@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX Roster now shows Renew buttons for expired contracts in cards and the sidebar.
+  - Why: Match the contract-expired CTA requirements so players can immediately renew lapsed performers.
+  - Files touched: src/ui/render.js, docs/task-checklist.md, CHANGELOG.md.
 - What: Clarified Diva Fee as a low-loyalty surcharge across roster cards, renewal prompts, and booking cost breakdowns.
   - Why: Make the extra fees for low loyalty explicit in the UI so players understand shoot and renewal costs.
   - Files touched: src/systems/performers.js, src/ui/render.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
