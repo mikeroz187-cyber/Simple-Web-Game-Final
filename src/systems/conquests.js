@@ -134,6 +134,22 @@ function isConquestTriggerMet(gameState, trigger) {
   if (!gameState || typeof gameState !== "object") {
     return false;
   }
+  if (Number.isFinite(trigger.minDay)) {
+    const currentDay = Number.isFinite(gameState.player && gameState.player.day)
+      ? gameState.player.day
+      : 0;
+    if (currentDay < trigger.minDay) {
+      return false;
+    }
+  }
+  if (trigger.requiresDebtCleared) {
+    const debtRemaining = Number.isFinite(gameState.player && gameState.player.debtRemaining)
+      ? gameState.player.debtRemaining
+      : 0;
+    if (debtRemaining > 0) {
+      return false;
+    }
+  }
   if (Array.isArray(trigger.anyOf)) {
     return trigger.anyOf.some(function (entry) {
       return isConquestTriggerMet(gameState, entry);

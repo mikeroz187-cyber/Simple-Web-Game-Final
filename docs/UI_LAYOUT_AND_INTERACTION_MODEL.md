@@ -61,8 +61,9 @@ This document describes the **current UI layout and interaction behavior** imple
 ## Conquests
 - **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).
 - **Multi-character flow:** Inbox aggregates messages across conquest characters; unlocked packs show the character label.
-- **Message detail:** Portrait uses the stage-specific mascot filename in `assets/images/mascots/` with fallback to Stage 1 and the mascot placeholder, plus scene title/body, stage badge, and status.
+- **Message detail:** Portrait uses the stage-specific mascot filename in `assets/images/mascots/<character>_stageX.png` with fallback to Stage 1 and the mascot placeholder, plus scene title/body, stage badge, and status.
 - **Scene text tokens:** Conquest scene body copy can include template tokens (ex: `{{reputation}}`, `{{followers}}`) rendered at display time.
+- **Stage triggers:** Trigger rules can include `minDay` and `requiresDebtCleared` gates before the stat/equipment checks are evaluated.
 - **Actions:** Accept (unlocks reward pack), Close (dismisses message), View Reward (opens slideshow).
 - **Unlocked packs list:** Shows unlocked reward packs with **View** button.
 
