@@ -969,6 +969,76 @@ function renderContent(gameState) {
     "</div>";
 }
 
+function clampNumber(value, fallback) {
+  return Number.isFinite(value) ? value : fallback;
+}
+
+function getHistorySeries(history, key, days) {
+  if (!Array.isArray(history) || !history.length) {
+    return [];
+  }
+  var safeDays = Number.isFinite(days) ? Math.max(1, Math.floor(days)) : history.length;
+  var sliced = history.slice(Math.max(0, history.length - safeDays));
+  return sliced.map(function (entry) {
+    if (!entry) {
+      return 0;
+    }
+    return clampNumber(entry[key], 0);
+  });
+}
+
+function getDelta(values, daysBack) {
+  if (!Array.isArray(values) || values.length < 2) {
+    return 0;
+  }
+  var safeDaysBack = Number.isFinite(daysBack) ? Math.max(1, Math.floor(daysBack)) : 1;
+  var lastIndex = values.length - 1;
+  var compareIndex = lastIndex - safeDaysBack;
+  if (compareIndex < 0) {
+    return 0;
+  }
+  return values[lastIndex] - values[compareIndex];
+}
+
+function renderSparkline(values) {
+  if (!Array.isArray(values) || values.length < 2) {
+    return "";
+  }
+  var width = 140;
+  var height = 34;
+  var min = Math.min.apply(null, values);
+  var max = Math.max.apply(null, values);
+  var range = max - min;
+  if (!Number.isFinite(range) || range === 0) {
+    range = 1;
+  }
+
+  var points = values.map(function (value, index) {
+    var x = (index / (values.length - 1)) * (width - 2) + 1;
+    var normalized = (value - min) / range;
+    var y = height - 1 - normalized * (height - 2);
+    return x.toFixed(1) + "," + y.toFixed(1);
+  }).join(" ");
+
+  return "<div class=\"sparkline\">" +
+    "<svg viewBox=\"0 0 " + width + " " + height + "\" aria-hidden=\"true\">" +
+    "<line x1=\"0\" y1=\"" + (height - 1) + "\" x2=\"" + width + "\" y2=\"" + (height - 1) + "\" stroke=\"rgba(255,255,255,0.2)\" stroke-width=\"1\" />" +
+    "<polyline fill=\"none\" stroke=\"rgba(212,175,55,0.85)\" stroke-width=\"2\" points=\"" + points + "\" />" +
+    "</svg>" +
+    "</div>";
+}
+
+function formatDelta(value) {
+  var safeValue = Number.isFinite(value) ? value : 0;
+  if (safeValue > 0) {
+    return "+" + safeValue.toLocaleString();
+  }
+  if (safeValue < 0) {
+    return "-" + Math.abs(safeValue).toLocaleString();
+  }
+  return "0";
+}
+
 function renderAnalytics(gameState) {
   var container = document.getElementById("screen-analytics");
   if (!container) {
@@ -976,59 +1046,171 @@ function renderAnalytics(gameState) {
   }
 
   var player = gameState.player;
-  var cash = player.cash;
-  var ofSubs = player.onlyFansSubscribers;
-  var followers = player.socialFollowers;
-  var socialSubs = player.socialSubscribers;
-  var reputation = player.reputation;
-  var mrr = typeof getMRR === "function" ? getMRR(gameState) : 0;
-  var netWorth = typeof getNetWorth === "function" ? getNetWorth(gameState) : cash;
-  var dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
-  var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
+  var cash = clampNumber(player.cash, 0);
+  var ofSubs = clampNumber(player.onlyFansSubscribers, 0);
+  var followers = clampNumber(player.socialFollowers, 0);
+  var reputation = clampNumber(player.reputation, 0);
+  var history = Array.isArray(gameState.analyticsHistory) ? gameState.analyticsHistory : [];
+  var sparklineDays = CONFIG.analytics && Number.isFinite(CONFIG.analytics.sparklineDays)
+    ? CONFIG.analytics.sparklineDays
+    : 30;
+  var cashflowDays = CONFIG.analytics && Number.isFinite(CONFIG.analytics.cashflowDays)
+    ? CONFIG.analytics.cashflowDays
+    : 7;
+  var hasWeeklyTrend = history.length >= 8;
 
-  var contentEntries = gameState.content.entries || [];
-  var promoCount = contentEntries.filter(function(e) { return e.contentType === 'Promo'; }).length;
-  var premiumCount = contentEntries.filter(function(e) { return e.contentType === 'Premium'; }).length;
+  var cashSeries = getHistorySeries(history, "cash", sparklineDays);
+  var subsSeries = getHistorySeries(history, "onlyFansSubscribers", sparklineDays);
+  var followersSeries = getHistorySeries(history, "socialFollowers", sparklineDays);
+  var reputationSeries = getHistorySeries(history, "reputation", sparklineDays);
 
-  // Top stats grid
-  var topStatsHtml = '<div class="analytics-grid">' +
-    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--gold">' + formatCurrency(cash) + '</div><div class="analytics-card__label">Cash</div></div>' +
-    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--pink">' + ofSubs.toLocaleString() + '</div><div class="analytics-card__label">OF Subscribers</div></div>' +
-    '<div class="analytics-card"><div class="analytics-card__value analytics-card__value--gold">' + formatCurrency(mrr) + '</div><div class="analytics-card__label">Monthly Revenue</div></div>' +
-    '<div class="analytics-card"><div class="analytics-card__value">' + formatCurrency(netWorth) + '</div><div class="analytics-card__label">Net Worth</div></div>' +
-  '</div>';
+  var weeklyCashDelta = hasWeeklyTrend ? getDelta(cashSeries, 7) : 0;
+  var weeklySubsDelta = hasWeeklyTrend ? getDelta(subsSeries, 7) : 0;
 
-  // Secondary stats
-  var secondaryStatsHtml = '<div class="panel"><h3 class="panel-title">Social & Reputation</h3>' +
-    '<div class="stat-row"><span class="stat-row__label">Social Followers</span><span class="stat-row__value">' + followers.toLocaleString() + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Social Subscribers</span><span class="stat-row__value">' + socialSubs.toLocaleString() + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + reputation + '</span></div>' +
-  '</div>';
+  var momentumLabel = "STEADY";
+  var momentumClass = "chip--steady";
+  if (weeklyCashDelta > 0 && weeklySubsDelta > 0) {
+    momentumLabel = "HOT";
+    momentumClass = "chip--hot";
+  } else if (weeklyCashDelta <= 0 && weeklySubsDelta <= 0) {
+    momentumLabel = "STALLING";
+    momentumClass = "chip--stalling";
+  }
 
-  // Cashflow stats
-  var dailyNet = dailyPayout - dailyOverhead.amount;
-  var cashflowHtml = '<div class="panel"><h3 class="panel-title">Daily Cashflow</h3>' +
-    '<div class="stat-row"><span class="stat-row__label">OF Payout</span><span class="stat-row__value stat-row__value--positive">+' + formatCurrency(dailyPayout) + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Overhead</span><span class="stat-row__value stat-row__value--negative">-' + formatCurrency(dailyOverhead.amount) + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Net Daily</span><span class="stat-row__value ' + (dailyNet >= 0 ? 'stat-row__value--positive' : 'stat-row__value--negative') + '">' + (dailyNet >= 0 ? '+' : '') + formatCurrency(dailyNet) + '</span></div>' +
-  '</div>';
+  function renderHeatCard(label, valueHtml, seriesValues) {
+    if (!hasWeeklyTrend) {
+      return '<div class="analytics-card"><div class="analytics-card__value">' + valueHtml + '</div>' +
+        '<div class="analytics-card__label">' + label + '</div>' +
+        '<div class="analytics-card__sub">Collecting trend data…</div></div>';
+    }
+    var delta = getDelta(seriesValues, 7);
+    var deltaClass = delta > 0 ? "delta--pos" : (delta < 0 ? "delta--neg" : "");
+    var sparklineHtml = renderSparkline(seriesValues);
+    return '<div class="analytics-card"><div class="analytics-card__value">' + valueHtml + '</div>' +
+      '<div class="analytics-card__label">' + label + '</div>' +
+      '<div class="delta ' + deltaClass + '">7D ' + formatDelta(delta) + '</div>' +
+      sparklineHtml +
+      '</div>';
+  }
 
-  // Content stats
-  var contentStatsHtml = '<div class="panel"><h3 class="panel-title">Content Library</h3>' +
-    '<div class="stat-row"><span class="stat-row__label">Total Shoots</span><span class="stat-row__value">' + contentEntries.length + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Promo Content</span><span class="stat-row__value">' + promoCount + '</span></div>' +
-    '<div class="stat-row"><span class="stat-row__label">Premium Content</span><span class="stat-row__value">' + premiumCount + '</span></div>' +
-  '</div>';
+  var heatCardsHtml = '<div class="analytics-heat-grid">' +
+    renderHeatCard("Cash", formatCurrency(cash), cashSeries) +
+    renderHeatCard("OF Subscribers", ofSubs.toLocaleString(), subsSeries) +
+    renderHeatCard("Social Followers", followers.toLocaleString(), followersSeries) +
+    renderHeatCard("Reputation", reputation.toLocaleString(), reputationSeries) +
+    '</div>';
 
-  // Layout
+  var cashflowHtml = "";
+  if (history.length < 2) {
+    cashflowHtml = '<div class="panel"><h3 class="panel-title">Cashflow (7 Days)</h3>' +
+      '<div class="analytics-subtitle">Cashflow bars start after 2+ days of data.</div></div>';
+  } else {
+    var startIndex = Math.max(1, history.length - cashflowDays);
+    var deltas = [];
+    for (var i = startIndex; i < history.length; i += 1) {
+      var current = history[i];
+      var previous = history[i - 1];
+      if (!current || !previous) {
+        continue;
+      }
+      deltas.push({
+        delta: clampNumber(current.cash, 0) - clampNumber(previous.cash, 0),
+        day: current.dayNumber
+      });
+    }
+    var maxAbs = deltas.reduce(function (maxValue, item) {
+      var absValue = Math.abs(item.delta);
+      return absValue > maxValue ? absValue : maxValue;
+    }, 1);
+    var barsHtml = deltas.map(function (item, index) {
+      var height = Math.max(6, Math.round((Math.abs(item.delta) / maxAbs) * 60));
+      var barClass = item.delta >= 0 ? "bar--pos" : "bar--neg";
+      var label = "D" + (index - deltas.length + 1);
+      if (Number.isFinite(item.day)) {
+        label = "Day " + item.day;
+      }
+      return '<div class="cashflow-bar ' + barClass + '" style="height:' + height + 'px" title="' +
+        formatCurrency(item.delta) + '"></div>';
+    }).join("");
+    var labelsHtml = deltas.map(function (item, index) {
+      var label = "D" + (index - deltas.length + 1);
+      if (Number.isFinite(item.day)) {
+        label = "Day " + item.day;
+      }
+      return '<span>' + label + '</span>';
+    }).join("");
+    cashflowHtml = '<div class="panel"><h3 class="panel-title">Cashflow (7 Days)</h3>' +
+      '<div class="cashflow-bars">' + barsHtml + '</div>' +
+      '<div class="analytics-subtitle" style="display:flex;gap:8px;flex-wrap:wrap;">' + labelsHtml + '</div>' +
+      '</div>';
+  }
+
+  var debtRemaining = clampNumber(player.debtRemaining, 0);
+  var debtInitial = clampNumber(player.debtInitialPrincipal, CONFIG.game.loan_total_due);
+  var debtHtml = "";
+  if (debtRemaining <= 0) {
+    debtHtml = '<div class="panel"><h3 class="panel-title">Debt</h3>' +
+      '<div class="stat-row"><span class="stat-row__label">Debt: Cleared.</span></div></div>';
+  } else {
+    var pctPaid = debtInitial > 0 ? Math.min(1, Math.max(0, (debtInitial - debtRemaining) / debtInitial)) : 1;
+    var pctLabel = Math.round(pctPaid * 100);
+    debtHtml = '<div class="panel"><h3 class="panel-title">Debt</h3>' +
+      '<div class="stat-row"><span class="stat-row__label">Debt:</span><span class="stat-row__value">' +
+      formatCurrency(debtRemaining) + ' remaining (' + pctLabel + '% paid)</span></div>' +
+      '<div class="progress" aria-hidden="true"><div class="progress__fill" style="width:' + pctLabel + '%;"></div></div>' +
+      '</div>';
+  }
+
+  var summary = typeof getWindowedSummary === "function" ? getWindowedSummary(gameState, 7) : {};
+  var promoCount = clampNumber(summary.promoCount, 0);
+  var premiumCount = clampNumber(summary.premiumCount, 0);
+  var weeklyOverhead = typeof getDailyOverhead === "function"
+    ? clampNumber(getDailyOverhead(gameState).amount, 0) * 7
+    : 0;
+
+  var topDriver = "Quiet week. No content means no momentum.";
+  if (premiumCount > promoCount) {
+    topDriver = "Premium did the heavy lifting. Keep them thirsty.";
+  } else if (promoCount > 0) {
+    topDriver = "Promo is your bait. Don’t skip the bait.";
+  }
+
+  var biggestLeak = weeklyOverhead > 0
+    ? "Overhead is the silent pimp — about " + formatCurrency(weeklyOverhead) + "/week."
+    : "Overhead is under control. For now.";
+
+  var suggestedMove = "Keep pressure: alternate Promo → Premium to keep growth compounding.";
+  if (promoCount === 0) {
+    suggestedMove = "Drop 2–3 Promos to spike followers fast.";
+  } else if (premiumCount === 0) {
+    suggestedMove = "Book a Premium shoot to convert attention into subs.";
+  } else if (weeklyCashDelta < 0) {
+    suggestedMove = "Cut the bleed: run Premium + pay down debt.";
+  }
+
+  var insightsHtml = '<div class="panel analytics-insights">' +
+    '<h3 class="panel-title">The Memo</h3>' +
+    '<ul class="insights-list">' +
+    '<li><strong>Top Driver:</strong> ' + topDriver + '</li>' +
+    '<li><strong>Biggest Leak:</strong> ' + biggestLeak + '</li>' +
+    '<li><strong>Suggested Move:</strong> ' + suggestedMove + '</li>' +
+    '</ul>' +
+    '</div>';
+
   var contentHtml = '<h2 class="screen-title">Analytics</h2>' +
-    '<div class="analytics-layout">' +
-      topStatsHtml +
-      '<div class="analytics-secondary-grid">' +
-        secondaryStatsHtml +
-        cashflowHtml +
-        contentStatsHtml +
+    '<div class="analytics-dashboard">' +
+      '<div class="analytics-dashboard__header">' +
+        '<div class="analytics-momentum">' +
+          '<span class="chip ' + momentumClass + '">Momentum: ' + momentumLabel + '</span>' +
+          '<div class="analytics-subtitle">Weekly Heat Check (Last 7 Days)</div>' +
+        '</div>' +
       '</div>' +
+      heatCardsHtml +
+      '<div class="analytics-money-row">' +
+        cashflowHtml +
+        debtHtml +
+      '</div>' +
+      insightsHtml +
     '</div>' +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 

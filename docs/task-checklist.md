@@ -118,6 +118,7 @@
 - [x] Social recent posts open shoot photo slideshows and return to Social on close (Bugfix D).
 - [x] Toast notifications render above the mascot and outside stacked screen containers (Bugfix E).
 - [x] Analytics secondary row uses aligned grid styling for top-aligned cards (Bugfix F).
+- [x] Bug #12 Analytics: Hustle Dashboard (heat check + cashflow bars + debt progress + memo insights + daily capped history).
 - [x] Bug #5 Analytics card alignment.
 - [x] FIX After Hours accept is a one-time cash payment with gating + dismiss penalties/cooldown.
   - [x] Cash decreases immediately on Accept (header updates instantly).
