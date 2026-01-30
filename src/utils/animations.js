@@ -217,35 +217,6 @@ function staggerEntrance(container, childSelector, staggerDelay) {
   });
 }
 
-/**
- * Trigger staggered entrance animation for elements in a container
- * @param {HTMLElement} container - Parent container to search within
- * @param {string} selector - CSS selector for items to animate (default: '.stagger-item')
- */
-function triggerStaggerEntrance(container, selector) {
-  if (!container) return;
-  selector = selector || '.stagger-item';
-
-  var items = container.querySelectorAll(selector);
-  items.forEach(function(item, index) {
-    // Remove any existing visibility class
-    item.classList.remove('is-visible');
-
-    for (var i = 1; i <= 10; i += 1) {
-      item.classList.remove('stagger-delay-' + i);
-    }
-
-    // Apply delay class (cap at 10 for performance)
-    var delayClass = 'stagger-delay-' + Math.min(index + 1, 10);
-    item.classList.add(delayClass);
-
-    // Trigger animation on next frame
-    requestAnimationFrame(function() {
-      item.classList.add('is-visible');
-    });
-  });
-}
-
 // ============================================
 // PULSE ANIMATION
 // ============================================

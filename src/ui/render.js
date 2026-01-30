@@ -619,7 +619,7 @@ function renderHub(gameState) {
   if (typeof isDebugEnabled === "function" && isDebugEnabled()) {
     var uiState = getUiState();
     var debugStatus = uiState.debug && uiState.debug.dayStatus ? uiState.debug.dayStatus : "";
-    debugPanel = "<div class=\"panel stagger-item\" style=\"margin-top:var(--gap-md);\">" +
+    debugPanel = "<div class=\"panel\" style=\"margin-top:var(--gap-md);\">" +
       "<h3 class=\"panel-title\">Debug (Dev Only)</h3>" +
       "<div class=\"field-row\">" +
         "<label class=\"field-label\" for=\"debug-day-input\">Day</label>" +
@@ -645,7 +645,7 @@ function renderHub(gameState) {
   // Assemble Hub
   var contentHtml = "<div class=\"hub-dashboard\">" +
     "<div class=\"hub-dashboard__metrics\">" +
-      "<div class=\"panel stagger-item\" style=\"flex:1;display:flex;flex-direction:column;\">" +
+      "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;\">" +
         "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
         heroMetricsHtml +
         secondaryStatsHtml +
@@ -653,7 +653,7 @@ function renderHub(gameState) {
       "</div>" +
     "</div>" +
     "<div class=\"hub-dashboard__feed\">" +
-      "<div class=\"panel stagger-item\" style=\"flex:1;display:flex;flex-direction:column;overflow:hidden;\">" +
+      "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;overflow:hidden;\">" +
         feedHtml +
       "</div>" +
     "</div>" +
@@ -722,12 +722,12 @@ function renderBooking(gameState) {
 
   // Booking mode cards
   var modeCardsHtml = '<div class="selection-grid selection-grid--2col">' +
-    '<div class="selection-card stagger-item' + (bookingMode === 'core' ? ' is-selected' : '') + '" data-action="select-booking-mode" data-id="core">' +
+    '<div class="selection-card' + (bookingMode === 'core' ? ' is-selected' : '') + '" data-action="select-booking-mode" data-id="core">' +
       '<div class="selection-card__title">Core Performer</div>' +
       '<div class="selection-card__subtitle">Book your contracted talent</div>' +
       '<div class="selection-card__meta">Full premium potential</div>' +
     '</div>' +
-    '<div class="selection-card stagger-item' + (bookingMode === 'agency_pack' ? ' is-selected' : '') + (agencyPackUsedToday ? ' is-disabled' : '') + '" data-action="select-booking-mode" data-id="agency_pack">' +
+    '<div class="selection-card' + (bookingMode === 'agency_pack' ? ' is-selected' : '') + (agencyPackUsedToday ? ' is-disabled' : '') + '" data-action="select-booking-mode" data-id="agency_pack">' +
       (agencyPackUsedToday ? '<span class="selection-card__badge">Used Today</span>' : '') +
       '<div class="selection-card__title">Agency Sample Pack</div>' +
       '<div class="selection-card__subtitle">5-image variety bundle</div>' +
@@ -745,9 +745,9 @@ function renderBooking(gameState) {
       var statusText = status.ok ? 'Available' : status.reason;
       var portraitPath = getPerformerPortraitPath(p);
       var divaLabelText = getDivaFeeLabelForPerformer(p);
-    return '<div class="performer-card stagger-item' + (isSelected ? ' is-selected' : '') + '" data-action="select-performer-a" data-id="' + p.id + '" style="cursor:pointer;">' +
-      '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
-      '<div class="performer-card__info">' +
+      return '<div class="performer-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-performer-a" data-id="' + p.id + '" style="cursor:pointer;">' +
+        '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
+        '<div class="performer-card__info">' +
           '<div class="performer-card__name">' + p.name + '</div>' +
           '<div class="performer-card__stats">' +
             '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + p.starPower + '</span></span>' +
@@ -759,9 +759,9 @@ function renderBooking(gameState) {
         '</div>' +
       '</div>';
     }).join('');
-    performerHtml = '<div class="panel stagger-item"><h3 class="panel-title">Select Performer</h3>' + performerCardsHtml + '</div>';
+    performerHtml = '<div class="panel"><h3 class="panel-title">Select Performer</h3>' + performerCardsHtml + '</div>';
   } else {
-    performerHtml = '<div class="panel stagger-item"><h3 class="panel-title">Agency Pack</h3>' +
+    performerHtml = '<div class="panel"><h3 class="panel-title">Agency Pack</h3>' +
       '<p style="color:var(--text-muted);font-size:13px;">Agency provides a 5-image sample pack matched to your selected theme and location.</p></div>';
   }
 
@@ -795,7 +795,7 @@ function renderBooking(gameState) {
     if (!theme) return '';
     var isSelected = themeId === selectedThemeId;
     var effectsLabel = formatThemeEffects(theme);
-    return '<div class="selection-card stagger-item' + (isSelected ? ' is-selected' : '') + '" data-action="select-theme" data-id="' + themeId + '">' +
+    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-theme" data-id="' + themeId + '">' +
       '<div class="selection-card__title">' + theme.name + '</div>' +
       '<div class="selection-card__subtitle">' + theme.description + '</div>' +
       '<div class="selection-card__meta selection-card__meta--highlight">' + effectsLabel + '</div>' +
@@ -807,7 +807,7 @@ function renderBooking(gameState) {
   var contentTypeHtml = contentTypes.map(function(type) {
     var isSelected = type === selectedContentType;
     var isPremium = type === 'Premium';
-    return '<div class="selection-card stagger-item' + (isSelected ? ' is-selected' : '') + '" data-action="select-content-type" data-id="' + type + '" style="text-align:center;">' +
+    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-content-type" data-id="' + type + '" style="text-align:center;">' +
       (isPremium ? '<span class="selection-card__badge selection-card__badge--premium">💎</span>' : '') +
       '<div class="selection-card__title">' + type + '</div>' +
       '<div class="selection-card__meta">' + (isPremium ? 'Higher cost, OF subs' : 'Social reach') + '</div>' +
@@ -846,16 +846,16 @@ function renderBooking(gameState) {
   '</div>';
 
   // Assemble layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Booking</h2>' +
+  var contentHtml = '<h2 class="screen-title">Booking</h2>' +
     '<div class="booking-layout">' +
       '<div class="booking-layout__left">' +
-        '<div class="panel stagger-item"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
+        '<div class="panel"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
         performerHtml +
       '</div>' +
       '<div class="booking-layout__right">' +
-        '<div class="panel stagger-item"><h3 class="panel-title">Location</h3>' + locationCardsHtml + '</div>' +
-        '<div class="panel stagger-item"><h3 class="panel-title">Theme</h3><div class="selection-grid selection-grid--2col">' + themeCardsHtml + '</div></div>' +
-        '<div class="panel stagger-item"><h3 class="panel-title">Content Type</h3><div class="selection-grid selection-grid--2col">' + contentTypeHtml + '</div></div>' +
+        '<div class="panel"><h3 class="panel-title">Location</h3>' + locationCardsHtml + '</div>' +
+        '<div class="panel"><h3 class="panel-title">Theme</h3><div class="selection-grid selection-grid--2col">' + themeCardsHtml + '</div></div>' +
+        '<div class="panel"><h3 class="panel-title">Content Type</h3><div class="selection-grid selection-grid--2col">' + contentTypeHtml + '</div></div>' +
         summaryHtml +
       '</div>' +
     '</div>' +
@@ -974,7 +974,7 @@ function renderAnalytics(gameState) {
   '</div>';
 
   // Secondary stats
-  var secondaryStatsHtml = '<div class="panel stagger-item"><h3 class="panel-title">Social & Reputation</h3>' +
+  var secondaryStatsHtml = '<div class="panel"><h3 class="panel-title">Social & Reputation</h3>' +
     '<div class="stat-row"><span class="stat-row__label">Social Followers</span><span class="stat-row__value">' + followers.toLocaleString() + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Social Subscribers</span><span class="stat-row__value">' + socialSubs.toLocaleString() + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + reputation + '</span></div>' +
@@ -982,21 +982,21 @@ function renderAnalytics(gameState) {
 
   // Cashflow stats
   var dailyNet = dailyPayout - dailyOverhead.amount;
-  var cashflowHtml = '<div class="panel stagger-item"><h3 class="panel-title">Daily Cashflow</h3>' +
+  var cashflowHtml = '<div class="panel"><h3 class="panel-title">Daily Cashflow</h3>' +
     '<div class="stat-row"><span class="stat-row__label">OF Payout</span><span class="stat-row__value stat-row__value--positive">+' + formatCurrency(dailyPayout) + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Overhead</span><span class="stat-row__value stat-row__value--negative">-' + formatCurrency(dailyOverhead.amount) + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Net Daily</span><span class="stat-row__value ' + (dailyNet >= 0 ? 'stat-row__value--positive' : 'stat-row__value--negative') + '">' + (dailyNet >= 0 ? '+' : '') + formatCurrency(dailyNet) + '</span></div>' +
   '</div>';
 
   // Content stats
-  var contentStatsHtml = '<div class="panel stagger-item"><h3 class="panel-title">Content Library</h3>' +
+  var contentStatsHtml = '<div class="panel"><h3 class="panel-title">Content Library</h3>' +
     '<div class="stat-row"><span class="stat-row__label">Total Shoots</span><span class="stat-row__value">' + contentEntries.length + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Promo Content</span><span class="stat-row__value">' + promoCount + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Premium Content</span><span class="stat-row__value">' + premiumCount + '</span></div>' +
   '</div>';
 
   // Layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Analytics</h2>' +
+  var contentHtml = '<h2 class="screen-title">Analytics</h2>' +
     '<div class="analytics-layout">' +
       topStatsHtml +
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-md);">' +
@@ -1045,7 +1045,7 @@ function renderRoster(gameState) {
       '</div>';
     }
 
-    return '<div class="performer-card stagger-item">' +
+    return '<div class="performer-card">' +
       '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
       '<div class="performer-card__info">' +
         '<div class="performer-card__name">' + p.name + '</div>' +
@@ -1094,7 +1094,7 @@ function renderRoster(gameState) {
     var hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
     recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
-        '<div class="performer-card performer-card--compact stagger-item" style="margin-top:var(--gap-sm);">' +
+        '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
           '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + name + '">' +
           '<div class="performer-card__info">' +
             '<div class="performer-card__name">' + name + '</div>' +
@@ -1158,7 +1158,7 @@ function renderRoster(gameState) {
   }
 
   // Layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Roster</h2>' +
+  var contentHtml = '<h2 class="screen-title">Roster</h2>' +
     '<div class="roster-layout">' +
       '<div class="roster-grid">' + performerCardsHtml + '</div>' +
       '<div class="roster-sidebar">' + recruitmentHtml + expiredContractsHtml + renewalsHtml + '</div>' +
@@ -1256,9 +1256,9 @@ function renderSocial(gameState) {
   '</div>';
 
   // Layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Social</h2>' +
+  var contentHtml = '<h2 class="screen-title">Social</h2>' +
     '<div class="social-layout">' +
-      '<div class="social-panel stagger-item">' +
+      '<div class="social-panel">' +
         '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
           '<h3 class="panel-title">Available to Post</h3>' +
           '<div class="social-panel__content">' + availableListHtml + '</div>' +
@@ -1268,7 +1268,7 @@ function renderSocial(gameState) {
           '</div>' +
         '</div>' +
       '</div>' +
-      '<div class="social-panel stagger-item">' +
+      '<div class="social-panel">' +
         statsHtml +
         '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
           '<h3 class="panel-title">Recent Posts</h3>' +
@@ -1352,7 +1352,7 @@ function renderGallery(gameState) {
       packsHtml +
       "</div>";
 
-    var conquestContentHtml = "<h2 class=\"screen-title stagger-item\">Gallery</h2>" +
+    var conquestContentHtml = "<h2 class=\"screen-title\">Gallery</h2>" +
       modeToggleHtml +
       conquestsHtml +
       "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
@@ -1376,7 +1376,7 @@ function renderGallery(gameState) {
     var thumbPath = entry.thumbnailPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
     var isSelected = entry.id === selectedEntryId;
 
-    return '<div class="content-card stagger-item' + (isSelected ? ' is-selected' : '') + '" data-action="select-gallery-entry" data-id="' + entry.id + '">' +
+    return '<div class="content-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-gallery-entry" data-id="' + entry.id + '">' +
       '<img class="content-card__image" src="' + thumbPath + '" alt="' + entry.title + '">' +
       '<div class="content-card__body">' +
         '<div class="content-card__title">' + (entry.title || 'Untitled') + '</div>' +
@@ -1417,7 +1417,7 @@ function renderGallery(gameState) {
   }
 
   // Layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Gallery</h2>' +
+  var contentHtml = '<h2 class="screen-title">Gallery</h2>' +
     modeToggleHtml +
     '<div class="gallery-layout">' +
       '<div class="gallery-grid">' + contentCardsHtml + '</div>' +
@@ -1522,7 +1522,7 @@ function renderConquests(gameState) {
       var characterName = characterConfig && characterConfig.name ? characterConfig.name : "Unknown";
       var stageLabel = "Stage " + message.stageIndex;
       var statusLabel = getConquestMessageStatusLabel(message.status);
-      var classes = ["conquest-message", "stagger-item"];
+      var classes = ["conquest-message"];
       if (selectedMessageIdSafe === message.id) {
         classes.push("is-selected");
       }
@@ -1556,7 +1556,7 @@ function renderConquests(gameState) {
   } else {
     packsHtml = unlockedPacks.map(function (pack) {
       var stageLabel = "Stage " + pack.stageIndex;
-      return "<div class=\"conquest-pack stagger-item\">" +
+      return "<div class=\"conquest-pack\">" +
         "<div class=\"conquest-pack__text\">" +
         "<div class=\"conquest-pack__title\">" + pack.title + "</div>" +
         "<div class=\"conquest-pack__meta\">" + stageLabel + "</div>" +
@@ -1638,12 +1638,12 @@ function renderConquests(gameState) {
   }
 
   var contentHtml = "<div class=\"screen-header\">" +
-    "<h2 class=\"screen-title stagger-item\" id=\"screen-conquests-title\">Conquests</h2>" +
+    "<h2 class=\"screen-title\" id=\"screen-conquests-title\">Conquests</h2>" +
     "<p class=\"helper-text\">Messages from power players. Accept to unlock exclusive reward packs.</p>" +
     "</div>" +
     "<div class=\"conquests-layout\">" +
     "<div class=\"conquests-panel\">" +
-    "<div class=\"panel stagger-item\">" +
+    "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Inbox</h3>" +
     "<div class=\"conquest-inbox\">" + inboxHtml + "</div>" +
     "<div class=\"conquest-unlocked\">" +
@@ -1653,7 +1653,7 @@ function renderConquests(gameState) {
     "</div>" +
     "</div>" +
     "<div class=\"conquests-panel\">" +
-    "<div class=\"panel stagger-item\">" +
+    "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Message</h3>" +
     detailHtml +
     "</div>" +
@@ -1748,7 +1748,7 @@ function renderSlideshow(gameState) {
       footerHtml +
       "</div>";
     const slideshowHtml = "<div class=\"panel recruit-slideshow-panel\" " + modalStyle + ">" +
-      "<h2 class=\"screen-title stagger-item\" id=\"screen-slideshow-title\">Meet Recruit</h2>" +
+      "<h2 class=\"screen-title\" id=\"screen-slideshow-title\">Meet Recruit</h2>" +
       body +
       "</div>";
     container.innerHTML = renderAmbientLayers("screen-slideshow") +
@@ -1870,7 +1870,7 @@ function renderStoryLog(gameState) {
     entriesHtml = '<div class="empty-state"><div class="empty-state__icon">📜</div><div class="empty-state__title">No Story Events</div><div class="empty-state__description">Events will appear here as your studio grows.</div></div>';
   }
 
-  var contentHtml = '<h2 class="screen-title stagger-item">Story Log</h2>' +
+  var contentHtml = '<h2 class="screen-title">Story Log</h2>' +
     '<div class="story-log-layout">' +
       '<div class="story-log-list">' + entriesHtml + '</div>' +
     '</div>' +
@@ -1900,7 +1900,7 @@ function renderShop(gameState) {
   var canBuyTier1 = !tier1Unlocked && cash >= tier1Cost;
   var canBuyTier2 = !tier2Unlocked && cash >= tier2Cost && gameState.player.reputation >= tier2RepReq;
 
-  var locationCardsHtml = '<div class="shop-card stagger-item' + (tier1Unlocked ? ' shop-card--owned' : '') + '">' +
+  var locationCardsHtml = '<div class="shop-card' + (tier1Unlocked ? ' shop-card--owned' : '') + '">' +
     '<div class="shop-card__title">Tier 1 Locations</div>' +
     '<div class="shop-card__description">Unlock Shower and other Tier 1 locations for your shoots.</div>' +
     (tier1Unlocked ?
@@ -1908,7 +1908,7 @@ function renderShop(gameState) {
       '<div class="shop-card__price">' + formatCurrency(tier1Cost) + '</div><button class="button primary" data-action="buy-tier1-location"' + (canBuyTier1 ? '' : ' disabled') + '>Unlock</button>'
     ) +
   '</div>' +
-  '<div class="shop-card stagger-item' + (tier2Unlocked ? ' shop-card--owned' : (!canBuyTier2 && !tier2Unlocked ? ' shop-card--locked' : '')) + '">' +
+  '<div class="shop-card' + (tier2Unlocked ? ' shop-card--owned' : (!canBuyTier2 && !tier2Unlocked ? ' shop-card--locked' : '')) + '">' +
     '<div class="shop-card__title">Tier 2 Locations</div>' +
     '<div class="shop-card__description">Unlock Office and premium Tier 2 locations. Requires ' + tier2RepReq + ' reputation.</div>' +
     (tier2Unlocked ?
@@ -1945,7 +1945,7 @@ function renderShop(gameState) {
       var nextCost = isMaxed ? null : upgrade.levelCosts[currentLevel];
       var canBuy = nextCost !== null && cash >= nextCost;
       var title = getEquipmentUpgradeLabel(upgradeId);
-      return '<div class="shop-card stagger-item' + (isMaxed ? ' shop-card--owned' : '') + '">' +
+      return '<div class="shop-card' + (isMaxed ? ' shop-card--owned' : '') + '">' +
         '<div class="shop-card__title">' + title + ' (Level ' + currentLevel + ')</div>' +
         '<div class="shop-card__description">Upgrade to improve shoot performance and growth multipliers.</div>' +
         (isMaxed
@@ -1957,10 +1957,10 @@ function renderShop(gameState) {
     : '<div class="empty-state"><div class="empty-state__description">No equipment upgrades available.</div></div>';
 
   // Layout
-  var contentHtml = '<h2 class="screen-title stagger-item">Shop</h2>' +
+  var contentHtml = '<h2 class="screen-title">Shop</h2>' +
     '<div class="shop-layout">' +
-      '<div class="panel stagger-item"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
-      '<div class="panel stagger-item"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
+      '<div class="panel"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
+      '<div class="panel"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
     '</div>' +
     renderStatusMessage() +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';

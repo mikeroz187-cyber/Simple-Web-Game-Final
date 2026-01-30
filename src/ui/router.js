@@ -5,11 +5,6 @@ function showScreen(screenId) {
       updateMascot(screenId);
     }
   };
-  var triggerStagger = function() {
-    if (typeof triggerStaggerEntrance === "function") {
-      triggerStaggerEntrance(targetScreen);
-    }
-  };
 
   if (!targetScreen) return;
 
@@ -30,13 +25,10 @@ function showScreen(screenId) {
       requestAnimationFrame(function() {
         targetScreen.classList.remove("screen--entering");
       });
-
-      setTimeout(triggerStagger, 180);
     }, 150);
   } else if (!activeScreen) {
     targetScreen.classList.add("is-active");
     applyMascotUpdate();
-    setTimeout(triggerStagger, 180);
   } else {
     applyMascotUpdate();
   }
