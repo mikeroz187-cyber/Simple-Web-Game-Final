@@ -65,6 +65,7 @@
 - [x] Hub shows “Est. days to afford debt” based on (daily OF payout − daily overhead).
 - [x] Hub: Pay Down Debt quick buttons (enables Bank Manager progression).
 - [x] Star Power progression (per-performer shoots → Star Power).
+- [x] Star Power cap increased to 10.
 - [x] Content-type shoot cost multipliers (Premium costs more) applied in booking + UI shows final cost.
 - [x] Promo gains apply only on posting (no double-counting).
 - [x] Promo OF conversion uses fractional carry.
@@ -100,6 +101,8 @@
 - [x] Implement Diva Fee Loyalty + boosted star + UI messaging.
 - [x] Low loyalty triggers Diva Fee (shoot + renewal) and UI explains it in Roster + Booking.
 - [x] Roster: expired contracts show Renew CTA (card + sidebar).
+- [x] Star Power >6 adds booking cost premium and displays on Booking summary card.
+- [x] Booking UI clarifies audience multiplier vs cost premium.
 
 ---
 

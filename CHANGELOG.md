@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Raised Star Power cap to 10 and clarified booking summary with audience pull vs Star Power premium itemization.
+  - Why: Allow progression beyond 6 while keeping audience math distinct from booking cost premiums.
+  - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/DATA_UI_COPY.md, CHANGELOG.md.
 - What: FIX remove the debt-day booking hard-block, enforce the CONFIG.game.shoots_per_day cap, and itemize Star Power cost premiums in booking.
   - Why: Allow Day 90+ shoots, enforce the real daily limit, and make high-star booking costs transparent.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

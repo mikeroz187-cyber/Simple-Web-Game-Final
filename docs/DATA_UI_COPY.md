@@ -33,7 +33,7 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 
 ## Booking
 - Booking Mode: **Core Performer**, **Agency Sample Pack**
-- Booking Summary: **Diva Fee** (when active), **Star Power Multiplier**
+- Booking Summary: **Star Rating**, **Audience Pull (Star Power)**, **Diva Fee** (when active), **Star Power Premium** (when active)
 - Confirm Shoot
 - Back to Hub
 
