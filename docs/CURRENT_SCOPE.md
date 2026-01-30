@@ -36,7 +36,6 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Empire Pulse Phase 1: Screen transitions
 
 ## Next 3–7 Candidate Tasks
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state
