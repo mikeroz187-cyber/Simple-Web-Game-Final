@@ -19,7 +19,7 @@
 - [x] Core screens (Hub, Booking, Content, Analytics, Roster, Social, Gallery, Shop, Story Log, Slideshow).
 - [x] Save/Load system with multiple slots + autosave.
 - [x] Export/Import JSON saves.
-- [x] Manual Advance Day (no global shoots/day cap; booking blocked at Day ≥ debt due day).
+- [x] Manual Advance Day (daily shoots cap enforced; no debt-day booking lock).
 - [x] Economy basics (cash, debt, Social Followers/Subs, OF Subs, MRR).
 - [x] Content types (Promo and Premium).
 - [x] Performer stats (Star Power, fatigue, loyalty).
@@ -126,6 +126,9 @@
 - [x] FIX Bug #13: Pay Max uses in-game modal instead of browser prompt.
 - [x] FIX Bug #14: Star Power 7+ adds a booking premium and is itemized at confirm.
 - [x] FIX Bug #15: Daily shoot cap only blocks booking more shoots (no global gating).
+- [x] Booking: remove Day>=debtDueDay hard-block (Day 90 no longer blocks shoots).
+- [x] Booking: enforce CONFIG.game.shoots_per_day cap (blocks only when shootsToday >= cap).
+- [x] Booking: Star Power > threshold adds cost premium and displays in booking summary.
 
 ---
 

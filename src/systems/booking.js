@@ -125,9 +125,41 @@ function getMaxStarPowerForPerformers(gameState, performerIds) {
     const performerEntry = gameState.roster.performers.find(function (entry) {
       return entry.id === performerId;
     });
-    const starPower = performerEntry && Number.isFinite(performerEntry.starPower) ? performerEntry.starPower : 0;
+    const configEntry = (!performerEntry && CONFIG.performers && CONFIG.performers.catalog)
+      ? CONFIG.performers.catalog[performerId]
+      : null;
+    const starPower = performerEntry && Number.isFinite(performerEntry.starPower)
+      ? performerEntry.starPower
+      : (configEntry && Number.isFinite(configEntry.starPower) ? configEntry.starPower : 0);
     return Math.max(maxValue, starPower);
   }, 0);
+}
+
+function getStarPowerCostSurcharge(gameState, performerIds, baseCost) {
+  const starPowerCostConfig = CONFIG.economy && CONFIG.economy.starPowerCost &&
+    typeof CONFIG.economy.starPowerCost === "object"
+    ? CONFIG.economy.starPowerCost
+    : {};
+  if (starPowerCostConfig.enabled === false) {
+    return { mult: 1, surcharge: 0, maxStar: null };
+  }
+  if (!Array.isArray(performerIds) || performerIds.length === 0 || performerIds.indexOf("agency_pack") !== -1) {
+    return { mult: 1, surcharge: 0, maxStar: null };
+  }
+  const threshold = Number.isFinite(starPowerCostConfig.threshold) ? starPowerCostConfig.threshold : 0;
+  const multipliers = typeof starPowerCostConfig.multipliers === "object" ? starPowerCostConfig.multipliers : {};
+  const defaultMultiplier = Number.isFinite(starPowerCostConfig.defaultMultiplier)
+    ? starPowerCostConfig.defaultMultiplier
+    : 1;
+  const maxStar = getMaxStarPowerForPerformers(gameState, performerIds);
+  if (maxStar <= threshold) {
+    return { mult: 1, surcharge: 0, maxStar: maxStar };
+  }
+  const lookupKey = String(Math.max(0, Math.round(maxStar)));
+  const mult = Number.isFinite(multipliers[lookupKey]) ? multipliers[lookupKey] : defaultMultiplier;
+  const safeBase = Number.isFinite(baseCost) ? baseCost : 0;
+  const surcharge = mult > 1 ? Math.round(safeBase * (mult - 1)) : 0;
+  return { mult: mult, surcharge: surcharge, maxStar: maxStar };
 }
 
 function getReputationOfSubsMultiplier(gameState) {
@@ -374,14 +406,10 @@ function tryAutoBookOne(gameState) {
     return { success: false, reason: "Game state missing" };
   }
 
-  if (gameState.player.day >= gameState.player.debtDueDay) {
-    return { success: false, reason: "Day limit reached" };
-  }
-
-  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 0;
+  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
-  if (maxShootsPerDay > 0 && currentShoots >= maxShootsPerDay) {
-    return { success: false, reason: "Day limit reached" };
+  if (currentShoots >= maxShootsPerDay) {
+    return { success: false, reason: "Daily shoot limit reached" };
   }
 
   const selectionResult = getAutoBookingSelection(gameState);
@@ -402,14 +430,12 @@ function tryAutoBookOne(gameState) {
     return entry.id === selectionResult.selection.performerIdA;
   });
   const divaFee = selectedPerformer ? getDivaShootFeeForPerformer(selectedPerformer) : 0;
-  const maxStarPowerUsed = selectedPerformer && Number.isFinite(selectedPerformer.starPower)
-    ? selectedPerformer.starPower
-    : 0;
-  const starPowerMultiplier = getStarPowerCostMultiplier(maxStarPowerUsed);
-  const starPowerSurcharge = starPowerMultiplier > 1
-    ? Math.round(adjustedCost.finalCost * (starPowerMultiplier - 1))
-    : 0;
-  const finalShootCost = adjustedCost.finalCost + divaFee + starPowerSurcharge;
+  const starPremium = getStarPowerCostSurcharge(
+    gameState,
+    selectedPerformer ? [selectedPerformer.id] : [],
+    adjustedCost.finalCost
+  );
+  const finalShootCost = adjustedCost.finalCost + divaFee + starPremium.surcharge;
   if (gameState.player.cash < finalShootCost) {
     return { success: false, reason: "Not enough cash" };
   }
@@ -435,14 +461,13 @@ function confirmBooking(gameState, selection) {
     return { ok: false, message: "Select all fields before confirming." };
   }
 
-  if (gameState.player.day >= gameState.player.debtDueDay) {
-    return { ok: false, message: "Day limit reached. No more shoots allowed." };
-  }
-
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
-  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 0;
-  if (maxShootsPerDay > 0 && currentShoots >= maxShootsPerDay) {
-    return { ok: false, message: "Day limit reached. No more shoots allowed." };
+  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
+  if (currentShoots >= maxShootsPerDay) {
+    return {
+      ok: false,
+      message: "Daily shoot limit reached (" + maxShootsPerDay + "). End the day to shoot again."
+    };
   }
 
   const agencyConfig = getAgencyPackConfig();
@@ -519,13 +544,10 @@ function confirmBooking(gameState, selection) {
       });
       return sum + (performerEntry ? getDivaShootFeeForPerformer(performerEntry) : 0);
     }, 0);
-  const maxStarPowerUsed = isAgencyPack
-    ? 0
-    : getMaxStarPowerForPerformers(gameState, performerSelection.performerIds);
-  const starPowerMultiplier = getStarPowerCostMultiplier(maxStarPowerUsed);
-  const starPowerSurcharge = starPowerMultiplier > 1
-    ? Math.round(shootCost * (starPowerMultiplier - 1))
-    : 0;
+  const starPremium = isAgencyPack
+    ? { mult: 1, surcharge: 0, maxStar: null }
+    : getStarPowerCostSurcharge(gameState, performerSelection.performerIds, shootCost);
+  const starPowerSurcharge = starPremium.surcharge;
   const totalShootCost = shootCost + divaFee + starPowerSurcharge;
   if (gameState.player.cash < totalShootCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
@@ -629,10 +651,10 @@ function confirmBooking(gameState, selection) {
     costBreakdown: {
       baseCost: baseShootCost,
       contentTypeMultiplier: adjustedCost.mult,
-      divaFee: divaFee,
-      starPowerMultiplier: starPowerMultiplier,
+      starPowerMax: starPremium.maxStar,
+      starPowerCostMultiplier: starPremium.mult,
       starPowerSurcharge: starPowerSurcharge,
-      maxStarPowerUsed: maxStarPowerUsed,
+      divaFee: divaFee,
       totalCost: totalShootCost
     },
     photoPaths: buildShootPhotoPaths(),
