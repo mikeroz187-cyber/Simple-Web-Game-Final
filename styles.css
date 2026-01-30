@@ -481,22 +481,18 @@ body {
   text-decoration: none;
   min-height: var(--control-height);
   box-shadow: var(--shadow-sm);
-  transform: translateY(0);
-  transition: all 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  transition: all 0.15s ease;
   white-space: nowrap;
-  position: relative;
-  overflow: hidden;
 }
 
 .button:hover:not(:disabled):not(.is-disabled) {
   background: var(--glass-active);
   border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .button:active:not(:disabled):not(.is-disabled) {
-  transform: translateY(0) scale(0.97);
-  transition: transform 0.05s ease;
+  transform: translateY(0);
 }
 
 .button:focus-visible {
@@ -525,10 +521,6 @@ body {
   box-shadow: 0 0 30px rgba(255, 45, 122, 0.5);
 }
 
-.button.primary:active:not(:disabled) {
-  box-shadow: 0 0 25px rgba(255, 45, 122, 0.6), 0 0 50px rgba(255, 45, 122, 0.3);
-}
-
 /* VIP - Gold */
 .button.vip {
   background: linear-gradient(135deg, var(--vip) 0%, #b8860b 100%);
@@ -540,10 +532,6 @@ body {
 
 .button.vip:hover:not(:disabled):not(.is-disabled) {
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-}
-
-.button.vip:active:not(:disabled) {
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), 0 0 50px rgba(212, 175, 55, 0.3);
 }
 
 /* Secondary - Outlined Pink */
@@ -568,28 +556,6 @@ body {
 .button.ghost:hover:not(:disabled):not(.is-disabled) {
   background: var(--glass-hover);
   color: var(--text-body);
-}
-
-.button.click-burst::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at var(--click-x, 50%) var(--click-y, 50%), rgba(255, 255, 255, 0.4) 0%, transparent 60%);
-  opacity: 0;
-  animation: click-burst 0.4s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes click-burst {
-  0% {
-    opacity: 1;
-    transform: scale(0.5);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(2);
-  }
 }
 
 /* Danger - Red */
@@ -651,25 +617,19 @@ body {
   border-radius: var(--radius-md);
   padding: var(--gap-md);
   cursor: pointer;
-  transition: all 0.15s ease, transform 0.1s ease;
+  transition: all 0.15s ease;
   position: relative;
 }
 
 .selection-card:hover:not(.is-disabled) {
   background: var(--glass-hover);
   border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-3px);
-}
-
-.selection-card:active:not(.is-disabled) {
-  transform: translateY(-1px) scale(0.98);
 }
 
 .selection-card.is-selected {
   border-color: var(--accent);
   background: var(--glass-active);
   box-shadow: 0 0 20px rgba(255, 45, 122, 0.15);
-  animation: selection-pop 0.2s ease-out;
 }
 
 .selection-card.is-selected::after {
@@ -754,12 +714,6 @@ body {
   color: var(--vip);
 }
 
-@keyframes selection-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-  100% { transform: scale(1); }
-}
-
 /* ============================================
    PERFORMER CARDS
    ============================================ */
@@ -771,18 +725,16 @@ body {
   border: var(--border-width) solid var(--glass-border);
   border-radius: var(--radius-md);
   padding: var(--gap-md);
-  transition: all 0.15s ease, transform 0.1s ease;
+  transition: all 0.15s ease;
 }
 
 .performer-card:hover {
   border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
 }
 
 .performer-card.is-selected {
   border-color: var(--accent);
   background: var(--glass-active);
-  animation: selection-pop 0.2s ease-out;
 }
 
 .performer-card--compact {
@@ -879,17 +831,12 @@ body {
   border-radius: var(--radius-md);
   padding: var(--gap-sm) var(--gap-md);
   cursor: pointer;
-  transition: all 0.15s ease, transform 0.1s ease;
+  transition: all 0.15s ease;
 }
 
 .location-card:hover:not(.is-disabled) {
   background: var(--glass-hover);
   border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-.location-card:active:not(.is-disabled) {
-  transform: translateY(0) scale(0.98);
 }
 
 .location-card.is-selected {
@@ -1243,7 +1190,7 @@ body {
   border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.15s ease, transform 0.1s ease;
+  transition: all 0.15s ease;
 }
 
 .content-card:hover {
@@ -1255,10 +1202,6 @@ body {
 .content-card.is-selected {
   border-color: var(--accent);
   box-shadow: 0 0 20px rgba(255, 45, 122, 0.2);
-}
-
-.content-card:active {
-  transform: translateY(0) scale(0.98);
 }
 
 .content-card__image {

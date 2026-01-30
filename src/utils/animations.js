@@ -246,35 +246,6 @@ function triggerStaggerEntrance(container, selector) {
   });
 }
 
-/**
- * Add click burst effect to a button
- * @param {HTMLElement} button - Button element
- * @param {MouseEvent} event - Click event for position
- */
-function addClickBurst(button, event) {
-  if (!button) return;
-
-  // Calculate click position relative to button
-  var rect = button.getBoundingClientRect();
-  var x = ((event.clientX - rect.left) / rect.width) * 100;
-  var y = ((event.clientY - rect.top) / rect.height) * 100;
-
-  button.style.setProperty('--click-x', x + '%');
-  button.style.setProperty('--click-y', y + '%');
-
-  // Remove existing burst class and force reflow
-  button.classList.remove('click-burst');
-  void button.offsetWidth;
-
-  // Add burst class
-  button.classList.add('click-burst');
-
-  // Remove class after animation
-  setTimeout(function() {
-    button.classList.remove('click-burst');
-  }, 400);
-}
-
 // ============================================
 // PULSE ANIMATION
 // ============================================
