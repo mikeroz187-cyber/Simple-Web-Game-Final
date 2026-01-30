@@ -370,7 +370,7 @@ function createRollerDigit(char, isNarrow) {
 
     // Position track to show current digit
     var index = rollerChars.indexOf(char);
-    track.style.transform = 'translateY(' + (-index * 1.2) + 'em)';
+    track.style.transform = 'translateY(' + (-index * 1) + 'em)';
   } else {
     // For non-numeric characters, just show the character
     var charEl = document.createElement('span');
@@ -424,7 +424,7 @@ function rollDigitTo(digitEl, newChar, delay) {
   if (newIndex !== -1) {
     setTimeout(function() {
       digitEl.classList.add('is-rolling');
-      track.style.transform = 'translateY(' + (-newIndex * 1.2) + 'em)';
+      track.style.transform = 'translateY(' + (-newIndex * 1) + 'em)';
 
       // Remove rolling class after animation
       setTimeout(function() {

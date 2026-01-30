@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX restore staggered content visibility, simplify header stats animations, and align roller digit sizing/offsets.
+  - Why: Resolve invisible panels and garbled currency rendering after the Empire Pulse visuals.
+  - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, CHANGELOG.md.
 - What: FIX screen navigation event bubbling and transition timing for Empire Pulse screens.
   - Why: Stop nav clicks from triggering fallback warnings and ensure screen content refreshes reliably.
   - Files touched: src/ui/events.js, src/ui/router.js, styles.css, CHANGELOG.md.

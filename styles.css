@@ -708,11 +708,16 @@ body {
 
 /* Staggered entrance animations */
 .stagger-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item.stagger-animate {
   opacity: 0;
   transform: translateY(12px);
 }
 
-.stagger-item.is-visible {
+.stagger-item.stagger-animate.is-visible {
   animation: stagger-in 0.3s ease-out forwards;
 }
 
@@ -3796,26 +3801,27 @@ body.after-hours-active .ambient-mascot {
 /* === SLOT-MACHINE NUMBER ROLLERS === */
 .roller-value {
   display: inline-flex;
-  overflow: hidden;
-  vertical-align: bottom;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 .roller-digit {
   display: inline-block;
   position: relative;
-  width: 0.6em;
-  height: 1.2em;
+  width: 0.65em;
+  height: 1em;
   overflow: hidden;
-  text-align: center;
+  vertical-align: top;
 }
 
 /* Narrower width for punctuation */
 .roller-digit--narrow {
-  width: 0.35em;
+  width: 0.4em;
 }
 
 .roller-digit__track {
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
   display: flex;
@@ -3825,8 +3831,9 @@ body.after-hours-active .ambient-mascot {
 }
 
 .roller-digit__char {
-  height: 1.2em;
-  line-height: 1.2em;
+  height: 1em;
+  line-height: 1em;
+  display: block;
 }
 
 /* Glow effect during roll */
@@ -3860,7 +3867,7 @@ body.after-hours-active .ambient-mascot {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.05);
   }
   100% {
     transform: scale(1);
@@ -3868,20 +3875,16 @@ body.after-hours-active .ambient-mascot {
 }
 
 /* Header stat specific sizing */
-.header-stat__value .roller-value {
-  font-family: var(--font-mono);
-}
-
 .header-stat__value .roller-digit {
-  width: 0.55em;
-  height: 1.15em;
+  width: 0.6em;
+  height: 1em;
 }
 
 .header-stat__value .roller-digit--narrow {
-  width: 0.3em;
+  width: 0.35em;
 }
 
 .header-stat__value .roller-digit__char {
-  height: 1.15em;
-  line-height: 1.15em;
+  height: 1em;
+  line-height: 1em;
 }
