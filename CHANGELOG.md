@@ -11,9 +11,6 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
-- What: Added slot-machine number roller visuals and animations for header cash/subscriber stats.
-  - Why: Deliver Empire Pulse Phase 3 digit-by-digit roll polish for key numbers.
-  - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Empire Pulse Phase 2 ambient animations (neon flicker, panel breathing, and glow pulses).
   - Why: Keep the UI feeling alive with subtle atmospheric effects tied to current game state.
   - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, src/main.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
