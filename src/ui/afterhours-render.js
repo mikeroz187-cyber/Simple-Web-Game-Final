@@ -151,6 +151,7 @@ function renderAfterHoursAskModal(performer, content) {
     '<div class="modal-card after-hours-card">' +
     '<h3 class="after-hours-title">' + content.askTitle + '</h3>' +
     '<div class="after-hours-text">' + content.askText + '</div>' +
+    '<div class="after-hours-subtext"><em>You already know what this is: she wants an envelope, not a conversation.</em></div>' +
     '<div class="after-hours-want">' +
     '<strong>WHAT SHE WANTS:</strong> ' + content.askWant +
     '</div>' +
@@ -190,11 +191,15 @@ function renderAfterHoursOfferModal(performer, content, gameState) {
   return '<div class="modal-overlay after-hours-modal">' +
     '<div class="modal-card after-hours-card">' +
     '<h3 class="after-hours-title">The Offer</h3>' +
-    '<div class="after-hours-text">' + content.offerText + '</div>' +
+    '<div class="after-hours-text">' +
+    content.offerText +
+    '<p>She names a number and holds eye contact. <strong>Cash. Up front. No receipts.</strong></p>' +
+    '<p>She wants <strong>' + feeLabel + '</strong> tonight.</p>' +
+    '</div>' +
     '<div class="after-hours-offer-box">' +
     '<div><strong>WHAT SHE WANTS:</strong> Cash. Tonight.</div>' +
-    '<div><strong>THE DEAL:</strong> Pay ' + feeLabel + ' right now and she’s all smiles again.</div>' +
-    '<div><strong>CONSEQUENCE:</strong> If you dismiss her: -' + declinePenalty + ' Loyalty and she won’t come back for ' + declineDays + ' days.</div>' +
+    '<div><strong>THE DEAL:</strong> Slide her ' + feeLabel + ' in cash right now. She walks out happy. You keep control.</div>' +
+    '<div><strong>CONSEQUENCE:</strong> If you refuse to pay: -' + declinePenalty + ' Loyalty and she won’t come back for ' + declineDays + ' days.</div>' +
     '</div>' +
     warningText +
     '<div class="button-row">' +
@@ -291,7 +296,10 @@ function renderAfterHoursLockModal(performer, content) {
   var lockText = content.lockText || "\"Deal.\"<br><br>She locks the door.<br><br><em>*click*</em>";
   return '<div class="modal-overlay after-hours-modal">' +
     '<div class="modal-card after-hours-card after-hours-beat">' +
-    '<div class="after-hours-beat-text">' + lockText + '</div>' +
+    '<div class="after-hours-beat-text">' +
+    lockText +
+    '<div class="after-hours-subtext"><em>You hand it over. She counts it without shame.</em></div>' +
+    '</div>' +
     '<div class="button-row">' +
     '<button class="button primary" data-action="after-hours-next-beat" data-performer="' + performer.id + '">Continue</button>' +
     '</div>' +

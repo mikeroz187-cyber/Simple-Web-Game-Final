@@ -117,6 +117,8 @@
 - [x] Analytics secondary row uses aligned grid styling for top-aligned cards (Bugfix F).
 - [x] Bug #5 Analytics card alignment.
 - [x] FIX After Hours accept is a one-time cash payment with gating + dismiss penalties/cooldown.
+  - [x] Cash decreases immediately on Accept (header updates instantly).
+  - [x] Offer/ask text explicitly communicates paying her cash.
 
 ---
 
