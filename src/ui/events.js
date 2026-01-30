@@ -1327,10 +1327,16 @@ function setupEventHandlers() {
           return;
         }
         uiState.afterHours.paymentApplied = true;
+        if (typeof renderHeaderStats === "function") {
+          renderHeaderStats(window.gameState);
+        }
+        if (typeof setPreviousValue === "function") {
+          setPreviousValue("header-cash", window.gameState.player.cash);
+        }
         saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (typeof showToast === "function") {
           showToast(
-            "Paid " + formatCurrency(paymentResult.feePaid) + ". Cash is gone. Problem is… postponed.",
+            "You pay her " + formatCurrency(paymentResult.feePaid) + " cash. She smiles like nothing happened.",
             "info"
           );
         }

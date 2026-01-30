@@ -123,6 +123,9 @@ function applyAfterHoursPayment(gameState, performerId) {
     return { ok: false, feePaid: 0 };
   }
   var fee = getAfterHoursOneTimeFee(performerId);
+  if (!Number.isFinite(fee) || fee < 0) {
+    fee = 0;
+  }
   if (!canAffordAfterHours(gameState, fee)) {
     return { ok: false, feePaid: 0 };
   }
