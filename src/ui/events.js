@@ -195,6 +195,7 @@ function setupEventHandlers() {
   document.querySelectorAll("[data-action=\"nav-screen\"]").forEach(function (el) {
     el.addEventListener("click", function (event) {
       event.preventDefault();
+      event.stopPropagation();
       var screenId = el.getAttribute("data-screen");
       if (screenId) {
         showScreen(screenId);
@@ -202,6 +203,9 @@ function setupEventHandlers() {
           navItem.classList.remove("is-active");
         });
         el.classList.add("is-active");
+        if (typeof renderApp === "function" && window.gameState) {
+          renderApp(window.gameState);
+        }
       }
     });
   });
