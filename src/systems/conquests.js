@@ -260,6 +260,10 @@ function checkConquests(gameState) {
       status: "unread"
     };
     gameState.conquests.inbox.push(message);
+    const current = Number.isFinite(gameState.conquests.characters[characterId].stageUnlocked)
+      ? gameState.conquests.characters[characterId].stageUnlocked
+      : 0;
+    gameState.conquests.characters[characterId].stageUnlocked = Math.max(current, nextStageIndex);
     result.messages.push(message);
     result.cards.push(buildConquestNotificationCard(characterConfig));
   });

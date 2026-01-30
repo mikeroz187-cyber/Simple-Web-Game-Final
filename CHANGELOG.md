@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX Bank Manager one-payment payoff now forces Stage 4, and Conquests stages unlock even if messages are unread.
+  - Why: Prevent early-stage Bank Manager messages on full payoff and remove the acceptance blocker for later Conquests stages.
+  - Files touched: src/systems/economy.js, src/systems/conquests.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX debt payoff stage flow, reminder gating, debt messaging, and Pay Max modal polish.
   - Why: Ensure the Bank Manager flow skips early stages on one-go payoff, reminders stop after payoff, story copy matches the $25,000 debt, and Pay Max uses in-game UI.
   - Files touched: src/systems/economy.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
