@@ -698,6 +698,9 @@ function renderBooking(gameState) {
     ? (Number.isFinite(selectedPerformer.loyalty) ? selectedPerformer.loyalty : CONFIG.performers.starting_loyalty)
     : null;
   var effectiveStar = (!isAgencyPack && selectedPerformer) ? getEffectiveStarPower(selectedPerformer) : null;
+  var maxStarPowerUsed = (!isAgencyPack && selectedPerformer && Number.isFinite(selectedPerformer.starPower))
+    ? selectedPerformer.starPower
+    : 0;
 
   // Get locations
   var locationIds = (CONFIG.locations.tier0_ids || [])
@@ -718,7 +721,11 @@ function renderBooking(gameState) {
   var shootCostResult = isAgencyPack ? calculateAgencyPackCost(selectedLocation) : calculateShootCost(selectedLocation);
   var baseCost = shootCostResult.ok ? shootCostResult.value : 0;
   var adjustedCost = applyContentTypeCostMultiplier(baseCost, selectedContentType);
-  var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0);
+  var starPowerMultiplier = !isAgencyPack ? getStarPowerCostMultiplier(maxStarPowerUsed) : 1;
+  var starPowerSurcharge = starPowerMultiplier > 1
+    ? Math.round(adjustedCost.finalCost * (starPowerMultiplier - 1))
+    : 0;
+  var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0) + starPowerSurcharge;
 
   // Booking mode cards
   var modeCardsHtml = '<div class="selection-grid selection-grid--2col">' +
@@ -827,6 +834,12 @@ function renderBooking(gameState) {
   var divaFeeRow = (!isAgencyPack && divaFee > 0)
     ? '<div class="booking-summary__row"><span class="booking-summary__label">Diva Fee</span><span class="booking-summary__value">+' + formatCurrency(divaFee) + (divaFeeReason ? ' (' + divaFeeReason + ')' : '') + '</span></div>'
     : '';
+  var starPowerPremiumRow = (!isAgencyPack && starPowerSurcharge > 0)
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Power Premium (★' + maxStarPowerUsed + ') x' + starPowerMultiplier.toFixed(2) + '</span><span class="booking-summary__value">+' + formatCurrency(starPowerSurcharge) + '</span></div>'
+    : '';
+  var starPowerPremiumNote = (!isAgencyPack && starPowerSurcharge > 0)
+    ? '<div class="helper-text">High-star talent costs more to book.</div>'
+    : '';
   var starRow = (!isAgencyPack && selectedPerformer && Number.isFinite(effectiveStar))
     ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Power Multiplier</span><span class="booking-summary__value">x' + effectiveStar.toFixed(2) + '</span></div>'
     : '';
@@ -838,6 +851,8 @@ function renderBooking(gameState) {
     '<div class="booking-summary__row"><span class="booking-summary__label">Type</span><span class="booking-summary__value">' + (selectedContentType || '—') + '</span></div>' +
     starRow +
     divaFeeRow +
+    starPowerPremiumRow +
+    starPowerPremiumNote +
     '<div class="divider"></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Total Cost</span><span class="booking-summary__value booking-summary__value--cost">' + formatCurrency(finalCost) + '</span></div>' +
     '<div class="button-row" style="margin-top:var(--gap-md);">' +

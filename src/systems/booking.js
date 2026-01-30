@@ -117,6 +117,19 @@ function buildAgencyPackPerformer() {
   };
 }
 
+function getMaxStarPowerForPerformers(gameState, performerIds) {
+  if (!gameState || !Array.isArray(performerIds)) {
+    return 0;
+  }
+  return performerIds.reduce(function (maxValue, performerId) {
+    const performerEntry = gameState.roster.performers.find(function (entry) {
+      return entry.id === performerId;
+    });
+    const starPower = performerEntry && Number.isFinite(performerEntry.starPower) ? performerEntry.starPower : 0;
+    return Math.max(maxValue, starPower);
+  }, 0);
+}
+
 function getReputationOfSubsMultiplier(gameState) {
   if (typeof getSelectedReputationBranch !== "function") {
     return 1;
@@ -365,6 +378,12 @@ function tryAutoBookOne(gameState) {
     return { success: false, reason: "Day limit reached" };
   }
 
+  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 0;
+  const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
+  if (maxShootsPerDay > 0 && currentShoots >= maxShootsPerDay) {
+    return { success: false, reason: "Day limit reached" };
+  }
+
   const selectionResult = getAutoBookingSelection(gameState);
   if (!selectionResult.ok) {
     return { success: false, reason: selectionResult.reason };
@@ -383,7 +402,14 @@ function tryAutoBookOne(gameState) {
     return entry.id === selectionResult.selection.performerIdA;
   });
   const divaFee = selectedPerformer ? getDivaShootFeeForPerformer(selectedPerformer) : 0;
-  const finalShootCost = adjustedCost.finalCost + divaFee;
+  const maxStarPowerUsed = selectedPerformer && Number.isFinite(selectedPerformer.starPower)
+    ? selectedPerformer.starPower
+    : 0;
+  const starPowerMultiplier = getStarPowerCostMultiplier(maxStarPowerUsed);
+  const starPowerSurcharge = starPowerMultiplier > 1
+    ? Math.round(adjustedCost.finalCost * (starPowerMultiplier - 1))
+    : 0;
+  const finalShootCost = adjustedCost.finalCost + divaFee + starPowerSurcharge;
   if (gameState.player.cash < finalShootCost) {
     return { success: false, reason: "Not enough cash" };
   }
@@ -414,6 +440,10 @@ function confirmBooking(gameState, selection) {
   }
 
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
+  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 0;
+  if (maxShootsPerDay > 0 && currentShoots >= maxShootsPerDay) {
+    return { ok: false, message: "Day limit reached. No more shoots allowed." };
+  }
 
   const agencyConfig = getAgencyPackConfig();
   const isAgencyPack = isAgencyPackSelection(selection) && agencyConfig.enabled;
@@ -489,7 +519,14 @@ function confirmBooking(gameState, selection) {
       });
       return sum + (performerEntry ? getDivaShootFeeForPerformer(performerEntry) : 0);
     }, 0);
-  const totalShootCost = shootCost + divaFee;
+  const maxStarPowerUsed = isAgencyPack
+    ? 0
+    : getMaxStarPowerForPerformers(gameState, performerSelection.performerIds);
+  const starPowerMultiplier = getStarPowerCostMultiplier(maxStarPowerUsed);
+  const starPowerSurcharge = starPowerMultiplier > 1
+    ? Math.round(shootCost * (starPowerMultiplier - 1))
+    : 0;
+  const totalShootCost = shootCost + divaFee + starPowerSurcharge;
   if (gameState.player.cash < totalShootCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
@@ -593,6 +630,9 @@ function confirmBooking(gameState, selection) {
       baseCost: baseShootCost,
       contentTypeMultiplier: adjustedCost.mult,
       divaFee: divaFee,
+      starPowerMultiplier: starPowerMultiplier,
+      starPowerSurcharge: starPowerSurcharge,
+      maxStarPowerUsed: maxStarPowerUsed,
       totalCost: totalShootCost
     },
     photoPaths: buildShootPhotoPaths(),

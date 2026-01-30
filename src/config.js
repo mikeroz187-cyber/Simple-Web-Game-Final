@@ -198,6 +198,14 @@ const CONFIG = {
     premium_base_of_subs: 23,
     subscriber_conversion_rate: 0.01,
     starPowerExponent: 1.15,
+    starPowerCostThreshold: 6,
+    starPowerCostMultipliers: {
+      7: 1.1,
+      8: 1.2,
+      9: 1.35,
+      10: 1.5
+    },
+    starPowerCostMultiplierDefault: 1.0,
     base_shoot_cost: 100,
     contentTypeCostMult: {
       promo: 1.0,

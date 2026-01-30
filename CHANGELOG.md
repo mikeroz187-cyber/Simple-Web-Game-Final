@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX Star Power booking premiums (7+) with confirm-line item plus daily shoot cap gating limited to booking.
+  - Why: Ensure high-star talent increases booking cost transparently and the day limit only blocks new shoots instead of other actions.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX Bank Manager one-payment payoff now forces Stage 4, and Conquests stages unlock even if messages are unread.
   - Why: Prevent early-stage Bank Manager messages on full payoff and remove the acceptance blocker for later Conquests stages.
   - Files touched: src/systems/economy.js, src/systems/conquests.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

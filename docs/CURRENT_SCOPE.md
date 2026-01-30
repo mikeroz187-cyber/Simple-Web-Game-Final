@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Booking fixes: Star Power 7+ cost premium now applies in booking totals with a confirm line item, and daily shoot caps only block booking more shoots.
 - Content screen UX polish (removed location thumbnail, corrected Promo/Premium CTAs, added jump-to-Social posting).
 - Social recent posts now open shoot photo slideshows and return correctly on close; analytics secondary cards align cleanly.
 - Toast notifications now render above the mascot via body-level container placement.
