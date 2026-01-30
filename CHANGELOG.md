@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX align Analytics secondary cards with the shared grid class.
+  - Why: Ensure the three secondary panels align cleanly with consistent column sizing.
+  - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX Content/Social CTA behavior, slideshow return path, toast layering, and analytics alignment polish.
   - Why: Resolve UX issues in the Content/Social flow, ensure toasts sit above mascots, and align Analytics cards cleanly.
   - Files touched: src/ui/render.js, src/ui/events.js, src/utils/animations.js, styles.css, index.html, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
