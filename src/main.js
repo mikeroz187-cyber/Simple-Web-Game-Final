@@ -50,6 +50,9 @@
     if (typeof updateAmbientIntensity === "function") {
       updateAmbientIntensity(window.gameState);
     }
+    if (typeof initParallax === "function") {
+      initParallax();
+    }
     if (storyResult.ok && storyResult.events.length) {
       appendStoryLogEntries(window.gameState, storyResult.events);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);

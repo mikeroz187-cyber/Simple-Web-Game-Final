@@ -1005,3 +1005,162 @@ function refreshActivityTicker(gameState) {
   renderTickerMessages(messages);
   updateTickerIntensity(gameState);
 }
+
+// ============================================
+// PARALLAX DEPTH SYSTEM
+// ============================================
+
+var parallaxConfig = {
+  enabled: true,
+  bgStrength: 0.02,
+  midStrength: 0.01,
+  fgStrength: -0.015,
+  particleStrength: -0.03,
+  mascotStrength: 0.02,
+  mascotRotate: 2,
+  smoothing: 0.1
+};
+
+var parallaxState = {
+  mouseX: 0.5,
+  mouseY: 0.5,
+  targetX: 0.5,
+  targetY: 0.5,
+  rafId: null,
+  initialized: false
+};
+
+/**
+ * Initialize the parallax system
+ */
+function initParallax() {
+  if (parallaxState.initialized) return;
+
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    parallaxConfig.enabled = false;
+    return;
+  }
+
+  document.addEventListener("mousemove", handleParallaxMouseMove);
+
+  var mascotContainer = document.getElementById("ambient-mascot-container");
+  if (mascotContainer) {
+    mascotContainer.classList.add("parallax-mascot");
+  }
+
+  parallaxState.initialized = true;
+  updateParallaxLoop();
+}
+
+/**
+ * Handle mouse movement
+ * @param {MouseEvent} event
+ */
+function handleParallaxMouseMove(event) {
+  if (!parallaxConfig.enabled) return;
+
+  parallaxState.targetX = event.clientX / window.innerWidth;
+  parallaxState.targetY = event.clientY / window.innerHeight;
+}
+
+/**
+ * Lerp helper for smooth interpolation
+ */
+function lerp(start, end, factor) {
+  return start + (end - start) * factor;
+}
+
+/**
+ * Update parallax positions with smooth interpolation
+ */
+function updateParallaxLoop() {
+  if (!parallaxConfig.enabled) {
+    parallaxState.rafId = null;
+    return;
+  }
+
+  parallaxState.mouseX = lerp(parallaxState.mouseX, parallaxState.targetX, parallaxConfig.smoothing);
+  parallaxState.mouseY = lerp(parallaxState.mouseY, parallaxState.targetY, parallaxConfig.smoothing);
+
+  var offsetX = parallaxState.mouseX - 0.5;
+  var offsetY = parallaxState.mouseY - 0.5;
+
+  var bgElements = document.querySelectorAll(".parallax-bg");
+  bgElements.forEach(function (el) {
+    var x = offsetX * window.innerWidth * parallaxConfig.bgStrength;
+    var y = offsetY * window.innerHeight * parallaxConfig.bgStrength;
+    el.style.setProperty("--parallax-x", x + "px");
+    el.style.setProperty("--parallax-y", y + "px");
+  });
+
+  var midElements = document.querySelectorAll(".parallax-mid");
+  midElements.forEach(function (el) {
+    var x = offsetX * window.innerWidth * parallaxConfig.midStrength;
+    var y = offsetY * window.innerHeight * parallaxConfig.midStrength;
+    el.style.setProperty("--parallax-x", x + "px");
+    el.style.setProperty("--parallax-y", y + "px");
+  });
+
+  var fgElements = document.querySelectorAll(".parallax-fg");
+  fgElements.forEach(function (el) {
+    var x = offsetX * window.innerWidth * parallaxConfig.fgStrength;
+    var y = offsetY * window.innerHeight * parallaxConfig.fgStrength;
+    el.style.setProperty("--parallax-x", x + "px");
+    el.style.setProperty("--parallax-y", y + "px");
+  });
+
+  var particleElements = document.querySelectorAll(".parallax-particles");
+  particleElements.forEach(function (el) {
+    var x = offsetX * window.innerWidth * parallaxConfig.particleStrength;
+    var y = offsetY * window.innerHeight * parallaxConfig.particleStrength;
+    el.style.setProperty("--parallax-x", x + "px");
+    el.style.setProperty("--parallax-y", y + "px");
+  });
+
+  var mascotContainer = document.getElementById("ambient-mascot-container");
+  if (mascotContainer) {
+    var mascotX = offsetX * 30 * parallaxConfig.mascotStrength;
+    var mascotY = offsetY * 20 * parallaxConfig.mascotStrength;
+    var mascotRotate = -offsetX * parallaxConfig.mascotRotate;
+    mascotContainer.style.setProperty("--parallax-x", mascotX + "px");
+    mascotContainer.style.setProperty("--parallax-y", mascotY + "px");
+    mascotContainer.style.setProperty("--parallax-rotate", mascotRotate + "deg");
+  }
+
+  parallaxState.rafId = requestAnimationFrame(updateParallaxLoop);
+}
+
+/**
+ * Stop the parallax system
+ */
+function stopParallax() {
+  if (parallaxState.rafId) {
+    cancelAnimationFrame(parallaxState.rafId);
+    parallaxState.rafId = null;
+  }
+  document.removeEventListener("mousemove", handleParallaxMouseMove);
+  parallaxState.initialized = false;
+}
+
+/**
+ * Enable or disable parallax
+ * @param {boolean} enabled
+ */
+function setParallaxEnabled(enabled) {
+  parallaxConfig.enabled = enabled;
+
+  if (enabled && !parallaxState.rafId) {
+    updateParallaxLoop();
+  }
+
+  if (!enabled) {
+    var allParallax = document.querySelectorAll(
+      ".parallax-bg, .parallax-mid, .parallax-fg, .parallax-particles, .parallax-mascot"
+    );
+    allParallax.forEach(function (el) {
+      el.style.setProperty("--parallax-x", "0px");
+      el.style.setProperty("--parallax-y", "0px");
+      el.style.setProperty("--parallax-rotate", "0deg");
+    });
+  }
+}

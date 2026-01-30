@@ -139,6 +139,62 @@ body {
   animation-delay: 16s;
 }
 
+/* === PARALLAX DEPTH SYSTEM === */
+.parallax-layer {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+  will-change: transform;
+}
+
+/* Background layer - moves slowest, same direction as mouse */
+.parallax-bg {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  transform: translate(var(--parallax-x), var(--parallax-y));
+}
+
+/* Mid layer - subtle movement */
+.parallax-mid {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  transform: translate(var(--parallax-x), var(--parallax-y));
+}
+
+/* Foreground elements - move opposite to mouse for depth */
+.parallax-fg {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  transform: translate(var(--parallax-x), var(--parallax-y));
+}
+
+/* Particles drift opposite to cursor */
+.parallax-particles {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  transform: translate(var(--parallax-x), var(--parallax-y));
+}
+
+/* Mascot leans toward/away from cursor */
+.parallax-mascot {
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+  --parallax-rotate: 0deg;
+  transform: translate(var(--parallax-x), var(--parallax-y)) rotate(var(--parallax-rotate));
+  transform-origin: bottom center;
+}
+
+/* Disable parallax on reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .parallax-layer,
+  .parallax-bg,
+  .parallax-mid,
+  .parallax-fg,
+  .parallax-particles,
+  .parallax-mascot {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 /* === INCOME PARTICLE STREAM === */
 .income-particles {
   position: fixed;
@@ -3267,6 +3323,13 @@ body {
   right: 2rem;
   z-index: 100;
   pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+  will-change: transform;
+}
+
+/* When parallax is active, use CSS custom properties */
+.ambient-mascot-container.parallax-mascot {
+  transform: translate(var(--parallax-x, 0), var(--parallax-y, 0)) rotate(var(--parallax-rotate, 0deg));
 }
 
 .ambient-mascot-container .ambient-mascot {
