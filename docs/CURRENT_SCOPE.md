@@ -16,7 +16,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Conquests expansion: Assistant, Talent Scout, and Saleswoman characters added with 4-stage reward packs and trigger thresholds.
 - Conquests mascot portraits standardized to stage-specific filenames with fallback handling for missing images.
 - Hub pay-down-debt quick buttons (Pay Max + presets) to let debt-based Conquests progress naturally.
-- Debt payoff now jumps Bank Manager to stage 4 when cleared in one payment, debt reminders stop after payoff, and Pay Max uses an in-game modal.
+- Debt payoff now jumps Bank Manager to stage 4 when cleared in one payment, Conquests stages unlock even if earlier messages are unread, debt reminders stop after payoff, and Pay Max uses an in-game modal.
 - Bank Manager Conquest character with debt payoff stages and reward packs.
 - Conquests MVP system: Producer message flow, reward packs, and slideshow viewing.
 - Conquests UI polish: stage-specific portrait overrides with fallback and visible slideshow back button.
