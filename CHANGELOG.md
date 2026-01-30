@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX remove the debt-day booking hard-block, enforce the CONFIG.game.shoots_per_day cap, and itemize Star Power cost premiums in booking.
+  - Why: Allow Day 90+ shoots, enforce the real daily limit, and make high-star booking costs transparent.
+  - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX Star Power booking premiums (7+) with confirm-line item plus daily shoot cap gating limited to booking.
   - Why: Ensure high-star talent increases booking cost transparently and the day limit only blocks new shoots instead of other actions.
   - Files touched: src/config.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

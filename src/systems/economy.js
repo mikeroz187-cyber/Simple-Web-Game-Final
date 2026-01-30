@@ -40,21 +40,34 @@ function applyContentTypeCostMultiplier(baseCost, contentType) {
 
 function getStarPowerCostConfig() {
   const economyConfig = CONFIG.economy && typeof CONFIG.economy === "object" ? CONFIG.economy : {};
-  const multipliers = economyConfig.starPowerCostMultipliers && typeof economyConfig.starPowerCostMultipliers === "object"
-    ? economyConfig.starPowerCostMultipliers
-    : {};
+  const starPowerCost = economyConfig.starPowerCost && typeof economyConfig.starPowerCost === "object"
+    ? economyConfig.starPowerCost
+    : null;
+  const multipliers = starPowerCost && typeof starPowerCost.multipliers === "object"
+    ? starPowerCost.multipliers
+    : (economyConfig.starPowerCostMultipliers && typeof economyConfig.starPowerCostMultipliers === "object"
+      ? economyConfig.starPowerCostMultipliers
+      : {});
   return {
-    threshold: Number.isFinite(economyConfig.starPowerCostThreshold) ? economyConfig.starPowerCostThreshold : 0,
+    enabled: starPowerCost ? starPowerCost.enabled !== false : true,
+    threshold: Number.isFinite(starPowerCost && starPowerCost.threshold)
+      ? starPowerCost.threshold
+      : (Number.isFinite(economyConfig.starPowerCostThreshold) ? economyConfig.starPowerCostThreshold : 0),
     multipliers: multipliers,
-    defaultMultiplier: Number.isFinite(economyConfig.starPowerCostMultiplierDefault)
-      ? economyConfig.starPowerCostMultiplierDefault
-      : 1
+    defaultMultiplier: Number.isFinite(starPowerCost && starPowerCost.defaultMultiplier)
+      ? starPowerCost.defaultMultiplier
+      : (Number.isFinite(economyConfig.starPowerCostMultiplierDefault)
+        ? economyConfig.starPowerCostMultiplierDefault
+        : 1)
   };
 }
 
 function getStarPowerCostMultiplier(starPower) {
   const config = getStarPowerCostConfig();
   const defaultMultiplier = config.defaultMultiplier;
+  if (!config.enabled) {
+    return defaultMultiplier;
+  }
   if (!Number.isFinite(starPower)) {
     return defaultMultiplier;
   }
