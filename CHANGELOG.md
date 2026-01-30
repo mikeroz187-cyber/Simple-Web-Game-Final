@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Analytics Hustle Dashboard with heat check trends, cashflow bars, debt progress, memo insights, and daily capped snapshots.
+  - Why: Replace static analytics with lightweight trend visuals and actionable weekly insights while keeping history performant.
+  - Files touched: src/config.js, src/systems/analytics.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Raised Star Power cap to 10 and clarified booking summary with audience pull vs Star Power premium itemization.
   - Why: Allow progression beyond 6 while keeping audience math distinct from booking cost premiums.
   - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/DATA_UI_COPY.md, CHANGELOG.md.

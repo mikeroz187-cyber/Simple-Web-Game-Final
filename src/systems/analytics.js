@@ -109,5 +109,11 @@ function recordAnalyticsSnapshot(gameState) {
   };
 
   gameState.analyticsHistory.push(snapshot);
+  const maxDays = (CONFIG.analytics && Number.isFinite(CONFIG.analytics.historyMaxDays))
+    ? CONFIG.analytics.historyMaxDays
+    : 120;
+  if (gameState.analyticsHistory.length > maxDays) {
+    gameState.analyticsHistory = gameState.analyticsHistory.slice(gameState.analyticsHistory.length - maxDays);
+  }
   return { ok: true, code: "snapshot_recorded" };
 }

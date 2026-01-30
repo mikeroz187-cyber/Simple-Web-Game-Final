@@ -1121,7 +1121,10 @@ const CONFIG = {
   analytics: {
     rollupWindowsDays: [7, 30],
     metricKeys: ["mrrDelta", "socialFollowers", "socialSubscribers", "onlyFansSubscribers", "promoCount", "premiumCount"],
-    snapshotFrequencyDays: 7
+    snapshotFrequencyDays: 1,
+    historyMaxDays: 120,
+    sparklineDays: 30,
+    cashflowDays: 7
   },
   progression: {
     starting_reputation: 0,
