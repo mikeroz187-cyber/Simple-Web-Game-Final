@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added staggered entrance animation utilities and applied stagger classes across key screens and cards.
+  - Why: Deliver Empire Pulse Phase 1 staggered reveal polish for screen content.
+  - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, src/ui/router.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Empire Pulse Phase 1 screen transition animations for screen navigation.
   - Why: Deliver the requested crossfade polish pass for smoother screen changes.
   - Files touched: styles.css, src/ui/router.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.

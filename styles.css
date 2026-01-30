@@ -405,6 +405,35 @@ body {
   transform: translateY(-8px);
 }
 
+/* Staggered entrance animations */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.stagger-item.is-visible {
+  animation: stagger-in 0.3s ease-out forwards;
+}
+
+@keyframes stagger-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger delay utility classes */
+.stagger-delay-1 { animation-delay: 0ms; }
+.stagger-delay-2 { animation-delay: 40ms; }
+.stagger-delay-3 { animation-delay: 80ms; }
+.stagger-delay-4 { animation-delay: 120ms; }
+.stagger-delay-5 { animation-delay: 160ms; }
+.stagger-delay-6 { animation-delay: 200ms; }
+.stagger-delay-7 { animation-delay: 240ms; }
+.stagger-delay-8 { animation-delay: 280ms; }
+.stagger-delay-9 { animation-delay: 320ms; }
+.stagger-delay-10 { animation-delay: 360ms; }
+
 .panel {
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
