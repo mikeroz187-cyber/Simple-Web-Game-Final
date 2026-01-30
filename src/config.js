@@ -1374,6 +1374,14 @@ const CONFIG = {
     minDayForKnock: 10,
     starBonusReputationRequired: 50,
     recruitHelpReputationRequired: 100,
+    oneTimeFeesByPerformerId: {
+      core_lena_watts: 5600,
+      core_milo_park: 4800,
+      core_tess_rowan: 3000
+    },
+    defaultOneTimeFee: 4000,
+    declineLoyaltyPenalty: 10,
+    declineCooldownDays: 10,
     recruitMapping: {
       core_lena_watts: "recruit_aria_lux",
       core_milo_park: "recruit_celeste_noir",

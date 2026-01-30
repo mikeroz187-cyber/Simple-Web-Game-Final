@@ -629,11 +629,19 @@ cooldownDays = 7
 minDayForKnock = 10
 starBonusReputationRequired = 50
 recruitHelpReputationRequired = 100
+defaultOneTimeFee = 4000
+declineLoyaltyPenalty = 10
+declineCooldownDays = 10
 
 [afterHours.recruitMapping]
 core_lena_watts = "recruit_aria_lux"
 core_milo_park = "recruit_celeste_noir"
 core_tess_rowan = "recruit_dahlia_slate"
+
+[afterHours.oneTimeFeesByPerformerId]
+core_lena_watts = 5600
+core_milo_park = 4800
+core_tess_rowan = 3000
 
 [afterHours.imagePaths]
 systemBackground = "assets/images/afterdark/system/office_night_bg.png"

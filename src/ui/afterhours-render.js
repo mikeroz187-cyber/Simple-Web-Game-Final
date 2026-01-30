@@ -167,10 +167,24 @@ function renderAfterHoursOfferModal(performer, content, gameState) {
   var canCounterRecruit = canAcceptCounterOffer(gameState, "recruit");
   var recruitId = getRecruitUnlockForPerformer(performer.id);
   var hasRecruitOption = recruitId !== null;
+  var fee = getAfterHoursOneTimeFee(performer.id);
+  var feeLabel = formatCurrency(fee);
+  var canAfford = canAffordAfterHours(gameState, fee);
+  var declinePenalty = Number.isFinite(CONFIG.afterHours.declineLoyaltyPenalty)
+    ? CONFIG.afterHours.declineLoyaltyPenalty
+    : 0;
+  var declineDays = Number.isFinite(CONFIG.afterHours.declineCooldownDays)
+    ? CONFIG.afterHours.declineCooldownDays
+    : 0;
 
   var counterSection = '';
   if (canCounterStar || (canCounterRecruit && hasRecruitOption)) {
     counterSection = '<button class="button secondary" data-action="after-hours-counter" data-performer="' + performer.id + '">Counter-offer</button>';
+  }
+
+  var warningText = '';
+  if (!canAfford) {
+    warningText = '<div class="after-hours-warning">You need ' + feeLabel + ' cash on hand to accept.</div>';
   }
 
   return '<div class="modal-overlay after-hours-modal">' +
@@ -178,13 +192,15 @@ function renderAfterHoursOfferModal(performer, content, gameState) {
     '<h3 class="after-hours-title">The Offer</h3>' +
     '<div class="after-hours-text">' + content.offerText + '</div>' +
     '<div class="after-hours-offer-box">' +
-    '<div><strong>HER OFFER:</strong> One-time. Right here. Right now.</div>' +
-    '<div><strong>IN EXCHANGE FOR:</strong> ' + content.askWant + '</div>' +
+    '<div><strong>WHAT SHE WANTS:</strong> Cash. Tonight.</div>' +
+    '<div><strong>THE DEAL:</strong> Pay ' + feeLabel + ' right now and she’s all smiles again.</div>' +
+    '<div><strong>CONSEQUENCE:</strong> If you dismiss her: -' + declinePenalty + ' Loyalty and she won’t come back for ' + declineDays + ' days.</div>' +
     '</div>' +
+    warningText +
     '<div class="button-row">' +
-    '<button class="button primary" data-action="after-hours-accept" data-performer="' + performer.id + '">Accept her terms</button>' +
+    '<button class="button primary" data-action="after-hours-accept" data-performer="' + performer.id + '"' + (canAfford ? '' : ' disabled') + '>Pay ' + feeLabel + ' (Accept)</button>' +
     counterSection +
-    '<button class="button secondary" data-action="after-hours-dismiss">Dismiss her</button>' +
+    '<button class="button secondary" data-action="after-hours-dismiss">Dismiss (Loyalty -' + declinePenalty + ')</button>' +
     '</div>' +
     '</div>' +
     '</div>';
@@ -195,6 +211,9 @@ function renderAfterHoursCounterModal(performer, content, gameState) {
   var canCounterRecruit = canAcceptCounterOffer(gameState, "recruit");
   var recruitId = getRecruitUnlockForPerformer(performer.id);
   var hasRecruitOption = recruitId !== null;
+  var fee = getAfterHoursOneTimeFee(performer.id);
+  var feeLabel = formatCurrency(fee);
+  var canAfford = canAffordAfterHours(gameState, fee);
 
   var starOption = '<div class="counter-option ' + (canCounterStar ? '' : 'disabled') + '">' +
     '<input type="radio" name="counter-type" value="star" id="counter-star" ' + (canCounterStar ? '' : 'disabled') + '>' +
@@ -211,6 +230,11 @@ function renderAfterHoursCounterModal(performer, content, gameState) {
       '</label></div>';
   }
 
+  var warningText = '';
+  if (!canAfford) {
+    warningText = '<div class="after-hours-warning">You need ' + feeLabel + ' cash on hand to accept.</div>';
+  }
+
   return '<div class="modal-overlay after-hours-modal">' +
     '<div class="modal-card after-hours-card">' +
     '<h3 class="after-hours-title">Your Terms</h3>' +
@@ -222,9 +246,10 @@ function renderAfterHoursCounterModal(performer, content, gameState) {
     starOption +
     recruitOption +
     '</div>' +
+    warningText +
     '<div class="button-row">' +
     '<button class="button primary" data-action="after-hours-submit-counter" data-performer="' + performer.id + '">Offer these terms</button>' +
-    '<button class="button secondary" data-action="after-hours-accept" data-performer="' + performer.id + '">Just accept her original offer</button>' +
+    '<button class="button secondary" data-action="after-hours-accept" data-performer="' + performer.id + '"' + (canAfford ? '' : ' disabled') + '>Just accept her original offer</button>' +
     '</div>' +
     '</div>' +
     '</div>';

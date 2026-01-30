@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX After Hours accept now charges a one-time cash fee with affordability gating plus decline penalties/cooldowns.
+  - Why: Ensure the After Hours deal is immediate and declines have clear loyalty/cooldown consequences without touching booking costs.
+  - Files touched: src/config.js, config.toml, src/systems/afterhours.js, src/ui/afterhours-render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/SYSTEM_AFTER_HOURS.md, CHANGELOG.md.
 - What: FIX align Analytics secondary cards with the shared grid class.
   - Why: Ensure the three secondary panels align cleanly with consistent column sizing.
   - Files touched: styles.css, docs/task-checklist.md, CHANGELOG.md.

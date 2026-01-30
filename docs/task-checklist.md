@@ -116,6 +116,7 @@
 - [x] Toast notifications render above the mascot and outside stacked screen containers (Bugfix E).
 - [x] Analytics secondary row uses aligned grid styling for top-aligned cards (Bugfix F).
 - [x] Bug #5 Analytics card alignment.
+- [x] FIX After Hours accept is a one-time cash payment with gating + dismiss penalties/cooldown.
 
 ---
 
