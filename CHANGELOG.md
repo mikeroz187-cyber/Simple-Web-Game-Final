@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX screen navigation event bubbling and transition timing for Empire Pulse screens.
+  - Why: Stop nav clicks from triggering fallback warnings and ensure screen content refreshes reliably.
+  - Files touched: src/ui/events.js, src/ui/router.js, styles.css, CHANGELOG.md.
 - What: Added Empire Pulse Phase 3 parallax depth styling and mouse-driven movement for atmosphere, particles, and mascots.
   - Why: Deliver subtle depth polish with smooth cursor tracking while honoring reduced motion preferences.
   - Files touched: styles.css, index.html, src/utils/animations.js, src/main.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
