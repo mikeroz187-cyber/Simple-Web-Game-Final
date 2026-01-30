@@ -115,6 +115,7 @@
 - [x] Social recent posts open shoot photo slideshows and return to Social on close (Bugfix D).
 - [x] Toast notifications render above the mascot and outside stacked screen containers (Bugfix E).
 - [x] Analytics secondary row uses aligned grid styling for top-aligned cards (Bugfix F).
+- [x] Bug #5 Analytics card alignment.
 
 ---
 
