@@ -117,25 +117,7 @@ function buildAgencyPackPerformer() {
   };
 }
 
-function getMaxStarPowerForPerformers(gameState, performerIds) {
-  if (!gameState || !Array.isArray(performerIds)) {
-    return 0;
-  }
-  return performerIds.reduce(function (maxValue, performerId) {
-    const performerEntry = gameState.roster.performers.find(function (entry) {
-      return entry.id === performerId;
-    });
-    const configEntry = (!performerEntry && CONFIG.performers && CONFIG.performers.catalog)
-      ? CONFIG.performers.catalog[performerId]
-      : null;
-    const starPower = performerEntry && Number.isFinite(performerEntry.starPower)
-      ? performerEntry.starPower
-      : (configEntry && Number.isFinite(configEntry.starPower) ? configEntry.starPower : 0);
-    return Math.max(maxValue, starPower);
-  }, 0);
-}
-
-function getStarPowerCostSurcharge(gameState, performerIds, baseCost) {
+function getStarPowerCostPremium(performer, baseShootCost) {
   const starPowerCostConfig = CONFIG.economy && CONFIG.economy.starPowerCost &&
     typeof CONFIG.economy.starPowerCost === "object"
     ? CONFIG.economy.starPowerCost
@@ -143,7 +125,7 @@ function getStarPowerCostSurcharge(gameState, performerIds, baseCost) {
   if (starPowerCostConfig.enabled === false) {
     return { mult: 1, surcharge: 0, maxStar: null };
   }
-  if (!Array.isArray(performerIds) || performerIds.length === 0 || performerIds.indexOf("agency_pack") !== -1) {
+  if (!performer || !Number.isFinite(baseShootCost)) {
     return { mult: 1, surcharge: 0, maxStar: null };
   }
   const threshold = Number.isFinite(starPowerCostConfig.threshold) ? starPowerCostConfig.threshold : 0;
@@ -151,14 +133,13 @@ function getStarPowerCostSurcharge(gameState, performerIds, baseCost) {
   const defaultMultiplier = Number.isFinite(starPowerCostConfig.defaultMultiplier)
     ? starPowerCostConfig.defaultMultiplier
     : 1;
-  const maxStar = getMaxStarPowerForPerformers(gameState, performerIds);
+  const maxStar = Number.isFinite(performer.starPower) ? performer.starPower : 0;
   if (maxStar <= threshold) {
     return { mult: 1, surcharge: 0, maxStar: maxStar };
   }
-  const lookupKey = String(Math.max(0, Math.round(maxStar)));
+  const lookupKey = Math.max(0, Math.round(maxStar));
   const mult = Number.isFinite(multipliers[lookupKey]) ? multipliers[lookupKey] : defaultMultiplier;
-  const safeBase = Number.isFinite(baseCost) ? baseCost : 0;
-  const surcharge = mult > 1 ? Math.round(safeBase * (mult - 1)) : 0;
+  const surcharge = Math.round(baseShootCost * (mult - 1));
   return { mult: mult, surcharge: surcharge, maxStar: maxStar };
 }
 
@@ -430,11 +411,9 @@ function tryAutoBookOne(gameState) {
     return entry.id === selectionResult.selection.performerIdA;
   });
   const divaFee = selectedPerformer ? getDivaShootFeeForPerformer(selectedPerformer) : 0;
-  const starPremium = getStarPowerCostSurcharge(
-    gameState,
-    selectedPerformer ? [selectedPerformer.id] : [],
-    adjustedCost.finalCost
-  );
+  const starPremium = selectedPerformer
+    ? getStarPowerCostPremium(selectedPerformer, adjustedCost.finalCost)
+    : { mult: 1, surcharge: 0, maxStar: null };
   const finalShootCost = adjustedCost.finalCost + divaFee + starPremium.surcharge;
   if (gameState.player.cash < finalShootCost) {
     return { success: false, reason: "Not enough cash" };
@@ -544,12 +523,12 @@ function confirmBooking(gameState, selection) {
       });
       return sum + (performerEntry ? getDivaShootFeeForPerformer(performerEntry) : 0);
     }, 0);
-  const starPremium = isAgencyPack
-    ? { mult: 1, surcharge: 0, maxStar: null }
-    : getStarPowerCostSurcharge(gameState, performerSelection.performerIds, shootCost);
+  const starPremium = (!isAgencyPack && performer)
+    ? getStarPowerCostPremium(performer, shootCost)
+    : { mult: 1, surcharge: 0, maxStar: null };
   const starPowerSurcharge = starPremium.surcharge;
-  const totalShootCost = shootCost + divaFee + starPowerSurcharge;
-  if (gameState.player.cash < totalShootCost) {
+  const totalCost = shootCost + divaFee + starPowerSurcharge;
+  if (gameState.player.cash < totalCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
 
@@ -645,7 +624,7 @@ function confirmBooking(gameState, selection) {
     themeId: theme.id,
     contentType: selection.contentType,
     source: isAgencyPack ? "agency_pack" : "core",
-    shootCost: totalShootCost,
+    shootCost: totalCost,
     baseShootCost: baseShootCost,
     divaFee: divaFee,
     costBreakdown: {
@@ -655,7 +634,7 @@ function confirmBooking(gameState, selection) {
       starPowerCostMultiplier: starPremium.mult,
       starPowerSurcharge: starPowerSurcharge,
       divaFee: divaFee,
-      totalCost: totalShootCost
+      totalCost: totalCost
     },
     photoPaths: buildShootPhotoPaths(),
     results: {
@@ -700,7 +679,7 @@ function confirmBooking(gameState, selection) {
     });
   }
 
-  gameState.player.cash = Math.max(0, gameState.player.cash - totalShootCost);
+  gameState.player.cash = Math.max(0, gameState.player.cash - totalCost);
   gameState.player.socialFollowers = Math.max(0, gameState.player.socialFollowers + socialFollowersGained);
   gameState.player.socialSubscribers = Math.max(0, gameState.player.socialSubscribers + socialSubscribersGained);
   gameState.player.onlyFansSubscribers = Math.max(0, gameState.player.onlyFansSubscribers + onlyFansSubscribersGained);

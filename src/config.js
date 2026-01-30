@@ -371,7 +371,7 @@ const CONFIG = {
     starPowerProgression: {
       enabled: true,
       shootsPerIncrease: 5,
-      maxStarPower: 6
+      maxStarPower: 10
     },
     core_ids: [
       "core_lena_watts",
