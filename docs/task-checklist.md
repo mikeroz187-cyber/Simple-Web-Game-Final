@@ -119,6 +119,10 @@
 - [x] FIX After Hours accept is a one-time cash payment with gating + dismiss penalties/cooldown.
   - [x] Cash decreases immediately on Accept (header updates instantly).
   - [x] Offer/ask text explicitly communicates paying her cash.
+- [x] FIX Bug #9: Bank Manager debt payoff triggers stage 4 only when paid in one go.
+- [x] FIX Bug #10: Stop debt reminders after debt is fully paid.
+- [x] FIX Bug #11: First debt story message matches $25,000 debt.
+- [x] FIX Bug #13: Pay Max uses in-game modal instead of browser prompt.
 
 ---
 

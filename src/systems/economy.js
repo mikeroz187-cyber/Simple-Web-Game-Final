@@ -311,6 +311,26 @@ function payDebt(gameState, amount) {
   const debtRemainingBefore = player.debtRemaining;
   player.cash = Math.max(0, cash - payAmount);
   player.debtRemaining = Math.max(0, debtRemaining - payAmount);
+  const initialPrincipal = Number.isFinite(player.debtInitialPrincipal)
+    ? player.debtInitialPrincipal
+    : debtRemainingBefore;
+  const debtClearedNow = player.debtRemaining <= 0;
+  const paidInOneGo = debtClearedNow && debtRemainingBefore > 0 && debtRemainingBefore === initialPrincipal;
+  if (paidInOneGo && gameState.conquests && gameState.conquests.characters) {
+    const bankManager = gameState.conquests.characters.bankManager;
+    if (bankManager) {
+      const currentStage = Number.isFinite(bankManager.stageUnlocked) ? bankManager.stageUnlocked : 0;
+      bankManager.stageUnlocked = Math.max(currentStage, 3);
+    }
+    if (Array.isArray(gameState.conquests.inbox)) {
+      gameState.conquests.inbox = gameState.conquests.inbox.filter(function (message) {
+        if (!message || message.characterId !== "bankManager") {
+          return true;
+        }
+        return Number.isFinite(message.stageIndex) ? message.stageIndex >= 4 : false;
+      });
+    }
+  }
   const competitionUnlocked = debtRemainingBefore > 0 && player.debtRemaining <= 0;
   let saturationActivated = false;
   const saturationConfig = CONFIG.market && CONFIG.market.saturation ? CONFIG.market.saturation : null;

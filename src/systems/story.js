@@ -24,15 +24,20 @@ function checkStoryEvents(gameState) {
     events.push({ id: CONFIG.story.act1.intro.id, day: currentDay });
   }
 
-  CONFIG.story.act1.act1_debt_reminder_days.forEach(function (day) {
-    if (day === currentDay && gameState.story.debtReminderDaysShown.indexOf(day) === -1) {
-      gameState.story.debtReminderDaysShown.push(day);
-      const reminder = CONFIG.story.act1.debtReminders.find(function (entry) {
-        return entry.triggerDay === day;
-      });
-      events.push({ id: reminder ? reminder.id : "debt_reminder_" + day, day: day });
-    }
-  });
+  const debtRemaining = Number.isFinite(gameState.player.debtRemaining)
+    ? gameState.player.debtRemaining
+    : 0;
+  if (debtRemaining > 0) {
+    CONFIG.story.act1.act1_debt_reminder_days.forEach(function (day) {
+      if (day === currentDay && gameState.story.debtReminderDaysShown.indexOf(day) === -1) {
+        gameState.story.debtReminderDaysShown.push(day);
+        const reminder = CONFIG.story.act1.debtReminders.find(function (entry) {
+          return entry.triggerDay === day;
+        });
+        events.push({ id: reminder ? reminder.id : "debt_reminder_" + day, day: day });
+      }
+    });
+  }
 
   if (currentDay === gameState.player.debtDueDay) {
     const endEvent = gameState.player.debtRemaining <= 0
@@ -76,7 +81,7 @@ function checkStoryEvents(gameState) {
 const STORY_EVENT_COPY = {
   act1_intro_day1: {
     title: "Loan Due, Day 90",
-    message: "You start with a $5,000 cash loan, but the debt is $10,000 due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady MRR early."
+    message: "You start with a $5,000 cash loan, but the debt is {{debtTotal}} due by Day 90. This is the only debt in the MVP and it must be cleared before the end of Day 90. Keep cash flow tight and prioritize steady MRR early."
   },
   act1_pack01_client_referral_day15: {
     title: "Client Referral Pipeline",
@@ -144,11 +149,11 @@ const STORY_EVENT_COPY = {
   },
   act1_debt_reminder_day30: {
     title: "Debt Check — Day 30",
-    message: "Thirty days in, the $10,000 debt clock is already ticking. You still have 60 days to close the gap. Keep shoots consistent and avoid unnecessary costs."
+    message: "Thirty days in, the {{debtTotal}} debt clock is already ticking. You still have 60 days to close the gap. Keep shoots consistent and avoid unnecessary costs."
   },
   act1_debt_reminder_day60: {
     title: "Debt Check — Day 60",
-    message: "Day 60 puts you in the final stretch. The $10,000 debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep MRR predictable."
+    message: "Day 60 puts you in the final stretch. The {{debtTotal}} debt is due in 30 days, and cash on hand will decide the outcome. Audit your plan and keep MRR predictable."
   },
   act1_debt_reminder_day80: {
     title: "Debt Check — Day 80",
@@ -156,7 +161,7 @@ const STORY_EVENT_COPY = {
   },
   act1_end_win_day90: {
     title: "Debt Cleared",
-    message: "You paid the $10,000 debt on time. The studio is stable, and the loan is behind you. You now have a real foundation for long-term growth."
+    message: "You paid the {{debtTotal}} debt on time. The studio is stable, and the loan is behind you. You now have a real foundation for long-term growth."
   },
   act2_saturation_activated: {
     title: "Debt Cleared — Act 2",
@@ -168,7 +173,7 @@ const STORY_EVENT_COPY = {
   },
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",
-    message: "The $10,000 debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."
+    message: "The {{debtTotal}} debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."
   },
   act2_expansion_plan_day95: {
     title: "Expansion Plan Drafted",
@@ -431,6 +436,25 @@ function resolvePerformerUnlockCopy(eventId, gameState) {
   return { title: "Unlocked!", message: message };
 }
 
+function getDebtTotalText(gameState) {
+  const resolvedState = gameState || (typeof window !== "undefined" ? window.gameState : null);
+  const player = resolvedState && resolvedState.player ? resolvedState.player : null;
+  const debtValue = player && Number.isFinite(player.debtInitialPrincipal)
+    ? player.debtInitialPrincipal
+    : (Number.isFinite(CONFIG.game.loan_total_due) ? CONFIG.game.loan_total_due : 0);
+  const formatValue = typeof formatCurrency === "function"
+    ? formatCurrency
+    : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  return formatValue(Math.max(0, debtValue));
+}
+
+function applyStoryTokens(message, gameState) {
+  if (typeof message !== "string") {
+    return message;
+  }
+  return message.replace(/\{\{debtTotal\}\}/g, getDebtTotalText(gameState));
+}
+
 function getStoryEventCopy(eventId, gameState) {
   const performerUnlockCopy = resolvePerformerUnlockCopy(eventId, gameState);
   if (performerUnlockCopy) {
@@ -438,13 +462,17 @@ function getStoryEventCopy(eventId, gameState) {
   }
 
   const baseCopy = STORY_EVENT_COPY[eventId] || { title: "Story Update", message: "A story event occurred." };
+  const resolvedCopy = {
+    title: baseCopy.title,
+    message: applyStoryTokens(baseCopy.message, gameState)
+  };
   const summaryText = buildEffectSummaryText(buildAct3EffectSummaryParts(getAct3EventEffects(eventId)));
   if (!summaryText) {
-    return baseCopy;
+    return resolvedCopy;
   }
   return {
-    title: baseCopy.title,
-    message: baseCopy.message + "\n\n" + summaryText
+    title: resolvedCopy.title,
+    message: resolvedCopy.message + "\n\n" + summaryText
   };
 }
 

@@ -471,10 +471,10 @@ function renderHub(gameState) {
       paymentButtons.push(
         createButton(
           "Pay Max",
-          "pay-debt",
+          "open-pay-max-modal",
           "small primary",
           !canPayDebt,
-          "data-amount=\"max\""
+          ""
         )
       );
     }
