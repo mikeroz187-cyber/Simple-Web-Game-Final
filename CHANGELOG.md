@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Empire Pulse Phase 2 income particle stream visuals with cash-gain bursts and intensity tuning.
+  - Why: Visualize passive income flow tied to subscriber growth and cash gains per current scope.
+  - Files touched: index.html, styles.css, src/utils/animations.js, src/main.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added button click burst feedback plus hover/press micro-interactions for buttons and interactive cards.
   - Why: Deliver Empire Pulse Phase 1 button micro-feedback polish for premium UI feel.
   - Files touched: styles.css, src/utils/animations.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.

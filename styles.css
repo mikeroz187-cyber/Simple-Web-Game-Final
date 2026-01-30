@@ -139,6 +139,76 @@ body {
   animation-delay: 16s;
 }
 
+/* === INCOME PARTICLE STREAM === */
+.income-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.income-particle {
+  position: absolute;
+  bottom: -10px;
+  width: 4px;
+  height: 4px;
+  background: var(--vip);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.8), 0 0 12px rgba(212, 175, 55, 0.4);
+  animation: income-rise linear forwards;
+  will-change: transform, opacity;
+}
+
+/* Particle size variations */
+.income-particle--small {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 4px rgba(212, 175, 55, 0.6);
+}
+
+.income-particle--large {
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.9), 0 0 16px rgba(212, 175, 55, 0.5);
+}
+
+/* Burst particles (for money gain events) */
+.income-particle--burst {
+  background: linear-gradient(135deg, var(--vip), #fff);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 1), 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+@keyframes income-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) translateX(var(--drift-x, 20px)) scale(0.5);
+  }
+}
+
+/* Empire intensity modifiers - applied to container */
+.income-particles.intensity-low .income-particle {
+  opacity: 0.4;
+}
+
+.income-particles.intensity-high .income-particle {
+  box-shadow: 0 0 8px rgba(212, 175, 55, 1), 0 0 16px rgba(212, 175, 55, 0.6);
+}
+
 @keyframes particle-float {
   0%,
   100% {
