@@ -261,6 +261,9 @@ function renderApp(gameState) {
   if (typeof updateIncomeParticleStream === "function") {
     updateIncomeParticleStream(gameState);
   }
+  if (typeof refreshActivityTicker === "function") {
+    refreshActivityTicker(gameState);
+  }
 }
 
 function renderStatusMessage() {
