@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX debt payoff stage flow, reminder gating, debt messaging, and Pay Max modal polish.
+  - Why: Ensure the Bank Manager flow skips early stages on one-go payoff, reminders stop after payoff, story copy matches the $25,000 debt, and Pay Max uses in-game UI.
+  - Files touched: src/systems/economy.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX After Hours payment now guards against negative fees, updates header cash immediately, and clarifies the cash payoff in modal copy.
   - Why: Make the payment feel like a real cash handoff and remove the perception of cash increasing after accepting.
   - Files touched: src/systems/afterhours.js, src/ui/events.js, src/ui/afterhours-render.js, docs/task-checklist.md, CHANGELOG.md.

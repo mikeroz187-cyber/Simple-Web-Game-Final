@@ -82,6 +82,113 @@ function showEventCards(cards) {
     "</div>";
 }
 
+function showPayMaxModal(gameState) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !gameState || !gameState.player) {
+    return;
+  }
+  const player = gameState.player;
+  const cash = Number.isFinite(player.cash) ? player.cash : 0;
+  const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+  const maxPay = Math.min(cash, debtRemaining);
+  const formatValue = typeof formatCurrency === "function"
+    ? formatCurrency
+    : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  const payMaxDisabled = maxPay <= 0;
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card\">" +
+    "<h3 class=\"modal-title\">Pay Down Debt</h3>" +
+    "<p class=\"modal-message\">" +
+    "Current debt: <strong>" + formatValue(debtRemaining) + "</strong><br>" +
+    "Cash on hand: <strong>" + formatValue(cash) + "</strong><br>" +
+    "Pay Max will pay the maximum you can afford up to the remaining debt." +
+    "</p>" +
+    "<div class=\"button-row\">" +
+    "<button class=\"button primary\" data-action=\"confirm-pay-max\"" + (payMaxDisabled ? " disabled" : "") + ">Pay Max</button>" +
+    "<button class=\"button\" data-action=\"dismiss-modal\">Cancel</button>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function processDebtPayment(amount, options) {
+  const config = options && typeof options === "object" ? options : {};
+  const skipConfirm = config.skipConfirm === true;
+  const gameState = window.gameState;
+  if (!gameState || !gameState.player) {
+    return;
+  }
+  const debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment
+    ? CONFIG.economy.debtPayment
+    : {};
+  const confirmThreshold = Number.isFinite(debtPaymentConfig.confirmForPaymentsAbove)
+    ? debtPaymentConfig.confirmForPaymentsAbove
+    : null;
+  if (!skipConfirm && confirmThreshold !== null) {
+    const player = gameState.player;
+    const cash = Number.isFinite(player.cash) ? player.cash : 0;
+    const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
+    const maxPay = Math.min(cash, debtRemaining);
+    const minPayment = Number.isFinite(debtPaymentConfig.minPayment)
+      ? debtPaymentConfig.minPayment
+      : 0;
+    let expectedPay = maxPay;
+    if (amount !== null && amount !== "max" && Number.isFinite(amount)) {
+      expectedPay = Math.min(Math.max(amount, minPayment), maxPay);
+    }
+    if (expectedPay > confirmThreshold) {
+      const confirmMessage = "Pay " + formatCurrency(expectedPay) + " toward your debt?";
+      if (!window.confirm(confirmMessage)) {
+        return;
+      }
+    }
+  }
+  const result = payDebt(gameState, amount);
+  setUiMessage(result.message || "");
+  if (result.ok) {
+    const storyEvents = [];
+    if (result.saturationActivated) {
+      const saturationConfig = CONFIG.market && CONFIG.market.saturation
+        ? CONFIG.market.saturation
+        : {};
+      const saturationMessageId = typeof saturationConfig.unlockMessageId === "string"
+        ? saturationConfig.unlockMessageId
+        : "act2_saturation_activated";
+      storyEvents.push({ id: saturationMessageId, day: gameState.player.day });
+    }
+    if (result.competitionUnlocked) {
+      const competitionConfig = CONFIG.market && CONFIG.market.competition
+        ? CONFIG.market.competition
+        : {};
+      const unlockMessageId = typeof competitionConfig.unlockMessageId === "string"
+        ? competitionConfig.unlockMessageId
+        : "act2_competition_unlocked";
+      storyEvents.push({ id: unlockMessageId, day: gameState.player.day });
+    }
+    if (storyEvents.length) {
+      ensureStoryLogState(gameState);
+      appendStoryLogEntries(gameState, storyEvents);
+      showStoryEvents(storyEvents);
+    }
+    const saveResult = saveGame(gameState, CONFIG.save.autosave_slot_id);
+    if (!saveResult.ok) {
+      setUiMessage(saveResult.message);
+    }
+    if (result.conquestResult && result.conquestResult.cards && result.conquestResult.cards.length) {
+      showEventCards(result.conquestResult.cards);
+    }
+    if (typeof showToast === "function") {
+      const formatValue = typeof formatCurrency === "function"
+        ? formatCurrency
+        : function (value) { return "$" + Math.round(value).toLocaleString(); };
+      const toastMessage = "Paid " + formatValue(result.amountPaid) + " toward your debt.";
+      showToast(toastMessage, "success");
+    }
+  }
+  renderApp(gameState);
+}
+
 function buildStoryEventCards(events) {
   if (!Array.isArray(events)) {
     return [];
@@ -340,6 +447,17 @@ function setupEventHandlers() {
 
     if (action === "dismiss-modal") {
       clearModal();
+      return;
+    }
+
+    if (action === "open-pay-max-modal") {
+      showPayMaxModal(window.gameState);
+      return;
+    }
+
+    if (action === "confirm-pay-max") {
+      clearModal();
+      processDebtPayment("max", { skipConfirm: true });
       return;
     }
 
@@ -1133,71 +1251,7 @@ function setupEventHandlers() {
         const parsedAmount = Number(amountAttr);
         amount = Number.isFinite(parsedAmount) ? parsedAmount : null;
       }
-      const debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment
-        ? CONFIG.economy.debtPayment
-        : {};
-      const confirmThreshold = Number.isFinite(debtPaymentConfig.confirmForPaymentsAbove)
-        ? debtPaymentConfig.confirmForPaymentsAbove
-        : null;
-      if (confirmThreshold !== null && window.gameState && window.gameState.player) {
-        const player = window.gameState.player;
-        const cash = Number.isFinite(player.cash) ? player.cash : 0;
-        const debtRemaining = Number.isFinite(player.debtRemaining) ? player.debtRemaining : 0;
-        const maxPay = Math.min(cash, debtRemaining);
-        const minPayment = Number.isFinite(debtPaymentConfig.minPayment)
-          ? debtPaymentConfig.minPayment
-          : 0;
-        let expectedPay = maxPay;
-        if (amount !== null && amount !== "max" && Number.isFinite(amount)) {
-          expectedPay = Math.min(Math.max(amount, minPayment), maxPay);
-        }
-        if (expectedPay > confirmThreshold) {
-          const confirmMessage = "Pay " + formatCurrency(expectedPay) + " toward your debt?";
-          if (!window.confirm(confirmMessage)) {
-            return;
-          }
-        }
-      }
-      const result = payDebt(window.gameState, amount);
-      setUiMessage(result.message || "");
-      if (result.ok) {
-        const storyEvents = [];
-        if (result.saturationActivated) {
-          const saturationConfig = CONFIG.market && CONFIG.market.saturation
-            ? CONFIG.market.saturation
-            : {};
-          const saturationMessageId = typeof saturationConfig.unlockMessageId === "string"
-            ? saturationConfig.unlockMessageId
-            : "act2_saturation_activated";
-          storyEvents.push({ id: saturationMessageId, day: window.gameState.player.day });
-        }
-        if (result.competitionUnlocked) {
-          const competitionConfig = CONFIG.market && CONFIG.market.competition
-            ? CONFIG.market.competition
-            : {};
-          const unlockMessageId = typeof competitionConfig.unlockMessageId === "string"
-            ? competitionConfig.unlockMessageId
-            : "act2_competition_unlocked";
-          storyEvents.push({ id: unlockMessageId, day: window.gameState.player.day });
-        }
-        if (storyEvents.length) {
-          ensureStoryLogState(window.gameState);
-          appendStoryLogEntries(window.gameState, storyEvents);
-          showStoryEvents(storyEvents);
-        }
-        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
-        if (!saveResult.ok) {
-          setUiMessage(saveResult.message);
-        }
-        if (result.conquestResult && result.conquestResult.cards && result.conquestResult.cards.length) {
-          showEventCards(result.conquestResult.cards);
-        }
-        if (typeof showToast === "function") {
-          const toastMessage = result.debtCleared ? "Debt paid in full!" : (result.message || "Debt payment made.");
-          showToast(toastMessage, "success");
-        }
-      }
-      renderApp(window.gameState);
+      processDebtPayment(amount, { skipConfirm: false });
       return;
     }
 
