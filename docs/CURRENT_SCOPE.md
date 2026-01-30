@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Empire Pulse Phase 1: Screen transitions, staggered entrances, button micro-feedback.
 - Performer/recruit/persona display names updated to the locked sexy list.
 - Loyalty/Diva Fee economy impact and boosted Star Power multiplier for clear cost/reward feedback.
 - Conquests story & pacing pass: tokenized scene copy, punchier progression text, and retuned thresholds for earlier Stage 1–3 pacing.
@@ -36,7 +37,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Empire Pulse Phase 1: Screen transitions ✓, staggered entrances ✓, button micro-feedback (in progress)
+- Empire Pulse Phase 2: Passive income particle stream (in progress)
 
 ## Next 3–7 Candidate Tasks
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state

@@ -336,3 +336,154 @@ function animateIfChanged(key, newValue, element, formatter, flashElement) {
 
   setPreviousValue(key, newValue);
 }
+
+/* ============================================
+   INCOME PARTICLE STREAM
+   ============================================ */
+
+var incomeParticleInterval = null;
+var incomeParticleConfig = {
+  minInterval: 400,
+  maxInterval: 3000,
+  baseDuration: 4000,
+  maxParticles: 30
+};
+
+/**
+ * Spawn a single income particle
+ * @param {boolean} isBurst - Whether this is a burst particle (money gain event)
+ */
+function spawnIncomeParticle(isBurst) {
+  var container = document.getElementById("income-particles");
+  if (!container) return;
+
+  if (container.children.length >= incomeParticleConfig.maxParticles) {
+    var oldest = container.firstChild;
+    if (oldest) oldest.remove();
+  }
+
+  var particle = document.createElement("div");
+  particle.className = "income-particle";
+
+  var sizeRoll = Math.random();
+  if (sizeRoll < 0.3) {
+    particle.classList.add("income-particle--small");
+  } else if (sizeRoll > 0.9) {
+    particle.classList.add("income-particle--large");
+  }
+
+  if (isBurst) {
+    particle.classList.add("income-particle--burst");
+    particle.classList.add("income-particle--large");
+  }
+
+  var xPos = 50 + Math.random() * 45;
+  particle.style.left = xPos + "%";
+
+  var drift = (Math.random() - 0.5) * 60;
+  particle.style.setProperty("--drift-x", drift + "px");
+
+  var duration = incomeParticleConfig.baseDuration + Math.random() * 2000 - 1000;
+  particle.style.animationDuration = duration + "ms";
+
+  container.appendChild(particle);
+
+  setTimeout(function () {
+    if (particle.parentNode) {
+      particle.remove();
+    }
+  }, duration + 100);
+}
+
+/**
+ * Spawn a burst of particles (for money gain events)
+ * @param {number} count - Number of particles to spawn
+ */
+function spawnIncomeParticleBurst(count) {
+  count = count || 8;
+  for (var i = 0; i < count; i++) {
+    setTimeout(function () {
+      spawnIncomeParticle(true);
+    }, i * 50);
+  }
+}
+
+/**
+ * Calculate particle spawn interval based on game state
+ * @param {object} gameState - Current game state
+ * @returns {number} - Interval in ms
+ */
+function calculateIncomeParticleInterval(gameState) {
+  if (!gameState || !gameState.player) {
+    return incomeParticleConfig.maxInterval;
+  }
+
+  var subs = gameState.player.onlyFansSubscribers || 0;
+  var cash = gameState.player.cash || 0;
+
+  var subsFactor = Math.min(subs / 1000, 1);
+  var cashFactor = Math.min(cash / 50000, 1) * 0.2;
+  var intensity = Math.min(subsFactor + cashFactor, 1);
+
+  var range = incomeParticleConfig.maxInterval - incomeParticleConfig.minInterval;
+  var interval = incomeParticleConfig.maxInterval - range * intensity;
+
+  return Math.round(interval);
+}
+
+/**
+ * Start the income particle stream
+ * @param {object} gameState - Current game state
+ */
+function startIncomeParticleStream(gameState) {
+  stopIncomeParticleStream();
+
+  var container = document.getElementById("income-particles");
+  if (!container) return;
+
+  var subs = gameState && gameState.player ? gameState.player.onlyFansSubscribers || 0 : 0;
+  container.classList.remove("intensity-low", "intensity-high");
+  if (subs < 50) {
+    container.classList.add("intensity-low");
+  } else if (subs > 500) {
+    container.classList.add("intensity-high");
+  }
+
+  function scheduleNext() {
+    var interval = calculateIncomeParticleInterval(gameState);
+    incomeParticleInterval = setTimeout(function () {
+      spawnIncomeParticle(false);
+      scheduleNext();
+    }, interval);
+  }
+
+  spawnIncomeParticle(false);
+  scheduleNext();
+}
+
+/**
+ * Stop the income particle stream
+ */
+function stopIncomeParticleStream() {
+  if (incomeParticleInterval) {
+    clearTimeout(incomeParticleInterval);
+    incomeParticleInterval = null;
+  }
+}
+
+/**
+ * Update income particle stream intensity (call when game state changes)
+ * @param {object} gameState - Current game state
+ */
+function updateIncomeParticleStream(gameState) {
+  var container = document.getElementById("income-particles");
+  if (!container) return;
+
+  var subs = gameState && gameState.player ? gameState.player.onlyFansSubscribers || 0 : 0;
+  container.classList.remove("intensity-low", "intensity-high");
+  if (subs < 50) {
+    container.classList.add("intensity-low");
+  } else if (subs > 500) {
+    container.classList.add("intensity-high");
+  }
+}

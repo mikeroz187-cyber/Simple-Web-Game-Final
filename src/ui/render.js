@@ -206,6 +206,13 @@ function renderHeaderStats(gameState) {
       }
     }
   }
+  if (cashChanged && cash > prevCash) {
+    var gain = cash - prevCash;
+    if (typeof spawnIncomeParticleBurst === "function") {
+      var burstCount = gain > 1000 ? 12 : (gain > 500 ? 8 : 5);
+      spawnIncomeParticleBurst(burstCount);
+    }
+  }
   if (typeof setPreviousValue === "function") {
     setPreviousValue("header-cash", cash);
   }
@@ -251,6 +258,9 @@ function renderApp(gameState) {
   renderSlideshow(gameState);
   renderStoryLog(gameState);
   renderShop(gameState);
+  if (typeof updateIncomeParticleStream === "function") {
+    updateIncomeParticleStream(gameState);
+  }
 }
 
 function renderStatusMessage() {
