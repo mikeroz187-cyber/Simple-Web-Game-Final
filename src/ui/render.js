@@ -180,8 +180,8 @@ function renderHeaderStats(gameState) {
 
   var stats = [
     { label: "Day", value: day, className: "" },
-    { label: "Cash", value: formatCurrency(cash), className: "header-stat--gold" },
-    { label: "OF Subs", value: ofSubs.toLocaleString(), className: "header-stat--accent" },
+    { label: "Cash", value: formatCurrency(cash), className: "header-stat--gold", id: "header-cash-value" },
+    { label: "OF Subs", value: ofSubs.toLocaleString(), className: "header-stat--accent", id: "header-subs-value" },
     { label: "Debt", value: formatCurrency(debt), className: debt > 0 ? "header-stat--danger" : "" },
     { label: "Days Left", value: daysLeft, className: daysLeft <= 14 ? "header-stat--danger" : "" },
     { label: "Rep", value: rep, className: "" }
@@ -190,20 +190,23 @@ function renderHeaderStats(gameState) {
   var html = stats.map(function (stat) {
     return "<div class=\"header-stat " + stat.className + "\">" +
       "<span class=\"header-stat__label\">" + stat.label + "</span>" +
-      "<span class=\"header-stat__value\">" + stat.value + "</span>" +
+      "<span class=\"header-stat__value\" " + (stat.id ? "id=\"" + stat.id + "\"" : "") + ">" + stat.value + "</span>" +
       "</div>";
   }).join("");
 
   container.innerHTML = html;
 
-  // Animate cash if changed
-  if (cashChanged && typeof animateCurrency === "function") {
-    var cashValueEl = container.querySelector(".header-stat--gold .header-stat__value");
-    if (cashValueEl) {
-      animateCurrency(cashValueEl, prevCash, cash, 600);
+  // Animate cash with roller if changed
+  var cashValueEl = document.getElementById("header-cash-value");
+  if (cashValueEl && typeof animateRollerValue === "function") {
+    if (cashChanged) {
+      animateRollerValue(cashValueEl, prevCash, cash, { prefix: "$" });
       if (typeof flashValueChange === "function") {
         flashValueChange(cashValueEl, cash > prevCash ? "positive" : "negative");
       }
+    } else if (!cashValueEl.querySelector(".roller-value")) {
+      // Initialize roller if not present
+      initRollerValue(cashValueEl, cash, { prefix: "$" });
     }
   }
   if (cashChanged && cash > prevCash) {
@@ -212,6 +215,20 @@ function renderHeaderStats(gameState) {
       var burstCount = gain > 1000 ? 12 : (gain > 500 ? 8 : 5);
       spawnIncomeParticleBurst(burstCount);
     }
+  }
+  // Animate subs with roller if changed
+  var prevSubs = typeof getPreviousValue === "function" ? getPreviousValue("header-subs") : undefined;
+  var subsChanged = prevSubs !== undefined && prevSubs !== ofSubs;
+  var subsValueEl = document.getElementById("header-subs-value");
+  if (subsValueEl && typeof animateRollerValue === "function") {
+    if (subsChanged) {
+      animateRollerValue(subsValueEl, prevSubs, ofSubs, { prefix: "" });
+    } else if (!subsValueEl.querySelector(".roller-value")) {
+      initRollerValue(subsValueEl, ofSubs, { prefix: "" });
+    }
+  }
+  if (typeof setPreviousValue === "function") {
+    setPreviousValue("header-subs", ofSubs);
   }
   if (typeof setPreviousValue === "function") {
     setPreviousValue("header-cash", cash);

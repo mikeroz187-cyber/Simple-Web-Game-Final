@@ -3733,3 +3733,96 @@ body.after-hours-active .ambient-mascot {
 .app-shell {
   padding-bottom: 40px;
 }
+
+/* === SLOT-MACHINE NUMBER ROLLERS === */
+.roller-value {
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.roller-digit {
+  display: inline-block;
+  position: relative;
+  width: 0.6em;
+  height: 1.2em;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Narrower width for punctuation */
+.roller-digit--narrow {
+  width: 0.35em;
+}
+
+.roller-digit__track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.roller-digit__char {
+  height: 1.2em;
+  line-height: 1.2em;
+}
+
+/* Glow effect during roll */
+.roller-digit.is-rolling .roller-digit__track {
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* Subtle blur during fast movement */
+.roller-digit.is-rolling .roller-digit__char {
+  animation: roller-blur 0.4s ease-out;
+}
+
+@keyframes roller-blur {
+  0%, 100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+  30%, 70% {
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+}
+
+/* Pop effect when roller completes */
+.roller-value.roll-complete {
+  animation: roller-pop 0.3s ease-out;
+}
+
+@keyframes roller-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Header stat specific sizing */
+.header-stat__value .roller-value {
+  font-family: var(--font-mono);
+}
+
+.header-stat__value .roller-digit {
+  width: 0.55em;
+  height: 1.15em;
+}
+
+.header-stat__value .roller-digit--narrow {
+  width: 0.3em;
+}
+
+.header-stat__value .roller-digit__char {
+  height: 1.15em;
+  line-height: 1.15em;
+}
