@@ -328,6 +328,16 @@ function setupEventHandlers() {
     if (!actionEl) {
       return;
     }
+    const targetButton = event.target.closest(".button");
+    if (targetButton &&
+      targetButton.classList.contains("button") &&
+      (targetButton.classList.contains("primary") || targetButton.classList.contains("vip")) &&
+      !targetButton.disabled &&
+      !targetButton.classList.contains("is-disabled")) {
+      if (typeof addClickBurst === "function") {
+        addClickBurst(targetButton, event);
+      }
+    }
     const action = actionEl.getAttribute("data-action");
     const actionId = actionEl.getAttribute("data-id");
     const actionTier = actionEl.getAttribute("data-tier");

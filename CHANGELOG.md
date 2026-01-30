@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added button click burst feedback plus hover/press micro-interactions for buttons and interactive cards.
+  - Why: Deliver Empire Pulse Phase 1 button micro-feedback polish for premium UI feel.
+  - Files touched: styles.css, src/utils/animations.js, src/ui/events.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added staggered entrance animation utilities and applied stagger classes across key screens and cards.
   - Why: Deliver Empire Pulse Phase 1 staggered reveal polish for screen content.
   - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, src/ui/router.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
