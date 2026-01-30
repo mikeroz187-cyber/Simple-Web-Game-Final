@@ -38,6 +38,37 @@ function applyContentTypeCostMultiplier(baseCost, contentType) {
   };
 }
 
+function getStarPowerCostConfig() {
+  const economyConfig = CONFIG.economy && typeof CONFIG.economy === "object" ? CONFIG.economy : {};
+  const multipliers = economyConfig.starPowerCostMultipliers && typeof economyConfig.starPowerCostMultipliers === "object"
+    ? economyConfig.starPowerCostMultipliers
+    : {};
+  return {
+    threshold: Number.isFinite(economyConfig.starPowerCostThreshold) ? economyConfig.starPowerCostThreshold : 0,
+    multipliers: multipliers,
+    defaultMultiplier: Number.isFinite(economyConfig.starPowerCostMultiplierDefault)
+      ? economyConfig.starPowerCostMultiplierDefault
+      : 1
+  };
+}
+
+function getStarPowerCostMultiplier(starPower) {
+  const config = getStarPowerCostConfig();
+  const defaultMultiplier = config.defaultMultiplier;
+  if (!Number.isFinite(starPower)) {
+    return defaultMultiplier;
+  }
+  if (starPower <= config.threshold) {
+    return defaultMultiplier;
+  }
+  const normalizedStar = Math.max(0, Math.round(starPower));
+  const lookup = config.multipliers[String(normalizedStar)];
+  if (Number.isFinite(lookup)) {
+    return lookup;
+  }
+  return defaultMultiplier;
+}
+
 function getEquipmentLevel(gameState, levelKey) {
   if (!gameState || !gameState.equipment) {
     return 0;

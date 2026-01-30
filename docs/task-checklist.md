@@ -124,6 +124,8 @@
 - [x] FIX Bug #10: Stop debt reminders after debt is fully paid.
 - [x] FIX Bug #11: First debt story message matches $25,000 debt.
 - [x] FIX Bug #13: Pay Max uses in-game modal instead of browser prompt.
+- [x] FIX Bug #14: Star Power 7+ adds a booking premium and is itemized at confirm.
+- [x] FIX Bug #15: Daily shoot cap only blocks booking more shoots (no global gating).
 
 ---
 
