@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Empire Pulse Phase 3 parallax depth styling and mouse-driven movement for atmosphere, particles, and mascots.
+  - Why: Deliver subtle depth polish with smooth cursor tracking while honoring reduced motion preferences.
+  - Files touched: styles.css, index.html, src/utils/animations.js, src/main.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added slot-machine number roller visuals and animations for header cash/subscriber stats.
   - Why: Deliver Empire Pulse Phase 3 digit-by-digit roll polish for key numbers.
   - Files touched: styles.css, src/utils/animations.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.

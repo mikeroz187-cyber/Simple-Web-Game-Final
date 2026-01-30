@@ -103,6 +103,7 @@ function updateMascot(screenId) {
 
   var positionClass = getMascotContainerPositionClass(screenKey);
   container.className = "ambient-mascot-container " + positionClass;
+  container.classList.add("parallax-mascot");
 
   var existingImg = container.querySelector("img");
   if (existingImg && existingImg.src.endsWith(poseConfig.path)) {
