@@ -267,8 +267,146 @@ body {
   color: var(--accent);
   text-shadow:
     0 0 10px rgba(255, 45, 122, 0.6),
-    0 0 30px rgba(255, 45, 122, 0.3);
+    0 0 30px rgba(255, 45, 122, 0.3),
+    0 0 50px rgba(255, 45, 122, 0.15);
   flex-shrink: 0;
+  animation: neon-flicker 8s ease-in-out infinite;
+  will-change: opacity, text-shadow;
+}
+
+@keyframes neon-flicker {
+  0%, 100% {
+    opacity: 1;
+    text-shadow:
+      0 0 10px rgba(255, 45, 122, 0.6),
+      0 0 30px rgba(255, 45, 122, 0.3),
+      0 0 50px rgba(255, 45, 122, 0.15);
+  }
+  4% {
+    opacity: 0.95;
+    text-shadow:
+      0 0 8px rgba(255, 45, 122, 0.5),
+      0 0 25px rgba(255, 45, 122, 0.25);
+  }
+  5% {
+    opacity: 1;
+    text-shadow:
+      0 0 12px rgba(255, 45, 122, 0.7),
+      0 0 35px rgba(255, 45, 122, 0.35),
+      0 0 55px rgba(255, 45, 122, 0.18);
+  }
+  18% {
+    opacity: 1;
+  }
+  19% {
+    opacity: 0.92;
+  }
+  20% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 1;
+    text-shadow:
+      0 0 10px rgba(255, 45, 122, 0.6),
+      0 0 30px rgba(255, 45, 122, 0.3),
+      0 0 50px rgba(255, 45, 122, 0.15);
+  }
+  46% {
+    opacity: 0.88;
+    text-shadow:
+      0 0 6px rgba(255, 45, 122, 0.4),
+      0 0 20px rgba(255, 45, 122, 0.2);
+  }
+  47% {
+    opacity: 0.94;
+    text-shadow:
+      0 0 14px rgba(255, 45, 122, 0.8),
+      0 0 40px rgba(255, 45, 122, 0.4);
+  }
+  48% {
+    opacity: 1;
+    text-shadow:
+      0 0 10px rgba(255, 45, 122, 0.6),
+      0 0 30px rgba(255, 45, 122, 0.3),
+      0 0 50px rgba(255, 45, 122, 0.15);
+  }
+  70% {
+    opacity: 1;
+  }
+  71% {
+    opacity: 0.96;
+  }
+  72% {
+    opacity: 1;
+  }
+}
+
+/* Empire intensity variants for neon */
+.header-bar__title.intensity-low {
+  animation: neon-flicker-struggling 5s ease-in-out infinite;
+}
+
+@keyframes neon-flicker-struggling {
+  0%, 100% {
+    opacity: 0.85;
+    text-shadow:
+      0 0 8px rgba(255, 45, 122, 0.4),
+      0 0 20px rgba(255, 45, 122, 0.2);
+  }
+  10% {
+    opacity: 0.7;
+    text-shadow:
+      0 0 5px rgba(255, 45, 122, 0.3),
+      0 0 15px rgba(255, 45, 122, 0.15);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  30% {
+    opacity: 0.75;
+  }
+  32% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow:
+      0 0 6px rgba(255, 45, 122, 0.35),
+      0 0 18px rgba(255, 45, 122, 0.18);
+  }
+  65% {
+    opacity: 0.65;
+  }
+  67% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.78;
+  }
+  82% {
+    opacity: 0.9;
+  }
+}
+
+.header-bar__title.intensity-high {
+  animation: neon-glow-strong 4s ease-in-out infinite;
+}
+
+@keyframes neon-glow-strong {
+  0%, 100% {
+    text-shadow:
+      0 0 10px rgba(255, 45, 122, 0.8),
+      0 0 30px rgba(255, 45, 122, 0.5),
+      0 0 50px rgba(255, 45, 122, 0.3),
+      0 0 80px rgba(255, 45, 122, 0.15);
+  }
+  50% {
+    text-shadow:
+      0 0 15px rgba(255, 45, 122, 1),
+      0 0 40px rgba(255, 45, 122, 0.6),
+      0 0 60px rgba(255, 45, 122, 0.4),
+      0 0 100px rgba(255, 45, 122, 0.2);
+  }
 }
 
 .header-bar__stats {
@@ -297,10 +435,30 @@ body {
 .header-stat--gold .header-stat__value {
   color: var(--vip);
   text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  animation: gold-pulse 3s ease-in-out infinite;
+}
+
+@keyframes gold-pulse {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.7), 0 0 25px rgba(212, 175, 55, 0.3);
+  }
 }
 
 .header-stat--danger .header-stat__value {
   color: var(--danger);
+  animation: danger-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes danger-pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(255, 51, 68, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(255, 51, 68, 0.7), 0 0 20px rgba(255, 51, 68, 0.3);
+  }
 }
 
 .header-stat--accent .header-stat__value {
@@ -379,6 +537,18 @@ body {
   background: var(--accent);
   border-radius: 0 2px 2px 0;
   box-shadow: 0 0 10px var(--accent);
+  animation: accent-pulse 2s ease-in-out infinite;
+}
+
+@keyframes accent-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(255, 45, 122, 0.3);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 15px var(--accent), 0 0 30px rgba(255, 45, 122, 0.5);
+    opacity: 0.9;
+  }
 }
 
 .nav-item__icon {
@@ -463,6 +633,16 @@ body {
 .screen.is-active {
   display: flex;
   flex-direction: column;
+  animation: screen-breathe 8s ease-in-out infinite;
+}
+
+@keyframes screen-breathe {
+  0%, 100% {
+    box-shadow: var(--shadow-md);
+  }
+  50% {
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.42), 0 0 1px rgba(255, 255, 255, 0.04);
+  }
 }
 
 .screen--exiting {
@@ -514,7 +694,24 @@ body {
   box-shadow: var(--shadow-sm);
   position: relative;
   transition: border-color 0.2s ease;
+  animation: panel-breathe 6s ease-in-out infinite;
+  will-change: transform, box-shadow;
 }
+
+@keyframes panel-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: var(--shadow-sm);
+  }
+  50% {
+    transform: scale(1.003);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.32), 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+}
+
+.panel:nth-child(2) { animation-delay: -1.5s; }
+.panel:nth-child(3) { animation-delay: -3s; }
+.panel:nth-child(4) { animation-delay: -4.5s; }
 
 .panel:hover {
   border-color: rgba(255, 255, 255, 0.12);
@@ -606,6 +803,8 @@ body {
   border-color: var(--vip);
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
   font-weight: 600;
+  position: relative;
+  overflow: hidden;
 }
 
 .button.vip:hover:not(:disabled):not(.is-disabled) {
@@ -822,7 +1021,45 @@ body {
 .selection-card__badge--premium {
   background: rgba(212, 175, 55, 0.2);
   color: var(--vip);
+  position: relative;
+  overflow: hidden;
 }
+
+/* Gold shimmer sweep - applies to vip buttons and gold elements */
+.button.vip::before,
+.selection-card__badge--premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  animation: gold-shimmer 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gold-shimmer {
+  0%, 85%, 100% {
+    left: -100%;
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
+  95% {
+    left: 200%;
+    opacity: 0;
+  }
+}
+
+.button.vip:nth-of-type(2)::before { animation-delay: -3s; }
+.button.vip:nth-of-type(3)::before { animation-delay: -5s; }
 
 @keyframes selection-pop {
   0% { transform: scale(1); }
