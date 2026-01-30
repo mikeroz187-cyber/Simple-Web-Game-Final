@@ -11,9 +11,6 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
-- What: Added the Empire Pulse Phase 2 activity ticker with contextual scrolling updates and intensity tuning.
-  - Why: Surface living world events from current state to keep the empire feeling active.
-  - Files touched: index.html, styles.css, src/utils/animations.js, src/main.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added the Empire Pulse Phase 2 income particle stream visuals with cash-gain bursts and intensity tuning.
   - Why: Visualize passive income flow tied to subscriber growth and cash gains per current scope.
   - Files touched: index.html, styles.css, src/utils/animations.js, src/main.js, src/ui/render.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
