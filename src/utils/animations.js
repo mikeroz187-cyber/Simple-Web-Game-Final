@@ -95,6 +95,8 @@ function processToastQueue() {
     container.id = 'toast-container';
     container.className = 'toast-container';
     document.body.appendChild(container);
+  } else if (container.parentNode !== document.body) {
+    document.body.appendChild(container);
   }
 
   var icons = {

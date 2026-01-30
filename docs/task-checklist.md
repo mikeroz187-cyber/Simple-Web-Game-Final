@@ -108,6 +108,14 @@
 - [x] Recruit meet modal: Hire/Decline available immediately and slideshow media stays within the modal.
 - [x] Performer/recruit/persona display names updated to locked sexy list.
 
+## Bugfix / UI polish — COMPLETE ✓
+- [x] Content screen removes location thumbnail from the info panel (Bugfix A).
+- [x] Content screen CTA buttons switch correctly for Premium vs Promo entries (Bugfix B).
+- [x] Promo CTA jumps to Social with the chosen content pre-selected (Bugfix C).
+- [x] Social recent posts open shoot photo slideshows and return to Social on close (Bugfix D).
+- [x] Toast notifications render above the mascot and outside stacked screen containers (Bugfix E).
+- [x] Analytics secondary row uses aligned grid styling for top-aligned cards (Bugfix F).
+
 ---
 
 ## Ambient Character Art System — In Progress

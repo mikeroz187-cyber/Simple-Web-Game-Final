@@ -331,6 +331,7 @@ function setupEventHandlers() {
     const action = actionEl.getAttribute("data-action");
     const actionId = actionEl.getAttribute("data-id");
     const actionTier = actionEl.getAttribute("data-tier");
+    const actionOrigin = actionEl.getAttribute("data-origin");
     if (!action) {
       return;
     }
@@ -422,7 +423,7 @@ function setupEventHandlers() {
 
     if (action === "view-shoot-photos") {
       const contentId = actionId;
-      uiState.slideshow = { mode: "shoot", id: contentId, index: 0, origin: null };
+      uiState.slideshow = { mode: "shoot", id: contentId, index: 0, origin: actionOrigin || null };
       setUiMessage("");
       showScreen("screen-slideshow");
       renderApp(window.gameState);
@@ -449,7 +450,7 @@ function setupEventHandlers() {
       if (mode === "recruit") {
         showScreen("screen-roster");
       } else if (mode === "shoot") {
-        showScreen("screen-gallery");
+        showScreen(origin === "social" ? "screen-social" : "screen-gallery");
       } else if (mode === "conquest") {
         showScreen(origin === "gallery" ? "screen-gallery" : "screen-conquests");
       } else {
@@ -505,6 +506,17 @@ function setupEventHandlers() {
     }
 
     if (action === "nav-social") {
+      showScreen("screen-social");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "content-post-social") {
+      if (!uiState.social) {
+        uiState.social = { selectedContentId: null };
+      }
+      uiState.social.selectedContentId = actionId;
+      setUiMessage("");
       showScreen("screen-social");
       renderApp(window.gameState);
       return;
