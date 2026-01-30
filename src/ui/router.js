@@ -1,5 +1,4 @@
 function showScreen(screenId) {
-  var screens = document.querySelectorAll(".screen");
   var targetScreen = document.getElementById(screenId);
   var applyMascotUpdate = function() {
     if (typeof updateMascot === "function") {
@@ -17,17 +16,15 @@ function showScreen(screenId) {
     activeScreen.classList.add("screen--exiting");
 
     setTimeout(function() {
-      screens.forEach(function(screen) {
-        screen.classList.remove("is-active", "screen--exiting");
-      });
+      activeScreen.classList.remove("is-active", "screen--exiting");
 
       targetScreen.classList.add("is-active", "screen--entering");
       applyMascotUpdate();
 
       // Remove entering class after animation
-      setTimeout(function() {
+      requestAnimationFrame(function() {
         targetScreen.classList.remove("screen--entering");
-      }, 150);
+      });
     }, 150);
   } else if (!activeScreen) {
     targetScreen.classList.add("is-active");

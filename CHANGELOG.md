@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Empire Pulse Phase 1 screen transition animations for screen navigation.
+  - Why: Deliver the requested crossfade polish pass for smoother screen changes.
+  - Files touched: styles.css, src/ui/router.js, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX add After Hours recruit performer content and remove gallery mention from aftermath results.
   - Why: Ensure every recruit has bespoke After Hours copy and outcomes avoid referencing the gallery.
   - Files touched: src/ui/afterhours-render.js, CHANGELOG.md.
