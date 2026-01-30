@@ -1588,6 +1588,13 @@ body {
   gap: var(--gap-sm);
 }
 
+.analytics-secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-md);
+  align-items: stretch;
+}
+
 .analytics-card {
   background: rgba(0, 0, 0, 0.2);
   border: var(--border-width) solid var(--glass-border);
@@ -2604,7 +2611,7 @@ body {
   position: fixed;
   bottom: var(--gap-lg);
   right: var(--gap-lg);
-  z-index: 1000;
+  z-index: 5000;
   display: flex;
   flex-direction: column;
   gap: var(--gap-sm);

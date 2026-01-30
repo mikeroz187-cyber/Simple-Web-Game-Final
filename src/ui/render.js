@@ -876,10 +876,6 @@ function renderContent(gameState) {
   }
   const uiState = getUiState();
   const entry = getLatestContentEntry(gameState);
-  const locationThumbSize = getLocationThumbnailSizePx();
-  const locationThumbRadius = getLocationThumbnailRadiusPx();
-  const locationThumbStyle = "width:" + locationThumbSize + "px;height:" + locationThumbSize + "px;object-fit:cover;border-radius:" + locationThumbRadius + "px;border:1px solid var(--panel-border);background:var(--panel-bg);flex-shrink:0;";
-  const locationRowStyle = "display:flex;gap:" + CONFIG.ui.panel_gap_px + "px;align-items:center;";
 
   let contentBody = "<p class=\"helper-text\">No content yet. Book a shoot first.</p>";
   if (!entry && gameState.content.lastContentId) {
@@ -888,10 +884,6 @@ function renderContent(gameState) {
   if (entry) {
     const performer = getContentEntryPerformerLabel(gameState, entry);
     const location = getLocationName(entry.locationId);
-    const locationData = CONFIG.locations.catalog[entry.locationId];
-    const locationThumbPath = getLocationThumbnailPath(locationData);
-    const locationFallbackPath = CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH;
-    const locationAlt = "Thumbnail of " + location;
     const theme = getThemeName(entry.themeId);
     const photoPaths = typeof getEntryPhotoPaths === "function"
       ? getEntryPhotoPaths(entry).slice(0, 5)
@@ -915,10 +907,7 @@ function renderContent(gameState) {
       "</div>";
     const infoHtml = "<div class=\"slideshow-info\">" +
       "<p><strong>Performer:</strong> " + performer + "</p>" +
-      "<div style=\"" + locationRowStyle + "\">" +
-      "<img src=\"" + locationThumbPath + "\" alt=\"" + locationAlt + "\" width=\"" + locationThumbSize + "\" height=\"" + locationThumbSize + "\" style=\"" + locationThumbStyle + "\" onerror=\"this.onerror=null;this.src='" + locationFallbackPath + "';\" />" +
       "<p><strong>Location:</strong> " + location + "</p>" +
-      "</div>" +
       "<p><strong>Theme:</strong> " + theme + "</p>" +
       "<p><strong>Content Type:</strong> " + entry.contentType + "</p>" +
       "<p><strong>Day Created:</strong> " + entry.dayCreated + "</p>" +
@@ -931,11 +920,31 @@ function renderContent(gameState) {
       "</div>";
   }
 
+  let actionButtons = "";
+  if (!entry) {
+    actionButtons = createButton("View Analytics", "nav-analytics", "primary", true) +
+      createButton("Back to Hub", "nav-hub");
+  } else if (entry.contentType === "Premium") {
+    actionButtons = createButton("Back to Booking", "nav-booking", "primary") +
+      createButton("Back to Hub", "nav-hub");
+  } else if (entry.contentType === "Promo") {
+    actionButtons = createButton(
+      "Post on Social",
+      "content-post-social",
+      "primary",
+      false,
+      "data-id=\"" + entry.id + "\""
+    ) +
+      createButton("Back to Booking", "nav-booking");
+  } else {
+    actionButtons = createButton("View Analytics", "nav-analytics", "primary") +
+      createButton("Back to Hub", "nav-hub");
+  }
+
   const body = contentBody +
     renderStatusMessage() +
     "<div class=\"button-row\">" +
-    createButton("View Analytics", "nav-analytics", "primary", !entry) +
-    createButton("Back to Hub", "nav-hub") +
+    actionButtons +
     "</div>";
   const contentHtml = createPanel("Content", body, "screen-content-title");
   container.innerHTML = renderAmbientLayers("screen-content") +
@@ -999,7 +1008,7 @@ function renderAnalytics(gameState) {
   var contentHtml = '<h2 class="screen-title">Analytics</h2>' +
     '<div class="analytics-layout">' +
       topStatsHtml +
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--gap-md);">' +
+      '<div class="analytics-secondary-grid">' +
         secondaryStatsHtml +
         cashflowHtml +
         contentStatsHtml +
@@ -1235,7 +1244,7 @@ function renderSocial(gameState) {
         title = 'Promo #' + post.contentId;
       }
     }
-    return '<div class="post-item">' +
+    return '<div class="post-item" data-action="view-shoot-photos" data-id="' + post.contentId + '" data-origin="social">' +
       '<div class="post-item__info">' +
         '<div class="post-item__title">' + title + '</div>' +
         '<div class="post-item__meta">' + post.platform + ' • Day ' + post.dayPosted + '</div>' +
