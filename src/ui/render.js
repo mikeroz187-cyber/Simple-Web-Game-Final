@@ -264,9 +264,6 @@ function renderApp(gameState) {
   if (typeof refreshActivityTicker === "function") {
     refreshActivityTicker(gameState);
   }
-  if (typeof updateAmbientIntensity === "function") {
-    updateAmbientIntensity(gameState);
-  }
 }
 
 function renderStatusMessage() {

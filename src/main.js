@@ -47,9 +47,6 @@
     if (typeof startActivityTicker === "function") {
       startActivityTicker(window.gameState);
     }
-    if (typeof updateAmbientIntensity === "function") {
-      updateAmbientIntensity(window.gameState);
-    }
     if (storyResult.ok && storyResult.events.length) {
       appendStoryLogEntries(window.gameState, storyResult.events);
       const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);

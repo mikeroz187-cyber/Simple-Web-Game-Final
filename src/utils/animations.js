@@ -488,35 +488,6 @@ function updateIncomeParticleStream(gameState) {
   }
 }
 
-/**
- * Update ambient UI intensity based on game state
- * Affects neon flicker, panel breathing, and overall energy
- * @param {object} gameState - Current game state
- */
-function updateAmbientIntensity(gameState) {
-  if (!gameState || !gameState.player) return;
-
-  var subs = gameState.player.onlyFansSubscribers || 0;
-  var cash = gameState.player.cash || 0;
-  var debt = gameState.player.debtRemaining || 0;
-
-  var titleEl = document.querySelector('.header-bar__title');
-  if (titleEl) {
-    titleEl.classList.remove('intensity-low', 'intensity-high');
-
-    // Struggling: low subs and high debt relative to cash
-    var isStruggling = subs < 50 && debt > cash * 2;
-    // Thriving: high subs and low/no debt
-    var isThriving = subs > 500 && debt < cash * 0.5;
-
-    if (isStruggling) {
-      titleEl.classList.add('intensity-low');
-    } else if (isThriving) {
-      titleEl.classList.add('intensity-high');
-    }
-  }
-}
-
 /* ============================================
    ACTIVITY TICKER SYSTEM
    ============================================ */
