@@ -97,6 +97,75 @@ function getRecruitUnlockForPerformer(performerId) {
   return mapping[performerId] || null;
 }
 
+function getAfterHoursOneTimeFee(performerId) {
+  var fees = CONFIG.afterHours.oneTimeFeesByPerformerId || {};
+  var defaultFee = CONFIG.afterHours.defaultOneTimeFee;
+  if (Number.isFinite(fees[performerId])) {
+    return fees[performerId];
+  }
+  if (Number.isFinite(defaultFee)) {
+    return defaultFee;
+  }
+  return 0;
+}
+
+function canAffordAfterHours(gameState, fee) {
+  if (!gameState || !gameState.player) {
+    return false;
+  }
+  var cash = Number.isFinite(gameState.player.cash) ? gameState.player.cash : 0;
+  var safeFee = Number.isFinite(fee) ? fee : 0;
+  return cash >= safeFee;
+}
+
+function applyAfterHoursPayment(gameState, performerId) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, feePaid: 0 };
+  }
+  var fee = getAfterHoursOneTimeFee(performerId);
+  if (!canAffordAfterHours(gameState, fee)) {
+    return { ok: false, feePaid: 0 };
+  }
+  var cash = Number.isFinite(gameState.player.cash) ? gameState.player.cash : 0;
+  gameState.player.cash = Math.max(0, cash - fee);
+  return { ok: true, feePaid: fee };
+}
+
+function applyAfterHoursDeclinePenalty(gameState, performerId) {
+  ensureAfterHoursState(gameState);
+
+  var performer = gameState.roster.performers.find(function (p) {
+    return p.id === performerId;
+  });
+  if (!performer) {
+    return { ok: false, loyaltyDelta: 0, cooldownUntilDay: null };
+  }
+
+  var penalty = Number.isFinite(CONFIG.afterHours.declineLoyaltyPenalty)
+    ? CONFIG.afterHours.declineLoyaltyPenalty
+    : 0;
+
+  if (!Number.isFinite(performer.loyalty)) {
+    performer.loyalty = CONFIG.performers.starting_loyalty;
+  }
+
+  var nextLoyalty = performer.loyalty - penalty;
+  if (typeof clampLoyalty === "function") {
+    performer.loyalty = clampLoyalty(nextLoyalty);
+  } else {
+    performer.loyalty = Math.min(100, Math.max(0, nextLoyalty));
+  }
+
+  var cooldownDays = Number.isFinite(CONFIG.afterHours.declineCooldownDays)
+    ? CONFIG.afterHours.declineCooldownDays
+    : 0;
+  var currentDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  var cooldownUntilDay = currentDay + cooldownDays;
+  gameState.afterHours.cooldowns[performerId] = cooldownUntilDay;
+
+  return { ok: true, loyaltyDelta: -penalty, cooldownUntilDay: cooldownUntilDay };
+}
+
 function applyAfterHoursOutcome(gameState, performerId, counterType) {
   ensureAfterHoursState(gameState);
 

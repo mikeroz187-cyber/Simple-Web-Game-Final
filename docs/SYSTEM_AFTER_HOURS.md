@@ -8,7 +8,7 @@ This document specifies the After Hours encounter system — a power-fantasy mec
 
 ## Overview
 
-When the player clicks "Advance Day," there is a chance that a performer "knocks" on their door with a request. The player can answer or ignore. If they answer, the performer makes an offer (something they want in exchange for a one-time explicit encounter). The player can accept the offer, counter-offer for additional gameplay benefits, or dismiss.
+When the player clicks "Advance Day," there is a chance that a performer "knocks" on their door with a request. The player can answer or ignore. If they answer, the performer makes an offer tied to a **one-time cash payment** (pay immediately on acceptance). The player can accept the offer, counter-offer for additional gameplay benefits, or dismiss.
 
 ---
 
@@ -54,13 +54,13 @@ When the player clicks "Advance Day," there is a chance that a performer "knocks
 │ What they're        │
 │ offering in return  │
 │                     │
-│ [Accept]            │
+│ [Accept (Pay now)]  │
 │ [Counter-Offer]     │
 │ [Dismiss]           │
 └─────────────────────┘
         │
    Accept │ Counter │ Dismiss
-        │     │        └──► Day advances
+        │     │        └──► Loyalty penalty + cooldown → Day advances
         │     ▼
         │  ┌─────────────────────┐
         │  │ Counter-Offer       │
@@ -92,6 +92,13 @@ When the player clicks "Advance Day," there is a chance that a performer "knocks
         ▼
    Day advances
 ```
+
+---
+
+## One-time Payment & Decline Consequences
+
+- **Accept:** player pays the one-time fee immediately (cash is reduced right away).
+- **Dismiss/Ignore (pre-completion):** performer loyalty decreases and a longer cooldown is applied before they can knock again.
 
 ---
 
@@ -224,8 +231,16 @@ Add to `config.toml`:
 enabled = true
 knockChancePerEligible = 0.30  # 30% chance per eligible performer
 cooldownDays = 7               # Days before performer can knock again after refusal
+defaultOneTimeFee = 4000
+declineLoyaltyPenalty = 10
+declineCooldownDays = 10
 starBonusReputationRequired = 50
 recruitHelpReputationRequired = 100
+
+[afterHours.oneTimeFeesByPerformerId]
+core_lena_watts = 5600
+core_milo_park = 4800
+core_tess_rowan = 3000
 
 [afterHours.recruitMapping]
 # Performer ID → Recruit ID they can help unlock

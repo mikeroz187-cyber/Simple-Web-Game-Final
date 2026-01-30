@@ -1226,6 +1226,23 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-ignore") {
+      var ignorePerformer = uiState.afterHours ? uiState.afterHours.performer : null;
+      if (ignorePerformer) {
+        ensureAfterHoursState(window.gameState);
+        if (!window.gameState.afterHours.completed[ignorePerformer.id]) {
+          var declineResult = applyAfterHoursDeclinePenalty(window.gameState, ignorePerformer.id);
+          if (declineResult.ok) {
+            saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+            if (typeof showToast === "function") {
+              showToast(
+                "She storms off. Loyalty " + declineResult.loyaltyDelta + ". " +
+                CONFIG.afterHours.declineCooldownDays + "-day cooldown.",
+                "info"
+              );
+            }
+          }
+        }
+      }
       hideAfterHoursModal();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
@@ -1242,6 +1259,23 @@ function setupEventHandlers() {
     }
 
     if (action === "after-hours-dismiss") {
+      var dismissPerformer = uiState.afterHours ? uiState.afterHours.performer : null;
+      if (dismissPerformer) {
+        ensureAfterHoursState(window.gameState);
+        if (!window.gameState.afterHours.completed[dismissPerformer.id]) {
+          var declineResult = applyAfterHoursDeclinePenalty(window.gameState, dismissPerformer.id);
+          if (declineResult.ok) {
+            saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+            if (typeof showToast === "function") {
+              showToast(
+                "She storms off. Loyalty " + declineResult.loyaltyDelta + ". " +
+                CONFIG.afterHours.declineCooldownDays + "-day cooldown.",
+                "info"
+              );
+            }
+          }
+        }
+      }
       hideAfterHoursModal();
       uiState.afterHours = null;
       uiState.afterHoursSkip = true;
@@ -1284,6 +1318,23 @@ function setupEventHandlers() {
 
     if (action === "after-hours-accept") {
       var performer = uiState.afterHours.performer;
+      if (!uiState.afterHours.paymentApplied) {
+        var paymentResult = applyAfterHoursPayment(window.gameState, performer.id);
+        if (!paymentResult.ok) {
+          if (typeof showToast === "function") {
+            showToast("Not enough cash.", "error");
+          }
+          return;
+        }
+        uiState.afterHours.paymentApplied = true;
+        saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (typeof showToast === "function") {
+          showToast(
+            "Paid " + formatCurrency(paymentResult.feePaid) + ". Cash is gone. Problem is… postponed.",
+            "info"
+          );
+        }
+      }
       var content = getAfterHoursContent(performer.id);
       uiState.afterHours.phase = "lock";
       uiState.afterHours.counterType = null;

@@ -25,6 +25,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Agency Sample Pack booking mode with daily limit and five-image bundle output.
 - Manual social strategy (budget + channel allocation) and social strategy selection.
 - Hub/Analytics UI clarity line for estimated days to afford debt based on daily net cashflow.
+- After Hours offers now use one-time cash payments with affordability gating plus decline loyalty penalties/cooldowns.
 - Post-debt Hire Manager upgrade that reduces daily overhead (one-time purchase).
 - Competition system, market shifts, and Studio Identity (reputation branches).
 - Act 2 and Act 3 story events, Story Log screen, and legacy milestones.
