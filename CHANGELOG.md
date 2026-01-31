@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Expanded recruitment pitch copy with titles/bullets/captions and punched up Act 1 Conquests dialogue for key characters.
+  - Why: Strengthen the power-fantasy tone in recruitment and Conquests without touching mechanics.
+  - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: FIX correct Hub debt countdown, add daily overhead visibility, and stabilize the Shop cashflow snapshot panel.
   - Why: Keep debt timing accurate, make overhead costs visible in the Hub, and prevent the cashflow info from flickering on the Shop screen.
   - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

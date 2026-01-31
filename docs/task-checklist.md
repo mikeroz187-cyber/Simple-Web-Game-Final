@@ -152,6 +152,7 @@
 ## Act 1+ Content Expansion — Implemented
 - [x] Reputation gains via milestone rewards (followers, OF subs, MRR).
 - [x] Recruitment panel with rep-gated candidates and meet slideshow.
+- [x] Recruitment: pitchTitle + pitchBullets + meetCaptions shown on recruit card + meet slideshow.
 - [x] Per-performer daily caps (max 3) + agency pack once per day.
 - [x] Shared slideshow viewer for recruit meets and shoot photos.
 - [x] Booking result slideshow (5 images) for Promo/Premium shoots.
@@ -171,6 +172,7 @@
 - [x] Conquests: add Assistant, Talent Scout, Saleswoman + standardize mascot stage portrait paths.
 - [x] Conquests Phase 2: Copy pass + pacing tuning + tokenized scene text.
 - [x] Conquests polish: assistant portrait fix + minDay/debt gates + reward pack copy pass.
+- [x] Conquests: Act 1 dialogue punch-up for Producer/Assistant/TalentScout/Saleswoman/BankManager.
 
 ---
 

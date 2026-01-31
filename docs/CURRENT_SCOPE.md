@@ -16,6 +16,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Loyalty/Diva Fee economy impact and boosted Star Power multiplier for clear cost/reward feedback.
 - Conquests story & pacing pass: tokenized scene copy, punchier progression text, and retuned thresholds for earlier Stage 1–3 pacing.
 - Conquests polish: fixed Assistant stage portrait assets, added minDay/debt-clear gates, and refreshed reward pack copy.
+- Recruitment and Conquests copy refresh: richer recruit pitches/meet captions plus Act 1 dialogue punch-up for key Conquest characters.
 - Gallery update: Added Shoots/Conquests toggle with unlocked Conquest packs viewable from the Gallery.
 - Conquests expansion: Assistant, Talent Scout, and Saleswoman characters added with 4-stage reward packs and trigger thresholds.
 - Conquests mascot portraits standardized to stage-specific filenames with fallback handling for missing images.
