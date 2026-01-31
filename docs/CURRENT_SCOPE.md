@@ -42,6 +42,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Balance Pass v2 tuning Promo reach up and Premium base OF subs down for early marketing-heavy pacing.
 - Premium UI Redesign (all 6 phases) — transformed the entire game UI to a "Neon Noir VIP" dark glass aesthetic with animations.
 - Premium UI redesign complete — all phases finished
+- Story feed cleanup: removed Act 1 flavor pings and Act 2 schedule copy so only gameplay-impacting events appear.
 
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
