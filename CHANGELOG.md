@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX correct Hub debt countdown, add daily overhead visibility, and stabilize the Shop cashflow snapshot panel.
+  - Why: Keep debt timing accurate, make overhead costs visible in the Hub, and prevent the cashflow info from flickering on the Shop screen.
+  - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added the Analytics Hustle Dashboard with heat check trends, cashflow bars, debt progress, memo insights, and daily capped snapshots.
   - Why: Replace static analytics with lightweight trend visuals and actionable weekly insights while keeping history performant.
   - Files touched: src/config.js, src/systems/analytics.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

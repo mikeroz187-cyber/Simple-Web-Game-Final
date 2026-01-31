@@ -173,19 +173,23 @@ function renderHeaderStats(gameState) {
   var cash = gameState.player.cash;
   var prevCash = typeof getPreviousValue === "function" ? getPreviousValue("header-cash") : undefined;
   var cashChanged = prevCash !== undefined && prevCash !== cash;
-  var debt = gameState.player.debtRemaining;
+  var debt = Number.isFinite(gameState.player.debtRemaining) ? gameState.player.debtRemaining : 0;
   var ofSubs = gameState.player.onlyFansSubscribers;
   var rep = gameState.player.reputation;
-  var daysLeft = Math.max(0, gameState.player.debtDueDay - day + 1);
+  var defaultDebtDueDay = Number.isFinite(CONFIG.game.debt_due_day) ? CONFIG.game.debt_due_day : 90;
+  var debtDueDay = Number.isFinite(gameState.player.debtDueDay) ? gameState.player.debtDueDay : defaultDebtDueDay;
+  var daysLeft = Math.max(0, debtDueDay - day);
 
   var stats = [
     { label: "Day", value: day, className: "" },
     { label: "Cash", value: formatCurrency(cash), className: "header-stat--gold" },
     { label: "OF Subs", value: ofSubs.toLocaleString(), className: "header-stat--accent" },
-    { label: "Debt", value: formatCurrency(debt), className: debt > 0 ? "header-stat--danger" : "" },
-    { label: "Days Left", value: daysLeft, className: daysLeft <= 14 ? "header-stat--danger" : "" },
-    { label: "Rep", value: rep, className: "" }
+    { label: "Debt", value: formatCurrency(debt), className: debt > 0 ? "header-stat--danger" : "" }
   ];
+  if (debt > 0) {
+    stats.push({ label: "Days Left", value: daysLeft, className: daysLeft <= 14 ? "header-stat--danger" : "" });
+  }
+  stats.push({ label: "Rep", value: rep, className: "" });
 
   var html = stats.map(function (stat) {
     return "<div class=\"header-stat " + stat.className + "\">" +
@@ -398,7 +402,9 @@ function renderHub(gameState) {
   var day = player.day;
   var cash = player.cash;
   var debt = player.debtRemaining;
-  var debtDueDay = player.debtDueDay;
+  var defaultDebtDueDay = Number.isFinite(CONFIG.game.debt_due_day) ? CONFIG.game.debt_due_day : 90;
+  var debtDueDay = Number.isFinite(player.debtDueDay) ? player.debtDueDay : defaultDebtDueDay;
+  var debtDaysLeft = Math.max(0, debtDueDay - day);
   var ofSubs = player.onlyFansSubscribers;
   var followers = player.socialFollowers;
   var socialSubs = player.socialSubscribers;
@@ -408,7 +414,8 @@ function renderHub(gameState) {
   var netWorth = typeof getNetWorth === "function" ? getNetWorth(gameState) : cash;
   var dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
   var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
-  var dailyNet = dailyPayout - dailyOverhead.amount;
+  var dailyOverheadAmount = Number.isFinite(dailyOverhead.amount) ? dailyOverhead.amount : 0;
+  var dailyNet = dailyPayout - dailyOverheadAmount;
   var debtEstimate = typeof getDaysToAffordDebtEstimate === "function" ? getDaysToAffordDebtEstimate(gameState) : { days: null };
   var debtPaymentConfig = CONFIG.economy && CONFIG.economy.debtPayment ? CONFIG.economy.debtPayment : null;
   var debtPaymentEnabled = debtPaymentConfig && debtPaymentConfig.enabled === true;
@@ -427,7 +434,7 @@ function renderHub(gameState) {
       "<div class=\"hero-stat__value" + (debt > 0 ? " hero-stat__value--red" : " hero-stat__value--green") + "\">" + formatCurrency(debt) + "</div>" +
       "<div class=\"hero-stat__divider\"></div>" +
       "<div class=\"hero-stat__label\">Debt</div>" +
-      "<div class=\"hero-stat__sub\">" + (debt > 0 ? "Due Day " + debtDueDay : "PAID OFF") + "</div>" +
+      "<div class=\"hero-stat__sub\">" + (debt > 0 ? "Debt due in " + debtDaysLeft + " days" : "Debt: Cleared") + "</div>" +
     "</div>" +
     "<div class=\"hero-stat\">" +
       "<div class=\"hero-stat__value hero-stat__value--pink\">" + ofSubs.toLocaleString() + "</div>" +
@@ -441,6 +448,12 @@ function renderHub(gameState) {
       "<div class=\"hero-stat__label\">Net Worth</div>" +
       "<div class=\"hero-stat__sub\">" + (debtEstimate.days !== null ? "~" + debtEstimate.days + " days to clear debt" : "Cashflow negative") + "</div>" +
     "</div>" +
+  "</div>";
+
+  var dailyCashflowHtml = "<div class=\"daily-cashflow\">" +
+    "<div class=\"daily-cashflow__title\">Daily Cashflow</div>" +
+    "<div class=\"daily-cashflow__row\"><span>OF Payouts</span><span class=\"daily-cashflow__value daily-cashflow__value--positive\">+" + formatCurrency(dailyPayout) + "/day</span></div>" +
+    "<div class=\"daily-cashflow__row\"><span>Overhead</span><span class=\"daily-cashflow__value daily-cashflow__value--negative\">-" + formatCurrency(dailyOverheadAmount) + "/day</span></div>" +
   "</div>";
 
   // Secondary stats row
@@ -648,6 +661,7 @@ function renderHub(gameState) {
       "<div class=\"panel\" style=\"flex:1;display:flex;flex-direction:column;\">" +
         "<h3 class=\"panel-title\">VIP Dashboard</h3>" +
         heroMetricsHtml +
+        dailyCashflowHtml +
         secondaryStatsHtml +
         debtPaymentHtml +
       "</div>" +
@@ -2097,6 +2111,16 @@ function renderShop(gameState) {
   }
 
   var cash = gameState.player.cash;
+  var onlyFansSubs = Number.isFinite(gameState.player.onlyFansSubscribers)
+    ? gameState.player.onlyFansSubscribers
+    : 0;
+  var dailyPayout = typeof getDailyOfPayout === "function" ? getDailyOfPayout(gameState) : 0;
+  var dailyOverhead = typeof getDailyOverhead === "function" ? getDailyOverhead(gameState) : { amount: 0 };
+  var dailyOverheadAmount = Number.isFinite(dailyOverhead.amount) ? dailyOverhead.amount : 0;
+  var dailyNet = dailyPayout - dailyOverheadAmount;
+  var payoutInactiveNote = onlyFansSubs > 0
+    ? ""
+    : '<p class="helper-text">OF payouts start once you have subscribers.</p>';
 
   // Location unlocks
   var tier1Unlocked = isLocationTierUnlocked(gameState, "tier1");
@@ -2163,11 +2187,23 @@ function renderShop(gameState) {
     }).join('')
     : '<div class="empty-state"><div class="empty-state__description">No equipment upgrades available.</div></div>';
 
+  var cashflowPanelHtml = '<div class="panel cashflow-panel">' +
+    '<h3 class="panel-title">Daily Cashflow</h3>' +
+    '<p class="helper-text">Buying upgrades changes your burn and your payouts. Here’s the current snapshot.</p>' +
+    '<div class="cashflow-snapshot">' +
+      '<div class="cashflow-snapshot__row"><span>OF Payouts</span><span class="cashflow-snapshot__value cashflow-snapshot__value--positive">+' + formatCurrency(dailyPayout) + '/day</span></div>' +
+      '<div class="cashflow-snapshot__row"><span>Overhead</span><span class="cashflow-snapshot__value cashflow-snapshot__value--negative">-' + formatCurrency(dailyOverheadAmount) + '/day</span></div>' +
+      '<div class="cashflow-snapshot__row cashflow-snapshot__row--total"><span>Net/day</span><span class="cashflow-snapshot__value ' + (dailyNet >= 0 ? 'cashflow-snapshot__value--positive' : 'cashflow-snapshot__value--negative') + '">' + (dailyNet >= 0 ? "+" : "-") + formatCurrency(Math.abs(dailyNet)) + '/day</span></div>' +
+    '</div>' +
+    payoutInactiveNote +
+    '</div>';
+
   // Layout
   var contentHtml = '<h2 class="screen-title">Shop</h2>' +
     '<div class="shop-layout">' +
       '<div class="panel"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
       '<div class="panel"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
+      cashflowPanelHtml +
     '</div>' +
     renderStatusMessage() +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
