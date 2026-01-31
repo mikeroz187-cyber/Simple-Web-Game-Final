@@ -1535,32 +1535,16 @@ const CONFIG = {
   story: {
     act1: {
       act1_intro_day: 1,
-      act1_debt_reminder_days: [15, 18, 22, 25, 29, 30, 36, 37, 45, 46, 55, 60, 63, 70, 72, 80, 83, 84, 85],
+      act1_debt_reminder_days: [30, 60, 80],
       act1_end_day: 90,
       intro: {
         id: "act1_intro_day1",
         triggerDay: 1
       },
       debtReminders: [
-        { id: "act1_pack01_client_referral_day15", triggerDay: 15 },
-        { id: "act1_pack03_debt_spiral_day18", triggerDay: 18 },
-        { id: "act1_pack02_sponsor_ping_day22", triggerDay: 22 },
-        { id: "act1_pack01_premium_editing_day25", triggerDay: 25 },
-        { id: "act1_pack02_backroom_buzz_day29", triggerDay: 29 },
         { id: "act1_debt_reminder_day30", triggerDay: 30 },
-        { id: "act1_pack03_power_trip_day36", triggerDay: 36 },
-        { id: "act1_pack02_rumor_polish_day37", triggerDay: 37 },
-        { id: "act1_pack01_vendor_discount_day45", triggerDay: 45 },
-        { id: "act1_pack02_midnight_metrics_day46", triggerDay: 46 },
-        { id: "act1_pack02_press_quote_day55", triggerDay: 55 },
         { id: "act1_debt_reminder_day60", triggerDay: 60 },
-        { id: "act1_pack03_debt_pressure_day63", triggerDay: 63 },
-        { id: "act1_pack01_repeat_commissions_day70", triggerDay: 70 },
-        { id: "act1_pack02_fanmail_stack_day72", triggerDay: 72 },
-        { id: "act1_debt_reminder_day80", triggerDay: 80 },
-        { id: "act1_pack02_late_act1_fever_day83", triggerDay: 83 },
-        { id: "act1_pack03_empire_swagger_day84", triggerDay: 84 },
-        { id: "act1_pack01_final_stretch_day85", triggerDay: 85 }
+        { id: "act1_debt_reminder_day80", triggerDay: 80 }
       ],
       endEvents: {
         win: { id: "act1_end_win_day90", triggerDay: 90 },
@@ -1568,12 +1552,7 @@ const CONFIG = {
       }
     },
     act2: {
-      schedule: [
-        { id: "act2_expansion_plan_day95", triggerDay: 95 },
-        { id: "act2_staffing_push_day120", triggerDay: 120 },
-        { id: "act2_studio_upgrade_day145", triggerDay: 145 },
-        { id: "act2_partnership_offer_day170", triggerDay: 170 }
-      ]
+      schedule: []
     },
     act3: {
       schedule: [

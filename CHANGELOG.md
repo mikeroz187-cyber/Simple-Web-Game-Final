@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX removed non-impact Act 1/Act 2 story events from config and copy, leaving only gameplay-relevant events in the feed.
+  - Why: Reduce event noise so the Story Log highlights reminders, unlocks, and effect-driven events only.
+  - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Expanded recruitment pitch copy with titles/bullets/captions and punched up Act 1 Conquests dialogue for key characters.
   - Why: Strengthen the power-fantasy tone in recruitment and Conquests without touching mechanics.
   - Files touched: src/config.js, src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

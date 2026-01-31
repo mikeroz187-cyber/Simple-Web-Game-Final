@@ -136,6 +136,7 @@
 - [x] Booking: remove Day>=debtDueDay hard-block (Day 90 no longer blocks shoots).
 - [x] Booking: enforce CONFIG.game.shoots_per_day cap (blocks only when shootsToday >= cap).
 - [x] Booking: Star Power > threshold adds cost premium and displays in booking summary.
+- [x] Bug #1: Removed non-impact story events (Act 1 pack pings + Act 2 schedule) so Events feed only shows gameplay-relevant events.
 
 ---
 
