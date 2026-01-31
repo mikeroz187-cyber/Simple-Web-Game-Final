@@ -541,7 +541,25 @@ const CONFIG = {
         repRequired: 5,
         hireCost: 900,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "A sharp-eyed newcomer looking for a studio with real ambition and a tasteful edge."
+        pitchTitle: "A quick study with a headline stare",
+        pitchText: "Scarlett Sterling wants her first real headline, and your studio is the fastest route. She learns the playbook in one take and smiles like she owns it.",
+        pitchBullets: [
+          "Hook: She wants a studio that moves fast and keeps the mystique tight.",
+          "Edge: Sharp camera instincts with instant chemistry.",
+          "Terms: Cash up front, treated like the breakout."
+        ],
+        meetCaptions: [
+          "New number saved as “Boss.”",
+          "Soft launch. No tags.",
+          "She studies angles like a cheat code.",
+          "“First real set. Make it count.”",
+          "Hair still damp, eyes still locked in.",
+          "DMs muted. Yours stay open.",
+          "Close enough to hear the flash.",
+          "Practicing the smirk you asked for.",
+          "Audience bait. She’s already teasing.",
+          "Seen 1 minute ago."
+        ]
       },
       {
         performerId: "recruit_aria_lux",
@@ -549,7 +567,25 @@ const CONFIG = {
         repRequired: 10,
         hireCost: 1400,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "She brings a red-carpet aura and expects direction that feels exclusive, not desperate."
+        pitchTitle: "Red-carpet polish, after-hours appetite",
+        pitchText: "Aria Afterdark treats every set like a headline and wants your rise as her next one. She expects direction that feels exclusive, not desperate.",
+        pitchBullets: [
+          "Hook: She wants a studio that feels VIP from first DM.",
+          "Edge: A headline aura that makes every frame look expensive.",
+          "Terms: Premium fee, premium treatment."
+        ],
+        meetCaptions: [
+          "Gloss first, gossip later.",
+          "“Tell me the dress code.”",
+          "Flash test. She nailed it.",
+          "Soft focus, sharp intent.",
+          "She only follows one account.",
+          "Booked the slot. Cleared the night.",
+          "No entourage, just you.",
+          "She likes the way you run it.",
+          "DM preview: “Keep this quiet.”",
+          "Last call. She’s still up."
+        ]
       },
       {
         performerId: "recruit_dahlia_slate",
@@ -557,7 +593,25 @@ const CONFIG = {
         repRequired: 15,
         hireCost: 1800,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "Your brand gets brighter with every shoot, and she knows exactly how to sell the glow."
+        pitchTitle: "Premium polish with a sly grin",
+        pitchText: "Dahlia Kane knows your studio can sell gloss without losing heat. She wants clean lines, controlled light, and your name on the credit.",
+        pitchBullets: [
+          "Hook: She’s here for a studio that looks expensive on purpose.",
+          "Edge: Brand-builder who makes polish feel addictive.",
+          "Terms: Cash now, spotlight later."
+        ],
+        meetCaptions: [
+          "She brought her own mood board.",
+          "“Make it glossy, not safe.”",
+          "Lighting check: perfect.",
+          "No messy takes. No wasted shots.",
+          "She likes your calm voice.",
+          "Soft launch, high shine.",
+          "Frame it like a magazine.",
+          "She approves the cut with a smirk.",
+          "Private preview, no watermark.",
+          "Seen from the mirror."
+        ]
       },
       {
         performerId: "recruit_eden_frost",
@@ -565,7 +619,25 @@ const CONFIG = {
         repRequired: 20,
         hireCost: 2200,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "A composed pro who thrives on tight schedules and perfectly framed moments."
+        pitchTitle: "Ice-calm pro, all about control",
+        pitchText: "Eden Ivy likes tight schedules and a boss who calls the shots. Your momentum tells her you can handle her pace.",
+        pitchBullets: [
+          "Hook: She wants structure with a little danger in it.",
+          "Edge: Cool composure that reads as power on camera.",
+          "Terms: Solid fee, serious direction."
+        ],
+        meetCaptions: [
+          "Quiet room. Loud results.",
+          "“On time. On brand.”",
+          "She doesn’t miss the mark.",
+          "No small talk, just chemistry.",
+          "Your notes. Her execution.",
+          "She likes the pressure.",
+          "Muted palette, sharp eyes.",
+          "She saves the best for last.",
+          "Private preview, no edits.",
+          "She’s already ready."
+        ]
       },
       {
         performerId: "recruit_fern_kestrel",
@@ -573,7 +645,25 @@ const CONFIG = {
         repRequired: 25,
         hireCost: 2700,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "She thrives on momentum, and your studio’s reputation has her attention."
+        pitchTitle: "Closer energy with viral instincts",
+        pitchText: "Raven Foxx follows momentum and wants in before it peaks. She turns a concept into buzz and expects you to steer the storm.",
+        pitchBullets: [
+          "Hook: She’s chasing the fastest rise in the city—yours.",
+          "Edge: Closer who turns concepts into heat.",
+          "Terms: Cash now, loyalty to the top."
+        ],
+        meetCaptions: [
+          "She asked for your shot list.",
+          "“Let’s make noise.”",
+          "Risky angle, perfect take.",
+          "She’s all momentum.",
+          "The buzz is already building.",
+          "She wants a private preview.",
+          "No soft edits. Full impact.",
+          "She knows the boss when she sees one.",
+          "Trending in a closed circle.",
+          "She’s waiting on your cue."
+        ]
       },
       {
         performerId: "recruit_celeste_noir",
@@ -581,7 +671,25 @@ const CONFIG = {
         repRequired: 30,
         hireCost: 3400,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "A headliner with high standards and higher stamina, drawn to elite creative control."
+        pitchTitle: "Headliner stamina, cinematic gaze",
+        pitchText: "Celeste Sin doesn’t audition for small rooms. She’s here because your studio is finally worth her time—and she wants you in control.",
+        pitchBullets: [
+          "Hook: She wants a studio that feels elite, not busy.",
+          "Edge: High-stamina headliner with a cinematic stare.",
+          "Terms: Top-tier fee, headline respect."
+        ],
+        meetCaptions: [
+          "No small talk. Just intent.",
+          "“Frame me like a movie.”",
+          "She only does first takes.",
+          "The room goes quiet for her.",
+          "She likes a boss who directs.",
+          "After-hours slot, no witnesses.",
+          "She’s the reason the lights stay on.",
+          "Her fans can wait. You don’t.",
+          "Private cut, locked link.",
+          "Seen just now."
+        ]
       },
       {
         performerId: "recruit_gigi_blade",
@@ -589,7 +697,25 @@ const CONFIG = {
         repRequired: 35,
         hireCost: 4200,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
-        pitchText: "A viral magnet with a taste for premium spots and a daring, glamorous edge."
+        pitchTitle: "Showstopper built for big swings",
+        pitchText: "Gigi Blade wants glamour, risk, and a studio brave enough to frame it. She picked you because your rise already looks expensive.",
+        pitchBullets: [
+          "Hook: She wants the hottest room and the boldest boss.",
+          "Edge: Relentless showstopper with a viral streak.",
+          "Terms: Premium cash, premium loyalty."
+        ],
+        meetCaptions: [
+          "She walks in like she owns it.",
+          "“Let’s make it loud.”",
+          "Dangerous angles, perfect smile.",
+          "She wants the VIP lens.",
+          "Gloves off. Glam on.",
+          "Your name on her call sheet.",
+          "She likes a boss who dares.",
+          "Private preview, no leaks.",
+          "She’s trending before the drop.",
+          "Last slide. Still watching."
+        ]
       }
     ]
   },
@@ -611,9 +737,9 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "lightingLevel", minLevel: 1 }]
             },
-            message: "Lighting check: you leveled up",
-            sceneTitle: "The glow makes you look dangerous",
-            sceneBody: "Lighting Level {{lightingLevel}} just turned the set into a spotlight.<br>“You made me look expensive,” she purrs.<br>“So I’m paying you back in previews.”",
+            message: "Lighting check: make it expensive.",
+            sceneTitle: "She wants the glow on you",
+            sceneBody: "Lighting Level {{lightingLevel}} turns the set into a spotlight.<br>“You made me look expensive,” she says.<br>“So I’m sending you the proof.”",
             rewardPack: {
               packId: "producer_stage1",
               title: "Lighting Check DMs",
@@ -628,9 +754,9 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "cameraLevel", minLevel: 1 }]
             },
-            message: "Lens upgrade, private preview",
-            sceneTitle: "Sharper lens, closer focus",
-            sceneBody: "Camera Level {{cameraLevel}} has her hovering by the monitor.<br>“If you’re shooting this crisp, I’m giving you something worth zooming.”<br>She sends a tighter set—no wasted angles.",
+            message: "Lens upgrade: private preview.",
+            sceneTitle: "She leans in on the monitor",
+            sceneBody: "Camera Level {{cameraLevel}} pulls her to the screen.<br>“If it’s this crisp, I’ll give you a set worth zooming.”<br>She sends a tighter run, no wasted frames.",
             rewardPack: {
               packId: "producer_stage2",
               title: "Focus Pull Tease",
@@ -645,9 +771,9 @@ const CONFIG = {
               type: "equipment",
               requirements: [{ key: "setDressingLevel", minLevel: 1 }]
             },
-            message: "Set dressing kept her late",
-            sceneTitle: "You built a set she can’t leave",
-            sceneBody: "Set Dressing {{setDressingLevel}} turned the studio into a trap she likes.<br>“You made the room feel like a scene,” she says, staying after wrap.<br>“So I gave you the after-hours cut.”",
+            message: "Set dressed: she stays late.",
+            sceneTitle: "You built a room she won’t leave",
+            sceneBody: "Set Dressing {{setDressingLevel}} turns the studio into a scene.<br>“You built the mood,” she says, lingering after wrap.<br>“So I sent the after-hours cut.”",
             rewardPack: {
               packId: "producer_stage3",
               title: "After-Hours Cut",
@@ -665,9 +791,9 @@ const CONFIG = {
                 { key: "cameraLevel", minLevel: 2 }
               ]
             },
-            message: "VIP production greenlit",
-            sceneTitle: "Private production, locked door",
-            sceneBody: "Lighting {{lightingLevel}} and Camera {{cameraLevel}}—you’re running a real production now.<br>“You can handle pressure,” she whispers, sliding the bolt.<br>“So this one goes in the vault.”",
+            message: "VIP production: locked in.",
+            sceneTitle: "Private production, vault rules",
+            sceneBody: "Lighting {{lightingLevel}} and Camera {{cameraLevel}} say you run the room.<br>“You can handle pressure,” she says, sliding the bolt.<br>“So this one goes in the vault.”",
             rewardPack: {
               packId: "producer_stage4",
               title: "Director's Vault",
@@ -692,9 +818,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier1 }
               ]
             },
-            message: "Dashboard ping: you’re trending",
-            sceneTitle: "She’s watching your rise",
-            sceneBody: "Reputation {{reputation}} and followers {{followers}} just spiked on her dashboard.<br>“I’ve been watching your numbers,” she says, sliding closer.<br>“Keep winning and I’ll keep you… prioritized.”",
+            message: "Your numbers are getting loud.",
+            sceneTitle: "The feed is hungry",
+            sceneBody: "Reputation {{reputation}} and followers {{followers}} are spiking.<br>“The feed is hungry,” she says, leaning in.<br>“Give it just enough to beg.”",
             rewardPack: {
               packId: "assistant_stage1",
               title: "Priority Ping",
@@ -711,9 +837,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.assistant.followers.tier2 }
               ]
             },
-            message: "Trendline alert: all up",
-            sceneTitle: "She keeps the climb tight",
-            sceneBody: "Followers {{followers}} are climbing and she’s already updating your calendar.<br>“I control the schedule,” she murmurs, “and you’re all over it.”<br>She leaves a forecast you’re not supposed to share.",
+            message: "Trendline alert: keep her close.",
+            sceneTitle: "She tightens the calendar",
+            sceneBody: "Followers {{followers}} won’t stop climbing.<br>“I control the schedule,” she murmurs.<br>“You stay at the top.”",
             rewardPack: {
               packId: "assistant_stage2",
               title: "Calendar Control",
@@ -730,9 +856,9 @@ const CONFIG = {
                 { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier3 }
               ]
             },
-            message: "Executive slot reserved",
-            sceneTitle: "She schedules you after hours",
-            sceneBody: "OF subs {{ofSubs}} crossed into real money and she notices.<br>“Premium attention costs extra,” she says, locking the door.<br>“Lucky for you, I’m on the payroll.”",
+            message: "Executive slot reserved.",
+            sceneTitle: "After-hours on your calendar",
+            sceneBody: "OF subs {{ofSubs}} just crossed into real money.<br>“Premium attention costs extra,” she says.<br>“Good thing you’re my priority.”",
             rewardPack: {
               packId: "assistant_stage3",
               title: "Executive Slot",
@@ -749,9 +875,9 @@ const CONFIG = {
                 { type: "stat", stat: "netWorth", min: CONQUEST_THRESHOLDS.assistant.netWorth.tier4 }
               ]
             },
-            message: "Boardroom access: after-hours",
-            sceneTitle: "She opens the private calendar",
-            sceneBody: "Cash {{cash}} and followers {{followers}} scream empire-builder.<br>She closes the blinds. “You built this. I keep it running.”<br>“Now let me show you what loyalty looks like.”",
+            message: "Boardroom access: private.",
+            sceneTitle: "Private calendar, private loyalty",
+            sceneBody: "Cash {{cash}} and followers {{followers}} say empire.<br>She closes the blinds. “You built this.”<br>“Let me show you what loyalty buys.”",
             rewardPack: {
               packId: "assistant_stage4",
               title: "Loyalty Ledger",
@@ -777,9 +903,9 @@ const CONFIG = {
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier1 }
               ]
             },
-            message: "Roster ping: first name locked",
-            sceneTitle: "She smells a winner",
-            sceneBody: "Recruits on file: {{recruitsCount}}. She grins anyway.<br>“I bring winners to winners,” she says, leaning in.<br>“You feel like my next favorite story.”",
+            message: "My inbox is melting.",
+            sceneTitle: "She smells a breakout",
+            sceneBody: "Recruits on file: {{recruitsCount}}.<br>“New girls don’t ask—they pitch,” she says.<br>“They ask about you.”",
             rewardPack: {
               packId: "talentscout_stage1",
               title: "Scout's Teaser",
@@ -796,9 +922,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalFollowers", min: CONQUEST_THRESHOLDS.talentscout.followers.tier2 }
               ]
             },
-            message: "Buzz check: your roster is hot",
-            sceneTitle: "She plays the spotlight",
-            sceneBody: "Followers {{followers}} are loud and she rides the noise.<br>“That kind of buzz makes my phone glow,” she smirks.<br>She sends a set built for gossip.",
+            message: "Buzz check: your roster is hot.",
+            sceneTitle: "She rides the spotlight",
+            sceneBody: "Followers {{followers}} are loud and she rides the noise.<br>“That kind of buzz makes my phone glow,” she smirks.<br>“So I sent something worth gossip.”",
             rewardPack: {
               packId: "talentscout_stage2",
               title: "Buzz Tape",
@@ -816,9 +942,9 @@ const CONFIG = {
                 { type: "stat", stat: "milestoneCount", min: CONQUEST_THRESHOLDS.talentscout.milestones.stage3 }
               ]
             },
-            message: "Private audition request",
+            message: "Private audition request.",
             sceneTitle: "She auditions herself for you",
-            sceneBody: "Recruits {{recruitsCount}} deep and she still wants your attention.<br>“Let me show you what I scout for,” she whispers.<br>“Consider it a personal audition.”",
+            sceneBody: "Recruits {{recruitsCount}} deep and she still wants your attention.<br>“Let me show you what I scout for,” she whispers.<br>“Consider it my personal pitch.”",
             rewardPack: {
               packId: "talentscout_stage3",
               title: "Personal Audition",
@@ -836,7 +962,7 @@ const CONFIG = {
                 { type: "stat", stat: "reputation", min: CONQUEST_THRESHOLDS.talentscout.reputation.tier3 }
               ]
             },
-            message: "Top-tier roster, top-tier perks",
+            message: "Top-tier roster, top-tier perks.",
             sceneTitle: "She signs, then seals it",
             sceneBody: "Reputation {{reputation}} and recruits {{recruitsCount}} put you in the top lane.<br>She snaps her pen shut. “Elite rosters get elite access.”<br>“This pack is your trophy.”",
             rewardPack: {
@@ -863,9 +989,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalUpgradesPurchased", min: CONQUEST_THRESHOLDS.saleswoman.upgrades.stage1 }
               ]
             },
-            message: "First upgrade, first taste",
-            sceneTitle: "She likes how you buy",
-            sceneBody: "Upgrades purchased: {{upgradesPurchased}}. She notices.<br>“You don’t hesitate,” she purrs.<br>“So I won’t either.”",
+            message: "Upgrade day. She shows up smiling.",
+            sceneTitle: "She likes how you spend",
+            sceneBody: "Upgrades purchased: {{upgradesPurchased}}.<br>“You don’t hesitate,” she purrs.<br>“So I won’t either.”",
             rewardPack: {
               packId: "saleswoman_stage1",
               title: "First Close",
@@ -882,9 +1008,9 @@ const CONFIG = {
                 { type: "stat", stat: "totalShopSpend", min: CONQUEST_THRESHOLDS.saleswoman.shopSpend.stage2 }
               ]
             },
-            message: "Receipt check: you went premium",
-            sceneTitle: "She rewards big spenders",
-            sceneBody: "Shop spend {{shopSpend}} has her leaning over the counter.<br>“That’s the kind of receipt I frame,” she smiles.<br>She sends a richer, closer set.",
+            message: "Receipt check: you went premium.",
+            sceneTitle: "She frames the receipt",
+            sceneBody: "Shop spend {{shopSpend}} has her leaning over the counter.<br>“That’s the kind of receipt I frame,” she smiles.<br>“Consider this your rebate.”",
             rewardPack: {
               packId: "saleswoman_stage2",
               title: "Premium Receipt",
@@ -904,8 +1030,8 @@ const CONFIG = {
                 { type: "equipment", key: "setDressingLevel", minLevel: 2 }
               ]
             },
-            message: "Tier 2 unlocked her attention",
-            sceneTitle: "She sells you the upgrade",
+            message: "Tier 2 unlocked her attention.",
+            sceneTitle: "She sells the premium touch",
             sceneBody: "Upgrades purchased {{upgradesPurchased}} and she’s already next to you.<br>“Premium service is hands-on,” she whispers.<br>“Lucky you.”",
             rewardPack: {
               packId: "saleswoman_stage3",
@@ -931,8 +1057,8 @@ const CONFIG = {
                 }
               ]
             },
-            message: "Closed deals, open vault",
-            sceneTitle: "The closer takes her cut",
+            message: "Closed deals, open vault.",
+            sceneTitle: "The closer collects",
             sceneBody: "Total spend {{shopSpend}} and upgrades {{upgradesPurchased}} make you her favorite client.<br>She locks the showroom. “You bought everything worth owning.”<br>“Now I collect.”",
             rewardPack: {
               packId: "saleswoman_stage4",
@@ -956,8 +1082,8 @@ const CONFIG = {
               type: "debtPaidRatio",
               minRatio: 0.25
             },
-            message: "Quarter paid. She noticed.",
-            sceneTitle: "Quarter paid, account watched",
+            message: "Quarter paid. She calls you in.",
+            sceneTitle: "Quarter paid, eyes on you",
             sceneBody: "Debt remaining: {{debtRemaining}}. She taps the ledger.<br>“Twenty-five percent down—disciplined or dangerous.”<br>“Keep going. I like clients who deliver.”",
             rewardPack: {
               packId: "bank_manager_stage1",
@@ -974,7 +1100,7 @@ const CONFIG = {
               minRatio: 0.5
             },
             message: "Half paid. She’s recalculating.",
-            sceneTitle: "Halfway paid, fully watched",
+            sceneTitle: "Halfway paid, leverage shifts",
             sceneBody: "Debt remaining: {{debtRemaining}}.<br>“At fifty percent, this stops being a loan.”<br>“It becomes leverage.”",
             rewardPack: {
               packId: "bank_manager_stage2",
@@ -991,8 +1117,8 @@ const CONFIG = {
               minRatio: 0.75
             },
             message: "Seventy-five. She wants a meeting.",
-            sceneTitle: "Pressure makes you interesting",
-            sceneBody: "Debt remaining: {{debtRemaining}} and she doesn’t blink.<br>“You perform under pressure,” she says, leaning in.<br>“So do I.”",
+            sceneTitle: "Pressure makes you useful",
+            sceneBody: "Debt remaining: {{debtRemaining}} and she doesn’t blink.<br>“You perform under pressure,” she says.<br>“So do I.”",
             rewardPack: {
               packId: "bank_manager_stage3",
               title: "Risk Review",
@@ -1008,7 +1134,7 @@ const CONFIG = {
               minRatio: 1
             },
             message: "Debt cleared. Terms change.",
-            sceneTitle: "Zero balance, private terms",
+            sceneTitle: "Zero balance, new terms",
             sceneBody: "Debt remaining: {{debtRemaining}}.<br>She locks the office. “Zero balance.”<br>“So let’s renegotiate in private.”",
             rewardPack: {
               packId: "bank_manager_stage4",

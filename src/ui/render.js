@@ -1313,6 +1313,17 @@ function renderRoster(gameState) {
     var dailyCap = performer ? getPerformerDailyBookingCap(performer) : '?';
     var repRequired = Number.isFinite(activeCandidate.repRequired) ? activeCandidate.repRequired : 0;
     var hireCost = Number.isFinite(activeCandidate.hireCost) ? activeCandidate.hireCost : 0;
+    var pitchTitle = activeCandidate.pitchTitle ? activeCandidate.pitchTitle : "";
+    var pitchText = activeCandidate.pitchText ? activeCandidate.pitchText : "";
+    var pitchBullets = Array.isArray(activeCandidate.pitchBullets) ? activeCandidate.pitchBullets.filter(Boolean) : [];
+    var pitchBulletsHtml = pitchBullets.length
+      ? '<ul class="recruit-bullets">' + pitchBullets.map(function(bullet) {
+        return '<li>' + bullet + '</li>';
+      }).join('') + '</ul>'
+      : '';
+    var pitchHtml = (pitchTitle ? '<div class="recruit-pitch"><strong>' + pitchTitle + '</strong></div>' : '') +
+      (pitchText ? '<div class="recruit-pitch">' + pitchText + '</div>' : '') +
+      pitchBulletsHtml;
     recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">🔥 Available Recruit</h3>' + recruitmentHeader +
         '<div class="performer-card performer-card--compact" style="margin-top:var(--gap-sm);">' +
@@ -1325,6 +1336,7 @@ function renderRoster(gameState) {
             '</div>' +
             '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Rep Required: ' + repRequired + '</div>' +
             '<div style="font-size:10px;color:var(--text-muted);">Hire Cost: ' + formatCurrency(hireCost) + '</div>' +
+            pitchHtml +
             '<div class="button-row" style="margin-top:6px;">' +
               '<button class="button small primary" data-action="open-meet-recruit" data-id="' + activeCandidate.performerId + '">Meet</button>' +
               '<button class="button small" data-action="recruit-decline" data-id="' + activeCandidate.performerId + '">Decline</button>' +
@@ -1917,6 +1929,11 @@ function renderSlideshow(gameState) {
     const slidePath = slideCount ? slides[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
     const slideNumber = slideCount ? safeIndex + 1 : 0;
     const pitchText = candidate && candidate.pitchText ? candidate.pitchText : "A private audition, tastefully framed.";
+    const pitchTitle = candidate && candidate.pitchTitle ? candidate.pitchTitle : "";
+    const pitchBullets = candidate && Array.isArray(candidate.pitchBullets) ? candidate.pitchBullets.filter(Boolean) : [];
+    const caption = candidate && Array.isArray(candidate.meetCaptions) && candidate.meetCaptions[safeIndex]
+      ? candidate.meetCaptions[safeIndex]
+      : "";
     const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
     const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
     const rosterSize = getContractedRosterCount(gameState);
@@ -1934,6 +1951,7 @@ function renderSlideshow(gameState) {
     const imageHtml = "<div class=\"slideshow-image-container\">" +
       "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Audition slide " + (safeIndex + 1) + "\" />" +
       "</div>";
+    const captionHtml = caption ? "<div class=\"slideshow-caption\">" + caption + "</div>" : "";
     const controlsHtml = "<div class=\"slideshow-controls\">" +
       "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
       "</div>";
@@ -1946,13 +1964,21 @@ function renderSlideshow(gameState) {
       "--recruit-modal-max-width-px:" + modalMaxWidthPx + "px;" +
       "--recruit-modal-max-width-vw:" + modalMaxWidthVw + "vw;" +
       "--recruit-modal-image-max-height-vh:" + imageMaxHeightVh + "vh;\"";
+    const bulletsHtml = pitchBullets.length
+      ? "<ul class=\"recruit-bullets\">" + pitchBullets.map(function(bullet) {
+        return "<li>" + bullet + "</li>";
+      }).join("") + "</ul>"
+      : "";
     const headerHtml = "<div class=\"recruit-slideshow-header\">" +
       "<h3 class=\"panel-title\">Private Audition — " + name + "</h3>" +
+      (pitchTitle ? "<div class=\"recruit-pitch\"><strong>" + pitchTitle + "</strong></div>" : "") +
       "<p class=\"helper-text\">" + pitchText + "</p>" +
+      bulletsHtml +
       "</div>";
     const mediaHtml = "<div class=\"recruit-slideshow-media\">" +
       "<div class=\"slideshow-layout\">" +
       imageHtml +
+      captionHtml +
       controlsHtml +
       "</div>" +
       "</div>";

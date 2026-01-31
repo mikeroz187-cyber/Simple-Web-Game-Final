@@ -2217,6 +2217,20 @@ body {
   flex: 0 0 auto;
 }
 
+.recruit-pitch {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.25;
+}
+
+.recruit-bullets {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
 .recruit-slideshow-media {
   flex: 1 1 auto;
   min-height: 0;
@@ -2247,6 +2261,14 @@ body {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+.slideshow-caption {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 8px;
+  text-align: center;
 }
 
 .slideshow-layout {
