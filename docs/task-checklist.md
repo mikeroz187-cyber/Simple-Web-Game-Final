@@ -130,6 +130,9 @@
 - [x] FIX Bug #13: Pay Max uses in-game modal instead of browser prompt.
 - [x] FIX Bug #14: Star Power 7+ adds a booking premium and is itemized at confirm.
 - [x] FIX Bug #15: Daily shoot cap only blocks booking more shoots (no global gating).
+- [x] FIX Bug #13: Hub debt days-left uses debt due day minus current day (clears when debt is paid).
+- [x] FIX Bug #16: Hub shows daily overhead alongside OF payouts.
+- [x] FIX Bug #9: Shop always shows Daily Cashflow panel with context about payouts/overhead.
 - [x] Booking: remove Day>=debtDueDay hard-block (Day 90 no longer blocks shoots).
 - [x] Booking: enforce CONFIG.game.shoots_per_day cap (blocks only when shootsToday >= cap).
 - [x] Booking: Star Power > threshold adds cost premium and displays in booking summary.

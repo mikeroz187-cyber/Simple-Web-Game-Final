@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Hub UI fixes: correct debt days-left countdown, show daily overhead with OF payouts, and stabilize the Shop cashflow snapshot panel.
 - Booking update: raised Star Power cap to 10 and clarified booking summary with audience pull vs Star Power premium itemization.
 - Booking fixes: removed the Day 90 debt checkpoint hard-block, enforced the CONFIG.game.shoots_per_day daily cap, and itemized Star Power booking premiums in summaries and cost breakdowns.
 - Content screen UX polish (removed location thumbnail, corrected Promo/Premium CTAs, added jump-to-Social posting).
