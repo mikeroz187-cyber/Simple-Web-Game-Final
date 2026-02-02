@@ -343,6 +343,13 @@ const CONFIG = {
     placeholderPortraitPath: LOCATION_PLACEHOLDER_THUMB_PATH,
     daysPerStage: 2,
     bossConfrontationStages: 5,
+    boss: {
+      cost: 150000,
+      stages: ["summons", "negotiation", "power_play", "fall", "terms"],
+      daysPerStage: 2,
+      requiredReputation: 100,
+      repRewardOnDefeat: 25
+    },
     repRequirements: {
       tier1: 30,
       tier2: 50,
@@ -1909,6 +1916,33 @@ const CONFIG = {
     act2: {
       theme_ids: [],
       themes: {}
+    },
+    act3: {
+      theme_ids: [
+        "cosplay",
+        "curves",
+        "alt"
+      ],
+      themes: {
+        cosplay: {
+          id: "cosplay",
+          name: "Cosplay",
+          description: "Costumes and canon, twisted into your own private fan service.",
+          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
+        },
+        curves: {
+          id: "curves",
+          name: "Curves",
+          description: "Soft power, heavy heat. Every frame sells the shape.",
+          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
+        },
+        alt: {
+          id: "alt",
+          name: "Alt",
+          description: "Ink, leather, and a stare that dares them to flinch.",
+          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
+        }
+      }
     }
   },
   afterHours: {

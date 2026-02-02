@@ -362,7 +362,7 @@ Player clicks [BEGIN CONFRONTATION] on vulnerable boss (3+ performers acquired)
 |                                          |
 | Cost: $150,000                           |
 | Duration: 10 days                        |
-| Reputation Required: 100 (You have: 105) |
+| Reputation Required: 100 (You have: 100) |
 |                                          |
 | This ends one of two ways:               |
 | She submits. Or you walk away.           |
@@ -399,7 +399,7 @@ She's not negotiating anymore. She's surrendering.
 
 **Stage 5: The Terms**
 ```
-[8-image sequence - main NSFW content for boss]
+[5-image sequence - placeholder cap for boss stages]
 The terms are yours to dictate.
 And you dictate thoroughly.
 ```
@@ -417,7 +417,7 @@ And you dictate thoroughly.
 | ✓ 2 remaining performers auto-acquired   |
 | ✓ Boss collection entry unlocked         |
 | ✓ Studio brand bonus: +10% glamour content|
-| ✓ +25 Reputation                         |
+| ✓ +25 Reputation (capped at 100)         |
 |                                          |
 | STUDIOS REMAINING: 2/5                   |
 |                                          |
@@ -599,6 +599,6 @@ Shows all 16 images in slideshow format:
 - 5 debut
 
 ### Individual Boss Gallery View
-Shows all 11 images:
+Shows all 6 images (current cap):
 - 1 portrait
-- 10 confrontation sequence
+- 5 confrontation sequence

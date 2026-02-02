@@ -98,6 +98,7 @@ When 3+ performers have been acquired from a studio, the Boss becomes vulnerable
 
 **Boss Confrontation Cost:** $150,000 + 100 reputation required
 **Duration:** 10 days (5 stages × 2 days each)
+**Current art cap:** Boss stage slideshows are capped at 5 images (placeholder).
 
 Boss confrontation stages:
 1. The Summons (she contacts you)
@@ -110,7 +111,7 @@ Boss confrontation stages:
 - All remaining performers auto-acquired (debut shoots still trigger)
 - Studio brand trophy (permanent bonus)
 - Boss joins your "collection" (gallery entry)
-- +25 reputation
+- +25 reputation (capped at 100)
 
 ---
 
@@ -120,7 +121,7 @@ Boss confrontation stages:
 - Tier 1 targets require 30+ rep
 - Tier 2 targets require 50+ rep
 - Tier 3 targets require 75+ rep
-- Bosses require 100+ rep
+- Bosses require 100 rep (global cap)
 
 ### Reputation as Cost
 | Action | Rep Change |
@@ -213,13 +214,13 @@ Acquired performers become full roster members:
 | Asset | Count |
 |-------|-------|
 | Portrait | 1 |
-| Confrontation sequence | 10 |
-| **Subtotal** | 11 |
+| Confrontation sequence | 5 (current cap, placeholder) |
+| **Subtotal** | 6 |
 
 ### Totals
 - Performers: 25 × 16 = **400 images**
-- Bosses: 5 × 11 = **55 images**
-- **Grand Total: 455 images**
+- Bosses: 5 × 6 = **30 images**
+- **Grand Total: 430 images**
 
 ---
 

@@ -462,6 +462,9 @@ function getThemeById(themeId) {
   if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
     return CONFIG.themes.act2.themes[themeId];
   }
+  if (CONFIG.themes.act3 && CONFIG.themes.act3.themes && CONFIG.themes.act3.themes[themeId]) {
+    return CONFIG.themes.act3.themes[themeId];
+  }
   return null;
 }
 
@@ -637,7 +640,7 @@ function confirmBooking(gameState, selection) {
   let saturationMult = null;
   let saturationTierLabel = null;
   if (selection.contentType === "Premium") {
-    const premiumResult = calculatePremiumOfSubs(performer, theme);
+    const premiumResult = calculatePremiumOfSubs(performer, theme, gameState);
     baseOfSubs = premiumResult.ok ? premiumResult.value : 0;
     adjustedOfSubs = applyEquipmentOfSubsMultiplier(baseOfSubs, gameState);
     if (canApplyContentVariance(gameState)) {
