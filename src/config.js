@@ -41,6 +41,20 @@ function buildPlaceholderImagePaths(count, path) {
 
 const AUTOMATION_AUTO_BOOK_ENABLED_DEFAULT = false;
 const AUTOMATION_AUTO_BOOK_PER_DAY = 1;
+const ACT2_STAFFING_PUSH_CONFIG = {
+  warningDay: 120,
+  checkOnEnteringDay: 121,
+  requiredActiveContracted: 7,
+  haloStarDelta: 1,
+  penalty: {
+    crisisOverheadPerDay: 75,
+    crisisBookingCostPerShoot: 200
+  },
+  recruitForceUnlock: {
+    firstWaveDay: 90,
+    secondWaveDay: 105
+  }
+};
 
 const CONFIG = {
   project: {
@@ -539,6 +553,7 @@ const CONFIG = {
         performerId: "recruit_bryn_sterling",
         storyId: "unlock_performer_bryn_sterling",
         repRequired: 5,
+        forceUnlockDay: ACT2_STAFFING_PUSH_CONFIG.recruitForceUnlock.firstWaveDay,
         hireCost: 900,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
         pitchTitle: "A quick study with a headline stare",
@@ -565,6 +580,7 @@ const CONFIG = {
         performerId: "recruit_aria_lux",
         storyId: "unlock_performer_aria_lux",
         repRequired: 10,
+        forceUnlockDay: ACT2_STAFFING_PUSH_CONFIG.recruitForceUnlock.firstWaveDay,
         hireCost: 1400,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
         pitchTitle: "Red-carpet polish, after-hours appetite",
@@ -591,6 +607,7 @@ const CONFIG = {
         performerId: "recruit_dahlia_slate",
         storyId: "unlock_performer_dahlia_slate",
         repRequired: 15,
+        forceUnlockDay: ACT2_STAFFING_PUSH_CONFIG.recruitForceUnlock.secondWaveDay,
         hireCost: 1800,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
         pitchTitle: "Premium polish with a sly grin",
@@ -617,6 +634,7 @@ const CONFIG = {
         performerId: "recruit_eden_frost",
         storyId: "unlock_performer_eden_frost",
         repRequired: 20,
+        forceUnlockDay: ACT2_STAFFING_PUSH_CONFIG.recruitForceUnlock.secondWaveDay,
         hireCost: 2200,
         meetSlides: buildPlaceholderImagePaths(10, SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH),
         pitchTitle: "Ice-calm pro, all about control",
@@ -1581,5 +1599,8 @@ const CONFIG = {
         act3_exit_strategy_day270: { cashDelta: 3000, reputationDelta: 1 }
       }
     }
+  },
+  act2: {
+    staffingPush: ACT2_STAFFING_PUSH_CONFIG
   }
 };

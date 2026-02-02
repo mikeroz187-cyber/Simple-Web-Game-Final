@@ -652,6 +652,9 @@ function migrateGameState(candidate) {
   if (!Array.isArray(candidate.storyLog)) {
     candidate.storyLog = [];
   }
+  if (typeof ensureFlagsState === "function") {
+    ensureFlagsState(candidate);
+  }
   if (typeof ensureUnlocksState === "function") {
     ensureUnlocksState(candidate);
   }
@@ -714,6 +717,7 @@ function validateGameState(candidate) {
     "social",
     "unlocks",
     "story",
+    "flags",
     "storyLog",
     "rng",
     "performerManagement",

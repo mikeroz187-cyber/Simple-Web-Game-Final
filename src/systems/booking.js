@@ -30,11 +30,12 @@ function advanceDay(gameState) {
   const conquestResult = typeof checkConquests === "function"
     ? checkConquests(gameState)
     : { cards: [] };
+  const staffingEvents = getStaffingPushDayAdvanceEvents(gameState);
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
   const recruitEvents = Array.isArray(recruitResult) ? recruitResult : [];
   return {
-    storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents),
+    storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents).concat(staffingEvents),
     conquestEvents: conquestResult.cards || [],
     cashflow: {
       subs: subs,
@@ -43,6 +44,67 @@ function advanceDay(gameState) {
       overheadLabel: overheadResult.label || null
     }
   };
+}
+
+function getStaffingCrisisBookingPenalty(gameState) {
+  const config = getStaffingPushConfig();
+  if (!config || !gameState || !gameState.flags || !gameState.flags.act2StaffingCrisisActive) {
+    return 0;
+  }
+  const penalty = config.penalty || {};
+  return Number.isFinite(penalty.crisisBookingCostPerShoot) ? penalty.crisisBookingCostPerShoot : 0;
+}
+
+function applyHaloStaffingReward(gameState, config) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return;
+  }
+  const delta = Number.isFinite(config.haloStarDelta) ? config.haloStarDelta : 0;
+  if (delta === 0) {
+    return;
+  }
+  const progressionConfig = CONFIG.performers && CONFIG.performers.starPowerProgression
+    ? CONFIG.performers.starPowerProgression
+    : {};
+  const maxStarPower = Number.isFinite(progressionConfig.maxStarPower) ? progressionConfig.maxStarPower : 10;
+  const defaultStar = Number.isFinite(CONFIG.performers.default_star_power) ? CONFIG.performers.default_star_power : 1;
+  gameState.roster.performers.forEach(function (performer) {
+    if (!performer) {
+      return;
+    }
+    const currentStar = Number.isFinite(performer.starPower) ? performer.starPower : defaultStar;
+    performer.starPower = Math.min(maxStarPower, currentStar + delta);
+  });
+}
+
+function getStaffingPushDayAdvanceEvents(gameState) {
+  const config = getStaffingPushConfig();
+  if (!config || !gameState || !gameState.player) {
+    return [];
+  }
+  if (typeof ensureFlagsState === "function") {
+    ensureFlagsState(gameState);
+  }
+  const flags = gameState.flags || {};
+  const currentDay = gameState.player.day;
+  const events = [];
+  if (currentDay === config.warningDay && !flags.act2StaffingPushWarned) {
+    flags.act2StaffingPushWarned = true;
+    events.push({ id: "act2_staffing_push_warning", day: currentDay });
+  }
+  if (currentDay === config.checkOnEnteringDay && !flags.act2StaffingPushCompleted) {
+    const activeCount = getActiveContractedPerformersCount(gameState);
+    if (activeCount >= config.requiredActiveContracted) {
+      applyHaloStaffingReward(gameState, config);
+      flags.act2StaffingPushCompleted = true;
+      flags.act2StaffingCrisisActive = false;
+      events.push({ id: "act2_staffing_push_success", day: currentDay });
+    } else {
+      flags.act2StaffingCrisisActive = true;
+      events.push({ id: "act2_staffing_push_failure", day: currentDay });
+    }
+  }
+  return events.concat(resolveStaffingCrisisIfRecovered(gameState));
 }
 
 function getBookingComboConfig() {
@@ -414,7 +476,8 @@ function tryAutoBookOne(gameState) {
   const starPremium = selectedPerformer
     ? getStarPowerCostPremium(selectedPerformer, adjustedCost.finalCost)
     : { mult: 1, surcharge: 0, maxStar: null };
-  const finalShootCost = adjustedCost.finalCost + divaFee + starPremium.surcharge;
+  const staffingPenalty = getStaffingCrisisBookingPenalty(gameState);
+  const finalShootCost = adjustedCost.finalCost + divaFee + starPremium.surcharge + staffingPenalty;
   if (gameState.player.cash < finalShootCost) {
     return { success: false, reason: "Not enough cash" };
   }
@@ -527,7 +590,8 @@ function confirmBooking(gameState, selection) {
     ? getStarPowerCostPremium(performer, shootCost)
     : { mult: 1, surcharge: 0, maxStar: null };
   const starPowerSurcharge = starPremium.surcharge;
-  const totalCost = shootCost + divaFee + starPowerSurcharge;
+  const staffingPenalty = getStaffingCrisisBookingPenalty(gameState);
+  const totalCost = shootCost + divaFee + starPowerSurcharge + staffingPenalty;
   if (gameState.player.cash < totalCost) {
     return { ok: false, message: "Not enough cash for this shoot." };
   }
@@ -633,6 +697,7 @@ function confirmBooking(gameState, selection) {
       starPowerMax: starPremium.maxStar,
       starPowerCostMultiplier: starPremium.mult,
       starPowerSurcharge: starPowerSurcharge,
+      staffingCrisisPenalty: staffingPenalty,
       divaFee: divaFee,
       totalCost: totalCost
     },

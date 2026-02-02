@@ -197,6 +197,11 @@ function newGameState() {
       act2: { eventsShown: [], lastEventId: null },
       act3: { eventsShown: [], lastEventId: null }
     },
+    flags: {
+      act2StaffingPushWarned: false,
+      act2StaffingPushCompleted: false,
+      act2StaffingCrisisActive: false
+    },
     storyLog: [],
     afterHours: {
       completed: {},
@@ -326,6 +331,24 @@ function ensureStoryLogState(gameState) {
 
   if (!Array.isArray(gameState.storyLog)) {
     gameState.storyLog = [];
+  }
+}
+
+function ensureFlagsState(gameState) {
+  if (!gameState) {
+    return;
+  }
+  if (!gameState.flags || typeof gameState.flags !== "object" || Array.isArray(gameState.flags)) {
+    gameState.flags = {};
+  }
+  if (typeof gameState.flags.act2StaffingPushWarned !== "boolean") {
+    gameState.flags.act2StaffingPushWarned = false;
+  }
+  if (typeof gameState.flags.act2StaffingPushCompleted !== "boolean") {
+    gameState.flags.act2StaffingPushCompleted = false;
+  }
+  if (typeof gameState.flags.act2StaffingCrisisActive !== "boolean") {
+    gameState.flags.act2StaffingCrisisActive = false;
   }
 }
 

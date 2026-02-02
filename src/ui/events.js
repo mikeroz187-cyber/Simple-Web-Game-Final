@@ -168,6 +168,7 @@ function processDebtPayment(amount, options) {
     }
     if (storyEvents.length) {
       ensureStoryLogState(gameState);
+      ensureFlagsState(gameState);
       appendStoryLogEntries(gameState, storyEvents);
       showStoryEvents(storyEvents);
     }
@@ -365,6 +366,7 @@ function setupEventHandlers() {
           ensureUnlocksState(window.gameState);
           ensureShootOutputsState(window.gameState);
           ensureStoryLogState(window.gameState);
+          ensureFlagsState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
           ensureReputationState(window.gameState);
           ensureRecruitmentState(window.gameState);
@@ -411,6 +413,7 @@ function setupEventHandlers() {
             ensureUnlocksState(window.gameState);
             ensureShootOutputsState(window.gameState);
             ensureStoryLogState(window.gameState);
+            ensureFlagsState(window.gameState);
             ensureSocialManualStrategyState(window.gameState);
             ensureReputationState(window.gameState);
             ensureRecruitmentState(window.gameState);
@@ -511,9 +514,14 @@ function setupEventHandlers() {
       setUiMessage(result.message || "");
       if (result.ok) {
         clearSlideshowState();
+        const crisisEvents = resolveStaffingCrisisIfRecovered(window.gameState);
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message || "");
+        }
+        if (crisisEvents.length) {
+          appendStoryLogEntries(window.gameState, crisisEvents);
+          showEventCards(buildStoryEventCards(crisisEvents));
         }
         showScreen("screen-roster");
       }
@@ -751,9 +759,14 @@ function setupEventHandlers() {
       const result = renewPerformerContract(window.gameState, performerId);
       setUiMessage(result.message || "");
       if (result.ok) {
+        const crisisEvents = resolveStaffingCrisisIfRecovered(window.gameState);
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
         if (!saveResult.ok) {
           setUiMessage(saveResult.message || "");
+        }
+        if (crisisEvents.length) {
+          appendStoryLogEntries(window.gameState, crisisEvents);
+          showEventCards(buildStoryEventCards(crisisEvents));
         }
       }
       renderApp(window.gameState);
@@ -1200,6 +1213,7 @@ function setupEventHandlers() {
         ensureUnlocksState(window.gameState);
         ensureShootOutputsState(window.gameState);
         ensureStoryLogState(window.gameState);
+        ensureFlagsState(window.gameState);
         ensureSocialManualStrategyState(window.gameState);
         ensureReputationState(window.gameState);
         ensureRecruitmentState(window.gameState);
@@ -1241,6 +1255,7 @@ function setupEventHandlers() {
           ensureUnlocksState(window.gameState);
           ensureShootOutputsState(window.gameState);
           ensureStoryLogState(window.gameState);
+          ensureFlagsState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
           ensureReputationState(window.gameState);
           ensureRecruitmentState(window.gameState);

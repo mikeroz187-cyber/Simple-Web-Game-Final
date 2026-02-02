@@ -209,6 +209,13 @@ body {
   flex: 1;
 }
 
+.header-status {
+  flex-basis: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: var(--danger);
+}
+
 .header-stat {
   display: flex;
   align-items: center;

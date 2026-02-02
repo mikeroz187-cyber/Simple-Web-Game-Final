@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Day 120 Staffing Push check with Halo reward, Staffing Crisis penalties, forced recruit availability, and a persistent crisis status indicator.
+  - Why: Deliver the required Act 2 staffing gate with clear warning, success/failure messaging, and reversible penalties tied to active contracts.
+  - Files touched: src/config.js, src/state.js, src/main.js, src/save.js, src/systems/performers.js, src/systems/recruitment.js, src/systems/booking.js, src/systems/economy.js, src/systems/story.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, CHANGELOG.md.
 - What: Added the Day 95 lease upgrade commitment with a time-limited shop offer, roster cap increase (5→7), and permanent overhead/reputation effects.
   - Why: Deliver the Act 2 lease decision as a Shop upgrade with clear stakes, while enforcing the new roster cap rules.
   - Files touched: src/config.js, src/state.js, src/save.js, src/systems/story.js, src/systems/shop.js, src/systems/economy.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CORE_GAMEPLAY_LOOP.md, CHANGELOG.md.
