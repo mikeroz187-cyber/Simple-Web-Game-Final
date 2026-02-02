@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Industry Takeover Phase 1 scaffolding (config, takeover state, save/migration hooks, roster cap override, helper system) and aligned late-game docs to the new source of truth.
+  - Why: Establish the foundation for Industry Takeover without enabling gameplay, while keeping documentation and saves aligned for later phases.
+  - Files touched: docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/DATA_STRUCTURE.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, src/config.js, src/state.js, src/save.js, src/systems/takeover.js, src/systems/recruitment.js, src/main.js, index.html, CHANGELOG.md.
 - What: Documented the Act 2 Social Collab Week (Day 170) rules, UI, and save-safe GameState fields.
   - Why: Keep gameplay documentation aligned with the implemented collab event and state placement.
   - Files touched: docs/task-checklist.md, docs/CORE_GAMEPLAY_LOOP.md, docs/GAMESTATE_DATA_MODEL.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

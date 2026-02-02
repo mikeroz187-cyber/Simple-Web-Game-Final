@@ -9,6 +9,16 @@ This document provides a phased, step-by-step implementation plan for the Indust
 
 ---
 
+## Decisions Locked
+
+- Takeover replaces Competition starting Day 181 (Phase to come).
+- Roster cap becomes 40 at Day 181 unlock (recruitment cap override).
+- Reputation cap is 100 (global).
+- Crisis floor is 10 by default (takeover-specific logic later).
+- First playable slice is A3 (3 studios initially).
+
+---
+
 ## Phase 0: Preparation & Documentation Sync
 
 ### Objective
@@ -26,15 +36,8 @@ Add to "Currently Working On":
 - Industry Takeover System — Phase 0 preparation
 ```
 
-#### 0.2 Create Takeover Documentation Folder
-Create dedicated documentation folder for takeover system.
-
-**Create:** `docs/TAKEOVER/` directory with:
-- `PRD.md`
-- `GAME_FLOW.md`
-- `FRONTEND_GUIDELINES.md`
-- `DATA_STRUCTURE.md`
-- `IMPLEMENTATION_PLAN.md` (this file)
+#### 0.2 Confirm Late-Game Docs Source of Truth
+Ensure takeover documentation lives in `docs/late-game` and update any references that still point elsewhere.
 
 #### 0.3 Retrofit Existing Rivals Documentation
 Update existing rival references to use new studio names.
@@ -86,7 +89,7 @@ Reference: `DATA_STRUCTURE.md` Section 2
 **File:** `src/save.js`
 
 - Add `takeover` to required state keys
-- Add migration function v3 → v4
+- Ensure migration calls `ensureTakeoverState` without bumping schema
 - Add validation for takeover state structure
 
 #### 1.4 Add Takeover System File (Stub)
@@ -108,7 +111,7 @@ function completeAcquisition(performerId) {}
 ### Definition of Done
 - [ ] Config loads without errors
 - [ ] New game creates valid takeover state
-- [ ] Existing saves load and migrate to v4
+- [ ] Existing saves load and gain takeover defaults (no schema bump)
 - [ ] Save/load roundtrip preserves takeover state
 - [ ] No UI changes visible yet
 
@@ -752,7 +755,7 @@ Replace placeholders with final Stable Diffusion artwork as produced.
 
 | File | Phase |
 |------|-------|
-| `docs/TAKEOVER/*.md` | 0 |
+| `docs/late-game/*.md` | 0 |
 | `src/systems/takeover.js` | 1 |
 | `src/ui/industry-render.js` | 2 |
 | `src/ui/studio-detail-render.js` | 4 |

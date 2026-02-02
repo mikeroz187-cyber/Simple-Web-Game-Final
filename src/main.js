@@ -23,6 +23,7 @@
     ensureRecruitmentState(window.gameState);
     ensurePlayerUpgradesState(window.gameState);
     ensureStatsState(window.gameState);
+    ensureTakeoverState(window.gameState);
     if (typeof ensureAfterHoursState === "function") {
       ensureAfterHoursState(window.gameState);
     }

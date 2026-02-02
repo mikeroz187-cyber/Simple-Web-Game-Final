@@ -772,6 +772,9 @@ function migrateGameState(candidate) {
   if (typeof ensureConquestsState === "function") {
     ensureConquestsState(candidate);
   }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(candidate);
+  }
   return { ok: true, gameState: candidate, didReset: false };
 }
 
@@ -819,7 +822,8 @@ function validateGameState(candidate) {
     "reputation",
     "recruitment",
     "conquests",
-    "afterHours"
+    "afterHours",
+    "takeover"
   ];
   const keys = Object.keys(candidate);
   const hasUnknown = keys.some(function (key) {
