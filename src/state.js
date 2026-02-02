@@ -152,6 +152,7 @@ function getDefaultTakeoverState() {
       performersAcquired: 0,
       performersLost: 0,
       performersReacquired: 0,
+      studiosDefeated: 0,
       bossesDefeated: 0,
       poachAttemptsDefended: 0,
       poachAttemptsLost: 0
@@ -642,6 +643,10 @@ function ensureTakeoverState(gameState) {
     return;
   }
   const defaults = getDefaultTakeoverState();
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const performerConfig = takeoverConfig.performers && typeof takeoverConfig.performers === "object"
+    ? takeoverConfig.performers
+    : {};
   if (!gameState.takeover || typeof gameState.takeover !== "object" || Array.isArray(gameState.takeover)) {
     gameState.takeover = defaults;
     return;
@@ -686,6 +691,73 @@ function ensureTakeoverState(gameState) {
   if (!takeover.performers || typeof takeover.performers !== "object" || Array.isArray(takeover.performers)) {
     takeover.performers = {};
   }
+  Object.keys(performerConfig).forEach(function (performerId) {
+    const performer = performerConfig[performerId] || {};
+    const resolvedTier = typeof performer.tier === "string"
+      ? performer.tier
+      : (Number.isFinite(performer.tier) ? (performer.tier >= 3 ? "tier3" : performer.tier >= 2 ? "tier2" : "tier1") : "tier1");
+    const resolvedWeakness = typeof performer.weaknessType === "string"
+      ? performer.weaknessType
+      : (typeof performer.weakness === "string" ? performer.weakness : "ambition");
+    if (!takeover.performers[performerId] || typeof takeover.performers[performerId] !== "object") {
+      takeover.performers[performerId] = {
+        id: performerId,
+        studioId: performer.studioId || null,
+        status: "locked",
+        tier: resolvedTier,
+        weaknessType: resolvedWeakness,
+        currentStage: null,
+        stageStartDay: null,
+        stageCompleteDay: null,
+        stageReady: false,
+        attemptCount: 0,
+        nextAvailableDay: 0,
+        lastOutcome: null,
+        lockReason: null
+      };
+      return;
+    }
+    const performerState = takeover.performers[performerId];
+    if (typeof performerState.id !== "string") {
+      performerState.id = performerId;
+    }
+    if (typeof performerState.studioId !== "string") {
+      performerState.studioId = performer.studioId || null;
+    }
+    if (typeof performerState.status !== "string") {
+      performerState.status = "locked";
+    }
+    if (typeof performerState.tier !== "string") {
+      performerState.tier = resolvedTier;
+    }
+    if (typeof performerState.weaknessType !== "string") {
+      performerState.weaknessType = resolvedWeakness;
+    }
+    if (performerState.currentStage !== null && typeof performerState.currentStage !== "string") {
+      performerState.currentStage = null;
+    }
+    if (!Number.isFinite(performerState.stageStartDay)) {
+      performerState.stageStartDay = null;
+    }
+    if (!Number.isFinite(performerState.stageCompleteDay)) {
+      performerState.stageCompleteDay = null;
+    }
+    if (typeof performerState.stageReady !== "boolean") {
+      performerState.stageReady = false;
+    }
+    if (!Number.isFinite(performerState.attemptCount) || performerState.attemptCount < 0) {
+      performerState.attemptCount = 0;
+    }
+    if (!Number.isFinite(performerState.nextAvailableDay) || performerState.nextAvailableDay < 0) {
+      performerState.nextAvailableDay = 0;
+    }
+    if (performerState.lastOutcome !== null && typeof performerState.lastOutcome !== "string") {
+      performerState.lastOutcome = null;
+    }
+    if (performerState.lockReason !== null && typeof performerState.lockReason !== "string") {
+      performerState.lockReason = null;
+    }
+  });
   if (!takeover.bossConfrontations || typeof takeover.bossConfrontations !== "object" || Array.isArray(takeover.bossConfrontations)) {
     takeover.bossConfrontations = {};
   }

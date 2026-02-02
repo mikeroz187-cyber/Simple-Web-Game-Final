@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** February 03, 2026
 
 ## Recently Completed
+- Industry Takeover Phase 4: 4-stage acquisition loop (intel/approach/turn/debut), stage-ready resolve UX, tier-scaled costs, weakness rep penalties, debut rewards, and roster integration.
 - Industry Takeover Phase 3: Studio Detail screen with boss card, performer roster, and View Studio navigation from the Industry Map (actions disabled).
 - Industry Takeover Phase 2: Industry Map nav entry, screen shell, and Day 181 unlock CTA.
 - Act 2 Social Collab Week (Day 170 offer, 7-day unique promo streak, 14-day retry cadence, +3% permanent promo reach reward).
@@ -50,7 +51,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Industry Takeover — Phase 4 acquisition stages (intel/approach/turn/debut)
+- Industry Takeover — Phase 5 boss confrontations
 
 ## Next 3–7 Candidate Tasks
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state
