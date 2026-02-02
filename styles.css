@@ -2215,6 +2215,73 @@ body {
   color: var(--danger);
 }
 
+/* Industry Takeover - Studio Detail */
+.industry-boss-card {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: flex-start;
+}
+
+.industry-boss__portrait,
+.industry-performer__portrait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.industry-boss__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.industry-portrait {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  border: var(--border-width) solid var(--glass-border);
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.industry-performer-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.industry-performer-card {
+  display: grid;
+  grid-template-columns: 84px 1fr auto;
+  gap: var(--gap-sm);
+  align-items: center;
+  padding: var(--gap-sm);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.industry-performer__details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.industry-performer__name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.industry-performer__line {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.industry-performer__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .cashflow-panel .panel-title {
   margin-bottom: var(--gap-xs);
 }

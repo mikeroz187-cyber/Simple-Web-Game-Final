@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** February 02, 2026 (Industry Takeover Phase 1 foundation)
+**Last Updated:** February 03, 2026 (Industry Takeover Phase 3 studio detail)
 
 ---
 
@@ -63,7 +63,7 @@
 ## Industry Takeover — In Progress
 - [x] Phase 1: Foundation (config + gameState + save/migration + docs)
 - [x] Phase 2: Industry Nav + Industry Map screen shell
-- [ ] Phase 3: Studio Detail screen + performer list
+- [x] Phase 3: Studio Detail screen + performer list
 - [ ] Phase 4: Acquisition stages (intel/approach/turn/debut)
 - [ ] Phase 5: Boss confrontations (5-stage)
 - [ ] Phase 6: Retaliation (poach + alliances)

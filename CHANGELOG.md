@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added Industry Takeover Studio Detail screen with boss card, performer roster statuses, and navigation from the Industry Map.
+  - Why: Deliver Phase 3 visibility into each A3 studio without enabling acquisition mechanics yet.
+  - Files touched: index.html, src/ui/render.js, src/ui/events.js, styles.css, docs/late-game/IMPLEMENTATION_PLAN.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added the Industry Map nav entry and screen shell for the A3 takeover studios plus the Day 181 unlock modal CTA.
   - Why: Surface the Industry Takeover entry point and unlock messaging without implementing acquisition mechanics yet.
   - Files touched: index.html, src/config.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/late-game/IMPLEMENTATION_PLAN.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
