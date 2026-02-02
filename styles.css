@@ -776,6 +776,87 @@ body {
 }
 
 /* ============================================
+   PERFORMER PROFILE CARD (BOOKING)
+   ============================================ */
+
+.performer-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-sm);
+  text-align: center;
+  padding: var(--gap-md);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.performer-profile-card__portrait {
+  width: 200px;
+  height: 356px;
+  border-radius: var(--radius-md);
+  background: #3a3a5a;
+  border: var(--border-width) solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.performer-profile-card__name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.performer-profile-card__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-sm);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.performer-profile-card__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.performer-profile-card__stat-value {
+  color: var(--text-body);
+  font-family: var(--font-mono);
+}
+
+.performer-profile-card__status-badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: var(--border-width) solid rgba(255, 255, 255, 0.08);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.performer-profile-card__status-badge--available {
+  color: var(--success);
+  background: rgba(46, 204, 113, 0.12);
+}
+
+.performer-profile-card__status-badge--busy {
+  color: var(--danger);
+  background: rgba(255, 51, 68, 0.14);
+}
+
+.performer-profile-card__status-badge--cooldown {
+  color: var(--vip);
+  background: rgba(212, 175, 55, 0.14);
+}
+
+/* ============================================
    LOCATION CARDS
    ============================================ */
 

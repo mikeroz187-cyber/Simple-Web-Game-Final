@@ -688,6 +688,9 @@ function setupEventHandlers() {
     }
 
     if (action === "select-performer-a") {
+      if (!actionId || (target && target.tagName === "SELECT")) {
+        return;
+      }
       uiState.booking.performerIdA = actionId || null;
       setUiMessage("");
       renderApp(window.gameState);

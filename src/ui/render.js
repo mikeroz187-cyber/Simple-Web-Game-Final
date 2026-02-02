@@ -756,28 +756,51 @@ function renderBooking(gameState) {
   // Performer selection (only for core mode)
   var performerHtml = '';
   if (!isAgencyPack) {
-    var performerCardsHtml = corePerformers.map(function(p) {
+    var performerOptionsHtml = corePerformers.map(function(p) {
       var isSelected = p.id === selectedPerformerId;
       var status = isPerformerBookable(gameState, p);
-      var statusClass = status.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
-      var statusText = status.ok ? 'Available' : status.reason;
-      var portraitPath = getPerformerPortraitPath(p);
-      var divaLabelText = getDivaFeeLabelForPerformer(p);
-      return '<div class="performer-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-performer-a" data-id="' + p.id + '" style="cursor:pointer;">' +
-        '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
-        '<div class="performer-card__info">' +
-          '<div class="performer-card__name">' + p.name + '</div>' +
-          '<div class="performer-card__stats">' +
-            '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + p.starPower + '</span></span>' +
-            '<span class="performer-card__stat">😓 <span class="performer-card__stat-value">' + p.fatigue + '</span></span>' +
-            '<span class="performer-card__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ <span class="performer-card__stat-value">' + p.loyalty + '</span></span>' +
+      var availabilityText = status.ok ? 'Available' : 'Busy';
+      return '<option value="' + p.id + '"' + (isSelected ? ' selected' : '') + '>' +
+        p.name + ' \u2022 ' + availabilityText +
+      '</option>';
+    }).join('');
+    var selectPanelHtml = '<div class="panel">' +
+      '<h3 class="panel-title">Select Performer</h3>' +
+      '<div class="field-row" style="flex-direction:column;align-items:stretch;gap:var(--gap-xs);">' +
+        '<label class="form-label" for="booking-performer-select">Performer</label>' +
+        '<select id="booking-performer-select" class="select-control" data-action="select-performer-a">' +
+          '<option value=""' + (selectedPerformerId ? '' : ' selected') + '>\u2014 Select a performer \u2014</option>' +
+          performerOptionsHtml +
+        '</select>' +
+      '</div>' +
+    '</div>';
+
+    var performerCardHtml = '';
+    if (selectedPerformer) {
+      var cardStatus = isPerformerBookable(gameState, selectedPerformer);
+      var cardStatusText = cardStatus.ok ? 'Available'
+        : (cardStatus.reason && cardStatus.reason.indexOf('Cooldown') >= 0 ? 'On Cooldown' : 'Busy');
+      var cardStatusClass = cardStatus.ok ? 'performer-profile-card__status-badge--available'
+        : (cardStatus.reason && cardStatus.reason.indexOf('Cooldown') >= 0
+          ? 'performer-profile-card__status-badge--cooldown'
+          : 'performer-profile-card__status-badge--busy');
+      performerCardHtml = '<div class="panel">' +
+        '<h3 class="panel-title">Performer Card</h3>' +
+        '<div class="performer-profile-card">' +
+          '<div class="performer-profile-card__portrait">Portrait</div>' +
+          '<div class="performer-profile-card__name">' + selectedPerformer.name + '</div>' +
+          '<div class="performer-profile-card__stats">' +
+            '<div class="performer-profile-card__stat">⭐ <span class="performer-profile-card__stat-value">' + selectedPerformer.starPower + '</span></div>' +
+            '<div class="performer-profile-card__stat">😓 <span class="performer-profile-card__stat-value">' + selectedPerformer.fatigue + '</span></div>' +
+            '<div class="performer-profile-card__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ <span class="performer-profile-card__stat-value">' + selectedPerformer.loyalty + '</span></div>' +
           '</div>' +
-          (divaLabelText ? '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">⚠ ' + divaLabelText + ' Active</div>' : '') +
-          '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
+          (divaLabel ? '<div class="diva-fee-note">⚠ ' + divaLabel + ' Active</div>' : '') +
+          '<div class="performer-profile-card__status-badge ' + cardStatusClass + '">' + cardStatusText + '</div>' +
         '</div>' +
       '</div>';
-    }).join('');
-    performerHtml = '<div class="panel"><h3 class="panel-title">Select Performer</h3>' + performerCardsHtml + '</div>';
+    }
+
+    performerHtml = selectPanelHtml + performerCardHtml;
   } else {
     performerHtml = '<div class="panel"><h3 class="panel-title">Agency Pack</h3>' +
       '<p style="color:var(--text-muted);font-size:13px;">Agency provides a 5-image sample pack matched to your selected theme and location.</p></div>';
