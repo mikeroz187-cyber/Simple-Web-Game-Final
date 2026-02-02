@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Day 95 lease upgrade commitment with a time-limited shop offer, roster cap increase (5→7), and permanent overhead/reputation effects.
+  - Why: Deliver the Act 2 lease decision as a Shop upgrade with clear stakes, while enforcing the new roster cap rules.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/story.js, src/systems/shop.js, src/systems/economy.js, src/systems/recruitment.js, src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CORE_GAMEPLAY_LOOP.md, CHANGELOG.md.
 - What: Booking UI now uses a performer dropdown with an on-demand portrait profile card.
   - Why: Match the updated booking screen layout while keeping selection clear and lightweight.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.

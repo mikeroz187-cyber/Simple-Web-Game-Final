@@ -195,6 +195,25 @@ function getDailyOverhead(gameState) {
       label = label + " + Manager";
     }
   }
+  const leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
+    ? CONFIG.leaseUpgrade
+    : null;
+  const leasePurchased = Boolean(
+    gameState &&
+    gameState.player &&
+    gameState.player.upgrades &&
+    gameState.player.upgrades.lease &&
+    gameState.player.upgrades.lease.purchased
+  );
+  if (leaseConfig && leaseConfig.enabled && leasePurchased) {
+    const leaseDelta = Number.isFinite(leaseConfig.overheadDeltaPerDay) ? leaseConfig.overheadDeltaPerDay : 0;
+    amount += leaseDelta;
+    if (!label) {
+      label = "Lease";
+    } else {
+      label = label + " + Lease";
+    }
+  }
   return { amount: Math.max(0, Math.round(amount)), label: label };
 }
 

@@ -44,6 +44,7 @@
 - [x] Placeholder portraits, thumbnails, and shoot output cards in Gallery.
 - [x] Competition unlocks after debt (Act 2), gated in Act 1, one-time unlock message shown.
 - [x] Post-debt upgrade: Hire Manager (one-time purchase) reduces daily overhead (config-driven).
+- [x] Act 2 lease upgrade commitment (Day 95 window), roster cap increase (5→7), and late-price fallback if missed.
 
 ---
 

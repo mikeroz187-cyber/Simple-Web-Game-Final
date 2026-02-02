@@ -129,3 +129,105 @@ function purchaseEquipmentUpgrade(gameState, upgradeId) {
     conquestEvents: conquestResult.cards || []
   };
 }
+
+function getLeaseUpgradeConfig() {
+  if (CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object") {
+    return CONFIG.leaseUpgrade;
+  }
+  return null;
+}
+
+function getLeaseUpgradeStatus(gameState) {
+  const config = getLeaseUpgradeConfig();
+  if (!config || config.enabled !== true) {
+    return { available: false, reason: "Lease upgrade unavailable." };
+  }
+  if (!gameState || !gameState.player) {
+    return { available: false, reason: "Game state missing." };
+  }
+  if (typeof ensurePlayerUpgradesState === "function") {
+    ensurePlayerUpgradesState(gameState);
+  }
+  const leaseState = gameState.player.upgrades && gameState.player.upgrades.lease
+    ? gameState.player.upgrades.lease
+    : null;
+  if (!leaseState) {
+    return { available: false, reason: "Lease data missing." };
+  }
+  const currentDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  const offerStartedDay = Number.isFinite(leaseState.offerStartedDay) ? leaseState.offerStartedDay : null;
+  const offerDeadlineDay = Number.isFinite(leaseState.offerDeadlineDay)
+    ? leaseState.offerDeadlineDay
+    : (Number.isFinite(config.storyTriggerDay) && Number.isFinite(config.windowDays)
+      ? config.storyTriggerDay + config.windowDays
+      : null);
+  const isUnlocked = Number.isFinite(config.shopUnlockAfterDay) ? currentDay >= config.shopUnlockAfterDay : true;
+  const isPurchased = Boolean(leaseState.purchased);
+  const isOfferActive = isUnlocked && !isPurchased && offerDeadlineDay !== null && currentDay <= offerDeadlineDay;
+  const isLate = isUnlocked && !isPurchased && offerDeadlineDay !== null && currentDay > offerDeadlineDay;
+  const price = isOfferActive
+    ? config.windowPrice
+    : (isLate ? config.latePrice : null);
+  return {
+    available: isOfferActive || isLate,
+    isUnlocked: isUnlocked,
+    isPurchased: isPurchased,
+    isOfferActive: isOfferActive,
+    isLate: isLate,
+    price: Number.isFinite(price) ? price : null,
+    deadlineDay: offerDeadlineDay
+  };
+}
+
+function purchaseLeaseUpgrade(gameState) {
+  const config = getLeaseUpgradeConfig();
+  if (!config || config.enabled !== true) {
+    return { ok: false, message: "Lease upgrade not available." };
+  }
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "Game state missing." };
+  }
+  if (typeof ensurePlayerUpgradesState === "function") {
+    ensurePlayerUpgradesState(gameState);
+  }
+  const leaseState = gameState.player.upgrades && gameState.player.upgrades.lease
+    ? gameState.player.upgrades.lease
+    : null;
+  if (!leaseState) {
+    return { ok: false, message: "Lease data missing." };
+  }
+  if (leaseState.purchased) {
+    return { ok: false, message: "Lease upgrade already purchased." };
+  }
+  const status = getLeaseUpgradeStatus(gameState);
+  if (!status.available || !Number.isFinite(status.price)) {
+    return { ok: false, message: "Lease upgrade not available yet." };
+  }
+  const price = status.price;
+  if (gameState.player.cash < price) {
+    return { ok: false, message: "Not enough cash for the lease upgrade." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - price);
+  leaseState.purchased = true;
+  if (!Number.isFinite(leaseState.offerStartedDay)) {
+    leaseState.offerStartedDay = Number.isFinite(config.storyTriggerDay) ? config.storyTriggerDay : null;
+  }
+  if (!Number.isFinite(leaseState.offerDeadlineDay)) {
+    leaseState.offerDeadlineDay = Number.isFinite(config.storyTriggerDay) && Number.isFinite(config.windowDays)
+      ? config.storyTriggerDay + config.windowDays
+      : null;
+  }
+  const repBonus = Number.isFinite(config.repOnPurchase) ? config.repOnPurchase : 0;
+  gameState.player.reputation = Math.max(0, gameState.player.reputation + repBonus);
+  if (typeof ensureStatsState === "function") {
+    ensureStatsState(gameState);
+  }
+  if (gameState.stats) {
+    gameState.stats.totalShopSpend = Math.max(0, (gameState.stats.totalShopSpend || 0) + price);
+    gameState.stats.totalUpgradesPurchased = Math.max(0, (gameState.stats.totalUpgradesPurchased || 0) + 1);
+  }
+  return {
+    ok: true,
+    message: "Lease signed. Bigger stage, bigger burn, and the city starts to treat you like the real thing."
+  };
+}

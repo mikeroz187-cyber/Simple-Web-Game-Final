@@ -63,6 +63,40 @@ function checkStoryEvents(gameState) {
     });
   }
 
+  const leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
+    ? CONFIG.leaseUpgrade
+    : null;
+  const upgrades = gameState.player.upgrades && typeof gameState.player.upgrades === "object"
+    ? gameState.player.upgrades
+    : null;
+  const leaseState = upgrades && upgrades.lease && typeof upgrades.lease === "object"
+    ? upgrades.lease
+    : null;
+  if (leaseConfig && leaseConfig.enabled && leaseState) {
+    const triggerDay = Number.isFinite(leaseConfig.storyTriggerDay) ? leaseConfig.storyTriggerDay : null;
+    const windowDays = Number.isFinite(leaseConfig.windowDays) ? leaseConfig.windowDays : 0;
+    const offerId = "act2_expansion_plan_day95";
+    if (Number.isFinite(triggerDay) && currentDay >= triggerDay && !Number.isFinite(leaseState.offerStartedDay)) {
+      leaseState.offerStartedDay = triggerDay;
+      leaseState.offerDeadlineDay = triggerDay + windowDays;
+      if (gameState.story.act2.eventsShown.indexOf(offerId) === -1) {
+        gameState.story.act2.eventsShown.push(offerId);
+        gameState.story.act2.lastEventId = offerId;
+        events.push({ id: offerId, day: currentDay });
+      }
+    }
+    const deadlineDay = Number.isFinite(leaseState.offerDeadlineDay) ? leaseState.offerDeadlineDay : null;
+    if (Number.isFinite(deadlineDay) && currentDay > deadlineDay && !leaseState.purchased && !leaseState.missed) {
+      leaseState.missed = true;
+      if (!leaseState.missPenaltyApplied) {
+        const repDelta = Number.isFinite(leaseConfig.repOnMiss) ? leaseConfig.repOnMiss : 0;
+        gameState.player.reputation = Math.max(0, gameState.player.reputation + repDelta);
+        leaseState.missPenaltyApplied = true;
+      }
+      events.push({ id: "act2_lease_offer_missed", day: currentDay });
+    }
+  }
+
   if (CONFIG.story.act3 && Array.isArray(CONFIG.story.act3.schedule)) {
     CONFIG.story.act3.schedule.forEach(function (entry) {
       if (!entry || entry.triggerDay !== currentDay) {
@@ -109,6 +143,18 @@ const STORY_EVENT_COPY = {
   act2_competition_unlocked: {
     title: "Act 2 — Rivals Wake Up",
     message: "Debt cleared. The market noticed. Rival studios are now active—competition pressure will affect your results."
+  },
+  act2_expansion_plan_day95: {
+    title: "Day 95 — Lease Upgrade Commitment",
+    message: "Your broker slides a glossy listing across the desk. Bigger studio. Cleaner light. People notice. " +
+      "Lock it in for {{leaseWindowPrice}} within {{leaseWindowDays}} days (Deadline: Day {{leaseDeadlineDay}}). " +
+      "Miss the window and it comes back at {{leaseLatePrice}}. " +
+      "If you buy: +" +
+      "{{leaseOverheadDelta}}/day overhead, roster cap {{leaseRosterCapBase}}→{{leaseRosterCapAfter}}, +{{leaseRepBonus}} Rep."
+  },
+  act2_lease_offer_missed: {
+    title: "Lease Window Missed",
+    message: "You hesitated. The listing got snatched. It’s back on the board at {{leaseLatePrice}} now, and the room remembers the pause. Rep {{leaseRepPenalty}}."
   },
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",
@@ -375,7 +421,34 @@ function applyStoryTokens(message, gameState) {
   if (typeof message !== "string") {
     return message;
   }
-  return message.replace(/\{\{debtTotal\}\}/g, getDebtTotalText(gameState));
+  let resolved = message.replace(/\{\{debtTotal\}\}/g, getDebtTotalText(gameState));
+  const leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
+    ? CONFIG.leaseUpgrade
+    : null;
+  if (!leaseConfig || leaseConfig.enabled !== true) {
+    return resolved;
+  }
+  const player = gameState && gameState.player ? gameState.player : null;
+  const leaseState = player && player.upgrades && player.upgrades.lease ? player.upgrades.lease : null;
+  const deadlineDay = leaseState && Number.isFinite(leaseState.offerDeadlineDay)
+    ? leaseState.offerDeadlineDay
+    : (Number.isFinite(leaseConfig.storyTriggerDay) && Number.isFinite(leaseConfig.windowDays)
+      ? leaseConfig.storyTriggerDay + leaseConfig.windowDays
+      : null);
+  const formatValue = typeof formatCurrency === "function"
+    ? formatCurrency
+    : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  resolved = resolved
+    .replace(/\{\{leaseWindowPrice\}\}/g, formatValue(leaseConfig.windowPrice || 0))
+    .replace(/\{\{leaseLatePrice\}\}/g, formatValue(leaseConfig.latePrice || 0))
+    .replace(/\{\{leaseWindowDays\}\}/g, String(leaseConfig.windowDays || 0))
+    .replace(/\{\{leaseDeadlineDay\}\}/g, deadlineDay !== null ? String(deadlineDay) : "TBD")
+    .replace(/\{\{leaseOverheadDelta\}\}/g, formatValue(leaseConfig.overheadDeltaPerDay || 0))
+    .replace(/\{\{leaseRepPenalty\}\}/g, String(leaseConfig.repOnMiss || 0))
+    .replace(/\{\{leaseRepBonus\}\}/g, String(leaseConfig.repOnPurchase || 0))
+    .replace(/\{\{leaseRosterCapBase\}\}/g, String(leaseConfig.rosterCapBase || 0))
+    .replace(/\{\{leaseRosterCapAfter\}\}/g, String(leaseConfig.rosterCapAfterUpgrade || 0));
+  return resolved;
 }
 
 function getStoryEventCopy(eventId, gameState) {

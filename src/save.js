@@ -498,11 +498,46 @@ function ensurePlayerUpgradesState(candidate) {
     return;
   }
   if (!candidate.player.upgrades || typeof candidate.player.upgrades !== "object" || Array.isArray(candidate.player.upgrades)) {
-    candidate.player.upgrades = { managerHired: false };
+    candidate.player.upgrades = {
+      managerHired: false,
+      lease: {
+        purchased: false,
+        offerStartedDay: null,
+        offerDeadlineDay: null,
+        missed: false,
+        missPenaltyApplied: false
+      }
+    };
     return;
   }
   if (typeof candidate.player.upgrades.managerHired !== "boolean") {
     candidate.player.upgrades.managerHired = false;
+  }
+  if (!candidate.player.upgrades.lease || typeof candidate.player.upgrades.lease !== "object") {
+    candidate.player.upgrades.lease = {
+      purchased: false,
+      offerStartedDay: null,
+      offerDeadlineDay: null,
+      missed: false,
+      missPenaltyApplied: false
+    };
+    return;
+  }
+  const lease = candidate.player.upgrades.lease;
+  if (typeof lease.purchased !== "boolean") {
+    lease.purchased = false;
+  }
+  if (!Number.isFinite(lease.offerStartedDay)) {
+    lease.offerStartedDay = null;
+  }
+  if (!Number.isFinite(lease.offerDeadlineDay)) {
+    lease.offerDeadlineDay = null;
+  }
+  if (typeof lease.missed !== "boolean") {
+    lease.missed = false;
+  }
+  if (typeof lease.missPenaltyApplied !== "boolean") {
+    lease.missPenaltyApplied = false;
   }
 }
 
@@ -748,6 +783,32 @@ function validateGameState(candidate) {
   }
   if (typeof player.upgrades.managerHired !== "boolean") {
     player.upgrades.managerHired = false;
+  }
+  if (!player.upgrades.lease || typeof player.upgrades.lease !== "object") {
+    player.upgrades.lease = {
+      purchased: false,
+      offerStartedDay: null,
+      offerDeadlineDay: null,
+      missed: false,
+      missPenaltyApplied: false
+    };
+  } else {
+    const lease = player.upgrades.lease;
+    if (typeof lease.purchased !== "boolean") {
+      lease.purchased = false;
+    }
+    if (!Number.isFinite(lease.offerStartedDay)) {
+      lease.offerStartedDay = null;
+    }
+    if (!Number.isFinite(lease.offerDeadlineDay)) {
+      lease.offerDeadlineDay = null;
+    }
+    if (typeof lease.missed !== "boolean") {
+      lease.missed = false;
+    }
+    if (typeof lease.missPenaltyApplied !== "boolean") {
+      lease.missPenaltyApplied = false;
+    }
   }
 
   const roster = candidate.roster;
