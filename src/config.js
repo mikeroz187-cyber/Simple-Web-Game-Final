@@ -1945,6 +1945,7 @@ const CONFIG = {
     },
     act3: {
       schedule: [
+        { id: "act3_takeover_unlock_day181", triggerDay: 181 },
         { id: "act3_brand_legacy_day200", triggerDay: 200 },
         { id: "act3_market_shift_day225", triggerDay: 225 },
         { id: "act3_mentorship_day245", triggerDay: 245 },

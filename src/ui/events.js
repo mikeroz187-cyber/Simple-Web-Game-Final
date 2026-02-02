@@ -127,6 +127,15 @@ function findCollabOfferEvent(events) {
   }) || null;
 }
 
+function findTakeoverUnlockEvent(events) {
+  if (!Array.isArray(events)) {
+    return null;
+  }
+  return events.find(function (event) {
+    return event && event.id === "act3_takeover_unlock_day181";
+  }) || null;
+}
+
 function buildCollabExtraHtml(cards) {
   if (!Array.isArray(cards) || cards.length === 0) {
     return "";
@@ -1044,6 +1053,13 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "nav-industry-map") {
+      clearModal();
+      showScreen("screen-industry-map");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "select-reputation-branch") {
       const branchId = actionId;
       const result = selectReputationBranch(window.gameState, branchId);
@@ -1566,6 +1582,7 @@ function setupEventHandlers() {
         setUiMessage(saveResult.message || "");
       }
       const collabOffer = findCollabOfferEvent(storyEvents);
+      const takeoverUnlock = findTakeoverUnlockEvent(storyEvents);
       const storyCards = buildStoryEventCards(storyEvents);
       const eventCards = storyCards.concat(automationResult.cards).concat(conquestEvents);
       if (collabOffer) {
@@ -1574,6 +1591,23 @@ function setupEventHandlers() {
         });
         const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
         showCollabOfferDecisionModal(collabOffer.id, extraCards, window.gameState);
+      } else if (takeoverUnlock) {
+        const otherStoryEvents = storyEvents.filter(function (event) {
+          return event && event.id !== takeoverUnlock.id;
+        });
+        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
+        const copy = getStoryEventCopy(takeoverUnlock.id, window.gameState);
+        const messageHtml = String(copy.message || "").replace(/\n/g, "<br>");
+        showDecisionModal({
+          title: copy.title,
+          messageHtml: messageHtml,
+          imagePath: "assets/images/mascots/talentscout_introducing.png",
+          primaryLabel: "Open Industry Map",
+          primaryAction: "nav-industry-map",
+          secondaryLabel: "Later",
+          secondaryAction: "dismiss-modal",
+          extraHtml: buildCollabExtraHtml(extraCards)
+        });
       } else if (eventCards.length) {
         showEventCards(eventCards);
       }

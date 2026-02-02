@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Industry Map nav entry and screen shell for the A3 takeover studios plus the Day 181 unlock modal CTA.
+  - Why: Surface the Industry Takeover entry point and unlock messaging without implementing acquisition mechanics yet.
+  - Files touched: index.html, src/config.js, src/systems/story.js, src/ui/events.js, src/ui/render.js, docs/late-game/IMPLEMENTATION_PLAN.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Industry Takeover Phase 1 scaffolding (config, takeover state, save/migration hooks, roster cap override, helper system) and aligned late-game docs to the new source of truth.
   - Why: Establish the foundation for Industry Takeover without enabling gameplay, while keeping documentation and saves aligned for later phases.
   - Files touched: docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/DATA_STRUCTURE.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, src/config.js, src/state.js, src/save.js, src/systems/takeover.js, src/systems/recruitment.js, src/main.js, index.html, CHANGELOG.md.

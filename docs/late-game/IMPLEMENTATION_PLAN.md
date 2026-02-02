@@ -117,64 +117,23 @@ function completeAcquisition(performerId) {}
 
 ---
 
-## Phase 2: System Unlock & Navigation
+## Phase 2: Industry Map Entry + Unlock UX — ✅ Completed
 
 ### Objective
-Make takeover unlock on Day 181 and add navigation to Industry Map (empty screen).
+Add the player-facing entry point for Industry Takeover with a visible Industry Map screen shell and a Day 181 unlock modal CTA.
 
-### Tasks
-
-#### 2.1 Implement Unlock Check
-**File:** `src/systems/takeover.js`
-
-```javascript
-function checkTakeoverUnlock() {
-  if (gameState.takeover.unlocked) return;
-  if (gameState.player.day >= CONFIG.takeover.unlockDay) {
-    gameState.takeover.unlocked = true;
-    gameState.takeover.unlockedDay = gameState.player.day;
-    // Trigger unlock event (Phase 3)
-  }
-}
-```
-
-#### 2.2 Hook Unlock Check to Day Advance
-**File:** `src/systems/progression.js` or `src/main.js`
-
-Call `checkTakeoverUnlock()` on day advance.
-
-#### 2.3 Add Navigation Item
-**File:** `src/ui/render.js` (or navigation component)
-
-Add "Industry" nav item, visible only when `gameState.takeover.unlocked === true`.
-
-#### 2.4 Add Router Entry
-**File:** `src/ui/router.js`
-
-Add route for "industry" screen.
-
-#### 2.5 Create Industry Map Screen (Placeholder)
-**Create:** `src/ui/industry-render.js`
-
-Render placeholder:
-```javascript
-function renderIndustryMap() {
-  return `
-    <div class="industry-map-screen">
-      <h1>Industry Map</h1>
-      <p>Coming soon...</p>
-      <button onclick="navigateTo('hub')">Back to Hub</button>
-    </div>
-  `;
-}
-```
+### Tasks (Completed)
+- [x] Add the Industry Map nav item (hidden until takeover unlock at Day 181).
+- [x] Render the Industry Map screen shell with the A3 studio trio (Neon Cherry, Honey Trap, Midnight Media).
+- [x] Add the Day 181 story event and decision modal with “Open Industry Map” CTA.
+- [x] Keep navigation/state safe for save/load and non-unlocked states.
 
 ### Definition of Done
-- [ ] Industry nav hidden before Day 181
-- [ ] Industry nav appears on/after Day 181
-- [ ] Clicking Industry nav shows placeholder screen
-- [ ] Navigation back to Hub works
-- [ ] State persists across save/load
+- [x] Industry nav hidden before Day 181
+- [x] Industry nav appears on/after Day 181
+- [x] Industry Map screen renders the 3 A3 studios
+- [x] Day 181 unlock modal routes to Industry Map
+- [x] State persists across save/load
 
 ---
 

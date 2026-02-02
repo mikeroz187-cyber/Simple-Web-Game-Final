@@ -327,6 +327,12 @@ const STORY_EVENT_COPY = {
     title: "Defaulted on the Debt",
     message: "The {{debtTotal}} debt was not paid by Day 90. The lender shuts the studio down, and the run ends here. Use what you learned to plan a tighter start next time."
   },
+  act3_takeover_unlock_day181: {
+    title: "Industry Takeover",
+    message: "Your Talent Scout drops a folder on your desk. Three rival studios. Loose contracts. Desperate talent.\n\n" +
+      "This isn’t competition anymore. It’s acquisition.\n\n" +
+      "Open the Industry Map and start picking them apart."
+  },
   act3_brand_legacy_day200: {
     title: "Brand Legacy Review",
     message: "Your studio is now a recognizable brand. You commit to a legacy plan that prioritizes long-term reputation and stability."
