@@ -128,6 +128,199 @@ function showDecisionModal(opts) {
     "</div>";
 }
 
+function getTakeoverStageLabel(stage) {
+  if (stage === "intel") {
+    return "Intel";
+  }
+  if (stage === "approach") {
+    return "Approach";
+  }
+  if (stage === "turn") {
+    return "Turn";
+  }
+  if (stage === "debut") {
+    return "Debut";
+  }
+  return "Stage";
+}
+
+function getTakeoverWeaknessLabel(type) {
+  if (type === "neglect") {
+    return "Neglect";
+  }
+  if (type === "debt") {
+    return "Debt";
+  }
+  if (type === "pride") {
+    return "Pride";
+  }
+  if (type === "secret") {
+    return "Secret";
+  }
+  return "Ambition";
+}
+
+function getTakeoverWeaknessAngle(type) {
+  if (type === "neglect") {
+    return "She wants attention. Give it to her until she can't go back.";
+  }
+  if (type === "debt") {
+    return "Cover her bills, then make sure she knows what she owes.";
+  }
+  if (type === "pride") {
+    return "Challenge her ego and make her prove she belongs with you.";
+  }
+  if (type === "secret") {
+    return "Hold her secret tight enough that she can't risk saying no.";
+  }
+  return "Promise the stardom she craves, then set the price.";
+}
+
+function getTakeoverWeaknessRepDelta(weaknessType) {
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const repChanges = takeoverConfig.repChanges || {};
+  if (weaknessType === "neglect") {
+    return Number.isFinite(repChanges.weaknessNeglect) ? repChanges.weaknessNeglect : 0;
+  }
+  if (weaknessType === "debt") {
+    return Number.isFinite(repChanges.weaknessDebt) ? repChanges.weaknessDebt : -5;
+  }
+  if (weaknessType === "pride") {
+    return Number.isFinite(repChanges.weaknessPride) ? repChanges.weaknessPride : -10;
+  }
+  if (weaknessType === "secret") {
+    return Number.isFinite(repChanges.weaknessSecret) ? repChanges.weaknessSecret : -20;
+  }
+  return Number.isFinite(repChanges.weaknessAmbition) ? repChanges.weaknessAmbition : 0;
+}
+
+function getTakeoverStageSlideLimit(stage) {
+  if (stage === "intel") {
+    return 3;
+  }
+  return 5;
+}
+
+function getTakeoverStageNext(stage) {
+  if (stage === "intel") {
+    return "approach";
+  }
+  if (stage === "approach") {
+    return "turn";
+  }
+  if (stage === "turn") {
+    return "debut";
+  }
+  return null;
+}
+
+function buildTakeoverStoryLogEntry(gameState, performerName, message, suffix) {
+  if (!gameState || !gameState.player) {
+    return null;
+  }
+  const dayNumber = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  const idSuffix = suffix || String(Date.now());
+  return {
+    id: "takeover_" + performerName.replace(/\s+/g, "_").toLowerCase() + "_" + idSuffix,
+    dayNumber: dayNumber,
+    title: "Industry Takeover",
+    body: message,
+    timestamp: new Date().toISOString()
+  };
+}
+
+function showTakeoverStageModal(gameState) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !gameState) {
+    return;
+  }
+  const uiState = getUiState();
+  const modalState = uiState.takeoverStageModal;
+  if (!modalState || !modalState.performerId) {
+    clearModal();
+    return;
+  }
+  const performerConfig = typeof getTakeoverPerformerConfig === "function"
+    ? getTakeoverPerformerConfig(modalState.performerId)
+    : null;
+  const performerState = typeof getTakeoverPerformerState === "function"
+    ? getTakeoverPerformerState(gameState, modalState.performerId)
+    : null;
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+  const stage = modalState.stage || (performerState ? performerState.currentStage : "intel");
+  const stageLabel = getTakeoverStageLabel(stage);
+  const performerName = performerConfig && performerConfig.name ? performerConfig.name : "Performer";
+  const weaknessType = performerState && performerState.weaknessType
+    ? performerState.weaknessType
+    : (performerConfig && performerConfig.weaknessType ? performerConfig.weaknessType : "ambition");
+  const weaknessLabel = getTakeoverWeaknessLabel(weaknessType);
+  const weaknessAngle = getTakeoverWeaknessAngle(weaknessType);
+  const repDelta = getTakeoverWeaknessRepDelta(weaknessType);
+  const maxSlides = getTakeoverStageSlideLimit(stage);
+  const slides = typeof getTakeoverStageImagePaths === "function"
+    ? getTakeoverStageImagePaths(modalState.performerId, stage, maxSlides)
+    : [];
+  const slideCount = slides.length ? slides.length : 1;
+  const safeIndex = Math.min(Math.max(0, modalState.index || 0), slideCount - 1);
+  const slidePath = slides.length ? slides[safeIndex] : placeholderPath;
+  const slideNumber = slideCount ? safeIndex + 1 : 0;
+  const imageHtml = "<div class=\"slideshow-image-container\">" +
+    "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"" + stageLabel + " slide " + slideNumber + "\"" +
+    (placeholderPath ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "") + " />" +
+    "</div>";
+  const prevDisabled = safeIndex <= 0;
+  const nextDisabled = safeIndex >= slideCount - 1;
+  const controlsHtml = "<div class=\"slideshow-controls\">" +
+    createButton("Prev", "takeover-stage-prev", "", prevDisabled) +
+    createButton("Next", "takeover-stage-next", "primary", nextDisabled) +
+    "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
+    "</div>";
+  const messageLines = [];
+  if (stage === "intel") {
+    messageLines.push("<strong>Weakness Identified:</strong> " + weaknessLabel);
+    messageLines.push("\"" + weaknessAngle + "\"");
+  } else if (stage === "approach") {
+    messageLines.push("She’s responding. She thinks she’s choosing this.");
+    messageLines.push("Turn rep cost: " + (repDelta === 0 ? "None" : repDelta) + " (Weakness: " + weaknessLabel + ")");
+  } else if (stage === "turn") {
+    messageLines.push("She’s yours now. The hook is set.");
+    messageLines.push("Rep cost (paid at Turn start): " + (repDelta === 0 ? "None" : repDelta) + " (Weakness: " + weaknessLabel + ")");
+  } else if (stage === "debut") {
+    messageLines.push("Her first shoot under your banner. Make it official.");
+  }
+  const messageHtml = messageLines.join("<br>");
+  const nextStage = getTakeoverStageNext(stage);
+  const tier = performerState && performerState.tier ? performerState.tier : (performerConfig ? performerConfig.tier : "tier1");
+  const nextCost = nextStage && typeof getStageCost === "function"
+    ? getStageCost(nextStage, tier)
+    : 0;
+  const primaryLabel = stage === "debut"
+    ? "Finalize Acquisition"
+    : "Proceed to " + getTakeoverStageLabel(nextStage) + " (Pay " + formatCurrency(nextCost) + ")";
+  const primaryButton = createButton(primaryLabel, "takeover-stage-proceed", "primary");
+  const abortButton = createButton("Abort", "takeover-stage-abort");
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card modal-card--decision\">" +
+    "<div class=\"decision-layout\">" +
+    "<div class=\"decision-body\">" +
+    "<h3 class=\"modal-title\">" + stageLabel.toUpperCase() + ": " + performerName + "</h3>" +
+    "<div class=\"slideshow-layout\">" +
+    imageHtml +
+    controlsHtml +
+    "</div>" +
+    "<p class=\"modal-message\" style=\"margin-top:12px;\">" + messageHtml + "</p>" +
+    "<div class=\"button-row\" style=\"margin-top:12px;\">" +
+    primaryButton +
+    abortButton +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+}
+
 function findCollabOfferEvent(events) {
   if (!Array.isArray(events)) {
     return null;
@@ -694,6 +887,12 @@ function setupEventHandlers() {
     const uiState = getUiState();
 
     if (action === "dismiss-modal") {
+      if (uiState.takeoverModal) {
+        uiState.takeoverModal = null;
+      }
+      if (uiState.takeoverStageModal) {
+        uiState.takeoverStageModal = null;
+      }
       clearModal();
       return;
     }
@@ -983,6 +1182,253 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "takeover-confirm-intel") {
+      const modalState = uiState.takeoverModal;
+      const performerId = modalState ? modalState.performerId : null;
+      if (!performerId) {
+        clearModal();
+        uiState.takeoverModal = null;
+        return;
+      }
+      const performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(performerId)
+        : null;
+      const performerState = typeof getTakeoverPerformerState === "function"
+        ? getTakeoverPerformerState(window.gameState, performerId)
+        : null;
+      if (!performerConfig || !performerState || performerState.status !== "available") {
+        if (typeof showToast === "function") {
+          showToast("Target not available.", "error");
+        }
+        return;
+      }
+      const cost = typeof getStageCost === "function" ? getStageCost("intel", performerState.tier || performerConfig.tier) : 0;
+      if (window.gameState.player.cash < cost) {
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "error");
+        }
+        return;
+      }
+      window.gameState.player.cash = Math.max(0, window.gameState.player.cash - cost);
+      performerState.status = "in_progress";
+      performerState.currentStage = "intel";
+      performerState.stageStartDay = window.gameState.player.day;
+      performerState.stageCompleteDay = window.gameState.player.day +
+        (typeof getStageDurationDays === "function" ? getStageDurationDays() : 2);
+      performerState.stageReady = false;
+      performerState.attemptCount = Number.isFinite(performerState.attemptCount) ? performerState.attemptCount + 1 : 1;
+      performerState.lockReason = null;
+      uiState.takeoverModal = null;
+      clearModal();
+      const logEntry = buildTakeoverStoryLogEntry(
+        window.gameState,
+        performerConfig.name || "Performer",
+        "Intel started: " + (performerConfig.name || "Performer") + " (complete Day " + performerState.stageCompleteDay + ")",
+        "intel_start_day" + performerState.stageStartDay
+      );
+      if (logEntry) {
+        addStoryLogEntry(window.gameState, logEntry);
+      }
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "takeover-stage-prev" || action === "takeover-stage-next") {
+      const modalState = uiState.takeoverStageModal;
+      if (!modalState || !modalState.performerId) {
+        return;
+      }
+      const stage = modalState.stage;
+      const maxSlides = getTakeoverStageSlideLimit(stage);
+      const slides = typeof getTakeoverStageImagePaths === "function"
+        ? getTakeoverStageImagePaths(modalState.performerId, stage, maxSlides)
+        : [];
+      const maxIndex = Math.max(0, (slides.length ? slides.length : 1) - 1);
+      const delta = action === "takeover-stage-next" ? 1 : -1;
+      modalState.index = clamp((modalState.index || 0) + delta, 0, maxIndex);
+      showTakeoverStageModal(window.gameState);
+      return;
+    }
+
+    if (action === "takeover-stage-abort") {
+      const modalState = uiState.takeoverStageModal;
+      if (!modalState || !modalState.performerId) {
+        clearModal();
+        return;
+      }
+      const performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(modalState.performerId)
+        : null;
+      const performerState = typeof getTakeoverPerformerState === "function"
+        ? getTakeoverPerformerState(window.gameState, modalState.performerId)
+        : null;
+      if (!performerConfig || !performerState) {
+        clearModal();
+        return;
+      }
+      const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+      const repPenalty = takeoverConfig.repChanges && Number.isFinite(takeoverConfig.repChanges.failedAcquisition)
+        ? takeoverConfig.repChanges.failedAcquisition
+        : -15;
+      if (typeof applyTakeoverReputationDelta === "function") {
+        applyTakeoverReputationDelta(window.gameState, repPenalty);
+      }
+      performerState.status = "locked";
+      performerState.currentStage = null;
+      performerState.stageStartDay = null;
+      performerState.stageCompleteDay = null;
+      performerState.stageReady = false;
+      performerState.nextAvailableDay = window.gameState.player.day + 7;
+      performerState.lastOutcome = "aborted";
+      performerState.lockReason = "cooldown";
+      const logEntry = buildTakeoverStoryLogEntry(
+        window.gameState,
+        performerConfig.name || "Performer",
+        "Acquisition cooled off: " + (performerConfig.name || "Performer") +
+          " (available Day " + performerState.nextAvailableDay + ")",
+        "cooldown_day" + window.gameState.player.day
+      );
+      if (logEntry) {
+        addStoryLogEntry(window.gameState, logEntry);
+      }
+      uiState.takeoverStageModal = null;
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "takeover-stage-proceed") {
+      const modalState = uiState.takeoverStageModal;
+      if (!modalState || !modalState.performerId) {
+        clearModal();
+        return;
+      }
+      const performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(modalState.performerId)
+        : null;
+      const performerState = typeof getTakeoverPerformerState === "function"
+        ? getTakeoverPerformerState(window.gameState, modalState.performerId)
+        : null;
+      if (!performerConfig || !performerState) {
+        clearModal();
+        return;
+      }
+      const currentStage = performerState.currentStage;
+      if (currentStage === "debut") {
+        const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+        const repReward = takeoverConfig.repChanges && Number.isFinite(takeoverConfig.repChanges.successfulDebut)
+          ? takeoverConfig.repChanges.successfulDebut
+          : 3;
+        if (typeof applyTakeoverReputationDelta === "function") {
+          applyTakeoverReputationDelta(window.gameState, repReward);
+        }
+        const rosterSize = typeof getContractedRosterCount === "function"
+          ? getContractedRosterCount(window.gameState)
+          : (window.gameState.roster && Array.isArray(window.gameState.roster.performers)
+            ? window.gameState.roster.performers.length
+            : 0);
+        const maxRosterSize = typeof getRecruitmentMaxRosterSize === "function"
+          ? getRecruitmentMaxRosterSize(window.gameState)
+          : 0;
+        if (maxRosterSize > 0 && rosterSize >= maxRosterSize) {
+          if (typeof showToast === "function") {
+            showToast("Roster full. Free a slot before finalizing.", "error");
+          }
+          return;
+        }
+        if (!window.gameState.roster || !Array.isArray(window.gameState.roster.performers)) {
+          window.gameState.roster = { performers: [] };
+        }
+        const rosterEntry = {
+          id: performerConfig.id,
+          name: performerConfig.name,
+          type: "act2",
+          starPower: Number.isFinite(performerConfig.starPower) ? performerConfig.starPower : CONFIG.performers.default_star_power,
+          starPowerShoots: 0,
+          portraitPath: performerConfig.portraitPath || (CONFIG.takeover && CONFIG.takeover.placeholderPortraitPath) || "",
+          fatigue: 0,
+          loyalty: CONFIG.performers.starting_loyalty
+        };
+        if (typeof isPerformerInRoster === "function" && isPerformerInRoster(window.gameState, rosterEntry.id)) {
+          if (typeof showToast === "function") {
+            showToast("Performer already on roster.", "info");
+          }
+          return;
+        }
+        window.gameState.roster.performers.push(rosterEntry);
+        if (typeof ensurePerformerManagementForId === "function") {
+          ensurePerformerManagementForId(window.gameState, rosterEntry);
+        }
+        performerState.status = "acquired";
+        performerState.currentStage = null;
+        performerState.stageStartDay = null;
+        performerState.stageCompleteDay = null;
+        performerState.stageReady = false;
+        performerState.lastOutcome = "completed";
+        performerState.lockReason = null;
+        if (window.gameState.takeover && window.gameState.takeover.stats) {
+          const stats = window.gameState.takeover.stats;
+          stats.performersAcquired = Number.isFinite(stats.performersAcquired) ? stats.performersAcquired + 1 : 1;
+        }
+        const logEntry = buildTakeoverStoryLogEntry(
+          window.gameState,
+          performerConfig.name || "Performer",
+          "Acquired: " + (performerConfig.name || "Performer") + " (now on your roster)",
+          "acquired_day" + window.gameState.player.day
+        );
+        if (logEntry) {
+          addStoryLogEntry(window.gameState, logEntry);
+        }
+        uiState.takeoverStageModal = null;
+        clearModal();
+        saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        renderApp(window.gameState);
+        return;
+      }
+      const nextStage = getTakeoverStageNext(currentStage);
+      if (!nextStage) {
+        return;
+      }
+      const cost = typeof getStageCost === "function" ? getStageCost(nextStage, performerState.tier || performerConfig.tier) : 0;
+      if (window.gameState.player.cash < cost) {
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "error");
+        }
+        return;
+      }
+      window.gameState.player.cash = Math.max(0, window.gameState.player.cash - cost);
+      if (nextStage === "turn") {
+        const repDelta = getTakeoverWeaknessRepDelta(performerState.weaknessType || performerConfig.weaknessType);
+        if (typeof applyTakeoverReputationDelta === "function") {
+          applyTakeoverReputationDelta(window.gameState, repDelta);
+        }
+      }
+      performerState.status = "in_progress";
+      performerState.currentStage = nextStage;
+      performerState.stageStartDay = window.gameState.player.day;
+      performerState.stageCompleteDay = window.gameState.player.day +
+        (typeof getStageDurationDays === "function" ? getStageDurationDays() : 2);
+      performerState.stageReady = false;
+      performerState.lockReason = null;
+      const logEntry = buildTakeoverStoryLogEntry(
+        window.gameState,
+        performerConfig.name || "Performer",
+        getTakeoverStageLabel(nextStage) + " started: " + (performerConfig.name || "Performer") +
+          " (complete Day " + performerState.stageCompleteDay + ")",
+        nextStage + "_start_day" + performerState.stageStartDay
+      );
+      if (logEntry) {
+        addStoryLogEntry(window.gameState, logEntry);
+      }
+      uiState.takeoverStageModal = null;
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "booking-slideshow-prev" || action === "booking-slideshow-next") {
       const entry = getLatestContentEntry(window.gameState);
       if (!entry) {
@@ -1078,6 +1524,59 @@ function setupEventHandlers() {
       setIndustrySelectedStudioId(studioId);
       showScreen("screen-industry-studio");
       renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-begin-acquisition") {
+      event.preventDefault();
+      event.stopPropagation();
+      const performerId = actionId;
+      const performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(performerId)
+        : null;
+      const performerState = typeof getTakeoverPerformerState === "function"
+        ? getTakeoverPerformerState(window.gameState, performerId)
+        : null;
+      if (!performerConfig || !performerState) {
+        return;
+      }
+      const tier = performerState.tier || performerConfig.tier;
+      const cost = typeof getStageCost === "function" ? getStageCost("intel", tier) : 0;
+      const duration = typeof getStageDurationDays === "function" ? getStageDurationDays() : 2;
+      const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+      const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+      const portraitPath = performerConfig.portraitPath || placeholderPath;
+      uiState.takeoverModal = { performerId: performerId };
+      showDecisionModal({
+        title: "INTEL: " + (performerConfig.name || "Performer"),
+        messageHtml: "Dig into her background. Find the angle.<br><br>" +
+          "<strong>Cost:</strong> " + formatCurrency(cost) + "<br>" +
+          "<strong>Duration:</strong> " + duration + " days",
+        imagePath: portraitPath,
+        primaryLabel: "Pay " + formatCurrency(cost) + " — Begin Intel",
+        primaryAction: "takeover-confirm-intel",
+        secondaryLabel: "Cancel",
+        secondaryAction: "dismiss-modal"
+      });
+      return;
+    }
+
+    if (action === "industry-resolve-stage") {
+      event.preventDefault();
+      event.stopPropagation();
+      const performerId = actionId;
+      const performerState = typeof getTakeoverPerformerState === "function"
+        ? getTakeoverPerformerState(window.gameState, performerId)
+        : null;
+      if (!performerState || performerState.status !== "in_progress" || !performerState.stageReady) {
+        return;
+      }
+      uiState.takeoverStageModal = {
+        performerId: performerId,
+        stage: performerState.currentStage,
+        index: 0
+      };
+      showTakeoverStageModal(window.gameState);
       return;
     }
 

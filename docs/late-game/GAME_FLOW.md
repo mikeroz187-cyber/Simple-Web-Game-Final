@@ -248,11 +248,11 @@ Player clicks through 2 approach images with narrative text.
 
 **On stage complete:**
 
-8-image slideshow with narrative progression:
+5-image slideshow with narrative progression (placeholder content, capped at 5 for now):
 
 ```
-+------------------------------------------+
-| THE TURN: Bianca Morel           [3/8]   |
+-------------------------------------------+
+| THE TURN: Bianca Morel           [3/5]   |
 +------------------------------------------+
 | [Turn Image 3 - Full Width]              |
 |                                          |
@@ -264,17 +264,17 @@ Player clicks through 2 approach images with narrative text.
 |                                          |
 | She hesitates. Then she doesn't.         |
 +------------------------------------------+
-| [● ● ● ○ ○ ○ ○ ○]              [NEXT]   |
+| [● ● ● ○ ○]                    [NEXT]   |
 +------------------------------------------+
 ```
 
-Player clicks through all 8 images. Final screen:
+Player clicks through all 5 images. Final screen:
 
 ```
 +------------------------------------------+
 | THE TURN: COMPLETE                       |
 +------------------------------------------+
-| [Turn Image 8]                           |
+| [Turn Image 5]                           |
 |                                          |
 | She's yours now.                         |
 |                                          |

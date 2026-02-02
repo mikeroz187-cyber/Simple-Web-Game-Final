@@ -11,6 +11,15 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Implemented the Industry Takeover Phase 4 acquisition loop with stage tracking, reputation clamps, and day-advance progression for A3 studios.
+  - Why: Enable the full intel → approach → turn → debut pipeline with safe takeover-specific reputation handling.
+  - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/systems/booking.js.
+- What: Activated Studio Detail acquisition CTAs, resolve-stage modals, and Industry Map acquisition summaries with boss vulnerability indicators.
+  - Why: Surface the playable takeover flow and progress signals in the existing Industry Map and Studio Detail screens.
+  - Files touched: src/ui/render.js, src/ui/events.js.
+- What: Updated takeover documentation and checklists to reflect Phase 4 completion, schema changes, and slideshow caps.
+  - Why: Keep late-game docs aligned with the shipped Phase 4 mechanics and data structures.
+  - Files touched: docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/GAME_FLOW.md, docs/late-game/DATA_STRUCTURE.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Industry Takeover Studio Detail screen with boss card, performer roster statuses, and navigation from the Industry Map.
   - Why: Deliver Phase 3 visibility into each A3 studio without enabling acquisition mechanics yet.
   - Files touched: index.html, src/ui/render.js, src/ui/events.js, styles.css, docs/late-game/IMPLEMENTATION_PLAN.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

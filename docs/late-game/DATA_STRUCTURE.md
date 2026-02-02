@@ -267,6 +267,8 @@ CONFIG.takeover.bosses = {
 
 ### 1.4 Performers Config
 
+Each takeover performer entry includes a `tier` string (`tier1`/`tier2`/`tier3`), a `weaknessType`, and a one-line `archetypeLine` used in the Studio Detail roster UI.
+
 ```javascript
 CONFIG.takeover.performers = {
   // ═══════════════════════════════════════════
@@ -277,55 +279,55 @@ CONFIG.takeover.performers = {
     id: "takeover_mika_sato",
     name: "Mika Sato",
     studioId: "neon_cherry",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "secret",
+    weaknessType: "secret",
     description: "The 'pure' idol with a not-so-pure side hustle. Moonlights at a hostess club.",
-    portraitPath: "assets/images/takeover/neon_cherry/mika_sato/portrait.png"
+    portraitPath: "assets/images/takeover/neon_cherry/takeover_mika_sato/portrait.png"
   },
 
   takeover_pepper_chu: {
     id: "takeover_pepper_chu",
     name: "Pepper Chu",
     studioId: "neon_cherry",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "ambition",
+    weaknessType: "ambition",
     description: "Loud, hungry, wants to be the STAR, not a backup dancer in elf ears.",
-    portraitPath: "assets/images/takeover/neon_cherry/pepper_chu/portrait.png"
+    portraitPath: "assets/images/takeover/neon_cherry/takeover_pepper_chu/portrait.png"
   },
 
   takeover_kira_kimura: {
     id: "takeover_kira_kimura",
     name: "Kira Kimura",
     studioId: "neon_cherry",
-    tier: 2,
+    tier: "tier2",
     starPower: 3,
-    weakness: "neglect",
+    weaknessType: "neglect",
     description: "Talented but overlooked. Yuki forgot her birthday. She noticed.",
-    portraitPath: "assets/images/takeover/neon_cherry/kira_kimura/portrait.png"
+    portraitPath: "assets/images/takeover/neon_cherry/takeover_kira_kimura/portrait.png"
   },
 
   takeover_suki_avalon: {
     id: "takeover_suki_avalon",
     name: "Suki Avalon",
     studioId: "neon_cherry",
-    tier: 2,
+    tier: "tier2",
     starPower: 3,
-    weakness: "debt",
+    weaknessType: "debt",
     description: "Gambling problem. Cute face, ugly spreadsheet. Owes the wrong people.",
-    portraitPath: "assets/images/takeover/neon_cherry/suki_avalon/portrait.png"
+    portraitPath: "assets/images/takeover/neon_cherry/takeover_suki_avalon/portrait.png"
   },
 
   takeover_luna_lux: {
     id: "takeover_luna_lux",
     name: "Luna Lux",
     studioId: "neon_cherry",
-    tier: 3,
+    tier: "tier3",
     starPower: 4,
-    weakness: "pride",
+    weaknessType: "pride",
     description: "The veteran of Neon Cherry. Thinks she's the best. Wants to prove it.",
-    portraitPath: "assets/images/takeover/neon_cherry/luna_lux/portrait.png"
+    portraitPath: "assets/images/takeover/neon_cherry/takeover_luna_lux/portrait.png"
   },
 
   // ═══════════════════════════════════════════
@@ -336,55 +338,55 @@ CONFIG.takeover.performers = {
     id: "takeover_rosa_vega",
     name: "Rosa Vega",
     studioId: "honey_trap",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "ambition",
+    weaknessType: "ambition",
     description: "Carmen's 'niece' (not really). Wants OUT of the family shadow.",
-    portraitPath: "assets/images/takeover/honey_trap/rosa_vega/portrait.png"
+    portraitPath: "assets/images/takeover/honey_trap/takeover_rosa_vega/portrait.png"
   },
 
   takeover_daniela_cruz: {
     id: "takeover_daniela_cruz",
     name: "Daniela Cruz",
     studioId: "honey_trap",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "neglect",
+    weaknessType: "neglect",
     description: "Hard worker, never gets the spotlight. Carmen plays favorites—not her.",
-    portraitPath: "assets/images/takeover/honey_trap/daniela_cruz/portrait.png"
+    portraitPath: "assets/images/takeover/honey_trap/takeover_daniela_cruz/portrait.png"
   },
 
   takeover_valentina_fuentes: {
     id: "takeover_valentina_fuentes",
     name: "Valentina Fuentes",
     studioId: "honey_trap",
-    tier: 2,
+    tier: "tier2",
     starPower: 3,
-    weakness: "debt",
+    weaknessType: "debt",
     description: "Bad boyfriend left her with bad credit. Carmen doesn't know how bad.",
-    portraitPath: "assets/images/takeover/honey_trap/valentina_fuentes/portrait.png"
+    portraitPath: "assets/images/takeover/honey_trap/takeover_valentina_fuentes/portrait.png"
   },
 
   takeover_marisol_delgado: {
     id: "takeover_marisol_delgado",
     name: "Marisol Delgado",
     studioId: "honey_trap",
-    tier: 3,
+    tier: "tier3",
     starPower: 4,
-    weakness: "pride",
+    weaknessType: "pride",
     description: "The golden child. Carmen's favorite. Thinks she's irreplaceable.",
-    portraitPath: "assets/images/takeover/honey_trap/marisol_delgado/portrait.png"
+    portraitPath: "assets/images/takeover/honey_trap/takeover_marisol_delgado/portrait.png"
   },
 
   takeover_sofia_reyes: {
     id: "takeover_sofia_reyes",
     name: "Sofia Reyes",
     studioId: "honey_trap",
-    tier: 3,
+    tier: "tier3",
     starPower: 4,
-    weakness: "secret",
+    weaknessType: "secret",
     description: "Carmen's actual niece. Sweet girl. Except for those photos that would DESTROY Carmen.",
-    portraitPath: "assets/images/takeover/honey_trap/sofia_reyes/portrait.png"
+    portraitPath: "assets/images/takeover/honey_trap/takeover_sofia_reyes/portrait.png"
   },
 
   // ═══════════════════════════════════════════
@@ -395,55 +397,55 @@ CONFIG.takeover.performers = {
     id: "takeover_raven_darke",
     name: "Raven Darke",
     studioId: "midnight_media",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "ambition",
+    weaknessType: "ambition",
     description: "Too talented for this 'collective' bullshit. Wants mainstream money.",
-    portraitPath: "assets/images/takeover/midnight_media/raven_darke/portrait.png"
+    portraitPath: "assets/images/takeover/midnight_media/takeover_raven_darke/portrait.png"
   },
 
   takeover_zoe_vicious: {
     id: "takeover_zoe_vicious",
     name: "Zoe Vicious",
     studioId: "midnight_media",
-    tier: 1,
+    tier: "tier1",
     starPower: 2,
-    weakness: "neglect",
+    weaknessType: "neglect",
     description: "Used to be Sasha's favorite. Then Sasha found a new favorite.",
-    portraitPath: "assets/images/takeover/midnight_media/zoe_vicious/portrait.png"
+    portraitPath: "assets/images/takeover/midnight_media/takeover_zoe_vicious/portrait.png"
   },
 
   takeover_jade_holloway: {
     id: "takeover_jade_holloway",
     name: "Jade Holloway",
     studioId: "midnight_media",
-    tier: 2,
+    tier: "tier2",
     starPower: 3,
-    weakness: "debt",
+    weaknessType: "debt",
     description: "Studio loans she didn't understand. Sasha owns her contract. You could own her instead.",
-    portraitPath: "assets/images/takeover/midnight_media/jade_holloway/portrait.png"
+    portraitPath: "assets/images/takeover/midnight_media/takeover_jade_holloway/portrait.png"
   },
 
   takeover_elektra_wylde: {
     id: "takeover_elektra_wylde",
     name: "Elektra Wylde",
     studioId: "midnight_media",
-    tier: 2,
+    tier: "tier2",
     starPower: 3,
-    weakness: "secret",
+    weaknessType: "secret",
     description: "Straight-edge 'no drugs' image. Except for the pills she needs more and more.",
-    portraitPath: "assets/images/takeover/midnight_media/elektra_wylde/portrait.png"
+    portraitPath: "assets/images/takeover/midnight_media/takeover_elektra_wylde/portrait.png"
   },
 
   takeover_vex_morrow: {
     id: "takeover_vex_morrow",
     name: "Vex Morrow",
     studioId: "midnight_media",
-    tier: 3,
+    tier: "tier3",
     starPower: 4,
-    weakness: "pride",
+    weaknessType: "pride",
     description: "Sasha's current #1. True believer. Would do ANYTHING to prove her devotion.",
-    portraitPath: "assets/images/takeover/midnight_media/vex_morrow/portrait.png"
+    portraitPath: "assets/images/takeover/midnight_media/takeover_vex_morrow/portrait.png"
   },
 
   // ═══════════════════════════════════════════
@@ -454,55 +456,55 @@ CONFIG.takeover.performers = {
     id: "takeover_bianca_morel",
     name: "Bianca Morel",
     studioId: "velvet_lens",
-    tier: 1,
+    tier: "tier1",
     starPower: 3,
-    weakness: "ambition",
+    weaknessType: "ambition",
     description: "Wants to be Dominique. Literally. Would do anything to climb.",
-    portraitPath: "assets/images/takeover/velvet_lens/bianca_morel/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_lens/takeover_bianca_morel/portrait.png"
   },
 
   takeover_chanel_dubois: {
     id: "takeover_chanel_dubois",
     name: "Chanel DuBois",
     studioId: "velvet_lens",
-    tier: 1,
+    tier: "tier1",
     starPower: 3,
-    weakness: "neglect",
+    weaknessType: "neglect",
     description: "The 'old face' being phased out for newer models. Still has years left. Pissed about it.",
-    portraitPath: "assets/images/takeover/velvet_lens/chanel_dubois/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_lens/takeover_chanel_dubois/portrait.png"
   },
 
   takeover_natasha_kaine: {
     id: "takeover_natasha_kaine",
     name: "Natasha Kaine",
     studioId: "velvet_lens",
-    tier: 2,
+    tier: "tier2",
     starPower: 4,
-    weakness: "debt",
+    weaknessType: "debt",
     description: "Rich girl cosplay—actually broke. Keeps up appearances on credit cards.",
-    portraitPath: "assets/images/takeover/velvet_lens/natasha_kaine/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_lens/takeover_natasha_kaine/portrait.png"
   },
 
   takeover_serena_lake: {
     id: "takeover_serena_lake",
     name: "Serena Lake",
     studioId: "velvet_lens",
-    tier: 3,
+    tier: "tier3",
     starPower: 4,
-    weakness: "secret",
+    weaknessType: "secret",
     description: "She's the one sleeping with Dominique's husband. She doesn't know you know. Yet.",
-    portraitPath: "assets/images/takeover/velvet_lens/serena_lake/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_lens/takeover_serena_lake/portrait.png"
   },
 
   takeover_isabelle_fontaine: {
     id: "takeover_isabelle_fontaine",
     name: "Isabelle Fontaine",
     studioId: "velvet_lens",
-    tier: 3,
+    tier: "tier3",
     starPower: 5,
-    weakness: "pride",
+    weaknessType: "pride",
     description: "THE star. Magazine covers, brand deals. Terrified someone will realize she's not as smart as she looks.",
-    portraitPath: "assets/images/takeover/velvet_lens/isabelle_fontaine/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_lens/takeover_isabelle_fontaine/portrait.png"
   },
 
   // ═══════════════════════════════════════════
@@ -513,55 +515,55 @@ CONFIG.takeover.performers = {
     id: "takeover_scarlet_obrien",
     name: "Scarlet O'Brien",
     studioId: "black_lace",
-    tier: 1,
+    tier: "tier1",
     starPower: 3,
-    weakness: "ambition",
+    weaknessType: "ambition",
     description: "Wants to be the next Victoria. Willing to go through YOU to get there.",
-    portraitPath: "assets/images/takeover/black_lace/scarlet_obrien/portrait.png"
+    portraitPath: "assets/images/takeover/black_lace/takeover_scarlet_obrien/portrait.png"
   },
 
   takeover_mistress_ivy: {
     id: "takeover_mistress_ivy",
     name: "Mistress Ivy",
     studioId: "black_lace",
-    tier: 1,
+    tier: "tier1",
     starPower: 3,
-    weakness: "neglect",
+    weaknessType: "neglect",
     description: "Senior performer. Victoria's taking her for granted. She's noticed.",
-    portraitPath: "assets/images/takeover/black_lace/mistress_ivy/portrait.png"
+    portraitPath: "assets/images/takeover/black_lace/takeover_mistress_ivy/portrait.png"
   },
 
   takeover_delilah_thorn: {
     id: "takeover_delilah_thorn",
     name: "Delilah Thorn",
     studioId: "black_lace",
-    tier: 2,
+    tier: "tier2",
     starPower: 4,
-    weakness: "debt",
+    weaknessType: "debt",
     description: "Expensive tastes. Borrowed from Victoria personally. Now she's trapped.",
-    portraitPath: "assets/images/takeover/black_lace/delilah_thorn/portrait.png"
+    portraitPath: "assets/images/takeover/black_lace/takeover_delilah_thorn/portrait.png"
   },
 
   takeover_anastasia_devereux: {
     id: "takeover_anastasia_devereux",
     name: "Anastasia Devereux",
     studioId: "black_lace",
-    tier: 2,
+    tier: "tier2",
     starPower: 4,
-    weakness: "secret",
+    weaknessType: "secret",
     description: "Vanilla. Completely vanilla in her personal life. The 'hardcore domme' watches rom-coms.",
-    portraitPath: "assets/images/takeover/black_lace/anastasia_devereux/portrait.png"
+    portraitPath: "assets/images/takeover/black_lace/takeover_anastasia_devereux/portrait.png"
   },
 
   takeover_lilith_kane: {
     id: "takeover_lilith_kane",
     name: "Lilith Kane",
     studioId: "black_lace",
-    tier: 3,
+    tier: "tier3",
     starPower: 5,
-    weakness: "pride",
+    weaknessType: "pride",
     description: "Victoria's heir apparent. Would kneel for Victoria forever—but she'll never be #1 while Victoria's around.",
-    portraitPath: "assets/images/takeover/black_lace/lilith_kane/portrait.png"
+    portraitPath: "assets/images/takeover/black_lace/takeover_lilith_kane/portrait.png"
   }
 };
 
@@ -605,17 +607,21 @@ gameState.takeover = {
 
   // Performer acquisition tracking
   performers: {
-    // Per-performer state (only populated when acquisition begins)
+    // Per-performer state (backfilled on load)
     // Example:
     // "takeover_mika_sato": {
-    //   status: "in_progress",  // "available" | "in_progress" | "acquired" | "lost"
-    //   currentStage: 2,        // 1=Intel, 2=Approach, 3=Turn, 4=Debut
+    //   id: "takeover_mika_sato",
+    //   studioId: "neon_cherry",
+    //   status: "in_progress",   // "locked" | "available" | "in_progress" | "acquired" | "lost"
+    //   tier: "tier1",
+    //   weaknessType: "secret",
+    //   currentStage: "intel",   // "intel" | "approach" | "turn" | "debut"
     //   stageStartDay: 185,
     //   stageCompleteDay: 187,
-    //   acquiredDay: null,
-    //   lostDay: null,
-    //   lostTo: null,           // studioId if poached
-    //   isReacquisition: false
+    //   stageReady: false,
+    //   attemptCount: 1,
+    //   nextAvailableDay: 0,
+    //   lastOutcome: null        // "aborted" | "failed" | "completed"
     // }
   },
 
@@ -650,6 +656,7 @@ gameState.takeover = {
     performersAcquired: 0,
     performersLost: 0,
     performersReacquired: 0,
+    studiosDefeated: 0,
     bossesDefeated: 0,
     poachAttemptsDefended: 0,
     poachAttemptsLost: 0
@@ -689,6 +696,7 @@ function getDefaultTakeoverState() {
       performersAcquired: 0,
       performersLost: 0,
       performersReacquired: 0,
+      studiosDefeated: 0,
       bossesDefeated: 0,
       poachAttemptsDefended: 0,
       poachAttemptsLost: 0
@@ -706,14 +714,12 @@ When a performer is acquired, they are added to `gameState.roster.performers`:
 {
   id: "takeover_mika_sato",
   name: "Mika Sato",
-  type: "acquired",           // New type for takeover performers
-  sourceStudio: "neon_cherry",
+  type: "act2",               // Uses standard contract rules
   starPower: 2,
   starPowerShoots: 0,
-  portraitPath: "assets/images/takeover/neon_cherry/mika_sato/portrait.png",
+  portraitPath: "assets/images/takeover/neon_cherry/takeover_mika_sato/portrait.png",
   fatigue: 0,
-  loyalty: 50,                // Starts at 50
-  acquiredDay: 195
+  loyalty: 50                 // Starts at 50
 }
 ```
 
@@ -724,6 +730,9 @@ When a performer is acquired, they are added to `gameState.roster.performers`:
 ### 3.1 Acquisition Content
 
 Each performer has narrative content for their acquisition arc. Store in `CONFIG.takeover.content.performers`:
+
+Stage images are resolved by convention using the performer and studio IDs:
+`assets/images/takeover/<studioId>/<performerId>/<stage>_<n>.png` where `n=1..5` (UI caps at 5 and falls back to the placeholder portrait when missing).
 
 ```javascript
 CONFIG.takeover.content = {

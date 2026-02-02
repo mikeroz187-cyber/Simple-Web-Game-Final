@@ -157,20 +157,24 @@ Deliver the Studio Detail screen reachable from the Industry Map, showing boss i
 
 ---
 
-## Phase 4: Acquisition Stages (Intel/Approach/Turn/Debut)
+## Phase 4: Acquisition Stages (Intel/Approach/Turn/Debut) — ✅ Completed
 
 ### Objective
 Implement the acquisition stage flow (intel → approach → turn → debut) and enable Studio Detail CTAs.
 
-### Tasks (Planned)
-- [ ] Add acquisition stage state per performer (save-safe).
-- [ ] Enable Begin Acquisition CTA with rep/cash gating and stage cost copy.
-- [ ] Surface stage progress in the Studio Detail roster.
+### Tasks (Completed)
+- [x] Add acquisition stage state per performer with stage readiness and cooldown tracking (save-safe).
+- [x] Enable Begin Acquisition CTA with rep/cash gating and stage cost copy.
+- [x] Surface stage progress and Resolve Stage CTA in the Studio Detail roster.
+- [x] Apply tier-scaled costs, weakness-based rep penalties on Turn start, and debut rep rewards (+3, capped at 100).
+- [x] Support abort outcomes with -15 rep penalty (takeover floor 10) and 7-day cooldown.
+- [x] Add stage slideshows capped at max 5 images via convention-based paths with safe fallbacks.
+- [x] Add acquired performers to the normal roster with standard contract + loyalty fields.
 
 ### Definition of Done
-- [ ] Performers advance through intel/approach/turn/debut stages without errors.
-- [ ] Studio Detail CTAs are enabled when requirements are met.
-- [ ] Boss confrontation remains locked until Phase 5.
+- [x] Performers advance through intel/approach/turn/debut stages without errors.
+- [x] Studio Detail CTAs are enabled when requirements are met.
+- [x] Boss confrontation remains locked until Phase 5.
 
 ---
 

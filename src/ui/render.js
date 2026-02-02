@@ -315,15 +315,38 @@ function renderIndustryMap(gameState) {
   var takeoverState = gameState && gameState.takeover && typeof gameState.takeover === "object"
     ? gameState.takeover
     : {};
+  if (typeof recomputeTakeoverAvailability === "function") {
+    recomputeTakeoverAvailability(gameState);
+  }
   var stats = takeoverState.stats && typeof takeoverState.stats === "object" ? takeoverState.stats : {};
   var performersAcquired = Number.isFinite(stats.performersAcquired) ? stats.performersAcquired : 0;
   var bossesDefeated = Number.isFinite(stats.bossesDefeated) ? stats.bossesDefeated : 0;
+  var performersByStudio = {};
 
   var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice(0, 3) : [];
   var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
     ? takeoverConfig.studios
     : {};
+  var performerState = takeoverState.performers && typeof takeoverState.performers === "object"
+    ? takeoverState.performers
+    : {};
+  var calculatedAcquired = 0;
+  studioOrder.forEach(function (studioId) {
+    var studioConfig = studiosConfig[studioId] || {};
+    var performerIds = Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds : [];
+    var acquiredCount = performerIds.filter(function (performerId) {
+      return performerState[performerId] && performerState[performerId].status === "acquired";
+    }).length;
+    performersByStudio[studioId] = acquiredCount;
+    calculatedAcquired += acquiredCount;
+  });
+  if (calculatedAcquired > performersAcquired) {
+    performersAcquired = calculatedAcquired;
+  }
   var placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+  var bossVulnerableThreshold = Number.isFinite(takeoverConfig.performersToVulnerableBoss)
+    ? takeoverConfig.performersToVulnerableBoss
+    : 3;
 
   var summaryHtml = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Overview</h3>" +
@@ -355,11 +378,19 @@ function renderIndustryMap(gameState) {
       ? "<div class=\"conquest-detail__portrait\" style=\"margin-bottom: var(--gap-sm);\"><img src=\"" + imagePath +
         "\" alt=\"\" /></div>"
       : "";
+    var acquiredCount = performersByStudio[studioId] || 0;
+    var acquiredLabel = acquiredCount + "/" + (Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds.length : 0) + " acquired";
+    var bossVulnerable = acquiredCount >= bossVulnerableThreshold;
+    var bossVulnerableHtml = bossVulnerable
+      ? "<div class=\"pill pill--warning\" style=\"margin-bottom: var(--gap-sm);\">Boss: VULNERABLE</div>"
+      : "";
     return "<div class=\"shop-card\">" +
       imageHtml +
       "<div class=\"shop-card__title\">" + title + "</div>" +
       "<div class=\"shop-card__description\">" + tagline + "</div>" +
       "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">" + statusText + "</div>" +
+      "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">" + acquiredLabel + "</div>" +
+      bossVulnerableHtml +
       "<button class=\"button primary\" data-action=\"industry-view-studio\" data-studio-id=\"" + studioId + "\">View Studio</button>" +
       "</div>";
   }).join("");
@@ -430,6 +461,9 @@ function renderIndustryStudio(gameState) {
     : {};
   var studioConfig = studiosConfig[selectedStudioId] || {};
   var takeoverState = gameState && gameState.takeover ? gameState.takeover : {};
+  if (typeof recomputeTakeoverAvailability === "function") {
+    recomputeTakeoverAvailability(gameState);
+  }
   var studioState = takeoverState.studios && takeoverState.studios[selectedStudioId]
     ? takeoverState.studios[selectedStudioId]
     : {};
@@ -464,6 +498,10 @@ function renderIndustryStudio(gameState) {
   var performerState = takeoverState.performers && typeof takeoverState.performers === "object"
     ? takeoverState.performers
     : {};
+  var currentDay = gameState && gameState.player ? gameState.player.day : 0;
+  var currentRep = gameState && gameState.player && Number.isFinite(gameState.player.reputation)
+    ? gameState.player.reputation
+    : 0;
 
   var acquiredCount = performerIds.filter(function (performerId) {
     var performer = performerState[performerId];
@@ -502,27 +540,83 @@ function renderIndustryStudio(gameState) {
     return "pill pill--muted";
   }
 
+  function getStageLabel(stageId) {
+    if (stageId === "intel") {
+      return "Intel";
+    }
+    if (stageId === "approach") {
+      return "Approach";
+    }
+    if (stageId === "turn") {
+      return "Turn";
+    }
+    if (stageId === "debut") {
+      return "Debut";
+    }
+    return "Stage";
+  }
+
   var performersHtml = performerIds.map(function (performerId) {
     var performer = performerConfig[performerId] || {};
     var performerStatus = performerState[performerId] && performerState[performerId].status
       ? performerState[performerId].status
       : "locked";
+    var performerData = performerState[performerId] || {};
     var performerName = performer.name || "Unknown Performer";
-    var performerLine = performer.description || "No intel yet.";
+    var performerLine = performer.archetypeLine || performer.description || "No intel yet.";
     var performerPortrait = performer.portraitPath || placeholderPath;
     var performerPortraitAttr = performerPortrait ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "";
     var performerPortraitHtml = performerPortrait
       ? "<img src=\"" + performerPortrait + "\" alt=\"" + performerName + "\" class=\"industry-portrait\"" + performerPortraitAttr + " />"
       : "";
+    var actionLabel = "Locked";
+    var actionDisabled = true;
+    var actionAttr = "";
+    var lockHtml = "";
+    if (performerStatus === "available") {
+      actionLabel = "Begin Acquisition";
+      actionDisabled = false;
+      actionAttr = " data-action=\"industry-begin-acquisition\" data-id=\"" + performerId + "\" data-origin=\"" + selectedStudioId + "\"";
+    } else if (performerStatus === "in_progress") {
+      var stageLabel = getStageLabel(performerData.currentStage);
+      if (performerData.stageReady) {
+        actionLabel = "Resolve: " + stageLabel;
+        actionDisabled = false;
+        actionAttr = " data-action=\"industry-resolve-stage\" data-id=\"" + performerId + "\" data-origin=\"" + selectedStudioId + "\"";
+      } else {
+        var daysRemaining = Number.isFinite(performerData.stageCompleteDay)
+          ? Math.max(0, performerData.stageCompleteDay - currentDay)
+          : 0;
+        actionLabel = "In Progress: " + stageLabel + " (" + daysRemaining + "d)";
+        actionDisabled = true;
+      }
+    } else if (performerStatus === "acquired") {
+      actionLabel = "Go to Roster";
+      actionDisabled = false;
+      actionAttr = " data-action=\"nav-roster\"";
+    } else if (performerStatus === "locked") {
+      if (performerData.lockReason === "cooldown" && Number.isFinite(performerData.nextAvailableDay)) {
+        lockHtml = "<div class=\"helper-text\">Cooling off — available Day " + performerData.nextAvailableDay + "</div>";
+      } else {
+        var repRequirement = typeof getPerformerRepRequirement === "function"
+          ? getPerformerRepRequirement(performerData.tier || performer.tier)
+          : 0;
+        if (currentRep < repRequirement) {
+          lockHtml = "<div class=\"helper-text\">Locked — requires Reputation " + repRequirement +
+            " (you: " + currentRep + ")</div>";
+        }
+      }
+    }
     return "<div class=\"industry-performer-card\">" +
       "<div class=\"industry-performer__portrait\">" + performerPortraitHtml + "</div>" +
       "<div class=\"industry-performer__details\">" +
       "<div class=\"industry-performer__name\">" + performerName + "</div>" +
       "<div class=\"industry-performer__line\">" + performerLine + "</div>" +
       "<div class=\"" + getPerformerStatusClass(performerStatus) + "\">" + getPerformerStatusLabel(performerStatus) + "</div>" +
+      lockHtml +
       "</div>" +
       "<div class=\"industry-performer__actions\">" +
-      "<button class=\"button primary\" disabled>Begin Acquisition (Next)</button>" +
+      "<button class=\"button primary\"" + (actionDisabled ? " disabled" : "") + actionAttr + ">" + actionLabel + "</button>" +
       "</div>" +
       "</div>";
   }).join("");

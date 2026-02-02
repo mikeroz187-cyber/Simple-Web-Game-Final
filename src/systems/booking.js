@@ -46,6 +46,12 @@ function advanceDay(gameState) {
     ? processCollabWeekOnDayEnd(gameState, previousDay)
     : [];
   const staffingEvents = getStaffingPushDayAdvanceEvents(gameState);
+  if (typeof takeoverOnDayAdvanced === "function") {
+    takeoverOnDayAdvanced(gameState);
+  }
+  if (typeof clampReputationGlobal === "function") {
+    clampReputationGlobal(gameState);
+  }
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
   const recruitEvents = Array.isArray(recruitResult) ? recruitResult : [];
