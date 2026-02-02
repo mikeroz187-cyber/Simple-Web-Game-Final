@@ -600,6 +600,73 @@ function renderHub(gameState) {
   var managerButton = !managerHired && managerUnlocked && managerConfig ?
     "<button class=\"button primary\" data-action=\"hire-manager\" style=\"margin-top:6px;padding:4px 8px;font-size:10px;min-height:auto;\">Hire</button>" : "";
 
+  var studioConfig = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : null;
+  var studioState = player.upgrades && player.upgrades.studioUpgrade ? player.upgrades.studioUpgrade : null;
+  var leasePurchased = player.upgrades && player.upgrades.lease && player.upgrades.lease.purchased;
+  var studioEligible = Boolean(
+    studioConfig &&
+    studioConfig.enabled &&
+    Number.isFinite(studioConfig.triggerDay) &&
+    day >= studioConfig.triggerDay &&
+    (!studioConfig.requiresLeaseUpgrade || leasePurchased)
+  );
+  var studioCardHtml = "";
+  if (studioEligible && studioState) {
+    var studioUi = studioConfig.ui || {};
+    var studioTitle = studioUi.hubTitle || "Studio Upgrade";
+    var studioSubtitle = studioUi.hubSubtitleWindow || "";
+    var studioValue = "Pending";
+    var studioBadge = "";
+    var studioButton = "";
+    var offerExpiresDay = Number.isFinite(studioState.offerExpiresDay) ? studioState.offerExpiresDay : null;
+    var offerActive = studioState.decision === "none" && Number.isFinite(offerExpiresDay) && day <= offerExpiresDay;
+    var financePlan = studioState.financePlan || {};
+    var financedActive = Boolean(financePlan.active && financePlan.daysRemaining > 0);
+    var lateAvailable = studioState.decision === "declined" || studioState.decision === "missed";
+    var latePrice = Number.isFinite(studioConfig.latePrice) ? studioConfig.latePrice : 0;
+    var cashPrice = Number.isFinite(studioConfig.cashPrice) ? studioConfig.cashPrice : 0;
+    if (offerActive) {
+      var daysLeft = Math.max(0, offerExpiresDay - day);
+      studioValue = "Lock it in: " + daysLeft + " days left";
+      studioSubtitle = studioUi.hubSubtitleWindow || studioSubtitle;
+      studioBadge = "<span class=\"strip-card__badge strip-card__badge--active\">Offer</span>";
+      studioButton = "<button class=\"button primary\" data-action=\"open-studio-upgrade-modal\" style=\"margin-top:6px;padding:4px 8px;font-size:10px;min-height:auto;\">Review Offer</button>";
+    } else if (financedActive) {
+      studioValue = "Payments left: " + financePlan.daysRemaining;
+      studioSubtitle = (studioUi.hubSubtitleFinanced || studioSubtitle) + " The note hits every morning.";
+      studioBadge = "<span class=\"strip-card__badge strip-card__badge--active\">Financed</span>";
+    } else if (studioState.purchased) {
+      var bonusShots = Number.isFinite(studioConfig.effects && studioConfig.effects.dailyShootCapBonus)
+        ? studioConfig.effects.dailyShootCapBonus
+        : 0;
+      var repBonus = Number.isFinite(studioConfig.effects && studioConfig.effects.repBonus)
+        ? studioConfig.effects.repBonus
+        : 0;
+      var premiumMult = Number.isFinite(studioConfig.effects && studioConfig.effects.premiumOfSubsMult)
+        ? studioConfig.effects.premiumOfSubsMult
+        : 1;
+      var premiumPct = Math.round((premiumMult - 1) * 100);
+      studioValue = "Active: +" + bonusShots + " shoots, +" + repBonus + " Rep, " + (premiumPct >= 0 ? "+" : "") + premiumPct + "% Premium";
+      studioSubtitle = studioUi.hubSubtitleOwned || studioSubtitle;
+      studioBadge = "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>";
+    } else if (lateAvailable) {
+      studioValue = "Late buy: " + formatCurrency(latePrice);
+      studioSubtitle = studioUi.hubSubtitleLate || studioSubtitle;
+      studioBadge = "<span class=\"strip-card__badge strip-card__badge--danger\">Late</span>";
+      studioButton = "<button class=\"button primary\" data-action=\"open-studio-upgrade-modal\" style=\"margin-top:6px;padding:4px 8px;font-size:10px;min-height:auto;\">Buy Late</button>";
+    } else {
+      studioValue = "Offer: " + formatCurrency(cashPrice);
+      studioSubtitle = studioUi.hubSubtitleWindow || studioSubtitle;
+    }
+    studioCardHtml = "<div class=\"strip-card\">" +
+      "<div class=\"strip-card__title\">" + studioTitle + "</div>" +
+      "<div class=\"strip-card__value\">" + studioValue + "</div>" +
+      (studioSubtitle ? "<div class=\"strip-card__sub\">" + studioSubtitle + "</div>" : "") +
+      studioBadge +
+      studioButton +
+    "</div>";
+  }
+
   var cardsStripHtml = "<div class=\"cards-strip\">" +
     "<div class=\"strip-card\">" +
       "<div class=\"strip-card__title\">Competition</div>" +
@@ -626,6 +693,7 @@ function renderHub(gameState) {
       managerBadge +
       managerButton +
     "</div>" +
+    studioCardHtml +
   "</div>";
 
   // Footer controls

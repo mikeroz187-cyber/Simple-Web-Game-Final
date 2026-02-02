@@ -64,6 +64,8 @@ This document lists story events implemented in `src/config.js` and triggered vi
 | act2_studio_upgrade_day145 | 145 | Studio Upgrade Decision |
 | act2_partnership_offer_day170 | 170 | Partnership Offer |
 
+**Studio Upgrade Note:** The Studio Upgrade event triggers when the player is eligible (Day ≥ 145 **and** the Lease Upgrade is purchased), then appears as a Hub offer window with real gameplay effects (shoot cap bonus, overhead increase, premium conversion boost, and rep shift).
+
 ## Act 3 — Story Schedule + Effects (Days 200–270)
 
 | id | day | title | effects |

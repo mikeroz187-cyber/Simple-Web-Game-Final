@@ -112,6 +112,131 @@ function showPayMaxModal(gameState) {
     "</div>";
 }
 
+function showStudioUpgradeModal(gameState) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !gameState || !gameState.player) {
+    return;
+  }
+  const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : null;
+  const studioState = gameState.player.upgrades && gameState.player.upgrades.studioUpgrade
+    ? gameState.player.upgrades.studioUpgrade
+    : null;
+  if (!config || !studioState) {
+    return;
+  }
+  const uiCopy = config.ui || {};
+  const title = uiCopy.modalTitle || "Studio Upgrade";
+  const body = uiCopy.modalBody || "";
+  const formatValue = typeof formatCurrency === "function"
+    ? formatCurrency
+    : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  const day = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  const offerExpiresDay = Number.isFinite(studioState.offerExpiresDay) ? studioState.offerExpiresDay : null;
+  const offerActive = studioState.decision === "none" && Number.isFinite(offerExpiresDay) && day <= offerExpiresDay;
+  const lateAvailable = studioState.decision === "declined" || studioState.decision === "missed";
+  const financeConfig = config.finance || {};
+  const financePlan = studioState.financePlan || {};
+  const financedActive = Boolean(financePlan.active && financePlan.daysRemaining > 0);
+  const purchased = Boolean(studioState.purchased);
+  const penaltyActive = typeof isStudioUpgradePenaltyActive === "function"
+    ? isStudioUpgradePenaltyActive(gameState)
+    : false;
+
+  const repBonus = Number.isFinite(config.effects && config.effects.repBonus) ? config.effects.repBonus : 0;
+  const overheadDelta = Number.isFinite(config.effects && config.effects.dailyOverheadDelta)
+    ? config.effects.dailyOverheadDelta
+    : 0;
+  const shootBonus = Number.isFinite(config.effects && config.effects.dailyShootCapBonus)
+    ? config.effects.dailyShootCapBonus
+    : 0;
+  const premiumMult = Number.isFinite(config.effects && config.effects.premiumOfSubsMult)
+    ? config.effects.premiumOfSubsMult
+    : 1;
+  const premiumPct = Math.round((premiumMult - 1) * 100);
+
+  const effectLines = [];
+  if (shootBonus) {
+    effectLines.push("+" + shootBonus + " daily shoot cap");
+  }
+  if (overheadDelta) {
+    effectLines.push("Overhead +" + formatValue(overheadDelta) + "/day");
+  }
+  if (repBonus) {
+    effectLines.push("Reputation +" + repBonus);
+  }
+  if (premiumPct) {
+    effectLines.push("Premium OF subs " + (premiumPct >= 0 ? "+" : "") + premiumPct + "%");
+  }
+
+  const effectListHtml = effectLines.length
+    ? "<ul style=\"margin:12px 0 0 18px; color: var(--text-muted); font-size: 13px;\">" +
+      effectLines.map(function (line) { return "<li>" + line + "</li>"; }).join("") +
+      "</ul>"
+    : "";
+
+  let statusHtml = "";
+  if (offerActive) {
+    const daysLeft = Math.max(0, offerExpiresDay - day);
+    statusHtml = "<p class=\"modal-message\" style=\"margin-top:10px;\">Offer window: " + daysLeft +
+      " days left (Day " + offerExpiresDay + ").</p>";
+  } else if (financedActive) {
+    statusHtml = "<p class=\"modal-message\" style=\"margin-top:10px;\">Payments remaining: " + financePlan.daysRemaining +
+      ". The note hits every morning.</p>";
+  } else if (purchased) {
+    statusHtml = "<p class=\"modal-message\" style=\"margin-top:10px;\">VIP buildout active. The room feels different now.</p>";
+  } else if (lateAvailable) {
+    statusHtml = "<p class=\"modal-message\" style=\"margin-top:10px;\">Late buy available at " +
+      formatValue(config.latePrice || 0) + ".</p>";
+  }
+
+  if (penaltyActive) {
+    const penaltyMult = Number.isFinite(config.penalty && config.penalty.premiumOfSubsMult)
+      ? config.penalty.premiumOfSubsMult
+      : 1;
+    const penaltyPct = Math.round((penaltyMult - 1) * 100);
+    statusHtml += "<p class=\"modal-message\" style=\"margin-top:8px; color: var(--danger);\">" +
+      "Penalty active until Day " + studioState.penaltyUntilDay + ": Premium " +
+      (penaltyPct >= 0 ? "+" : "") + penaltyPct + "%." +
+      "</p>";
+  }
+
+  const imageHtml = "<div style=\"margin-top:12px; text-align:center;\">" +
+    "<img src=\"" + CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH + "\" alt=\"Studio upgrade\" style=\"max-width:140px; opacity:0.9;\" />" +
+    "</div>";
+
+  let buttonsHtml = "<button class=\"button\" data-action=\"dismiss-modal\">Close</button>";
+  if (offerActive) {
+    const cashPrice = Number.isFinite(config.cashPrice) ? config.cashPrice : 0;
+    const downPayment = Number.isFinite(financeConfig.downPayment) ? financeConfig.downPayment : 0;
+    const termDays = Number.isFinite(financeConfig.termDays) ? financeConfig.termDays : 0;
+    const financedAmount = Number.isFinite(financeConfig.totalFinancedAmount) ? financeConfig.totalFinancedAmount : 0;
+    const dailyPayment = termDays > 0 ? Math.ceil(financedAmount / termDays) : 0;
+    buttonsHtml =
+      "<button class=\"button primary\" data-action=\"studio-upgrade-buy-cash\">Pay Cash — " + formatValue(cashPrice) + "</button>" +
+      (financeConfig.enabled === true
+        ? "<button class=\"button\" data-action=\"studio-upgrade-buy-finance\">Finance — " + formatValue(downPayment) +
+          " down + " + formatValue(dailyPayment) + "/day (" + termDays + " days)</button>"
+        : "") +
+      "<button class=\"button\" data-action=\"studio-upgrade-decline\">Pass</button>";
+  } else if (lateAvailable) {
+    buttonsHtml = "<button class=\"button primary\" data-action=\"studio-upgrade-buy-late\">Buy Late — " +
+      formatValue(config.latePrice || 0) + "</button>" +
+      "<button class=\"button\" data-action=\"dismiss-modal\">Close</button>";
+  }
+
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card\">" +
+    "<h3 class=\"modal-title\">" + title + "</h3>" +
+    "<p class=\"modal-message\">" + body + "</p>" +
+    effectListHtml +
+    statusHtml +
+    imageHtml +
+    "<div class=\"button-row\" style=\"margin-top:12px;\">" + buttonsHtml + "</div>" +
+    "</div>" +
+    "</div>";
+}
+
 function processDebtPayment(amount, options) {
   const config = options && typeof options === "object" ? options : {};
   const skipConfirm = config.skipConfirm === true;
@@ -461,6 +586,88 @@ function setupEventHandlers() {
     if (action === "confirm-pay-max") {
       clearModal();
       processDebtPayment("max", { skipConfirm: true });
+      return;
+    }
+
+    if (action === "open-studio-upgrade-modal") {
+      showStudioUpgradeModal(window.gameState);
+      return;
+    }
+
+    if (action === "studio-upgrade-buy-cash") {
+      const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : {};
+      const result = startStudioUpgradeCashPurchase(window.gameState, config.cashPrice);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        if (typeof showToast === "function") {
+          showToast("Studio upgrade secured.", "success");
+        }
+        clearModal();
+      } else if (typeof showToast === "function") {
+        showToast(result.message || "Upgrade failed.", "error");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "studio-upgrade-buy-finance") {
+      const result = startStudioUpgradeFinance(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        if (typeof showToast === "function") {
+          showToast("Financing locked. The note starts tomorrow.", "success");
+        }
+        clearModal();
+      } else if (typeof showToast === "function") {
+        showToast(result.message || "Financing failed.", "error");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "studio-upgrade-decline") {
+      const result = declineStudioUpgrade(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        if (typeof showToast === "function") {
+          showToast("You walked away from the offer.", "warning");
+        }
+        clearModal();
+      } else if (typeof showToast === "function") {
+        showToast(result.message || "Action failed.", "error");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "studio-upgrade-buy-late") {
+      const result = buyLateStudioUpgrade(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message || "");
+        }
+        if (typeof showToast === "function") {
+          showToast("Late buy secured. The room remembers.", "success");
+        }
+        clearModal();
+      } else if (typeof showToast === "function") {
+        showToast(result.message || "Late buy failed.", "error");
+      }
+      renderApp(window.gameState);
       return;
     }
 

@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added the Day 145 Studio Upgrade decision system with Hub CTA, modal choices, finance plan, and gameplay modifiers (shoot cap, overhead, premium mult, rep, penalties).
+  - Why: Turn the Act 2 Studio Upgrade into a real mechanic gated by Lease and a timed offer window with lasting consequences.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/story.js, src/systems/economy.js, src/systems/booking.js, src/ui/render.js, src/ui/events.js, docs/DATA_STORY_EVENTS.md, CHANGELOG.md.
 - What: Added the Day 120 Staffing Push check with Halo reward, Staffing Crisis penalties, forced recruit availability, and a persistent crisis status indicator.
   - Why: Deliver the required Act 2 staffing gate with clear warning, success/failure messaging, and reversible penalties tied to active contracts.
   - Files touched: src/config.js, src/state.js, src/main.js, src/save.js, src/systems/performers.js, src/systems/recruitment.js, src/systems/booking.js, src/systems/economy.js, src/systems/story.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, CHANGELOG.md.

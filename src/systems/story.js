@@ -54,6 +54,9 @@ function checkStoryEvents(gameState) {
       if (!entry || entry.triggerDay !== currentDay) {
         return;
       }
+      if (entry.id === "act2_studio_upgrade_day145") {
+        return;
+      }
       if (gameState.story.act2.eventsShown.indexOf(entry.id) !== -1) {
         return;
       }
@@ -97,6 +100,30 @@ function checkStoryEvents(gameState) {
     }
   }
 
+  const studioConfig = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object"
+    ? CONFIG.studioUpgrade
+    : null;
+  const studioTriggerDay = studioConfig && Number.isFinite(studioConfig.triggerDay)
+    ? studioConfig.triggerDay
+    : null;
+  if (studioConfig && studioConfig.enabled === true && Number.isFinite(studioTriggerDay) && currentDay >= studioTriggerDay) {
+    const studioOfferResult = ensureStudioUpgradeOffer(gameState);
+    if (studioOfferResult && studioOfferResult.started) {
+      const offerId = "act2_studio_upgrade_day145";
+      if (gameState.story.act2.eventsShown.indexOf(offerId) === -1) {
+        gameState.story.act2.eventsShown.push(offerId);
+        gameState.story.act2.lastEventId = offerId;
+        events.push({ id: offerId, day: currentDay });
+      }
+      const studioState = gameState.player.upgrades && gameState.player.upgrades.studioUpgrade
+        ? gameState.player.upgrades.studioUpgrade
+        : null;
+      if (studioState) {
+        studioState.offerSeen = true;
+      }
+    }
+  }
+
   if (CONFIG.story.act3 && Array.isArray(CONFIG.story.act3.schedule)) {
     CONFIG.story.act3.schedule.forEach(function (entry) {
       if (!entry || entry.triggerDay !== currentDay) {
@@ -113,6 +140,56 @@ function checkStoryEvents(gameState) {
   }
 
   return { ok: true, events: events };
+}
+
+function ensureStudioUpgradeOffer(gameState) {
+  const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object"
+    ? CONFIG.studioUpgrade
+    : null;
+  if (!config || config.enabled !== true || !gameState || !gameState.player) {
+    return { ok: false };
+  }
+  const upgrades = gameState.player.upgrades && typeof gameState.player.upgrades === "object"
+    ? gameState.player.upgrades
+    : null;
+  if (!upgrades || !upgrades.studioUpgrade || typeof upgrades.studioUpgrade !== "object") {
+    return { ok: false };
+  }
+  const studioState = upgrades.studioUpgrade;
+  const leaseRequired = config.requiresLeaseUpgrade === true;
+  const leasePurchased = Boolean(upgrades.lease && upgrades.lease.purchased);
+  if (leaseRequired && !leasePurchased) {
+    return { ok: false };
+  }
+  const currentDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  if (Number.isFinite(studioState.penaltyUntilDay) && currentDay > studioState.penaltyUntilDay) {
+    studioState.penaltyUntilDay = null;
+  }
+  if (studioState.purchased) {
+    return { ok: false };
+  }
+  if (!Number.isFinite(studioState.offerStartedDay) && studioState.decision === "none") {
+    const windowDays = Number.isFinite(config.offerWindowDays) ? config.offerWindowDays : 0;
+    studioState.offerStartedDay = currentDay;
+    studioState.offerExpiresDay = currentDay + windowDays;
+    studioState.offerSeen = false;
+    return { ok: true, started: true };
+  }
+  const offerExpiresDay = Number.isFinite(studioState.offerExpiresDay) ? studioState.offerExpiresDay : null;
+  if (Number.isFinite(offerExpiresDay) && currentDay > offerExpiresDay && studioState.decision === "none") {
+    studioState.decision = "missed";
+    const repPenalty = Number.isFinite(config.repPenaltyOnMiss) ? config.repPenaltyOnMiss : 0;
+    if (repPenalty > 0) {
+      gameState.player.reputation = Math.max(0, gameState.player.reputation - repPenalty);
+    }
+    const penaltyConfig = config.penalty || {};
+    if (penaltyConfig.enabled === true) {
+      const durationDays = Number.isFinite(penaltyConfig.durationDays) ? penaltyConfig.durationDays : 0;
+      studioState.penaltyUntilDay = currentDay + durationDays;
+    }
+    return { ok: true, missed: true };
+  }
+  return { ok: true };
 }
 
 const STORY_EVENT_COPY = {
@@ -180,6 +257,10 @@ const STORY_EVENT_COPY = {
   act2_lease_offer_missed: {
     title: "Lease Window Missed",
     message: "You hesitated. The listing got snatched. It’s back on the board at {{leaseLatePrice}} now, and the room remembers the pause. Rep {{leaseRepPenalty}}."
+  },
+  act2_studio_upgrade_day145: {
+    title: "Studio Upgrade — Offer Window",
+    message: "You finally get shown the VIP buildout. The decision isn’t on the feed anymore—it’s in the Hub with a hard clock. Lock it in before the window closes."
   },
   act1_end_loss_day90: {
     title: "Defaulted on the Debt",

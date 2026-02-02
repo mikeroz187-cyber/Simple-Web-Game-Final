@@ -506,6 +506,23 @@ function ensurePlayerUpgradesState(candidate) {
         offerDeadlineDay: null,
         missed: false,
         missPenaltyApplied: false
+      },
+      studioUpgrade: {
+        offerStartedDay: null,
+        offerExpiresDay: null,
+        offerSeen: false,
+        decision: "none",
+        purchased: false,
+        financed: false,
+        financePlan: {
+          active: false,
+          termDays: 0,
+          daysRemaining: 0,
+          dailyPayment: 0,
+          totalFinancedAmount: 0,
+          downPayment: 0
+        },
+        penaltyUntilDay: null
       }
     };
     return;
@@ -538,6 +555,76 @@ function ensurePlayerUpgradesState(candidate) {
   }
   if (typeof lease.missPenaltyApplied !== "boolean") {
     lease.missPenaltyApplied = false;
+  }
+  if (!candidate.player.upgrades.studioUpgrade || typeof candidate.player.upgrades.studioUpgrade !== "object") {
+    candidate.player.upgrades.studioUpgrade = {
+      offerStartedDay: null,
+      offerExpiresDay: null,
+      offerSeen: false,
+      decision: "none",
+      purchased: false,
+      financed: false,
+      financePlan: {
+        active: false,
+        termDays: 0,
+        daysRemaining: 0,
+        dailyPayment: 0,
+        totalFinancedAmount: 0,
+        downPayment: 0
+      },
+      penaltyUntilDay: null
+    };
+    return;
+  }
+  const studio = candidate.player.upgrades.studioUpgrade;
+  if (!Number.isFinite(studio.offerStartedDay)) {
+    studio.offerStartedDay = null;
+  }
+  if (!Number.isFinite(studio.offerExpiresDay)) {
+    studio.offerExpiresDay = null;
+  }
+  if (typeof studio.offerSeen !== "boolean") {
+    studio.offerSeen = false;
+  }
+  if (typeof studio.decision !== "string") {
+    studio.decision = "none";
+  }
+  if (typeof studio.purchased !== "boolean") {
+    studio.purchased = false;
+  }
+  if (typeof studio.financed !== "boolean") {
+    studio.financed = false;
+  }
+  if (!studio.financePlan || typeof studio.financePlan !== "object") {
+    studio.financePlan = {
+      active: false,
+      termDays: 0,
+      daysRemaining: 0,
+      dailyPayment: 0,
+      totalFinancedAmount: 0,
+      downPayment: 0
+    };
+  }
+  if (typeof studio.financePlan.active !== "boolean") {
+    studio.financePlan.active = false;
+  }
+  if (!Number.isFinite(studio.financePlan.termDays)) {
+    studio.financePlan.termDays = 0;
+  }
+  if (!Number.isFinite(studio.financePlan.daysRemaining)) {
+    studio.financePlan.daysRemaining = 0;
+  }
+  if (!Number.isFinite(studio.financePlan.dailyPayment)) {
+    studio.financePlan.dailyPayment = 0;
+  }
+  if (!Number.isFinite(studio.financePlan.totalFinancedAmount)) {
+    studio.financePlan.totalFinancedAmount = 0;
+  }
+  if (!Number.isFinite(studio.financePlan.downPayment)) {
+    studio.financePlan.downPayment = 0;
+  }
+  if (!Number.isFinite(studio.penaltyUntilDay)) {
+    studio.penaltyUntilDay = null;
   }
 }
 
@@ -812,6 +899,76 @@ function validateGameState(candidate) {
     }
     if (typeof lease.missPenaltyApplied !== "boolean") {
       lease.missPenaltyApplied = false;
+    }
+  }
+  if (!player.upgrades.studioUpgrade || typeof player.upgrades.studioUpgrade !== "object") {
+    player.upgrades.studioUpgrade = {
+      offerStartedDay: null,
+      offerExpiresDay: null,
+      offerSeen: false,
+      decision: "none",
+      purchased: false,
+      financed: false,
+      financePlan: {
+        active: false,
+        termDays: 0,
+        daysRemaining: 0,
+        dailyPayment: 0,
+        totalFinancedAmount: 0,
+        downPayment: 0
+      },
+      penaltyUntilDay: null
+    };
+  } else {
+    const studio = player.upgrades.studioUpgrade;
+    if (!Number.isFinite(studio.offerStartedDay)) {
+      studio.offerStartedDay = null;
+    }
+    if (!Number.isFinite(studio.offerExpiresDay)) {
+      studio.offerExpiresDay = null;
+    }
+    if (typeof studio.offerSeen !== "boolean") {
+      studio.offerSeen = false;
+    }
+    if (typeof studio.decision !== "string") {
+      studio.decision = "none";
+    }
+    if (typeof studio.purchased !== "boolean") {
+      studio.purchased = false;
+    }
+    if (typeof studio.financed !== "boolean") {
+      studio.financed = false;
+    }
+    if (!studio.financePlan || typeof studio.financePlan !== "object") {
+      studio.financePlan = {
+        active: false,
+        termDays: 0,
+        daysRemaining: 0,
+        dailyPayment: 0,
+        totalFinancedAmount: 0,
+        downPayment: 0
+      };
+    }
+    if (typeof studio.financePlan.active !== "boolean") {
+      studio.financePlan.active = false;
+    }
+    if (!Number.isFinite(studio.financePlan.termDays)) {
+      studio.financePlan.termDays = 0;
+    }
+    if (!Number.isFinite(studio.financePlan.daysRemaining)) {
+      studio.financePlan.daysRemaining = 0;
+    }
+    if (!Number.isFinite(studio.financePlan.dailyPayment)) {
+      studio.financePlan.dailyPayment = 0;
+    }
+    if (!Number.isFinite(studio.financePlan.totalFinancedAmount)) {
+      studio.financePlan.totalFinancedAmount = 0;
+    }
+    if (!Number.isFinite(studio.financePlan.downPayment)) {
+      studio.financePlan.downPayment = 0;
+    }
+    if (!Number.isFinite(studio.penaltyUntilDay)) {
+      studio.penaltyUntilDay = null;
     }
   }
 
