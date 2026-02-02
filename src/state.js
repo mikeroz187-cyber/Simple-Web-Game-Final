@@ -124,6 +124,41 @@ function buildDefaultConquestsState() {
   };
 }
 
+function getDefaultTakeoverState() {
+  const studioIds = ["neon_cherry", "honey_trap", "midnight_media"];
+  const studios = {};
+  studioIds.forEach(function (studioId) {
+    studios[studioId] = { status: "active", defeatedDay: null, bossConfrontation: null };
+  });
+  return {
+    unlocked: false,
+    unlockedDay: null,
+    victoryAchieved: false,
+    victoryDay: null,
+    studios: studios,
+    performers: {},
+    bossConfrontations: {},
+    gallery: {
+      performers: [],
+      bosses: []
+    },
+    retaliation: {
+      lastEventDay: null,
+      activeAlliance: null,
+      poachAttempts: []
+    },
+    stats: {
+      totalSpent: 0,
+      performersAcquired: 0,
+      performersLost: 0,
+      performersReacquired: 0,
+      bossesDefeated: 0,
+      poachAttemptsDefended: 0,
+      poachAttemptsLost: 0
+    }
+  };
+}
+
 function newGameState() {
   const now = new Date().toISOString();
   const rosterIds = CONFIG.performers.core_ids.slice();
@@ -235,7 +270,8 @@ function newGameState() {
     legacyMilestones: [],
     automation: buildDefaultAutomationState(),
     recruitment: buildDefaultRecruitmentState(),
-    conquests: buildDefaultConquestsState()
+    conquests: buildDefaultConquestsState(),
+    takeover: getDefaultTakeoverState()
   };
 }
 
@@ -599,4 +635,90 @@ function ensureStatsState(gameState) {
   if (!Number.isFinite(gameState.stats.totalUpgradesPurchased) || gameState.stats.totalUpgradesPurchased < 0) {
     gameState.stats.totalUpgradesPurchased = 0;
   }
+}
+
+function ensureTakeoverState(gameState) {
+  if (!gameState) {
+    return;
+  }
+  const defaults = getDefaultTakeoverState();
+  if (!gameState.takeover || typeof gameState.takeover !== "object" || Array.isArray(gameState.takeover)) {
+    gameState.takeover = defaults;
+    return;
+  }
+  const takeover = gameState.takeover;
+  if (typeof takeover.unlocked !== "boolean") {
+    takeover.unlocked = defaults.unlocked;
+  }
+  if (!Number.isFinite(takeover.unlockedDay)) {
+    takeover.unlockedDay = null;
+  }
+  if (typeof takeover.victoryAchieved !== "boolean") {
+    takeover.victoryAchieved = defaults.victoryAchieved;
+  }
+  if (!Number.isFinite(takeover.victoryDay)) {
+    takeover.victoryDay = null;
+  }
+  if (!takeover.studios || typeof takeover.studios !== "object" || Array.isArray(takeover.studios)) {
+    takeover.studios = defaults.studios;
+  }
+  const studioDefaults = defaults.studios;
+  Object.keys(studioDefaults).forEach(function (studioId) {
+    const studio = takeover.studios[studioId];
+    if (!studio || typeof studio !== "object") {
+      takeover.studios[studioId] = {
+        status: studioDefaults[studioId].status,
+        defeatedDay: studioDefaults[studioId].defeatedDay,
+        bossConfrontation: studioDefaults[studioId].bossConfrontation
+      };
+      return;
+    }
+    if (typeof studio.status !== "string") {
+      studio.status = studioDefaults[studioId].status;
+    }
+    if (!Number.isFinite(studio.defeatedDay)) {
+      studio.defeatedDay = studioDefaults[studioId].defeatedDay;
+    }
+    if (studio.bossConfrontation !== null && typeof studio.bossConfrontation !== "object") {
+      studio.bossConfrontation = studioDefaults[studioId].bossConfrontation;
+    }
+  });
+  if (!takeover.performers || typeof takeover.performers !== "object" || Array.isArray(takeover.performers)) {
+    takeover.performers = {};
+  }
+  if (!takeover.bossConfrontations || typeof takeover.bossConfrontations !== "object" || Array.isArray(takeover.bossConfrontations)) {
+    takeover.bossConfrontations = {};
+  }
+  if (!takeover.gallery || typeof takeover.gallery !== "object" || Array.isArray(takeover.gallery)) {
+    takeover.gallery = { performers: [], bosses: [] };
+  }
+  if (!Array.isArray(takeover.gallery.performers)) {
+    takeover.gallery.performers = [];
+  }
+  if (!Array.isArray(takeover.gallery.bosses)) {
+    takeover.gallery.bosses = [];
+  }
+  if (!takeover.retaliation || typeof takeover.retaliation !== "object" || Array.isArray(takeover.retaliation)) {
+    takeover.retaliation = { lastEventDay: null, activeAlliance: null, poachAttempts: [] };
+  } else {
+    if (!Number.isFinite(takeover.retaliation.lastEventDay)) {
+      takeover.retaliation.lastEventDay = null;
+    }
+    if (takeover.retaliation.activeAlliance !== null && typeof takeover.retaliation.activeAlliance !== "object") {
+      takeover.retaliation.activeAlliance = null;
+    }
+    if (!Array.isArray(takeover.retaliation.poachAttempts)) {
+      takeover.retaliation.poachAttempts = [];
+    }
+  }
+  if (!takeover.stats || typeof takeover.stats !== "object" || Array.isArray(takeover.stats)) {
+    takeover.stats = defaults.stats;
+    return;
+  }
+  const stats = takeover.stats;
+  Object.keys(defaults.stats).forEach(function (key) {
+    if (!Number.isFinite(stats[key]) || stats[key] < 0) {
+      stats[key] = defaults.stats[key];
+    }
+  });
 }

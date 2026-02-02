@@ -4,6 +4,8 @@
 
 This document defines all data structures for the Industry Takeover system: config schemas, gameState extensions, and content data formats.
 
+**Playable Slice A3:** Only the first 3 studios are implemented initially; remaining studios will be added later.
+
 ---
 
 ## 1. Config Additions (src/config.js)
@@ -25,7 +27,7 @@ CONFIG.takeover = {
     tier1: 30,
     tier2: 50,
     tier3: 75,
-    boss: 100
+    boss: 100 // Reputation cap is 100 (global)
   },
 
   // Base costs (Tier 1)

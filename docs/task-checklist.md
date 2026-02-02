@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** January 29, 2026 (Conquests packs in Gallery)
+**Last Updated:** February 02, 2026 (Industry Takeover Phase 1 foundation)
 
 ---
 
@@ -57,6 +57,17 @@
 - [x] Content variance (Premium OF subs variance from Day 181).
 - [x] Legacy milestones with cash rewards.
 - [x] Automation expansion (Auto-Book + Auto-Post, daily action cap).
+
+---
+
+## Industry Takeover — In Progress
+- [x] Phase 1: Foundation (config + gameState + save/migration + docs)
+- [ ] Phase 2: Industry Nav + Industry Map screen shell
+- [ ] Phase 3: Studio Detail screen + performer list
+- [ ] Phase 4: Acquisition stages (intel/approach/turn/debut)
+- [ ] Phase 5: Boss confrontations (5-stage)
+- [ ] Phase 6: Retaliation (poach + alliances)
+- [ ] Phase 7: Victory + endgame bonuses
 
 ---
 

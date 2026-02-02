@@ -336,6 +336,311 @@ const CONFIG = {
       label: "Social bonus"
     }
   },
+  takeover: {
+    enabled: true,
+    unlockDay: 181,
+    rosterCapAfterUnlock: 40,
+    placeholderPortraitPath: LOCATION_PLACEHOLDER_THUMB_PATH,
+    daysPerStage: 2,
+    bossConfrontationStages: 5,
+    repRequirements: {
+      tier1: 30,
+      tier2: 50,
+      tier3: 75,
+      boss: 100
+    },
+    costs: {
+      intel: 5000,
+      approach: 10000,
+      turn: 25000,
+      debut: 5000,
+      bossConfrontation: 150000
+    },
+    tierMultipliers: {
+      tier1: 1.0,
+      tier2: 1.5,
+      tier3: 2.0
+    },
+    repChanges: {
+      weaknessAmbition: 0,
+      weaknessNeglect: 0,
+      weaknessDebt: -5,
+      weaknessPride: -10,
+      weaknessSecret: -20,
+      failedAcquisition: -15,
+      successfulDebut: 3,
+      bossDefeated: 25,
+      defendedPoach: 5,
+      passiveRecoveryPerWeek: 1
+    },
+    repDefense: {
+      strong: 100,
+      normal: 75,
+      vulnerable: 50,
+      weak: 25,
+      crisis: 10
+    },
+    retaliation: {
+      minDaysBetweenEvents: 7,
+      maxDaysBetweenEvents: 14,
+      poachBaseCost: 8000,
+      poachCostPerStarPower: 2000,
+      allianceDurationDays: 14,
+      allianceCostMultiplier: 1.25
+    },
+    performersToVulnerableBoss: 3,
+    studios: {
+      neon_cherry: {
+        id: "neon_cherry",
+        name: "Neon Cherry",
+        tagline: "Cute sells. Weird sells more.",
+        specialty: "Cosplay/Kawaii",
+        difficulty: 2,
+        bossId: "boss_yuki_tanaka",
+        performerIds: [
+          "takeover_mika_sato",
+          "takeover_pepper_chu",
+          "takeover_kira_kimura",
+          "takeover_suki_avalon",
+          "takeover_luna_lux"
+        ],
+        bonusOnDefeat: {
+          type: "contentMultiplier",
+          category: "cosplay",
+          value: 1.10
+        }
+      },
+      honey_trap: {
+        id: "honey_trap",
+        name: "Honey Trap Productions",
+        tagline: "Family first. Business second. But business is good.",
+        specialty: "Latina/Curves",
+        difficulty: 3,
+        bossId: "boss_carmen_reyes",
+        performerIds: [
+          "takeover_rosa_vega",
+          "takeover_daniela_cruz",
+          "takeover_valentina_fuentes",
+          "takeover_marisol_delgado",
+          "takeover_sofia_reyes"
+        ],
+        bonusOnDefeat: {
+          type: "contentMultiplier",
+          category: "curves",
+          value: 1.10
+        }
+      },
+      midnight_media: {
+        id: "midnight_media",
+        name: "Midnight Media",
+        tagline: "We're not mainstream. We're better.",
+        specialty: "Alt/Edge",
+        difficulty: 3,
+        bossId: "boss_sasha_volkov",
+        performerIds: [
+          "takeover_raven_darke",
+          "takeover_zoe_vicious",
+          "takeover_jade_holloway",
+          "takeover_elektra_wylde",
+          "takeover_vex_morrow"
+        ],
+        bonusOnDefeat: {
+          type: "contentMultiplier",
+          category: "alt",
+          value: 1.10
+        }
+      }
+    },
+    studioOrder: [
+      "neon_cherry",
+      "honey_trap",
+      "midnight_media"
+    ],
+    bosses: {
+      boss_yuki_tanaka: {
+        id: "boss_yuki_tanaka",
+        name: "Yuki Tanaka",
+        studioId: "neon_cherry",
+        age: 28,
+        description: "Petite, pastel hair, always in some costume element. Bubbly exterior hiding business anxiety.",
+        weakness: "Desperate to be taken seriously. Treat her like a real player, and she'll melt.",
+        confrontationStyle: "Seduction through validation",
+        portraitPath: "assets/images/takeover/neon_cherry/boss_yuki_tanaka/portrait.png"
+      },
+      boss_carmen_reyes: {
+        id: "boss_carmen_reyes",
+        name: "Carmen Reyes",
+        studioId: "honey_trap",
+        age: 42,
+        description: "Mature, voluptuous, always overdressed. Former performer. Protective mama bear.",
+        weakness: "Her son has debts. Real ones. She'd do anything to protect him.",
+        confrontationStyle: "Leverage through family pressure",
+        portraitPath: "assets/images/takeover/honey_trap/boss_carmen_reyes/portrait.png"
+      },
+      boss_sasha_volkov: {
+        id: "boss_sasha_volkov",
+        name: "Sasha Volkov",
+        studioId: "midnight_media",
+        age: 35,
+        description: "Eastern European ice queen. Sleeve tattoos, undercut, permanent scowl.",
+        weakness: "Hypocrisy. She preaches anti-capitalism while hoarding the profits.",
+        confrontationStyle: "Exposure and unmasking",
+        portraitPath: "assets/images/takeover/midnight_media/boss_sasha_volkov/portrait.png"
+      }
+    },
+    performers: {
+      takeover_mika_sato: {
+        id: "takeover_mika_sato",
+        name: "Mika Sato",
+        studioId: "neon_cherry",
+        tier: 1,
+        starPower: 2,
+        weakness: "secret",
+        description: "The 'pure' idol with a not-so-pure side hustle. Moonlights at a hostess club.",
+        portraitPath: "assets/images/takeover/neon_cherry/takeover_mika_sato/portrait.png"
+      },
+      takeover_pepper_chu: {
+        id: "takeover_pepper_chu",
+        name: "Pepper Chu",
+        studioId: "neon_cherry",
+        tier: 1,
+        starPower: 2,
+        weakness: "ambition",
+        description: "Loud, hungry, wants to be the STAR, not a backup dancer in elf ears.",
+        portraitPath: "assets/images/takeover/neon_cherry/takeover_pepper_chu/portrait.png"
+      },
+      takeover_kira_kimura: {
+        id: "takeover_kira_kimura",
+        name: "Kira Kimura",
+        studioId: "neon_cherry",
+        tier: 2,
+        starPower: 3,
+        weakness: "neglect",
+        description: "Talented but overlooked. Yuki forgot her birthday. She noticed.",
+        portraitPath: "assets/images/takeover/neon_cherry/takeover_kira_kimura/portrait.png"
+      },
+      takeover_suki_avalon: {
+        id: "takeover_suki_avalon",
+        name: "Suki Avalon",
+        studioId: "neon_cherry",
+        tier: 2,
+        starPower: 3,
+        weakness: "debt",
+        description: "Gambling problem. Cute face, ugly spreadsheet. Owes the wrong people.",
+        portraitPath: "assets/images/takeover/neon_cherry/takeover_suki_avalon/portrait.png"
+      },
+      takeover_luna_lux: {
+        id: "takeover_luna_lux",
+        name: "Luna Lux",
+        studioId: "neon_cherry",
+        tier: 3,
+        starPower: 4,
+        weakness: "pride",
+        description: "The veteran of Neon Cherry. Thinks she's the best. Wants to prove it.",
+        portraitPath: "assets/images/takeover/neon_cherry/takeover_luna_lux/portrait.png"
+      },
+      takeover_rosa_vega: {
+        id: "takeover_rosa_vega",
+        name: "Rosa Vega",
+        studioId: "honey_trap",
+        tier: 1,
+        starPower: 2,
+        weakness: "ambition",
+        description: "Carmen's 'niece' (not really). Wants OUT of the family shadow.",
+        portraitPath: "assets/images/takeover/honey_trap/takeover_rosa_vega/portrait.png"
+      },
+      takeover_daniela_cruz: {
+        id: "takeover_daniela_cruz",
+        name: "Daniela Cruz",
+        studioId: "honey_trap",
+        tier: 1,
+        starPower: 2,
+        weakness: "neglect",
+        description: "Always the sidekick. She's ready for a studio that notices her.",
+        portraitPath: "assets/images/takeover/honey_trap/takeover_daniela_cruz/portrait.png"
+      },
+      takeover_valentina_fuentes: {
+        id: "takeover_valentina_fuentes",
+        name: "Valentina Fuentes",
+        studioId: "honey_trap",
+        tier: 2,
+        starPower: 3,
+        weakness: "debt",
+        description: "In debt to a cartel-adjacent moneylender. She's desperate.",
+        portraitPath: "assets/images/takeover/honey_trap/takeover_valentina_fuentes/portrait.png"
+      },
+      takeover_marisol_delgado: {
+        id: "takeover_marisol_delgado",
+        name: "Marisol Delgado",
+        studioId: "honey_trap",
+        tier: 2,
+        starPower: 3,
+        weakness: "secret",
+        description: "She's hiding a kid from the whole industry. One slip could ruin her.",
+        portraitPath: "assets/images/takeover/honey_trap/takeover_marisol_delgado/portrait.png"
+      },
+      takeover_sofia_reyes: {
+        id: "takeover_sofia_reyes",
+        name: "Sofia Reyes",
+        studioId: "honey_trap",
+        tier: 3,
+        starPower: 4,
+        weakness: "pride",
+        description: "The queen bee. Needs to be worshipped. You can give her that.",
+        portraitPath: "assets/images/takeover/honey_trap/takeover_sofia_reyes/portrait.png"
+      },
+      takeover_raven_darke: {
+        id: "takeover_raven_darke",
+        name: "Raven Darke",
+        studioId: "midnight_media",
+        tier: 1,
+        starPower: 2,
+        weakness: "secret",
+        description: "Pierced everywhere, but secretly a softie. Hides it with spikes.",
+        portraitPath: "assets/images/takeover/midnight_media/takeover_raven_darke/portrait.png"
+      },
+      takeover_zoe_vicious: {
+        id: "takeover_zoe_vicious",
+        name: "Zoe Vicious",
+        studioId: "midnight_media",
+        tier: 1,
+        starPower: 2,
+        weakness: "ambition",
+        description: "Wants fame so badly she can taste it. Loyal to no one.",
+        portraitPath: "assets/images/takeover/midnight_media/takeover_zoe_vicious/portrait.png"
+      },
+      takeover_jade_holloway: {
+        id: "takeover_jade_holloway",
+        name: "Jade Holloway",
+        studioId: "midnight_media",
+        tier: 2,
+        starPower: 3,
+        weakness: "neglect",
+        description: "Never promoted, never spotlighted. Her resentment is boiling.",
+        portraitPath: "assets/images/takeover/midnight_media/takeover_jade_holloway/portrait.png"
+      },
+      takeover_elektra_wylde: {
+        id: "takeover_elektra_wylde",
+        name: "Elektra Wylde",
+        studioId: "midnight_media",
+        tier: 2,
+        starPower: 3,
+        weakness: "debt",
+        description: "She threw her money into a failed crypto scheme. She needs a bailout.",
+        portraitPath: "assets/images/takeover/midnight_media/takeover_elektra_wylde/portrait.png"
+      },
+      takeover_vex_morrow: {
+        id: "takeover_vex_morrow",
+        name: "Vex Morrow",
+        studioId: "midnight_media",
+        tier: 3,
+        starPower: 4,
+        weakness: "pride",
+        description: "Punk icon, too cool for everyone. Except you. Maybe.",
+        portraitPath: "assets/images/takeover/midnight_media/takeover_vex_morrow/portrait.png"
+      }
+    }
+  },
   reputation: {
     branches: [
       {

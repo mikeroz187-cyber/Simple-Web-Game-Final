@@ -24,7 +24,31 @@ function getRecruitmentMaxRosterSize(gameState) {
   const upgradedCap = leaseConfig && Number.isFinite(leaseConfig.rosterCapAfterUpgrade)
     ? leaseConfig.rosterCapAfterUpgrade
     : baseCap;
-  return leasePurchased ? upgradedCap : baseCap;
+  const currentCap = leasePurchased ? upgradedCap : baseCap;
+  let overrideCap = null;
+  if (typeof getTakeoverRosterCapOverride === "function") {
+    overrideCap = getTakeoverRosterCapOverride(gameState);
+  } else {
+    const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object"
+      ? CONFIG.takeover
+      : null;
+    const unlockDay = takeoverConfig && Number.isFinite(takeoverConfig.unlockDay)
+      ? takeoverConfig.unlockDay
+      : null;
+    const rosterCapAfterUnlock = takeoverConfig && Number.isFinite(takeoverConfig.rosterCapAfterUnlock)
+      ? takeoverConfig.rosterCapAfterUnlock
+      : null;
+    const currentDay = gameState && gameState.player && Number.isFinite(gameState.player.day)
+      ? gameState.player.day
+      : null;
+    if (takeoverConfig && takeoverConfig.enabled && unlockDay !== null && currentDay !== null && currentDay >= unlockDay) {
+      overrideCap = rosterCapAfterUnlock;
+    }
+  }
+  if (Number.isFinite(overrideCap)) {
+    return Math.max(currentCap, overrideCap);
+  }
+  return currentCap;
 }
 
 function getContractedRosterCount(gameState) {
