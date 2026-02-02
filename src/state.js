@@ -139,8 +139,9 @@ function getDefaultTakeoverState() {
     performers: {},
     bossConfrontations: {},
     gallery: {
-      performers: [],
-      bosses: []
+      bosses: {},
+      trophies: {},
+      notes: []
     },
     retaliation: {
       lastEventDay: null,
@@ -687,6 +688,26 @@ function ensureTakeoverState(gameState) {
     if (studio.bossConfrontation !== null && typeof studio.bossConfrontation !== "object") {
       studio.bossConfrontation = studioDefaults[studioId].bossConfrontation;
     }
+    if (studio.bossConfrontation && typeof studio.bossConfrontation === "object") {
+      if (typeof studio.bossConfrontation.status !== "string") {
+        studio.bossConfrontation.status = "in_progress";
+      }
+      if (!Number.isFinite(studio.bossConfrontation.stageIndex)) {
+        studio.bossConfrontation.stageIndex = 0;
+      }
+      if (typeof studio.bossConfrontation.stageKey !== "string") {
+        studio.bossConfrontation.stageKey = null;
+      }
+      if (!Number.isFinite(studio.bossConfrontation.stageStartDay)) {
+        studio.bossConfrontation.stageStartDay = null;
+      }
+      if (!Number.isFinite(studio.bossConfrontation.stageCompleteDay)) {
+        studio.bossConfrontation.stageCompleteDay = null;
+      }
+      if (typeof studio.bossConfrontation.stageReady !== "boolean") {
+        studio.bossConfrontation.stageReady = false;
+      }
+    }
   });
   if (!takeover.performers || typeof takeover.performers !== "object" || Array.isArray(takeover.performers)) {
     takeover.performers = {};
@@ -762,13 +783,23 @@ function ensureTakeoverState(gameState) {
     takeover.bossConfrontations = {};
   }
   if (!takeover.gallery || typeof takeover.gallery !== "object" || Array.isArray(takeover.gallery)) {
-    takeover.gallery = { performers: [], bosses: [] };
+    takeover.gallery = { bosses: {}, trophies: {}, notes: [] };
   }
-  if (!Array.isArray(takeover.gallery.performers)) {
-    takeover.gallery.performers = [];
+  if (!takeover.gallery.bosses || typeof takeover.gallery.bosses !== "object" || Array.isArray(takeover.gallery.bosses)) {
+    const legacyBosses = Array.isArray(takeover.gallery.bosses) ? takeover.gallery.bosses : [];
+    const bossMap = {};
+    legacyBosses.forEach(function (bossId) {
+      if (typeof bossId === "string") {
+        bossMap[bossId] = { defeatedDay: null, studioId: null };
+      }
+    });
+    takeover.gallery.bosses = bossMap;
   }
-  if (!Array.isArray(takeover.gallery.bosses)) {
-    takeover.gallery.bosses = [];
+  if (!takeover.gallery.trophies || typeof takeover.gallery.trophies !== "object" || Array.isArray(takeover.gallery.trophies)) {
+    takeover.gallery.trophies = {};
+  }
+  if (!Array.isArray(takeover.gallery.notes)) {
+    takeover.gallery.notes = [];
   }
   if (!takeover.retaliation || typeof takeover.retaliation !== "object" || Array.isArray(takeover.retaliation)) {
     takeover.retaliation = { lastEventDay: null, activeAlliance: null, poachAttempts: [] };

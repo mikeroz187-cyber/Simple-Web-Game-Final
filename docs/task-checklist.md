@@ -65,8 +65,8 @@
 - [x] Phase 2: Industry Nav + Industry Map screen shell
 - [x] Phase 3: Studio Detail screen + performer list
 - [x] Phase 4: Acquisition stages (intel/approach/turn/debut)
-- [ ] Phase 5: Boss confrontations (5-stage)
-- [ ] Phase 6: Retaliation (poach + alliances)
+- [x] Phase 5: Boss confrontations (5-stage)
+- [ ] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
 - [ ] Phase 7: Victory + endgame bonuses
 
 ---

@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** February 03, 2026
 
 ## Recently Completed
+- Industry Takeover Phase 5: Boss confrontation flow (5 stages/10 days), studio defeat rewards, boss/trophy tracking, and Act 3 theme bonuses (+10% on matching themes).
 - Industry Takeover Phase 4: 4-stage acquisition loop (intel/approach/turn/debut), stage-ready resolve UX, tier-scaled costs, weakness rep penalties, debut rewards, and roster integration.
 - Industry Takeover Phase 3: Studio Detail screen with boss card, performer roster, and View Studio navigation from the Industry Map (actions disabled).
 - Industry Takeover Phase 2: Industry Map nav entry, screen shell, and Day 181 unlock CTA.
@@ -51,9 +52,10 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Industry Takeover — Phase 5 boss confrontations
+- Industry Takeover — Phase 6 competition swap + retaliation events
 
 ## Next 3–7 Candidate Tasks
+- Disable/replace Competition at Day 181 + add retaliation events for Industry Takeover.
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state
 - Ambient Art Phase 3: Generate test artwork for mascot positions
 - Ambient Art Phase 4: Replace placeholders with final artwork

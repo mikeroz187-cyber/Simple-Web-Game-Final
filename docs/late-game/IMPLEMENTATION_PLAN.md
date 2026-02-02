@@ -178,207 +178,25 @@ Implement the acquisition stage flow (intel → approach → turn → debut) and
 
 ---
 
-## Phase 5: Acquisition Flow (Core)
+## Phase 5: Boss Confrontation — ✅ Completed
 
-### Objective
-Implement the 4-stage performer acquisition flow with modals.
-
-### Tasks
-
-#### 5.1 Implement Acquisition Logic
-**File:** `src/systems/takeover.js`
-
-```javascript
-function canStartAcquisition(performerId) {
-  const status = getPerformerStatus(performerId);
-  if (status.status !== 'available') return { allowed: false, reason: 'Not available' };
-  
-  const cost = getAcquisitionCost(performerId, 1);
-  if (gameState.player.cash < cost) return { allowed: false, reason: 'Insufficient funds' };
-  
-  return { allowed: true };
-}
-
-function startAcquisition(performerId, stage) {
-  const cost = getAcquisitionCost(performerId, stage);
-  gameState.player.cash -= cost;
-  gameState.takeover.stats.totalSpent += cost;
-  
-  gameState.takeover.performers[performerId] = {
-    status: 'in_progress',
-    currentStage: stage,
-    stageStartDay: gameState.player.day,
-    stageCompleteDay: gameState.player.day + CONFIG.takeover.daysPerStage,
-    acquiredDay: null,
-    lostDay: null,
-    lostTo: null,
-    isReacquisition: false
-  };
-  
-  save();
-}
-
-function checkAcquisitionProgress() {
-  // Called on day advance
-  // Check all in_progress acquisitions
-  // If current day >= stageCompleteDay, mark stage as ready to advance
-}
-
-function advanceAcquisition(performerId) {
-  // Move to next stage or complete
-}
-
-function completeAcquisition(performerId) {
-  const performer = gameState.takeover.performers[performerId];
-  performer.status = 'acquired';
-  performer.acquiredDay = gameState.player.day;
-  
-  // Add to player roster
-  addPerformerToRoster(performerId);
-  
-  // Add to gallery
-  gameState.takeover.gallery.performers.push(performerId);
-  
-  // Update stats
-  gameState.takeover.stats.performersAcquired++;
-  
-  // Check studio vulnerability
-  updateStudioStatus(CONFIG.takeover.performers[performerId].studioId);
-  
-  save();
-}
-```
-
-#### 5.2 Create Acquisition Modal
-**Create:** `src/ui/acquisition-modal.js`
-
-Modal flow implementation:
-- Stage intro/confirmation modal
-- Stage complete modal with slideshow
-- Handle all 4 stages
-- Abort option with rep penalty
-
-Reference: `GAME_FLOW.md` Section 4
-
-#### 5.3 Hook Acquisition Check to Day Advance
-**File:** `src/systems/progression.js` or `src/main.js`
-
-Call `checkAcquisitionProgress()` on day advance.
-
-#### 5.4 Add Modal CSS
-**File:** `styles.css`
-
-Add styles for:
-- `.acquisition-modal`
-- `.acquisition-modal__header`, `__image`, `__text`, `__progress`, `__actions`
-- Slideshow progress dots
-
-### Definition of Done
-- [ ] Can start acquisition from Studio Detail screen
-- [ ] Stage 1 (Intel) flow works: pay → wait 2 days → see result
-- [ ] Stage 2 (Approach) flow works: pay → wait → slideshow (2 images)
-- [ ] Stage 3 (Turn) flow works: pay → wait → slideshow (8 images)
-- [ ] Stage 4 (Debut) flow works: pay → wait → slideshow (5 images)
-- [ ] Acquisition completes: performer added to roster
-- [ ] Performer appears in player roster
-- [ ] Gallery entry unlocked
-- [ ] Studio status updates correctly
-- [ ] Abort works with rep penalty
-- [ ] Costs deducted correctly
-- [ ] State persists across save/load
+### Shipped (Phase 5)
+- [x] Boss becomes vulnerable at 3+ acquired performers from a studio.
+- [x] 5-stage / 10-day boss confrontation flow with resolve-stage modals (manual advance).
+- [x] Defeat rewards: auto-acquire remaining performers, trophy tracking, boss collection entry, and +25 reputation (clamped at 100).
+- [x] Studio defeat bonus applies +10% theme multiplier for matching Act 3 categories.
 
 ---
 
-## Phase 6: Boss Confrontation
+## Phase 6: Competition Swap + Retaliation Events (Next)
 
 ### Objective
-Implement boss confrontation when studio is vulnerable.
+Disable or replace the Competition loop at Day 181 and introduce retaliation events.
 
-### Tasks
-
-#### 6.1 Implement Boss Confrontation Logic
-**File:** `src/systems/takeover.js`
-
-```javascript
-function canStartBossConfrontation(bossId) {
-  const boss = CONFIG.takeover.bosses[bossId];
-  const studio = gameState.takeover.studios[boss.studioId];
-  const acquired = getAcquiredPerformerCount(boss.studioId);
-  
-  if (acquired < CONFIG.takeover.performersToVulnerableBoss) {
-    return { allowed: false, reason: 'Need 3+ performers first' };
-  }
-  
-  if (gameState.player.reputation < CONFIG.takeover.repRequirements.boss) {
-    return { allowed: false, reason: 'Insufficient reputation' };
-  }
-  
-  if (gameState.player.cash < CONFIG.takeover.costs.bossConfrontation) {
-    return { allowed: false, reason: 'Insufficient funds' };
-  }
-  
-  return { allowed: true };
-}
-
-function startBossConfrontation(bossId) {
-  // Similar to startAcquisition but for boss
-}
-
-function completeBossConfrontation(bossId) {
-  const boss = CONFIG.takeover.bosses[bossId];
-  const studioId = boss.studioId;
-  
-  // Mark boss defeated
-  gameState.takeover.bossConfrontations[bossId].status = 'defeated';
-  gameState.takeover.bossConfrontations[bossId].defeatedDay = gameState.player.day;
-  
-  // Mark studio defeated
-  gameState.takeover.studios[studioId].status = 'defeated';
-  gameState.takeover.studios[studioId].defeatedDay = gameState.player.day;
-  
-  // Auto-acquire remaining performers
-  autoAcquireRemainingPerformers(studioId);
-  
-  // Add boss to gallery
-  gameState.takeover.gallery.bosses.push(bossId);
-  
-  // Reputation bonus
-  gameState.player.reputation += CONFIG.takeover.repChanges.bossDefeated;
-  
-  // Stats
-  gameState.takeover.stats.bossesDefeated++;
-  
-  // Check victory condition
-  checkVictoryCondition();
-  
-  save();
-}
-```
-
-#### 6.2 Create Boss Confrontation Modal
-**File:** `src/ui/acquisition-modal.js` (extend)
-
-Add boss confrontation flow:
-- 5 stages × 2 images each
-- Final stage is longer sequence
-- Victory screen for studio acquisition
-
-#### 6.3 Update Studio Detail Screen
-**File:** `src/ui/studio-detail-render.js`
-
-- Show "CONFRONT BOSS" button when vulnerable
-- Show confrontation progress when in progress
-
-### Definition of Done
-- [ ] Boss shows "VULNERABLE" when 3+ performers acquired
-- [ ] Can start boss confrontation
-- [ ] 5-stage flow works with 2-day intervals
-- [ ] Final stage shows full image sequence
-- [ ] Boss defeat triggers studio acquisition
-- [ ] Remaining performers auto-acquired (with debut shoots queued)
-- [ ] Gallery entries unlocked
-- [ ] Rep bonus applied
-- [ ] Studio shows as DEFEATED on Industry Map
+### Tasks (Next)
+- [ ] Disable/replace Competition at Day 181.
+- [ ] Add retaliation/poaching events tied to takeover status.
+- [ ] Ensure the takeover reputation floor (10) and global cap (100) are enforced during retaliation.
 
 ---
 

@@ -512,6 +512,30 @@ function applyEquipmentOfSubsMultiplier(baseOfSubs, gameState) {
   return Math.round(safeOfSubs * (1 + multiplier));
 }
 
+function getStudioDefeatThemeBonusMultiplier(gameState, themeId) {
+  if (!themeId || !gameState || !gameState.takeover || !gameState.takeover.studios) {
+    return 1;
+  }
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder : [];
+  const studioConfigs = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
+    ? takeoverConfig.studios
+    : {};
+  let multiplier = 1;
+  studioOrder.forEach(function (studioId) {
+    const studioState = gameState.takeover.studios[studioId];
+    const studioConfig = studioConfigs[studioId];
+    if (!studioState || studioState.status !== "defeated" || !studioConfig) {
+      return;
+    }
+    const bonus = studioConfig.bonusOnDefeat;
+    if (bonus && bonus.type === "contentMultiplier" && bonus.category === themeId && Number.isFinite(bonus.value)) {
+      multiplier *= bonus.value;
+    }
+  });
+  return multiplier;
+}
+
 function getEffectiveStarPower(performer) {
   const baseStar = performer && Number.isFinite(performer.starPower) ? performer.starPower : 1;
   const exponent = CONFIG.economy && Number.isFinite(CONFIG.economy.starPowerExponent)
@@ -520,28 +544,34 @@ function getEffectiveStarPower(performer) {
   return Math.pow(baseStar, exponent);
 }
 
-function calculatePromoFollowers(performer, theme) {
+function calculatePromoFollowers(performer, theme, gameState) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };
   }
   const effectiveStar = getEffectiveStarPower(performer);
+  const resolvedState = gameState || window.gameState;
+  const bonusMult = getStudioDefeatThemeBonusMultiplier(resolvedState, theme.id);
   const followersGained = Math.round(
     CONFIG.economy.promo_followers_gain *
     theme.modifiers.followersMult *
-    effectiveStar
+    effectiveStar *
+    bonusMult
   );
   return { ok: true, value: Math.max(0, followersGained) };
 }
 
-function calculatePremiumOfSubs(performer, theme) {
+function calculatePremiumOfSubs(performer, theme, gameState) {
   if (!performer || !theme) {
     return { ok: false, value: 0 };
   }
   const effectiveStar = getEffectiveStarPower(performer);
+  const resolvedState = gameState || window.gameState;
+  const bonusMult = getStudioDefeatThemeBonusMultiplier(resolvedState, theme.id);
   const ofSubs = Math.round(
     CONFIG.economy.premium_base_of_subs *
     theme.modifiers.ofSubsMult *
-    effectiveStar
+    effectiveStar *
+    bonusMult
   );
   return { ok: true, value: Math.max(0, ofSubs) };
 }

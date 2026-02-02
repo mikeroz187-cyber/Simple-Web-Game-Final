@@ -100,13 +100,16 @@ function showDecisionModal(opts) {
   const title = opts.title || "Decision";
   const messageHtml = opts.messageHtml || "";
   const imagePath = opts.imagePath || "";
+  const imageFallbackPath = opts.imageFallbackPath || "";
   const primaryLabel = opts.primaryLabel || "Confirm";
   const primaryAction = opts.primaryAction || "dismiss-modal";
   const secondaryLabel = opts.secondaryLabel || "Cancel";
   const secondaryAction = opts.secondaryAction || "dismiss-modal";
   const extraHtml = opts.extraHtml || "";
   const imageHtml = imagePath
-    ? "<img class=\"decision-mascot\" src=\"" + imagePath + "\" alt=\"\" />"
+    ? "<img class=\"decision-mascot\" src=\"" + imagePath + "\" alt=\"\"" +
+      (imageFallbackPath ? " onerror=\"this.onerror=null;this.src='" + imageFallbackPath + "'\"" : "") +
+      " />"
     : "";
 
   modalRoot.innerHTML =
@@ -229,6 +232,25 @@ function buildTakeoverStoryLogEntry(gameState, performerName, message, suffix) {
   };
 }
 
+function getBossStageCopy(stageKey) {
+  if (stageKey === "summons") {
+    return "She contacts you. Neutral ground. Just talking. You both know that's a lie.";
+  }
+  if (stageKey === "negotiation") {
+    return "\"A merger,\" she offers. \"Equal partners.\" You laugh. She doesn't.";
+  }
+  if (stageKey === "power_play") {
+    return "Threats now. Lawyers. Old favors. None of it lands.";
+  }
+  if (stageKey === "fall") {
+    return "The moment she realizes she's not negotiating anymore. She's surrendering.";
+  }
+  if (stageKey === "terms") {
+    return "The terms are yours to dictate. And you dictate thoroughly.";
+  }
+  return "The room tilts. The leverage shifts. You're in control.";
+}
+
 function showTakeoverStageModal(gameState) {
   const modalRoot = qs("#modal-root");
   if (!modalRoot || !gameState) {
@@ -314,6 +336,76 @@ function showTakeoverStageModal(gameState) {
     "<div class=\"button-row\" style=\"margin-top:12px;\">" +
     primaryButton +
     abortButton +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function showBossStageModal(gameState) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !gameState) {
+    return;
+  }
+  const uiState = getUiState();
+  const modalState = uiState.bossStageModal;
+  if (!modalState || !modalState.studioId) {
+    clearModal();
+    return;
+  }
+  const studioId = modalState.studioId;
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+  const studioConfig = typeof getTakeoverStudioConfig === "function"
+    ? getTakeoverStudioConfig(studioId)
+    : (takeoverConfig.studios ? takeoverConfig.studios[studioId] : null);
+  const bossConfig = typeof getBossConfigForStudio === "function"
+    ? getBossConfigForStudio(studioId)
+    : null;
+  const bossName = bossConfig && bossConfig.name ? bossConfig.name : "Boss";
+  const bossId = bossConfig && bossConfig.id ? bossConfig.id : (studioConfig ? studioConfig.bossId : null);
+  const stageKey = modalState.stageKey || "summons";
+  const stageLabel = typeof getBossStageLabel === "function" ? getBossStageLabel(stageKey) : "Stage";
+  const slides = typeof getBossStageImagePaths === "function"
+    ? getBossStageImagePaths(studioId, bossId, stageKey, 5)
+    : [];
+  const slideCount = slides.length ? slides.length : 1;
+  const safeIndex = Math.min(Math.max(0, modalState.index || 0), slideCount - 1);
+  const slidePath = slides.length ? slides[safeIndex] : placeholderPath;
+  const slideNumber = slideCount ? safeIndex + 1 : 0;
+  const imageHtml = "<div class=\"slideshow-image-container\">" +
+    "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"" + stageLabel + " slide " + slideNumber + "\"" +
+    (placeholderPath ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "") + " />" +
+    "</div>";
+  const prevDisabled = safeIndex <= 0;
+  const nextDisabled = safeIndex >= slideCount - 1;
+  const controlsHtml = "<div class=\"slideshow-controls\">" +
+    createButton("Prev", "boss-stage-prev", "", prevDisabled) +
+    createButton("Next", "boss-stage-next", "primary", nextDisabled) +
+    "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
+    "</div>";
+  const messageHtml = getBossStageCopy(stageKey);
+  const stages = typeof getBossStagesList === "function"
+    ? getBossStagesList()
+    : ["summons", "negotiation", "power_play", "fall", "terms"];
+  const isFinalStage = modalState.stageIndex >= stages.length - 1;
+  const durationDays = typeof getBossStageDurationDays === "function" ? getBossStageDurationDays() : 2;
+  const primaryLabel = isFinalStage ? "Finalize Acquisition" : "Proceed (" + durationDays + " days)";
+  const primaryButton = createButton(primaryLabel, "boss-stage-proceed", "primary");
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card modal-card--decision\">" +
+    "<div class=\"decision-layout\">" +
+    "<div class=\"decision-body\">" +
+    "<h3 class=\"modal-title\">" + stageLabel.toUpperCase() + ": " + bossName + "</h3>" +
+    "<div class=\"slideshow-layout\">" +
+    imageHtml +
+    controlsHtml +
+    "</div>" +
+    "<p class=\"modal-message\" style=\"margin-top:12px;\">" + messageHtml + "</p>" +
+    "<div class=\"button-row\" style=\"margin-top:12px;\">" +
+    primaryButton +
     "</div>" +
     "</div>" +
     "</div>" +
@@ -893,6 +985,12 @@ function setupEventHandlers() {
       if (uiState.takeoverStageModal) {
         uiState.takeoverStageModal = null;
       }
+      if (uiState.bossModal) {
+        uiState.bossModal = null;
+      }
+      if (uiState.bossStageModal) {
+        uiState.bossStageModal = null;
+      }
       clearModal();
       return;
     }
@@ -1234,6 +1332,79 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "industry-confirm-boss") {
+      const modalState = uiState.bossModal;
+      const studioId = modalState ? modalState.studioId : null;
+      if (!studioId) {
+        clearModal();
+        uiState.bossModal = null;
+        return;
+      }
+      const studioConfig = typeof getTakeoverStudioConfig === "function"
+        ? getTakeoverStudioConfig(studioId)
+        : (CONFIG.takeover && CONFIG.takeover.studios ? CONFIG.takeover.studios[studioId] : null);
+      const bossConfig = typeof getBossConfigForStudio === "function"
+        ? getBossConfigForStudio(studioId)
+        : null;
+      if (!studioConfig || !bossConfig) {
+        clearModal();
+        uiState.bossModal = null;
+        return;
+      }
+      if (typeof ensureTakeoverState === "function") {
+        ensureTakeoverState(window.gameState);
+      }
+      const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+      const bossSettings = takeoverConfig.boss || {};
+      const cost = Number.isFinite(bossSettings.cost) ? bossSettings.cost : 150000;
+      const requiredRep = Number.isFinite(bossSettings.requiredReputation) ? bossSettings.requiredReputation : 100;
+      const currentRep = Number.isFinite(window.gameState.player.reputation) ? window.gameState.player.reputation : 0;
+      if (currentRep < requiredRep) {
+        if (typeof showToast === "function") {
+          showToast("Reputation too low.", "error");
+        }
+        return;
+      }
+      if (window.gameState.player.cash < cost) {
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "error");
+        }
+        return;
+      }
+      const stages = typeof getBossStagesList === "function"
+        ? getBossStagesList()
+        : ["summons", "negotiation", "power_play", "fall", "terms"];
+      const stageKey = stages[0] || "summons";
+      const stageDuration = typeof getBossStageDurationDays === "function" ? getBossStageDurationDays() : 2;
+      window.gameState.player.cash = Math.max(0, window.gameState.player.cash - cost);
+      const studioState = window.gameState.takeover.studios[studioId];
+      studioState.bossConfrontation = {
+        status: "in_progress",
+        stageIndex: 0,
+        stageKey: stageKey,
+        stageStartDay: window.gameState.player.day,
+        stageCompleteDay: window.gameState.player.day + stageDuration,
+        stageReady: false
+      };
+      if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
+        const logEntry = buildTakeoverStoryLogEntry(
+          window.gameState,
+          bossConfig.name || "Boss",
+          "Boss confrontation started: " + (bossConfig.name || "Boss") +
+            " (ready Day " + studioState.bossConfrontation.stageCompleteDay + ")",
+          "boss_start_day" + window.gameState.player.day
+        );
+        if (logEntry) {
+          addStoryLogEntry(window.gameState, logEntry);
+        }
+      }
+      uiState.bossModal = null;
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "takeover-stage-prev" || action === "takeover-stage-next") {
       const modalState = uiState.takeoverStageModal;
       if (!modalState || !modalState.performerId) {
@@ -1248,6 +1419,25 @@ function setupEventHandlers() {
       const delta = action === "takeover-stage-next" ? 1 : -1;
       modalState.index = clamp((modalState.index || 0) + delta, 0, maxIndex);
       showTakeoverStageModal(window.gameState);
+      return;
+    }
+
+    if (action === "boss-stage-prev" || action === "boss-stage-next") {
+      const modalState = uiState.bossStageModal;
+      if (!modalState || !modalState.studioId) {
+        return;
+      }
+      const studioId = modalState.studioId;
+      const bossConfig = typeof getBossConfigForStudio === "function" ? getBossConfigForStudio(studioId) : null;
+      const bossId = bossConfig && bossConfig.id ? bossConfig.id : null;
+      const stageKey = modalState.stageKey || "summons";
+      const slides = typeof getBossStageImagePaths === "function"
+        ? getBossStageImagePaths(studioId, bossId, stageKey, 5)
+        : [];
+      const maxIndex = Math.max(0, (slides.length ? slides.length : 1) - 1);
+      const delta = action === "boss-stage-next" ? 1 : -1;
+      modalState.index = clamp((modalState.index || 0) + delta, 0, maxIndex);
+      showBossStageModal(window.gameState);
       return;
     }
 
@@ -1429,6 +1619,86 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "boss-stage-proceed") {
+      const modalState = uiState.bossStageModal;
+      if (!modalState || !modalState.studioId) {
+        clearModal();
+        return;
+      }
+      const studioId = modalState.studioId;
+      const confrontation = typeof getBossConfrontationState === "function"
+        ? getBossConfrontationState(window.gameState, studioId)
+        : null;
+      if (!confrontation || confrontation.status !== "in_progress" || !confrontation.stageReady) {
+        clearModal();
+        return;
+      }
+      const bossConfig = typeof getBossConfigForStudio === "function" ? getBossConfigForStudio(studioId) : null;
+      const stages = typeof getBossStagesList === "function"
+        ? getBossStagesList()
+        : ["summons", "negotiation", "power_play", "fall", "terms"];
+      const isFinalStage = confrontation.stageIndex >= stages.length - 1;
+      if (isFinalStage) {
+        if (typeof defeatStudioBoss === "function") {
+          defeatStudioBoss(window.gameState, studioId);
+        }
+        uiState.bossStageModal = null;
+        clearModal();
+        const studioConfig = typeof getTakeoverStudioConfig === "function"
+          ? getTakeoverStudioConfig(studioId)
+          : (CONFIG.takeover && CONFIG.takeover.studios ? CONFIG.takeover.studios[studioId] : null);
+        const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+        const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+        const trophyPath = studioConfig
+          ? "assets/images/takeover/" + studioId + "/trophy.png"
+          : placeholderPath;
+        showDecisionModal({
+          title: (studioConfig && studioConfig.name ? studioConfig.name : "Studio") + " — ACQUIRED",
+          messageHtml: "<ul>" +
+            "<li>✓ Remaining performers auto-acquired</li>" +
+            "<li>✓ Trophy unlocked (studio bonus applied)</li>" +
+            "<li>✓ Boss added to collection</li>" +
+            "<li>✓ +25 Reputation (capped at 100)</li>" +
+            "</ul>",
+          imagePath: trophyPath,
+          imageFallbackPath: placeholderPath,
+          primaryLabel: "Return to Industry Map",
+          primaryAction: "nav-industry-map",
+          secondaryLabel: "Back to Studio",
+          secondaryAction: "industry-return-to-studio"
+        });
+        saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        renderApp(window.gameState);
+        return;
+      }
+      const nextStageIndex = confrontation.stageIndex + 1;
+      const nextStageKey = stages[nextStageIndex] || confrontation.stageKey;
+      const stageDuration = typeof getBossStageDurationDays === "function" ? getBossStageDurationDays() : 2;
+      confrontation.stageIndex = nextStageIndex;
+      confrontation.stageKey = nextStageKey;
+      confrontation.stageStartDay = window.gameState.player.day;
+      confrontation.stageCompleteDay = window.gameState.player.day + stageDuration;
+      confrontation.stageReady = false;
+      if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
+        const logEntry = buildTakeoverStoryLogEntry(
+          window.gameState,
+          bossConfig && bossConfig.name ? bossConfig.name : "Boss",
+          "Boss stage advanced: " + (bossConfig && bossConfig.name ? bossConfig.name : "Boss") +
+            " — " + (typeof getBossStageLabel === "function" ? getBossStageLabel(nextStageKey) : "Stage") +
+            " (ready Day " + confrontation.stageCompleteDay + ")",
+          "boss_stage_" + confrontation.stageIndex + "_day" + window.gameState.player.day
+        );
+        if (logEntry) {
+          addStoryLogEntry(window.gameState, logEntry);
+        }
+      }
+      uiState.bossStageModal = null;
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "booking-slideshow-prev" || action === "booking-slideshow-next") {
       const entry = getLatestContentEntry(window.gameState);
       if (!entry) {
@@ -1561,6 +1831,52 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "industry-begin-boss") {
+      event.preventDefault();
+      event.stopPropagation();
+      const studioId = actionEl.getAttribute("data-studio-id");
+      if (!studioId) {
+        return;
+      }
+      if (typeof canStartBossConfrontation === "function" && !canStartBossConfrontation(window.gameState, studioId)) {
+        return;
+      }
+      const studioConfig = typeof getTakeoverStudioConfig === "function"
+        ? getTakeoverStudioConfig(studioId)
+        : (CONFIG.takeover && CONFIG.takeover.studios ? CONFIG.takeover.studios[studioId] : null);
+      const bossConfig = typeof getBossConfigForStudio === "function"
+        ? getBossConfigForStudio(studioId)
+        : null;
+      if (!studioConfig || !bossConfig) {
+        return;
+      }
+      const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+      const bossSettings = takeoverConfig.boss || {};
+      const cost = Number.isFinite(bossSettings.cost) ? bossSettings.cost : 150000;
+      const stageDuration = Number.isFinite(bossSettings.daysPerStage) ? bossSettings.daysPerStage : 2;
+      const stageCount = typeof getBossStagesList === "function" ? getBossStagesList().length : 5;
+      const durationDays = stageDuration * (stageCount || 5);
+      const requiredRep = Number.isFinite(bossSettings.requiredReputation) ? bossSettings.requiredReputation : 100;
+      const currentRep = Number.isFinite(window.gameState.player.reputation) ? window.gameState.player.reputation : 0;
+      const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+      const portraitPath = bossConfig.portraitPath || placeholderPath;
+      uiState.bossModal = { studioId: studioId };
+      showDecisionModal({
+        title: "CONFRONT: " + (bossConfig.name || "Boss"),
+        messageHtml: "You've taken three of her best. " + (studioConfig.name || "The studio") + " is bleeding.<br><br>" +
+          "<strong>Cost:</strong> " + formatCurrency(cost) + "<br>" +
+          "<strong>Duration:</strong> " + durationDays + " days<br>" +
+          "<strong>Reputation Required:</strong> " + requiredRep + " (You have: " + currentRep + ")",
+        imagePath: portraitPath,
+        imageFallbackPath: placeholderPath,
+        primaryLabel: "Pay " + formatCurrency(cost) + " — Accept Meeting",
+        primaryAction: "industry-confirm-boss",
+        secondaryLabel: "Decline",
+        secondaryAction: "dismiss-modal"
+      });
+      return;
+    }
+
     if (action === "industry-resolve-stage") {
       event.preventDefault();
       event.stopPropagation();
@@ -1580,10 +1896,38 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "industry-resolve-boss-stage") {
+      event.preventDefault();
+      event.stopPropagation();
+      const studioId = actionEl.getAttribute("data-studio-id");
+      if (!studioId || typeof getBossConfrontationState !== "function") {
+        return;
+      }
+      const confrontation = getBossConfrontationState(window.gameState, studioId);
+      if (!confrontation || confrontation.status !== "in_progress" || !confrontation.stageReady) {
+        return;
+      }
+      uiState.bossStageModal = {
+        studioId: studioId,
+        stageIndex: confrontation.stageIndex || 0,
+        stageKey: confrontation.stageKey,
+        index: 0
+      };
+      showBossStageModal(window.gameState);
+      return;
+    }
+
     if (action === "industry-back-to-map") {
       event.preventDefault();
       event.stopPropagation();
       showScreen("screen-industry-map");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-return-to-studio") {
+      clearModal();
+      showScreen("screen-industry-studio");
       renderApp(window.gameState);
       return;
     }

@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Implemented Phase 5 boss confrontations for A3 studios with stage-ready flow, studio defeat rewards, gallery tracking, and theme-based bonuses on booking outputs.
+  - Why: Deliver the Industry Takeover boss loop and studio defeat rewards for Act 3 content expansion while honoring reputation caps.
+  - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/systems/economy.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, src/ui/events.js.
+- What: Updated late-game takeover documentation, scope snapshot, and task checklist for Phase 5 completion and image/reputation caps.
+  - Why: Keep documentation aligned with the shipped boss confrontation flow and current Phase 6 focus.
+  - Files touched: docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md.
 - What: Implemented the Industry Takeover Phase 4 acquisition loop with stage tracking, reputation clamps, and day-advance progression for A3 studios.
   - Why: Enable the full intel → approach → turn → debut pipeline with safe takeover-specific reputation handling.
   - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/systems/booking.js.

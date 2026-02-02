@@ -381,7 +381,11 @@ function postPromoContent(gameState, platform, contentId) {
     themeFollowersMult *
     averageStarPower
   );
-  let socialFollowersGained = applyEquipmentFollowersMultiplier(baseFollowers, gameState);
+  const themeBonusMult = typeof getStudioDefeatThemeBonusMultiplier === "function"
+    ? getStudioDefeatThemeBonusMultiplier(gameState, entry.themeId)
+    : 1;
+  const adjustedBaseFollowers = Math.round(baseFollowers * (Number.isFinite(themeBonusMult) ? themeBonusMult : 1));
+  let socialFollowersGained = applyEquipmentFollowersMultiplier(adjustedBaseFollowers, gameState);
   const source = entry.source || "core";
   const isAgencyPack = source === "agency_pack";
   const performerIds = getEntryPerformerIds(entry);

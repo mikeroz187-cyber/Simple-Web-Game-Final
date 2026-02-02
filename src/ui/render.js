@@ -362,6 +362,7 @@ function renderIndustryMap(gameState) {
     var studioState = takeoverState.studios && takeoverState.studios[studioId]
       ? takeoverState.studios[studioId]
       : {};
+    var studioDefeated = studioState && studioState.status === "defeated";
     var title = studioConfig.name || "Unknown Studio";
     var tagline = studioConfig.tagline || studioConfig.description || "No intel yet.";
     var statusText = "Available";
@@ -381,15 +382,26 @@ function renderIndustryMap(gameState) {
     var acquiredCount = performersByStudio[studioId] || 0;
     var acquiredLabel = acquiredCount + "/" + (Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds.length : 0) + " acquired";
     var bossVulnerable = acquiredCount >= bossVulnerableThreshold;
-    var bossVulnerableHtml = bossVulnerable
+    var bossVulnerableHtml = bossVulnerable && !studioDefeated
       ? "<div class=\"pill pill--warning\" style=\"margin-bottom: var(--gap-sm);\">Boss: VULNERABLE</div>"
+      : "";
+    var bonusLineHtml = "";
+    if (studioDefeated && studioConfig.bonusOnDefeat && studioConfig.bonusOnDefeat.category) {
+      var bonusThemeName = getThemeName(studioConfig.bonusOnDefeat.category);
+      bonusLineHtml = "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">Bonus: +10% " +
+        bonusThemeName + " theme outputs</div>";
+    }
+    var defeatedBadgeHtml = studioDefeated
+      ? "<div class=\"pill pill--success\" style=\"margin-bottom: var(--gap-sm);\">DEFEATED</div>"
       : "";
     return "<div class=\"shop-card\">" +
       imageHtml +
       "<div class=\"shop-card__title\">" + title + "</div>" +
       "<div class=\"shop-card__description\">" + tagline + "</div>" +
       "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">" + statusText + "</div>" +
+      defeatedBadgeHtml +
       "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">" + acquiredLabel + "</div>" +
+      bonusLineHtml +
       bossVulnerableHtml +
       "<button class=\"button primary\" data-action=\"industry-view-studio\" data-studio-id=\"" + studioId + "\">View Studio</button>" +
       "</div>";
@@ -467,6 +479,7 @@ function renderIndustryStudio(gameState) {
   var studioState = takeoverState.studios && takeoverState.studios[selectedStudioId]
     ? takeoverState.studios[selectedStudioId]
     : {};
+  var studioDefeated = studioState && studioState.status === "defeated";
   var statusLabel = "Available";
   if (studioState && typeof studioState.status === "string") {
     if (studioState.status === "active") {
@@ -507,6 +520,75 @@ function renderIndustryStudio(gameState) {
     var performer = performerState[performerId];
     return performer && performer.status === "acquired";
   }).length;
+  var bossConfrontation = studioState && studioState.bossConfrontation ? studioState.bossConfrontation : null;
+  var bossStages = typeof getBossStagesList === "function" ? getBossStagesList() : ["summons", "negotiation", "power_play", "fall", "terms"];
+  var bossStageKey = bossConfrontation && typeof bossConfrontation.stageKey === "string"
+    ? bossConfrontation.stageKey
+    : bossStages[0];
+  var bossStageLabel = typeof getBossStageLabel === "function" ? getBossStageLabel(bossStageKey) : "Stage";
+  var bossStageReadyDay = Number.isFinite(bossConfrontation && bossConfrontation.stageCompleteDay)
+    ? bossConfrontation.stageCompleteDay
+    : null;
+  var bossVulnerable = typeof isBossVulnerable === "function"
+    ? isBossVulnerable(gameState, selectedStudioId)
+    : acquiredCount >= (Number.isFinite(takeoverConfig.performersToVulnerableBoss) ? takeoverConfig.performersToVulnerableBoss : 3);
+  var bossStartable = typeof canStartBossConfrontation === "function"
+    ? canStartBossConfrontation(gameState, selectedStudioId)
+    : false;
+  var bossStatusLine = "Boss Status: LOCKED (need " + Math.max(0, (Number.isFinite(takeoverConfig.performersToVulnerableBoss)
+    ? takeoverConfig.performersToVulnerableBoss
+    : 3) - acquiredCount) + " more acquisitions)";
+  if (studioDefeated) {
+    bossStatusLine = "Boss Status: Defeated";
+  } else if (bossConfrontation && bossConfrontation.status === "in_progress") {
+    if (bossConfrontation.stageReady) {
+      bossStatusLine = "Boss Stage Ready: " + bossStageLabel;
+    } else if (bossStageReadyDay !== null) {
+      bossStatusLine = "Boss In Progress: " + bossStageLabel + " (ready Day " + bossStageReadyDay + ")";
+    } else {
+      bossStatusLine = "Boss In Progress: " + bossStageLabel;
+    }
+  } else if (bossVulnerable) {
+    bossStatusLine = "Boss Status: VULNERABLE";
+  }
+  var bossButtonLabel = "Confront Boss (Coming Soon)";
+  var bossButtonDisabled = true;
+  var bossButtonAttr = "";
+  if (studioDefeated) {
+    bossButtonLabel = "Confront Boss (Defeated)";
+    bossButtonDisabled = true;
+  } else if (bossConfrontation && bossConfrontation.status === "in_progress") {
+    if (bossConfrontation.stageReady) {
+      bossButtonLabel = "Resolve Boss Stage: " + bossStageLabel;
+      bossButtonDisabled = false;
+      bossButtonAttr = " data-action=\"industry-resolve-boss-stage\" data-studio-id=\"" + selectedStudioId + "\"";
+    } else if (bossStageReadyDay !== null) {
+      bossButtonLabel = bossStageLabel + " — ready Day " + bossStageReadyDay;
+      bossButtonDisabled = true;
+    } else {
+      bossButtonLabel = bossStageLabel + " — in progress";
+      bossButtonDisabled = true;
+    }
+  } else if (bossVulnerable) {
+    var bossConfigData = takeoverConfig.boss || {};
+    var requiredRep = Number.isFinite(bossConfigData.requiredReputation)
+      ? bossConfigData.requiredReputation
+      : 100;
+    var bossCost = Number.isFinite(bossConfigData.cost)
+      ? bossConfigData.cost
+      : 150000;
+    if (bossStartable) {
+      bossButtonLabel = "Begin Confrontation";
+      bossButtonDisabled = false;
+      bossButtonAttr = " data-action=\"industry-begin-boss\" data-studio-id=\"" + selectedStudioId + "\"";
+    } else if (currentRep < requiredRep) {
+      bossButtonLabel = "Requires Reputation " + requiredRep + " (You: " + currentRep + ")";
+      bossButtonDisabled = true;
+    } else if (gameState.player.cash < bossCost) {
+      bossButtonLabel = "Need " + formatCurrency(bossCost) + " (You: " + formatCurrency(gameState.player.cash) + ")";
+      bossButtonDisabled = true;
+    }
+  }
 
   function getPerformerStatusLabel(status) {
     if (status === "available") {
@@ -607,6 +689,11 @@ function renderIndustryStudio(gameState) {
         }
       }
     }
+    if (studioDefeated) {
+      actionLabel = "Studio Defeated";
+      actionDisabled = true;
+      actionAttr = "";
+    }
     return "<div class=\"industry-performer-card\">" +
       "<div class=\"industry-performer__portrait\">" + performerPortraitHtml + "</div>" +
       "<div class=\"industry-performer__details\">" +
@@ -627,6 +714,7 @@ function renderIndustryStudio(gameState) {
     "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">" + studioName + "</h2>" +
     "<p class=\"helper-text\">" + studioTagline + "</p>" +
     "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">Status: " + statusLabel + "</div>" +
+    (studioDefeated ? "<div class=\"helper-text\">Studio Status: Defeated</div>" : "") +
     "<div class=\"secondary-stats-row\" style=\"border-top:none; padding-top:0;\">" +
     "<div class=\"secondary-stat\"><span>Acquired from this studio:</span><span class=\"secondary-stat__value\">" +
     acquiredCount + " / " + performerIds.length + "</span></div>" +
@@ -637,9 +725,10 @@ function renderIndustryStudio(gameState) {
     "<div class=\"industry-boss-card\">" +
     "<div class=\"industry-boss__portrait\">" + bossPortraitHtml + "</div>" +
     "<div class=\"industry-boss__details\">" +
+    "<p class=\"helper-text\">" + bossStatusLine + "</p>" +
     "<p class=\"helper-text\">Boss confrontation at Reputation: 100 (cap)</p>" +
     "<p class=\"helper-text\">Take 3 performers from this studio to draw them out.</p>" +
-    "<button class=\"button primary\" disabled>Confront Boss (Coming Soon)</button>" +
+    "<button class=\"button primary\"" + (bossButtonDisabled ? " disabled" : "") + bossButtonAttr + ">" + bossButtonLabel + "</button>" +
     "</div>" +
     "</div>" +
     "</div>" +
@@ -1182,7 +1271,17 @@ function renderBooking(gameState) {
   var selectedLocation = selectedLocationId ? CONFIG.locations.catalog[selectedLocationId] : null;
 
   // Get themes
-  var themeIds = CONFIG.themes.mvp.theme_ids || [];
+  var themeIds = (CONFIG.themes.mvp.theme_ids || []).slice();
+  if (typeof isTakeoverUnlocked === "function" && isTakeoverUnlocked(gameState)) {
+    var act3ThemeIds = CONFIG.themes.act3 && Array.isArray(CONFIG.themes.act3.theme_ids)
+      ? CONFIG.themes.act3.theme_ids
+      : [];
+    act3ThemeIds.forEach(function (themeId) {
+      if (themeIds.indexOf(themeId) === -1) {
+        themeIds.push(themeId);
+      }
+    });
+  }
   var selectedThemeId = uiState.booking.themeId;
   var selectedTheme = selectedThemeId ? getThemeById(selectedThemeId) : null;
 
@@ -2865,6 +2964,9 @@ function getThemeById(themeId) {
   }
   if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
     return CONFIG.themes.act2.themes[themeId];
+  }
+  if (CONFIG.themes.act3 && CONFIG.themes.act3.themes && CONFIG.themes.act3.themes[themeId]) {
+    return CONFIG.themes.act3.themes[themeId];
   }
   return null;
 }
