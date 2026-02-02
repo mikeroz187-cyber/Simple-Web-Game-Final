@@ -19,6 +19,16 @@ function setEquipmentMessage(message) {
   uiState.shop.equipmentMessage = message || "";
 }
 
+function setIndustrySelectedStudioId(studioId) {
+  const uiState = getUiState();
+  uiState.industrySelectedStudioId = studioId || null;
+}
+
+function getIndustrySelectedStudioId() {
+  const uiState = getUiState();
+  return uiState.industrySelectedStudioId || null;
+}
+
 function buildDailyCashflowMessage(cashflow) {
   if (!cashflow || typeof cashflow !== "object") {
     return "";
@@ -1055,6 +1065,25 @@ function setupEventHandlers() {
 
     if (action === "nav-industry-map") {
       clearModal();
+      showScreen("screen-industry-map");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-view-studio") {
+      event.preventDefault();
+      event.stopPropagation();
+      var studioEl = actionEl.closest("[data-studio-id]");
+      var studioId = studioEl ? studioEl.getAttribute("data-studio-id") : null;
+      setIndustrySelectedStudioId(studioId);
+      showScreen("screen-industry-studio");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-back-to-map") {
+      event.preventDefault();
+      event.stopPropagation();
       showScreen("screen-industry-map");
       renderApp(window.gameState);
       return;

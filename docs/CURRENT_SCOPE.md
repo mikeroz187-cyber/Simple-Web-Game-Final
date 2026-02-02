@@ -2,9 +2,10 @@
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
 
-**Last Updated:** February 02, 2026
+**Last Updated:** February 03, 2026
 
 ## Recently Completed
+- Industry Takeover Phase 3: Studio Detail screen with boss card, performer roster, and View Studio navigation from the Industry Map (actions disabled).
 - Industry Takeover Phase 2: Industry Map nav entry, screen shell, and Day 181 unlock CTA.
 - Act 2 Social Collab Week (Day 170 offer, 7-day unique promo streak, 14-day retry cadence, +3% permanent promo reach reward).
 - Hub UI fixes: correct debt days-left countdown, show daily overhead with OF payouts, and stabilize the Shop cashflow snapshot panel.
@@ -49,7 +50,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Industry Takeover — Phase 3 studio detail screen + performer list
+- Industry Takeover — Phase 4 acquisition stages (intel/approach/turn/debut)
 
 ## Next 3–7 Candidate Tasks
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state

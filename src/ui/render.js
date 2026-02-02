@@ -36,6 +36,7 @@ function getUiState() {
       save: {
         selectedSlotId: CONFIG.save.default_slot_id
       },
+      industrySelectedStudioId: null,
       debug: {
         dayStatus: ""
       },
@@ -283,6 +284,7 @@ function renderApp(gameState) {
   renderGallery(gameState);
   renderConquests(gameState);
   renderIndustryMap(gameState);
+  renderIndustryStudio(gameState);
   renderSlideshow(gameState);
   renderStoryLog(gameState);
   renderShop(gameState);
@@ -358,8 +360,7 @@ function renderIndustryMap(gameState) {
       "<div class=\"shop-card__title\">" + title + "</div>" +
       "<div class=\"shop-card__description\">" + tagline + "</div>" +
       "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">" + statusText + "</div>" +
-      "<button class=\"button primary\" disabled>View Studio</button>" +
-      "<p class=\"helper-text\" style=\"margin-top:8px;\">Coming next: Studio detail + roster.</p>" +
+      "<button class=\"button primary\" data-action=\"industry-view-studio\" data-studio-id=\"" + studioId + "\">View Studio</button>" +
       "</div>";
   }).join("");
 
@@ -370,6 +371,187 @@ function renderIndustryMap(gameState) {
     "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Studios</h3>" +
       "<div class=\"shop-grid\">" + studioCardsHtml + "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function renderIndustryStudio(gameState) {
+  var container = document.getElementById("screen-industry-studio");
+  if (!container) {
+    return;
+  }
+
+  var takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  var unlocked = typeof isTakeoverUnlocked === "function" ? isTakeoverUnlocked(gameState) : false;
+  var placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+
+  if (!unlocked) {
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
+      "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Locked</h3>" +
+      "<p class=\"helper-text\">Industry Takeover unlocks later. Come back on Day " +
+      (Number.isFinite(takeoverConfig.unlockDay) ? takeoverConfig.unlockDay : 181) + ".</p>" +
+      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
+
+  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice(0, 3) : [];
+  var selectedStudioId = typeof getIndustrySelectedStudioId === "function" ? getIndustrySelectedStudioId() : null;
+  if (!selectedStudioId) {
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
+      "<div class=\"panel\">" +
+      "<p class=\"helper-text\">Select a studio from the Industry Map.</p>" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">Back to Industry Map</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
+
+  if (studioOrder.indexOf(selectedStudioId) === -1) {
+    if (typeof setIndustrySelectedStudioId === "function") {
+      setIndustrySelectedStudioId(null);
+    }
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
+      "<div class=\"panel\">" +
+      "<p class=\"helper-text\">Select a studio from the Industry Map.</p>" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">Back to Industry Map</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
+
+  var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
+    ? takeoverConfig.studios
+    : {};
+  var studioConfig = studiosConfig[selectedStudioId] || {};
+  var takeoverState = gameState && gameState.takeover ? gameState.takeover : {};
+  var studioState = takeoverState.studios && takeoverState.studios[selectedStudioId]
+    ? takeoverState.studios[selectedStudioId]
+    : {};
+  var statusLabel = "Available";
+  if (studioState && typeof studioState.status === "string") {
+    if (studioState.status === "active") {
+      statusLabel = "Available";
+    } else {
+      statusLabel = studioState.status.replace(/_/g, " ");
+      statusLabel = statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1);
+    }
+  }
+
+  var studioName = studioConfig.name || "Unknown Studio";
+  var studioTagline = studioConfig.tagline || studioConfig.description || "No intel yet.";
+
+  var bossConfig = null;
+  if (studioConfig && studioConfig.bossId && takeoverConfig.bosses && takeoverConfig.bosses[studioConfig.bossId]) {
+    bossConfig = takeoverConfig.bosses[studioConfig.bossId];
+  }
+  var bossName = bossConfig && bossConfig.name ? bossConfig.name : "Unknown Boss";
+  var bossPortrait = bossConfig && bossConfig.portraitPath ? bossConfig.portraitPath : placeholderPath;
+  var bossPortraitAttr = bossPortrait ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "";
+  var bossPortraitHtml = bossPortrait
+    ? "<img src=\"" + bossPortrait + "\" alt=\"" + bossName + "\" class=\"industry-portrait\"" + bossPortraitAttr + " />"
+    : "";
+
+  var performerIds = Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds.slice() : [];
+  var performerConfig = takeoverConfig.performers && typeof takeoverConfig.performers === "object"
+    ? takeoverConfig.performers
+    : {};
+  var performerState = takeoverState.performers && typeof takeoverState.performers === "object"
+    ? takeoverState.performers
+    : {};
+
+  var acquiredCount = performerIds.filter(function (performerId) {
+    var performer = performerState[performerId];
+    return performer && performer.status === "acquired";
+  }).length;
+
+  function getPerformerStatusLabel(status) {
+    if (status === "available") {
+      return "Available";
+    }
+    if (status === "in_progress") {
+      return "In Progress";
+    }
+    if (status === "acquired") {
+      return "Acquired";
+    }
+    if (status === "lost") {
+      return "Lost";
+    }
+    return "Locked";
+  }
+
+  function getPerformerStatusClass(status) {
+    if (status === "available") {
+      return "pill pill--info";
+    }
+    if (status === "in_progress") {
+      return "pill pill--warning";
+    }
+    if (status === "acquired") {
+      return "pill pill--success";
+    }
+    if (status === "lost") {
+      return "pill pill--danger";
+    }
+    return "pill pill--muted";
+  }
+
+  var performersHtml = performerIds.map(function (performerId) {
+    var performer = performerConfig[performerId] || {};
+    var performerStatus = performerState[performerId] && performerState[performerId].status
+      ? performerState[performerId].status
+      : "locked";
+    var performerName = performer.name || "Unknown Performer";
+    var performerLine = performer.description || "No intel yet.";
+    var performerPortrait = performer.portraitPath || placeholderPath;
+    var performerPortraitAttr = performerPortrait ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "";
+    var performerPortraitHtml = performerPortrait
+      ? "<img src=\"" + performerPortrait + "\" alt=\"" + performerName + "\" class=\"industry-portrait\"" + performerPortraitAttr + " />"
+      : "";
+    return "<div class=\"industry-performer-card\">" +
+      "<div class=\"industry-performer__portrait\">" + performerPortraitHtml + "</div>" +
+      "<div class=\"industry-performer__details\">" +
+      "<div class=\"industry-performer__name\">" + performerName + "</div>" +
+      "<div class=\"industry-performer__line\">" + performerLine + "</div>" +
+      "<div class=\"" + getPerformerStatusClass(performerStatus) + "\">" + getPerformerStatusLabel(performerStatus) + "</div>" +
+      "</div>" +
+      "<div class=\"industry-performer__actions\">" +
+      "<button class=\"button primary\" disabled>Begin Acquisition (Next)</button>" +
+      "</div>" +
+      "</div>";
+  }).join("");
+
+  container.innerHTML = "<div class=\"screen-content\">" +
+    "<button class=\"button\" data-action=\"industry-back-to-map\">← Back to Industry Map</button>" +
+    "<div class=\"panel\">" +
+    "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">" + studioName + "</h2>" +
+    "<p class=\"helper-text\">" + studioTagline + "</p>" +
+    "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">Status: " + statusLabel + "</div>" +
+    "<div class=\"secondary-stats-row\" style=\"border-top:none; padding-top:0;\">" +
+    "<div class=\"secondary-stat\"><span>Acquired from this studio:</span><span class=\"secondary-stat__value\">" +
+    acquiredCount + " / " + performerIds.length + "</span></div>" +
+    "</div>" +
+    "</div>" +
+    "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Boss: " + bossName + "</h3>" +
+    "<div class=\"industry-boss-card\">" +
+    "<div class=\"industry-boss__portrait\">" + bossPortraitHtml + "</div>" +
+    "<div class=\"industry-boss__details\">" +
+    "<p class=\"helper-text\">Boss confrontation at Reputation: 100 (cap)</p>" +
+    "<p class=\"helper-text\">Take 3 performers from this studio to draw them out.</p>" +
+    "<button class=\"button primary\" disabled>Confront Boss (Coming Soon)</button>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Performer Roster</h3>" +
+    "<div class=\"industry-performer-list\">" + performersHtml + "</div>" +
     "</div>" +
     "</div>";
 }

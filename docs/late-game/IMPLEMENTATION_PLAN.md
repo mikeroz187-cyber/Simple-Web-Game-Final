@@ -137,137 +137,40 @@ Add the player-facing entry point for Industry Takeover with a visible Industry 
 
 ---
 
-## Phase 3: Industry Map Screen
+## Phase 3: Studio Detail Screen — ✅ Completed
 
 ### Objective
-Build the full Industry Map screen showing all studios and player empire.
+Deliver the Studio Detail screen reachable from the Industry Map, showing boss intel and the A3 performer roster with status pills.
 
-### Tasks
-
-#### 3.1 Implement Studio Status Helpers
-**File:** `src/systems/takeover.js`
-
-```javascript
-function getStudioStatus(studioId) {
-  const studio = gameState.takeover.studios[studioId];
-  const config = CONFIG.takeover.studios[studioId];
-  const acquiredCount = getAcquiredPerformerCount(studioId);
-  
-  return {
-    ...studio,
-    ...config,
-    acquiredCount,
-    remainingCount: config.performerIds.length - acquiredCount,
-    isVulnerable: acquiredCount >= CONFIG.takeover.performersToVulnerableBoss
-  };
-}
-
-function getAcquiredPerformerCount(studioId) {
-  const config = CONFIG.takeover.studios[studioId];
-  return config.performerIds.filter(id => 
-    gameState.takeover.performers[id]?.status === 'acquired'
-  ).length;
-}
-```
-
-#### 3.2 Build Industry Map UI
-**File:** `src/ui/industry-render.js`
-
-Full implementation:
-- Header with title and back button
-- Grid of studio cards (5 rivals + 1 player empire)
-- Footer status bar (performers acquired, studios defeated, reputation)
-- Studio card click → navigate to studio detail
-
-Reference: `FRONTEND_GUIDELINES.md` Section 2.1
-
-#### 3.3 Add CSS Styles
-**File:** `styles.css`
-
-Add styles for:
-- `.industry-map-screen`
-- `.studio-card`, `.studio-card--active`, `.studio-card--vulnerable`, `.studio-card--defeated`
-- Grid layout
-- Status bar
+### Tasks (Completed)
+- [x] Enable “View Studio” navigation from Industry Map cards.
+- [x] Add the Studio Detail screen shell (locked/unselected states included).
+- [x] Render boss card with portrait fallback and rep requirement copy.
+- [x] Render performer roster list for Neon Cherry, Honey Trap, and Midnight Media with status pills.
+- [x] Include disabled CTAs for boss confrontation and acquisition actions (Phase 4 will implement mechanics).
 
 ### Definition of Done
-- [ ] Industry Map shows all 5 rival studios
-- [ ] Studio cards show correct status (active/vulnerable/defeated)
-- [ ] Player empire card shows roster count
-- [ ] Clicking studio card works (next phase)
-- [ ] Responsive within desktop constraints
+- [x] Industry Map “View Studio” routes to Studio Detail.
+- [x] Studio Detail shows header, boss card, and performer roster for A3 studios.
+- [x] Status pills render safely with sensible defaults.
+- [x] Buttons are visible but disabled (Phase 4 will activate).
 
 ---
 
-## Phase 4: Studio Detail Screen
+## Phase 4: Acquisition Stages (Intel/Approach/Turn/Debut)
 
 ### Objective
-Build the Studio Detail screen showing boss and performer roster.
+Implement the acquisition stage flow (intel → approach → turn → debut) and enable Studio Detail CTAs.
 
-### Tasks
-
-#### 4.1 Implement Performer Status Helpers
-**File:** `src/systems/takeover.js`
-
-```javascript
-function getPerformerStatus(performerId) {
-  const state = gameState.takeover.performers[performerId];
-  const config = CONFIG.takeover.performers[performerId];
-  const repRequired = CONFIG.takeover.repRequirements[`tier${config.tier}`];
-  const playerRep = gameState.player.reputation;
-  
-  if (!state) {
-    return {
-      ...config,
-      status: playerRep >= repRequired ? 'available' : 'locked',
-      repRequired,
-      playerRep,
-      canStart: playerRep >= repRequired
-    };
-  }
-  
-  return {
-    ...config,
-    ...state,
-    repRequired,
-    playerRep
-  };
-}
-```
-
-#### 4.2 Create Studio Detail Screen
-**Create:** `src/ui/studio-detail-render.js`
-
-Full implementation:
-- Header with studio name, tagline, back button
-- Boss section (portrait, status, lock state)
-- Performer roster list
-- Each performer shows: portrait, name, star power, tier, status, action button
-
-Reference: `FRONTEND_GUIDELINES.md` Section 2.2
-
-#### 4.3 Add Router Entry
-**File:** `src/ui/router.js`
-
-Add route for "studio-detail" with studioId parameter.
-
-#### 4.4 Add CSS Styles
-**File:** `styles.css`
-
-Add styles for:
-- `.studio-detail-screen`
-- `.boss-section`
-- `.performer-row`, `.performer-row--locked`, `.performer-row--available`, etc.
-- `.tier-badge`
+### Tasks (Planned)
+- [ ] Add acquisition stage state per performer (save-safe).
+- [ ] Enable Begin Acquisition CTA with rep/cash gating and stage cost copy.
+- [ ] Surface stage progress in the Studio Detail roster.
 
 ### Definition of Done
-- [ ] Can navigate from Industry Map to any Studio Detail
-- [ ] Boss section shows correctly
-- [ ] All 5 performers listed with correct status
-- [ ] Tier badges display correctly
-- [ ] Locked performers show rep requirement
-- [ ] Available performers show "Begin Acquisition" button
-- [ ] Back button returns to Industry Map
+- [ ] Performers advance through intel/approach/turn/debut stages without errors.
+- [ ] Studio Detail CTAs are enabled when requirements are met.
+- [ ] Boss confrontation remains locked until Phase 5.
 
 ---
 
