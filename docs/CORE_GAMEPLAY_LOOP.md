@@ -23,6 +23,13 @@ This document describes the **current implemented loop** and rules as they exist
 - **Automation (optional):** If enabled, auto-book or auto-post can run once per day when you click **Advance Day**.
 - **Competition & variance:** After Day 181, competition standings and market shifts can modify Promo/Premium outputs, and Premium content may roll variance.
 
+### Day 170 — Social Collab Week (Talent Scout)
+- **Trigger:** Day 170 (repeats every 14 days if failed or declined via `nextOfferDay`).
+- **Requirement:** Post **5 unique** promo contents per day for **7 consecutive days**.
+- **Unique rule:** Cross‑posting the same promo to multiple platforms counts as **one** unique promo.
+- **Rewards (Option A):** +8 Reputation and **+3% permanent promo social reach** (applies to followers + social subs only, not OF).
+- **Failure/Decline:** No penalty; the offer returns in 14 days.
+
 ## Daily Flow
 1. **Book a shoot** in Booking (Core Performer or Agency Sample Pack).
 2. **Review Content** (five-image slideshow preview, metadata).

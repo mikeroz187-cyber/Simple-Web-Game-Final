@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Documented the Act 2 Social Collab Week (Day 170) rules, UI, and save-safe GameState fields.
+  - Why: Keep gameplay documentation aligned with the implemented collab event and state placement.
+  - Files touched: docs/task-checklist.md, docs/CORE_GAMEPLAY_LOOP.md, docs/GAMESTATE_DATA_MODEL.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added Act 2 Social Collab Week offers with streak tracking, promo reach reward, and new decision modal UI.
   - Why: Deliver the requested Act 2 collab loop with unique promo counting and repeatable offers without breaking saves.
   - Files touched: src/config.js, src/state.js, src/main.js, src/systems/story.js, src/systems/booking.js, src/systems/social.js, src/ui/events.js, src/ui/render.js, styles.css, CHANGELOG.md.

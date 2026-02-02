@@ -37,6 +37,7 @@
 - [x] Tier 2 location unlock (cash + reputation requirement).
 - [x] Equipment upgrades (Lighting, Camera, Set Dressing).
 - [x] Act 2 story events (Days 95/120/145/170).
+- [x] Act 2 Event (Day 170): Social Collab Week (7-day streak, 5 unique promo/day, reschedules on fail/decline, permanent social reach bonus).
 - [x] Expanded roster depth (Act 2 freelance performers added to the roster catalog).
 - [x] Social strategy selection (Balanced, Growth Focus, MRR Focus).
 - [x] Manual social strategy (daily budget + channel allocation, once per day).
