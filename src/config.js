@@ -1262,6 +1262,23 @@ const CONFIG = {
       diminishingReturnsK: 0.002
     }
   },
+  socialCollabWeek: {
+    initialOfferDay: 170,
+    dailyUniquePromosRequired: 5,
+    durationDays: 7,
+    retryDelayDays: 14,
+    reward: {
+      reputationDelta: 8,
+      promoReachBonusPct: 3
+    },
+    partners: [
+      "NeonVice Studio",
+      "Velvet Alley Media",
+      "AfterDark Collective",
+      "Chrome Hearts Content",
+      "SugarStatic Studio"
+    ]
+  },
   analytics: {
     rollupWindowsDays: [7, 30],
     metricKeys: ["mrrDelta", "socialFollowers", "socialSubscribers", "onlyFansSubscribers", "promoCount", "premiumCount"],

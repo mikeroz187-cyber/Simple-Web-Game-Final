@@ -82,6 +82,82 @@ function showEventCards(cards) {
     "</div>";
 }
 
+function showDecisionModal(opts) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !opts) {
+    return;
+  }
+  const title = opts.title || "Decision";
+  const messageHtml = opts.messageHtml || "";
+  const imagePath = opts.imagePath || "";
+  const primaryLabel = opts.primaryLabel || "Confirm";
+  const primaryAction = opts.primaryAction || "dismiss-modal";
+  const secondaryLabel = opts.secondaryLabel || "Cancel";
+  const secondaryAction = opts.secondaryAction || "dismiss-modal";
+  const extraHtml = opts.extraHtml || "";
+  const imageHtml = imagePath
+    ? "<img class=\"decision-mascot\" src=\"" + imagePath + "\" alt=\"\" />"
+    : "";
+
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card modal-card--decision\">" +
+    "<div class=\"decision-layout\">" +
+    imageHtml +
+    "<div class=\"decision-body\">" +
+    "<h3 class=\"modal-title\">" + title + "</h3>" +
+    "<p class=\"modal-message\">" + messageHtml + "</p>" +
+    extraHtml +
+    "<div class=\"button-row\" style=\"margin-top:12px;\">" +
+    "<button class=\"button primary\" data-action=\"" + primaryAction + "\">" + primaryLabel + "</button>" +
+    "<button class=\"button\" data-action=\"" + secondaryAction + "\">" + secondaryLabel + "</button>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function findCollabOfferEvent(events) {
+  if (!Array.isArray(events)) {
+    return null;
+  }
+  return events.find(function (event) {
+    return event && typeof event.id === "string" && event.id.indexOf("act2_collab_offer_day_") === 0;
+  }) || null;
+}
+
+function buildCollabExtraHtml(cards) {
+  if (!Array.isArray(cards) || cards.length === 0) {
+    return "";
+  }
+  const itemsHtml = cards.map(function (card) {
+    return "<div class=\"modal-event\">" +
+      "<h4 class=\"modal-title\" style=\"font-size:14px;\">" + card.title + "</h4>" +
+      "<p class=\"modal-message\">" + card.message + "</p>" +
+      "</div>";
+  }).join("");
+  return "<div class=\"decision-extra\" style=\"margin-top:12px;\">" +
+    "<div class=\"panel-title\" style=\"font-size:12px;\">Also Today</div>" +
+    itemsHtml +
+    "</div>";
+}
+
+function showCollabOfferDecisionModal(offerEventId, extraCards, gameState) {
+  const copy = getStoryEventCopy(offerEventId, gameState || null);
+  const messageHtml = String(copy.message || "").replace(/\n/g, "<br>");
+  showDecisionModal({
+    title: "Collab Week: Cross-Promo Frenzy",
+    messageHtml: messageHtml,
+    imagePath: "assets/images/mascots/talentscout_introducing.png",
+    primaryLabel: "Lock it in (7-day streak)",
+    primaryAction: "collab-accept",
+    secondaryLabel: "Pass (ask me again later)",
+    secondaryAction: "collab-decline",
+    extraHtml: buildCollabExtraHtml(extraCards)
+  });
+}
+
 function showPayMaxModal(gameState) {
   const modalRoot = qs("#modal-root");
   if (!modalRoot || !gameState || !gameState.player) {
@@ -346,7 +422,30 @@ function buildMilestoneEventCards(events) {
   });
 }
 
+function addStoryLogEntry(gameState, entry) {
+  if (!gameState || !entry || typeof entry.id !== "string") {
+    return;
+  }
+  ensureStoryLogState(gameState);
+  const exists = gameState.storyLog.some(function (logEntry) {
+    return logEntry.id === entry.id;
+  });
+  if (exists) {
+    return;
+  }
+  gameState.storyLog.push(entry);
+}
+
 function showStoryEvents(events) {
+  const collabOffer = findCollabOfferEvent(events);
+  if (collabOffer) {
+    const otherEvents = events.filter(function (event) {
+      return event && event.id !== collabOffer.id;
+    });
+    const extraCards = buildStoryEventCards(otherEvents);
+    showCollabOfferDecisionModal(collabOffer.id, extraCards, typeof window !== "undefined" ? window.gameState : null);
+    return;
+  }
   showEventCards(buildStoryEventCards(events));
 }
 
@@ -493,6 +592,7 @@ function setupEventHandlers() {
           ensureStoryLogState(window.gameState);
           ensureFlagsState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
+          ensureSocialCollabWeekState(window.gameState);
           ensureReputationState(window.gameState);
           ensureRecruitmentState(window.gameState);
           ensurePlayerUpgradesState(window.gameState);
@@ -540,6 +640,7 @@ function setupEventHandlers() {
             ensureStoryLogState(window.gameState);
             ensureFlagsState(window.gameState);
             ensureSocialManualStrategyState(window.gameState);
+            ensureSocialCollabWeekState(window.gameState);
             ensureReputationState(window.gameState);
             ensureRecruitmentState(window.gameState);
             ensurePlayerUpgradesState(window.gameState);
@@ -575,6 +676,76 @@ function setupEventHandlers() {
 
     if (action === "dismiss-modal") {
       clearModal();
+      return;
+    }
+
+    if (action === "collab-accept") {
+      event.preventDefault();
+      event.stopPropagation();
+      ensureSocialCollabWeekState(window.gameState);
+      const collab = window.gameState.social && window.gameState.social.collab ? window.gameState.social.collab : null;
+      if (!collab) {
+        clearModal();
+        return;
+      }
+      const config = CONFIG.socialCollabWeek || {};
+      const partners = Array.isArray(config.partners) ? config.partners : [];
+      const partnerName = partners.length
+        ? partners[collab.partnerIndex % partners.length]
+        : "Partner Studio";
+      const currentDay = window.gameState.player.day;
+      const durationDays = Number.isFinite(config.durationDays) ? config.durationDays : 7;
+      collab.status = "active";
+      collab.attempt.partnerName = partnerName;
+      collab.attempt.startDay = currentDay;
+      collab.attempt.endDay = currentDay + durationDays - 1;
+      collab.attempt.daysCompleted = 0;
+      collab.attempt.lastEvaluatedDay = null;
+      addStoryLogEntry(window.gameState, {
+        id: "act2_collab_accept_day_" + currentDay,
+        dayNumber: currentDay,
+        title: "Collab Week — Accepted",
+        body: "You tell your Scout to lock it in. Seven days. No silence. Time to flood the feed.",
+        timestamp: new Date().toISOString()
+      });
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "collab-decline") {
+      event.preventDefault();
+      event.stopPropagation();
+      ensureSocialCollabWeekState(window.gameState);
+      const collab = window.gameState.social && window.gameState.social.collab ? window.gameState.social.collab : null;
+      if (!collab) {
+        clearModal();
+        return;
+      }
+      const config = CONFIG.socialCollabWeek || {};
+      const retryDelay = Number.isFinite(config.retryDelayDays) ? config.retryDelayDays : 14;
+      const currentDay = window.gameState.player.day;
+      collab.status = "idle";
+      collab.nextOfferDay = currentDay + retryDelay;
+      collab.partnerIndex = Number.isFinite(collab.partnerIndex) ? collab.partnerIndex + 1 : 1;
+      collab.attempt = {
+        partnerName: null,
+        startDay: null,
+        endDay: null,
+        daysCompleted: 0,
+        lastEvaluatedDay: null
+      };
+      addStoryLogEntry(window.gameState, {
+        id: "act2_collab_decline_day_" + currentDay,
+        dayNumber: currentDay,
+        title: "Collab Week — Passed",
+        body: "You tell your Scout ‘not this week.’ The partner shrugs and moves on. No harm, no foul — you’ll get another collab window in 14 days.",
+        timestamp: new Date().toISOString()
+      });
+      clearModal();
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
       return;
     }
 
@@ -1394,8 +1565,16 @@ function setupEventHandlers() {
       if (!saveResult.ok) {
         setUiMessage(saveResult.message || "");
       }
-      const eventCards = buildStoryEventCards(storyEvents).concat(automationResult.cards).concat(conquestEvents);
-      if (eventCards.length) {
+      const collabOffer = findCollabOfferEvent(storyEvents);
+      const storyCards = buildStoryEventCards(storyEvents);
+      const eventCards = storyCards.concat(automationResult.cards).concat(conquestEvents);
+      if (collabOffer) {
+        const otherStoryEvents = storyEvents.filter(function (event) {
+          return event && event.id !== collabOffer.id;
+        });
+        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
+        showCollabOfferDecisionModal(collabOffer.id, extraCards, window.gameState);
+      } else if (eventCards.length) {
         showEventCards(eventCards);
       }
       renderApp(window.gameState);
@@ -1422,6 +1601,7 @@ function setupEventHandlers() {
         ensureStoryLogState(window.gameState);
         ensureFlagsState(window.gameState);
         ensureSocialManualStrategyState(window.gameState);
+        ensureSocialCollabWeekState(window.gameState);
         ensureReputationState(window.gameState);
         ensureRecruitmentState(window.gameState);
         ensurePlayerUpgradesState(window.gameState);
@@ -1464,6 +1644,7 @@ function setupEventHandlers() {
           ensureStoryLogState(window.gameState);
           ensureFlagsState(window.gameState);
           ensureSocialManualStrategyState(window.gameState);
+          ensureSocialCollabWeekState(window.gameState);
           ensureReputationState(window.gameState);
           ensureRecruitmentState(window.gameState);
           ensurePlayerUpgradesState(window.gameState);

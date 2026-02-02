@@ -1537,6 +1537,10 @@ function renderSocial(gameState) {
 
   // Get posts
   var posts = gameState.social.posts || [];
+  if (typeof ensureSocialCollabWeekState === "function") {
+    ensureSocialCollabWeekState(gameState);
+  }
+  var collab = gameState.social && gameState.social.collab ? gameState.social.collab : null;
 
   // Available to post (promo content not fully posted)
   var availableToPost = promoEntries.filter(function(entry) {
@@ -1607,6 +1611,40 @@ function renderSocial(gameState) {
     '<div class="stat-row"><span class="stat-row__label">OF Pipeline</span><span class="stat-row__value">' + (gameState.player.onlyFansSubCarry * 100).toFixed(0) + '%</span></div>' +
   '</div>';
 
+  var collabPanelHtml = '';
+  if (collab) {
+    var collabConfig = CONFIG.socialCollabWeek || {};
+    if (collab.status === "active") {
+      var todayPosts = posts.filter(function (post) { return post.dayPosted === gameState.player.day; });
+      var uniqueToday = new Set(todayPosts.map(function (post) { return post.contentId; }));
+      var todayCount = uniqueToday.size;
+      var requiredDaily = Number.isFinite(collabConfig.dailyUniquePromosRequired)
+        ? collabConfig.dailyUniquePromosRequired
+        : 0;
+      var durationDays = Number.isFinite(collabConfig.durationDays) ? collabConfig.durationDays : 7;
+      var daysCompleted = collab.attempt && Number.isFinite(collab.attempt.daysCompleted)
+        ? collab.attempt.daysCompleted
+        : 0;
+      var dayLabel = Math.min(durationDays, daysCompleted + 1);
+      collabPanelHtml = '<div class="panel">' +
+        '<h3 class="panel-title">Collab Week — Day ' + dayLabel + ' of ' + durationDays + '</h3>' +
+        '<div class="stat-row"><span class="stat-row__label">Today</span><span class="stat-row__value">' + todayCount + ' / ' + requiredDaily + ' unique promos posted</span></div>' +
+        '<div class="stat-row"><span class="stat-row__label">Streak</span><span class="stat-row__value">' + daysCompleted + ' / ' + durationDays + ' days completed</span></div>' +
+        '<div class="stat-row"><span class="stat-row__label">Rule</span><span class="stat-row__value">Cross-posting the same promo still counts as ONE.</span></div>' +
+      '</div>';
+    } else if (collab.status === "completed") {
+      var bonusPct = Number.isFinite(collab.permanentPromoReachBonusPct)
+        ? collab.permanentPromoReachBonusPct
+        : 0;
+      if (bonusPct > 0) {
+        collabPanelHtml = '<div class="panel">' +
+          '<h3 class="panel-title">Collab Perk Active</h3>' +
+          '<div class="stat-row"><span class="stat-row__label">Promo reach bonus</span><span class="stat-row__value">+' + bonusPct + '%</span></div>' +
+        '</div>';
+      }
+    }
+  }
+
   // Layout
   var contentHtml = '<h2 class="screen-title">Social</h2>' +
     '<div class="social-layout">' +
@@ -1622,6 +1660,7 @@ function renderSocial(gameState) {
       '</div>' +
       '<div class="social-panel">' +
         statsHtml +
+        collabPanelHtml +
         '<div class="panel" style="flex:1;display:flex;flex-direction:column;">' +
           '<h3 class="panel-title">Recent Posts</h3>' +
           '<div class="social-panel__content">' + recentPostsHtml + '</div>' +

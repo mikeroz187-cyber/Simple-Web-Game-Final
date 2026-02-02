@@ -1581,6 +1581,28 @@ body {
   position: relative;
 }
 
+.modal-card--decision {
+  max-width: 900px;
+}
+
+.decision-layout {
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: stretch;
+}
+
+.decision-mascot {
+  width: 260px;
+  max-width: 35%;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  background: #111;
+}
+
+.decision-body {
+  flex: 1;
+}
+
 .modal-event + .modal-event {
   margin-top: var(--gap-md);
   padding-top: var(--gap-sm);

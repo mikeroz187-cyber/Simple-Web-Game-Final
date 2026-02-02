@@ -66,6 +66,19 @@ function checkStoryEvents(gameState) {
     });
   }
 
+  if (typeof ensureSocialCollabWeekState === "function") {
+    ensureSocialCollabWeekState(gameState);
+  }
+  const collabState = gameState.social && gameState.social.collab ? gameState.social.collab : null;
+  if (collabState && collabState.status !== "active" && collabState.status !== "completed") {
+    const nextOfferDay = collabState.nextOfferDay;
+    if (Number.isFinite(nextOfferDay) && nextOfferDay === currentDay) {
+      collabState.status = "offered";
+      collabState.lastOfferDay = currentDay;
+      events.push({ id: "act2_collab_offer_day_" + currentDay, day: currentDay });
+    }
+  }
+
   const leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
     ? CONFIG.leaseUpgrade
     : null;
@@ -140,6 +153,54 @@ function checkStoryEvents(gameState) {
   }
 
   return { ok: true, events: events };
+}
+
+function resolveCollabWeekCopy(eventId) {
+  if (typeof eventId !== "string") {
+    return null;
+  }
+  const config = CONFIG.socialCollabWeek && typeof CONFIG.socialCollabWeek === "object"
+    ? CONFIG.socialCollabWeek
+    : {};
+  const durationDays = Number.isFinite(config.durationDays) ? config.durationDays : 7;
+  const dailyRequired = Number.isFinite(config.dailyUniquePromosRequired) ? config.dailyUniquePromosRequired : 5;
+  const reward = config.reward || {};
+  const repDelta = Number.isFinite(reward.reputationDelta) ? reward.reputationDelta : 0;
+  const promoBonus = Number.isFinite(reward.promoReachBonusPct) ? reward.promoReachBonusPct : 0;
+
+  if (eventId.indexOf("act2_collab_offer_day_") === 0) {
+    return {
+      title: "Collab Week Offer",
+      message: "Your Talent Scout slides in with a grin: a rival-ish studio wants a " + durationDays +
+        "-day cross-promo blitz.<br>" +
+        "Rule is simple: post " + dailyRequired + " UNIQUE promo drops per day for " + durationDays + " days straight.<br>" +
+        "Post the same promo to both platforms? Cute — still counts as ONE.<br>" +
+        "Nail the streak and the algorithm treats you like royalty (permanent reach bump). Flake and you get nothing… and a bruised ego."
+    };
+  }
+  if (eventId.indexOf("act2_collab_decline_day_") === 0) {
+    return {
+      title: "Collab Week — Passed",
+      message: "You tell your Scout ‘not this week.’ The partner shrugs and moves on.<br>" +
+        "No harm, no foul — you’ll get another collab window in 14 days."
+    };
+  }
+  if (eventId.indexOf("act2_collab_fail_day_") === 0) {
+    return {
+      title: "Collab Week — Dropped",
+      message: "The week sputters out. You didn’t hit the quota yesterday, and the partner goes cold.<br>" +
+        "No penalty — just no perks. Another partner will come sniffing around in 14 days."
+    };
+  }
+  if (eventId.indexOf("act2_collab_success_day_") === 0) {
+    return {
+      title: "Collab Week — Completed",
+      message: "Seven days. No silence. The collab pops off.<br>" +
+        "Reputation +" + repDelta + ".<br>" +
+        "Permanent: +" + promoBonus + "% Social reach on Promo posts."
+    };
+  }
+  return null;
 }
 
 function ensureStudioUpgradeOffer(gameState) {
@@ -578,6 +639,11 @@ function getStoryEventCopy(eventId, gameState) {
   const performerUnlockCopy = resolvePerformerUnlockCopy(eventId, gameState);
   if (performerUnlockCopy) {
     return performerUnlockCopy;
+  }
+
+  const collabCopy = resolveCollabWeekCopy(eventId);
+  if (collabCopy) {
+    return collabCopy;
   }
 
   const baseCopy = STORY_EVENT_COPY[eventId] || { title: "Story Update", message: "A story event occurred." };
