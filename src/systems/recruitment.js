@@ -5,9 +5,26 @@ function getRecruitmentConfig() {
   return { candidates: [], maxRosterSize: 0, dailyCandidateLimit: 1 };
 }
 
-function getRecruitmentMaxRosterSize() {
+function getRecruitmentMaxRosterSize(gameState) {
   const config = getRecruitmentConfig();
-  return Number.isFinite(config.maxRosterSize) ? config.maxRosterSize : 0;
+  const leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
+    ? CONFIG.leaseUpgrade
+    : null;
+  const baseCap = leaseConfig && Number.isFinite(leaseConfig.rosterCapBase)
+    ? leaseConfig.rosterCapBase
+    : (Number.isFinite(config.maxRosterSize) ? config.maxRosterSize : 0);
+  if (!leaseConfig || leaseConfig.enabled !== true) {
+    return baseCap;
+  }
+  const leasePurchased = Boolean(
+    (gameState && gameState.player && gameState.player.upgrades && gameState.player.upgrades.lease)
+      ? gameState.player.upgrades.lease.purchased
+      : false
+  );
+  const upgradedCap = leaseConfig && Number.isFinite(leaseConfig.rosterCapAfterUpgrade)
+    ? leaseConfig.rosterCapAfterUpgrade
+    : baseCap;
+  return leasePurchased ? upgradedCap : baseCap;
 }
 
 function getContractedRosterCount(gameState) {
@@ -81,7 +98,7 @@ function getNewRecruitEligibilityEvents(gameState) {
   }
   ensureRecruitmentState(gameState);
   const rosterSize = getContractedRosterCount(gameState);
-  const maxRosterSize = getRecruitmentMaxRosterSize();
+  const maxRosterSize = getRecruitmentMaxRosterSize(gameState);
   if (maxRosterSize > 0 && rosterSize >= maxRosterSize) {
     return [];
   }
@@ -155,9 +172,9 @@ function hireRecruitCandidate(gameState, performerId) {
     return { ok: false, message: "Recruit already on your roster." };
   }
   const rosterSize = getContractedRosterCount(gameState);
-  const maxRosterSize = getRecruitmentMaxRosterSize();
+  const maxRosterSize = getRecruitmentMaxRosterSize(gameState);
   if (maxRosterSize > 0 && rosterSize >= maxRosterSize) {
-    return { ok: false, message: "Roster full. Expand later." };
+    return { ok: false, message: "Roster full (" + rosterSize + "/" + maxRosterSize + "). Upgrade your lease to expand." };
   }
   const hireCost = Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
   if (gameState.player.cash < hireCost) {

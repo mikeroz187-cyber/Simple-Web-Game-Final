@@ -1266,6 +1266,8 @@ function renderRoster(gameState) {
 
   var performers = gameState.roster.performers || [];
   var contractedPerformers = performers.filter(function(p) { return p.type === "core"; });
+  var rosterSize = getContractedRosterCount(gameState);
+  var maxRosterSize = getRecruitmentMaxRosterSize(gameState);
 
   // Performer grid
   var performerCardsHtml = contractedPerformers.map(function(p) {
@@ -1313,9 +1315,8 @@ function renderRoster(gameState) {
   }
 
   // Recruitment panel
-  var rosterSize = getContractedRosterCount(gameState);
-  var maxRosterSize = getRecruitmentMaxRosterSize();
   var isRosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
+  var rosterSummaryHtml = '<div class="helper-text" style="margin-bottom:var(--gap-sm);">Roster: ' + rosterSize + ' / ' + maxRosterSize + '</div>';
   var activeCandidate = getActiveRecruitCandidate(gameState);
   var recruitmentHeader = '<div class="stat-row"><span class="stat-row__label">Reputation</span><span class="stat-row__value">' + gameState.player.reputation + '</span></div>' +
     '<div class="stat-row"><span class="stat-row__label">Roster Size</span><span class="stat-row__value">' + rosterSize + ' / ' + maxRosterSize + '</span></div>';
@@ -1323,7 +1324,7 @@ function renderRoster(gameState) {
   if (isRosterFull) {
     recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
-      '<p style="color:var(--text-muted);font-size:12px;">Roster full. Release a contract to recruit more talent.</p></div></div>';
+      '<p style="color:var(--text-muted);font-size:12px;">Roster full. Upgrade your lease to expand the cap.</p></div></div>';
   } else if (!activeCandidate) {
     recruitmentHtml = '<div class="panel">' +
       '<div class="screen-content"><h3 class="panel-title">Recruitment</h3>' + recruitmentHeader +
@@ -1415,6 +1416,7 @@ function renderRoster(gameState) {
 
   // Layout
   var contentHtml = '<h2 class="screen-title">Roster</h2>' +
+    rosterSummaryHtml +
     '<div class="roster-layout">' +
       '<div class="roster-grid">' + performerCardsHtml + '</div>' +
       '<div class="roster-sidebar">' + recruitmentHtml + expiredContractsHtml + renewalsHtml + '</div>' +
@@ -1960,7 +1962,7 @@ function renderSlideshow(gameState) {
     const repRequired = candidate && Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
     const hireCost = candidate && Number.isFinite(candidate.hireCost) ? candidate.hireCost : 0;
     const rosterSize = getContractedRosterCount(gameState);
-    const maxRosterSize = getRecruitmentMaxRosterSize();
+    const maxRosterSize = getRecruitmentMaxRosterSize(gameState);
     const rosterFull = maxRosterSize > 0 && rosterSize >= maxRosterSize;
     const canHire = !rosterFull && gameState.player.cash >= hireCost && gameState.player.reputation >= repRequired;
     const nextButton = safeIndex < slideCount - 1
@@ -2170,6 +2172,14 @@ function renderShop(gameState) {
   var payoutInactiveNote = onlyFansSubs > 0
     ? ""
     : '<p class="helper-text">OF payouts start once you have subscribers.</p>';
+  var leaseConfig = CONFIG.leaseUpgrade && typeof CONFIG.leaseUpgrade === "object"
+    ? CONFIG.leaseUpgrade
+    : null;
+  var leaseStatus = leaseConfig && typeof getLeaseUpgradeStatus === "function"
+    ? getLeaseUpgradeStatus(gameState)
+    : null;
+  var rosterSize = getContractedRosterCount(gameState);
+  var rosterCap = getRecruitmentMaxRosterSize(gameState);
 
   // Location unlocks
   var tier1Unlocked = isLocationTierUnlocked(gameState, "tier1");
@@ -2197,7 +2207,47 @@ function renderShop(gameState) {
       (gameState.player.reputation < tier2RepReq ? '<div class="shop-card__status shop-card__status--locked">Requires Rep ' + tier2RepReq + '</div>' : '') +
       '<button class="button primary" data-action="unlock-location-tier" data-tier="tier2"' + (canBuyTier2 ? '' : ' disabled') + '>Unlock</button>'
     ) +
-  '</div>';
+    '</div>';
+
+  var leaseCardHtml = "";
+  if (leaseConfig && leaseConfig.enabled) {
+    var leasePurchased = leaseStatus && leaseStatus.isPurchased;
+    var deadlineLabel = leaseStatus && Number.isFinite(leaseStatus.deadlineDay)
+      ? "Deadline: Day " + leaseStatus.deadlineDay
+      : "Deadline: TBD";
+    var latePrice = Number.isFinite(leaseConfig.latePrice) ? leaseConfig.latePrice : 0;
+    var windowPrice = Number.isFinite(leaseConfig.windowPrice) ? leaseConfig.windowPrice : 0;
+    var overheadDelta = Number.isFinite(leaseConfig.overheadDeltaPerDay) ? leaseConfig.overheadDeltaPerDay : 0;
+    var repBonus = Number.isFinite(leaseConfig.repOnPurchase) ? leaseConfig.repOnPurchase : 0;
+    var capAfter = Number.isFinite(leaseConfig.rosterCapAfterUpgrade) ? leaseConfig.rosterCapAfterUpgrade : rosterCap;
+    var canBuyLease = leaseStatus && leaseStatus.available && Number.isFinite(leaseStatus.price) && cash >= leaseStatus.price;
+    var leaseStatusHtml = "";
+    if (leasePurchased) {
+      leaseStatusHtml = '<div class="shop-card__status shop-card__status--owned">✓ Upgraded</div>' +
+        '<div class="helper-text">Overhead +' + formatCurrency(overheadDelta) + '/day • Roster cap ' + capAfter + '</div>';
+    } else if (leaseStatus && leaseStatus.isOfferActive) {
+      leaseStatusHtml = '<div class="shop-card__price">' + formatCurrency(windowPrice) + '</div>' +
+        '<div class="helper-text">' + deadlineLabel + ' • Late price ' + formatCurrency(latePrice) + '</div>' +
+        '<button class="button primary" data-action="purchase-lease-upgrade"' + (canBuyLease ? '' : ' disabled') + '>Lock in the Lease</button>';
+    } else if (leaseStatus && leaseStatus.isLate) {
+      leaseStatusHtml = '<div class="shop-card__price">' + formatCurrency(latePrice) + '</div>' +
+        '<div class="helper-text">Window missed. Available anytime.</div>' +
+        '<button class="button primary" data-action="purchase-lease-upgrade"' + (canBuyLease ? '' : ' disabled') + '>Buy the Lease</button>';
+    } else {
+      var unlockDay = Number.isFinite(leaseConfig.shopUnlockAfterDay) ? leaseConfig.shopUnlockAfterDay : leaseConfig.storyTriggerDay;
+      leaseStatusHtml = '<div class="shop-card__status shop-card__status--locked">Available Day ' + unlockDay + '</div>' +
+        '<div class="helper-text">A glossy lease offer is circling. Keep your cash ready.</div>' +
+        '<button class="button primary" data-action="purchase-lease-upgrade" disabled>Locked</button>';
+    }
+    leaseCardHtml = '<div class="shop-card' + (leasePurchased ? ' shop-card--owned' : '') + '">' +
+      '<div class="shop-card__title">Studio Lease Upgrade</div>' +
+      '<div class="shop-card__description">Bigger floor, slicker light, and a roster that looks like a real operation. Roster ' +
+      rosterSize + '/' + rosterCap + '.</div>' +
+      '<div class="helper-text">Impact: +' + formatCurrency(overheadDelta) + '/day overhead • Roster cap ' + rosterCap + '→' +
+      capAfter + ' • +' + repBonus + ' Rep</div>' +
+      leaseStatusHtml +
+      '</div>';
+  }
 
   // Equipment upgrades
   var equipmentOrder = CONFIG.equipment && Array.isArray(CONFIG.equipment.upgradeOrder)
@@ -2251,6 +2301,7 @@ function renderShop(gameState) {
   var contentHtml = '<h2 class="screen-title">Shop</h2>' +
     '<div class="shop-layout">' +
       '<div class="panel"><h3 class="panel-title">Locations</h3><div class="shop-grid">' + locationCardsHtml + '</div></div>' +
+      (leaseCardHtml ? '<div class="panel"><h3 class="panel-title">Lease Upgrades</h3><div class="shop-grid">' + leaseCardHtml + '</div></div>' : '') +
       '<div class="panel"><h3 class="panel-title">Equipment</h3>' + renderEquipmentMessage() + '<div class="shop-grid">' + equipmentCardsHtml + '</div></div>' +
       cashflowPanelHtml +
     '</div>' +

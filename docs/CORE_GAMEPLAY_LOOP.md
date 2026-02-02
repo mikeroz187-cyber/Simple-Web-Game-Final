@@ -4,10 +4,10 @@ This document describes the **current implemented loop** and rules as they exist
 
 ## Current Game Rules (Source of Truth)
 - **Day flow is manual.** The player advances the day by clicking **Advance Day** on the Hub.
-- **Day limit for booking:** New shoots cannot be booked once `player.day >= player.debtDueDay` (default Day 90).
+- **Day 90 debt gate:** Day 90 still triggers the win/loss story check, but booking is not blocked after debt is cleared.
 - **Debt target:** Act 1 starts with **$25,000** due by Day 90; clearing it is the Act 1 gate that unlocks post-debt systems.
 - **Debt payoff controls:** The Hub includes config-driven quick-pay buttons plus Pay Max to reduce debt in chunks before Day 90.
-- **No global shoots/day cap.** The game tracks `shootsToday`, but booking is limited by performer availability and contracts.
+- **Daily shoots cap:** Booking is capped by `CONFIG.game.shoots_per_day`, plus performer availability and contracts.
 - **Per‑performer daily cap:** Each contracted performer has a daily booking cap (default 1/day, max 3/day) tracked as consecutive bookings and reset on day advance.
 - **Agency Sample Pack:** Optional booking mode available once per day (flat fee + location cost, five-image bundle output).
 - **Contracts & availability:** Contracts count down daily; expired contracts must be renewed to book. Fatigue builds per shoot and recovers daily; hitting max fatigue forces rest days.
@@ -16,7 +16,8 @@ This document describes the **current implemented loop** and rules as they exist
   - **Premium** content immediately adds OnlyFans subscribers and increases MRR.
 - **Pacing guideline:** Early days (≈1–30) favor Promo-heavy output (roughly 2 Promo / 1 Premium) to build footprint; mid/late days should gradually lean Premium-heavy as scaling kicks in.
 - **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
-- **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance, starting at $0 and ramping through $8 (50 subs), $20 (100), $60 (200), $100 (350), $150 (500), $210 (750), and $270 (1,000). After debt is cleared, a one-time **Hire Manager** upgrade can reduce this overhead by 15% (config-driven).
+- **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance. After debt is cleared, a one-time **Hire Manager** upgrade reduces overhead by 15% (config-driven). In Act 2, the **Studio Lease Upgrade** adds +$100/day overhead if purchased.
+- **Roster caps:** Contracted performers are capped at 5 by default; the Studio Lease Upgrade raises the cap to 7.
 - **Reputation:** Increases from milestone rewards (followers, OF subs, MRR thresholds). It gates Tier 2 location unlocks, recruitment candidates, and studio identity selection.
 - **Automation (optional):** If enabled, auto-book or auto-post can run once per day when you click **Advance Day**.
 - **Competition & variance:** After Day 181, competition standings and market shifts can modify Promo/Premium outputs, and Premium content may roll variance.
@@ -38,7 +39,7 @@ This document describes the **current implemented loop** and rules as they exist
 - Recruitment appears at the top of the Roster screen.
 - One candidate is shown per day (config-driven) if reputation thresholds are met.
 - **Meet** opens a 10‑slide slideshow; **Hire** deducts the hire cost and adds the performer to the roster; **Decline** removes the offer.
-- Roster size is capped for **contracted** (non‑freelance) performers.
+- Roster size is capped for **contracted** (non‑freelance) performers: 5 base, 7 after the Studio Lease Upgrade.
 
 ## Slideshows
 - **Recruit Meet:** 10-image slideshow.

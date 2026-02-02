@@ -79,7 +79,14 @@ function buildDefaultStatsState() {
 
 function buildDefaultPlayerUpgradesState() {
   return {
-    managerHired: false
+    managerHired: false,
+    lease: {
+      purchased: false,
+      offerStartedDay: null,
+      offerDeadlineDay: null,
+      missed: false,
+      missPenaltyApplied: false
+    }
   };
 }
 
@@ -279,6 +286,26 @@ function ensurePlayerUpgradesState(gameState) {
   }
   if (typeof gameState.player.upgrades.managerHired !== "boolean") {
     gameState.player.upgrades.managerHired = false;
+  }
+  if (!gameState.player.upgrades.lease || typeof gameState.player.upgrades.lease !== "object") {
+    gameState.player.upgrades.lease = buildDefaultPlayerUpgradesState().lease;
+    return;
+  }
+  const lease = gameState.player.upgrades.lease;
+  if (typeof lease.purchased !== "boolean") {
+    lease.purchased = false;
+  }
+  if (!Number.isFinite(lease.offerStartedDay)) {
+    lease.offerStartedDay = null;
+  }
+  if (!Number.isFinite(lease.offerDeadlineDay)) {
+    lease.offerDeadlineDay = null;
+  }
+  if (typeof lease.missed !== "boolean") {
+    lease.missed = false;
+  }
+  if (typeof lease.missPenaltyApplied !== "boolean") {
+    lease.missPenaltyApplied = false;
   }
 }
 

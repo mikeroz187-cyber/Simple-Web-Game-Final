@@ -532,7 +532,7 @@ const CONFIG = {
     }
   },
   recruitment: {
-    maxRosterSize: 10,
+    maxRosterSize: 5,
     dailyCandidateLimit: 1,
     candidates: [
       {
@@ -1395,6 +1395,19 @@ const CONFIG = {
       title: "Hire Manager",
       description: "Cuts daily overhead by 15%. One-time purchase."
     }
+  },
+  leaseUpgrade: {
+    enabled: true,
+    storyTriggerDay: 95,
+    windowDays: 14,
+    windowPrice: 35000,
+    latePrice: 65000,
+    overheadDeltaPerDay: 100,
+    repOnPurchase: 5,
+    repOnMiss: -5,
+    rosterCapBase: 5,
+    rosterCapAfterUpgrade: 7,
+    shopUnlockAfterDay: 95
   },
   equipment: {
     upgradeOrder: ["lighting", "camera", "set_dressing"],

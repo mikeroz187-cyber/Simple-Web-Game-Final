@@ -987,6 +987,22 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "purchase-lease-upgrade") {
+      const result = purchaseLeaseUpgrade(window.gameState);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+        if (typeof showToast === "function") {
+          showToast("Lease upgrade purchased!", "unlock");
+        }
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "debug-set-day-reload") {
       event.preventDefault();
       event.stopPropagation();
