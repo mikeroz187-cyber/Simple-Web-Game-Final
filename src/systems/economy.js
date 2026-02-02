@@ -214,6 +214,30 @@ function getDailyOverhead(gameState) {
       label = label + " + Lease";
     }
   }
+  const studioConfig = getStudioUpgradeConfig();
+  const studioState = getStudioUpgradeState(gameState);
+  if (studioConfig && studioConfig.enabled && studioState && studioState.purchased) {
+    const studioDelta = Number.isFinite(studioConfig.effects && studioConfig.effects.dailyOverheadDelta)
+      ? studioConfig.effects.dailyOverheadDelta
+      : 0;
+    amount += studioDelta;
+    if (!label) {
+      label = "Studio";
+    } else {
+      label = label + " + Studio";
+    }
+  }
+  if (studioState && studioState.financePlan && studioState.financePlan.active && studioState.financePlan.daysRemaining > 0) {
+    const dailyPayment = Number.isFinite(studioState.financePlan.dailyPayment) ? studioState.financePlan.dailyPayment : 0;
+    if (dailyPayment > 0) {
+      amount += dailyPayment;
+      if (!label) {
+        label = "Studio Note";
+      } else {
+        label = label + " + Studio Note";
+      }
+    }
+  }
   const staffingConfig = typeof getStaffingPushConfig === "function" ? getStaffingPushConfig() : null;
   if (staffingConfig && gameState.flags && gameState.flags.act2StaffingCrisisActive) {
     const penalty = staffingConfig.penalty || {};
@@ -228,6 +252,185 @@ function getDailyOverhead(gameState) {
     }
   }
   return { amount: Math.max(0, Math.round(amount)), label: label };
+}
+
+function getStudioUpgradeConfig() {
+  return CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object"
+    ? CONFIG.studioUpgrade
+    : null;
+}
+
+function getStudioUpgradeState(gameState) {
+  if (!gameState || !gameState.player || !gameState.player.upgrades) {
+    return null;
+  }
+  return gameState.player.upgrades.studioUpgrade || null;
+}
+
+function isStudioUpgradePurchased(gameState) {
+  const studioState = getStudioUpgradeState(gameState);
+  return Boolean(studioState && studioState.purchased);
+}
+
+function isStudioUpgradePenaltyActive(gameState) {
+  const config = getStudioUpgradeConfig();
+  const studioState = getStudioUpgradeState(gameState);
+  if (!config || !studioState || !config.penalty || config.penalty.enabled !== true) {
+    return false;
+  }
+  const currentDay = gameState && gameState.player && Number.isFinite(gameState.player.day)
+    ? gameState.player.day
+    : 0;
+  return Number.isFinite(studioState.penaltyUntilDay) && currentDay <= studioState.penaltyUntilDay;
+}
+
+function getStudioUpgradePremiumMult(gameState) {
+  const config = getStudioUpgradeConfig();
+  if (!config) {
+    return 1;
+  }
+  if (isStudioUpgradePenaltyActive(gameState)) {
+    const penaltyMult = Number.isFinite(config.penalty && config.penalty.premiumOfSubsMult)
+      ? config.penalty.premiumOfSubsMult
+      : 1;
+    return penaltyMult;
+  }
+  if (isStudioUpgradePurchased(gameState)) {
+    const bonusMult = Number.isFinite(config.effects && config.effects.premiumOfSubsMult)
+      ? config.effects.premiumOfSubsMult
+      : 1;
+    return bonusMult;
+  }
+  return 1;
+}
+
+function getStudioUpgradeShootCapBonus(gameState) {
+  const config = getStudioUpgradeConfig();
+  if (!config || !isStudioUpgradePurchased(gameState)) {
+    return 0;
+  }
+  const bonus = Number.isFinite(config.effects && config.effects.dailyShootCapBonus)
+    ? config.effects.dailyShootCapBonus
+    : 0;
+  return bonus;
+}
+
+function startStudioUpgradeCashPurchase(gameState, price) {
+  const config = getStudioUpgradeConfig();
+  if (!config || !gameState || !gameState.player) {
+    return { ok: false, message: "Studio upgrade unavailable." };
+  }
+  const studioState = getStudioUpgradeState(gameState);
+  if (!studioState) {
+    return { ok: false, message: "Studio upgrade state missing." };
+  }
+  if (studioState.purchased) {
+    return { ok: false, message: "Studio upgrade already active." };
+  }
+  const resolvedPrice = Number.isFinite(price) ? price : (Number.isFinite(config.cashPrice) ? config.cashPrice : 0);
+  if (gameState.player.cash < resolvedPrice) {
+    return { ok: false, message: "Not enough cash for the studio upgrade." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - resolvedPrice);
+  studioState.purchased = true;
+  studioState.decision = "cash";
+  studioState.financed = false;
+  if (studioState.financePlan) {
+    studioState.financePlan.active = false;
+    studioState.financePlan.daysRemaining = 0;
+  }
+  studioState.penaltyUntilDay = null;
+  const repBonus = Number.isFinite(config.effects && config.effects.repBonus) ? config.effects.repBonus : 0;
+  if (repBonus > 0) {
+    gameState.player.reputation = Math.max(0, gameState.player.reputation + repBonus);
+  }
+  return { ok: true, message: "Studio upgrade secured in cash." };
+}
+
+function startStudioUpgradeFinance(gameState) {
+  const config = getStudioUpgradeConfig();
+  if (!config || !gameState || !gameState.player) {
+    return { ok: false, message: "Studio upgrade unavailable." };
+  }
+  const financeConfig = config.finance || {};
+  if (financeConfig.enabled !== true) {
+    return { ok: false, message: "Financing is not available." };
+  }
+  const studioState = getStudioUpgradeState(gameState);
+  if (!studioState) {
+    return { ok: false, message: "Studio upgrade state missing." };
+  }
+  if (studioState.purchased) {
+    return { ok: false, message: "Studio upgrade already active." };
+  }
+  const downPayment = Number.isFinite(financeConfig.downPayment) ? financeConfig.downPayment : 0;
+  if (gameState.player.cash < downPayment) {
+    return { ok: false, message: "Not enough cash for the down payment." };
+  }
+  const termDays = Number.isFinite(financeConfig.termDays) ? financeConfig.termDays : 0;
+  const financedAmount = Number.isFinite(financeConfig.totalFinancedAmount) ? financeConfig.totalFinancedAmount : 0;
+  const dailyPayment = termDays > 0 ? Math.ceil(financedAmount / termDays) : 0;
+  gameState.player.cash = Math.max(0, gameState.player.cash - downPayment);
+  studioState.purchased = true;
+  studioState.decision = "finance";
+  studioState.financed = true;
+  studioState.financePlan = {
+    active: true,
+    termDays: termDays,
+    daysRemaining: termDays,
+    dailyPayment: dailyPayment,
+    totalFinancedAmount: financedAmount,
+    downPayment: downPayment
+  };
+  studioState.penaltyUntilDay = null;
+  const repBonus = Number.isFinite(config.effects && config.effects.repBonus) ? config.effects.repBonus : 0;
+  if (repBonus > 0) {
+    gameState.player.reputation = Math.max(0, gameState.player.reputation + repBonus);
+  }
+  return { ok: true, message: "Studio upgrade financed. The note starts tomorrow." };
+}
+
+function declineStudioUpgrade(gameState) {
+  const config = getStudioUpgradeConfig();
+  if (!config || !gameState || !gameState.player) {
+    return { ok: false, message: "Studio upgrade unavailable." };
+  }
+  const studioState = getStudioUpgradeState(gameState);
+  if (!studioState) {
+    return { ok: false, message: "Studio upgrade state missing." };
+  }
+  if (studioState.purchased) {
+    return { ok: false, message: "Studio upgrade already active." };
+  }
+  if (studioState.decision !== "none") {
+    return { ok: false, message: "You already made a decision." };
+  }
+  studioState.decision = "declined";
+  const repPenalty = Number.isFinite(config.repPenaltyOnDecline) ? config.repPenaltyOnDecline : 0;
+  if (repPenalty > 0) {
+    gameState.player.reputation = Math.max(0, gameState.player.reputation - repPenalty);
+  }
+  const penaltyConfig = config.penalty || {};
+  if (penaltyConfig.enabled === true) {
+    const durationDays = Number.isFinite(penaltyConfig.durationDays) ? penaltyConfig.durationDays : 0;
+    studioState.penaltyUntilDay = gameState.player.day + durationDays;
+  }
+  return { ok: true, message: "You pass. The room notices." };
+}
+
+function buyLateStudioUpgrade(gameState) {
+  const config = getStudioUpgradeConfig();
+  if (!config) {
+    return { ok: false, message: "Studio upgrade unavailable." };
+  }
+  const studioState = getStudioUpgradeState(gameState);
+  if (!studioState) {
+    return { ok: false, message: "Studio upgrade state missing." };
+  }
+  if (studioState.decision !== "declined" && studioState.decision !== "missed") {
+    return { ok: false, message: "Late buy is not available yet." };
+  }
+  return startStudioUpgradeCashPurchase(gameState, config.latePrice);
 }
 
 function getDaysToAffordDebtEstimate(gameState) {

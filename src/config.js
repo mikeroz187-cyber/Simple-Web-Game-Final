@@ -1427,6 +1427,42 @@ const CONFIG = {
     rosterCapAfterUpgrade: 7,
     shopUnlockAfterDay: 95
   },
+  studioUpgrade: {
+    enabled: true,
+    triggerDay: 145,
+    requiresLeaseUpgrade: true,
+    offerWindowDays: 14,
+    repPenaltyOnDecline: 3,
+    repPenaltyOnMiss: 5,
+    cashPrice: 85000,
+    latePrice: 110000,
+    finance: {
+      enabled: true,
+      termDays: 20,
+      downPayment: 20000,
+      totalFinancedAmount: 75000
+    },
+    effects: {
+      repBonus: 5,
+      dailyOverheadDelta: 250,
+      dailyShootCapBonus: 1,
+      premiumOfSubsMult: 1.08
+    },
+    penalty: {
+      enabled: true,
+      durationDays: 14,
+      premiumOfSubsMult: 0.92
+    },
+    ui: {
+      hubTitle: "Studio Upgrade",
+      hubSubtitleWindow: "A bigger room. Better light. Dirtier profits.",
+      hubSubtitleFinanced: "You’re playing with house money now.",
+      hubSubtitleOwned: "VIP sets. VIP attention.",
+      hubSubtitleLate: "You blinked. Price went up.",
+      modalTitle: "Studio Upgrade — VIP Set Buildout",
+      modalBody: "A real studio isn’t just space — it’s permission. Bigger sets, cleaner angles, hotter talent. But the bill hits every morning like a hangover."
+    }
+  },
   equipment: {
     upgradeOrder: ["lighting", "camera", "set_dressing"],
     upgrades: {

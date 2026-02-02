@@ -86,6 +86,23 @@ function buildDefaultPlayerUpgradesState() {
       offerDeadlineDay: null,
       missed: false,
       missPenaltyApplied: false
+    },
+    studioUpgrade: {
+      offerStartedDay: null,
+      offerExpiresDay: null,
+      offerSeen: false,
+      decision: "none",
+      purchased: false,
+      financed: false,
+      financePlan: {
+        active: false,
+        termDays: 0,
+        daysRemaining: 0,
+        dailyPayment: 0,
+        totalFinancedAmount: 0,
+        downPayment: 0
+      },
+      penaltyUntilDay: null
     }
   };
 }

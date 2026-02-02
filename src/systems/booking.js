@@ -18,6 +18,17 @@ function advanceDay(gameState) {
   if (overheadAmount > 0) {
     gameState.player.cash = Math.max(0, gameState.player.cash - overheadAmount);
   }
+  const studioState = gameState.player && gameState.player.upgrades ? gameState.player.upgrades.studioUpgrade : null;
+  if (studioState && studioState.financePlan && studioState.financePlan.active && studioState.financePlan.daysRemaining > 0) {
+    studioState.financePlan.daysRemaining = Math.max(0, studioState.financePlan.daysRemaining - 1);
+    if (studioState.financePlan.daysRemaining === 0) {
+      studioState.financePlan.active = false;
+      studioState.financed = false;
+    }
+  }
+  if (studioState && Number.isFinite(studioState.penaltyUntilDay) && gameState.player.day > studioState.penaltyUntilDay) {
+    studioState.penaltyUntilDay = null;
+  }
   recordAnalyticsSnapshot(gameState);
   maybeApplyWeeklyCompetitionCheck(gameState, gameState.player.day);
   const unlockResult = typeof applyScheduledUnlocks === "function"
@@ -444,12 +455,19 @@ function getThemeById(themeId) {
   return null;
 }
 
+function getMaxShootsPerDay(gameState) {
+  const base = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
+  const bonus = typeof getStudioUpgradeShootCapBonus === "function" ? getStudioUpgradeShootCapBonus(gameState) : 0;
+  const resolvedBonus = Number.isFinite(bonus) ? bonus : 0;
+  return Math.max(0, base + resolvedBonus);
+}
+
 function tryAutoBookOne(gameState) {
   if (!gameState || !gameState.player) {
     return { success: false, reason: "Game state missing" };
   }
 
-  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
+  const maxShootsPerDay = getMaxShootsPerDay(gameState);
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
   if (currentShoots >= maxShootsPerDay) {
     return { success: false, reason: "Daily shoot limit reached" };
@@ -504,7 +522,7 @@ function confirmBooking(gameState, selection) {
   }
 
   const currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
-  const maxShootsPerDay = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
+  const maxShootsPerDay = getMaxShootsPerDay(gameState);
   if (currentShoots >= maxShootsPerDay) {
     return {
       ok: false,
@@ -629,6 +647,11 @@ function confirmBooking(gameState, selection) {
       ? premiumConfig.ofSubsMultiplier
       : 1;
     adjustedOfSubs = Math.round(adjustedOfSubs * premiumMultiplier);
+    const studioMult = typeof getStudioUpgradePremiumMult === "function" ? getStudioUpgradePremiumMult(gameState) : 1;
+    const resolvedStudioMult = Number.isFinite(studioMult) ? studioMult : 1;
+    if (resolvedStudioMult !== 1) {
+      adjustedOfSubs = Math.round(adjustedOfSubs * resolvedStudioMult);
+    }
     onlyFansSubscribersGained = Math.max(0, Math.floor(adjustedOfSubs));
     if (isAgencyPack) {
       const premiumOfSubsMult = Number.isFinite(agencyConfig.premiumOfSubsMult)
@@ -719,10 +742,17 @@ function confirmBooking(gameState, selection) {
     entry.results.socialFootprintMult = socialFootprintMult;
     entry.results.socialFootprintDetail = socialFootprintDetail;
   }
-  if (selection.contentType === "Premium" && Number.isFinite(saturationMult)) {
-    entry.results.saturationMult = saturationMult;
-    entry.results.saturationTierLabel = saturationTierLabel;
-  }
+    if (selection.contentType === "Premium" && Number.isFinite(saturationMult)) {
+      entry.results.saturationMult = saturationMult;
+      entry.results.saturationTierLabel = saturationTierLabel;
+    }
+    if (selection.contentType === "Premium" && typeof getStudioUpgradePremiumMult === "function") {
+      const studioMult = getStudioUpgradePremiumMult(gameState);
+      if (Number.isFinite(studioMult) && studioMult !== 1) {
+        entry.results.studioUpgradeMult = studioMult;
+        entry.results.studioUpgradeLabel = "Studio";
+      }
+    }
 
   if (isAgencyPack) {
     const bundleCount = Number.isFinite(agencyConfig.bundleCount) ? agencyConfig.bundleCount : 0;
