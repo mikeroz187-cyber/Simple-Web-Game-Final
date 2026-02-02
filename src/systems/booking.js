@@ -1,4 +1,5 @@
 function advanceDay(gameState) {
+  const previousDay = gameState.player.day;
   gameState.player.shootsToday = 0;
   gameState.player.agencyPackUsedToday = false;
   gameState.player.day += 1;
@@ -41,12 +42,15 @@ function advanceDay(gameState) {
   const conquestResult = typeof checkConquests === "function"
     ? checkConquests(gameState)
     : { cards: [] };
+  const collabEvents = typeof processCollabWeekOnDayEnd === "function"
+    ? processCollabWeekOnDayEnd(gameState, previousDay)
+    : [];
   const staffingEvents = getStaffingPushDayAdvanceEvents(gameState);
   const unlockEvents = unlockResult && Array.isArray(unlockResult.events) ? unlockResult.events : [];
   const storyEvents = storyResult && Array.isArray(storyResult.events) ? storyResult.events : [];
   const recruitEvents = Array.isArray(recruitResult) ? recruitResult : [];
   return {
-    storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents).concat(staffingEvents),
+    storyEvents: unlockEvents.concat(recruitEvents).concat(storyEvents).concat(staffingEvents).concat(collabEvents),
     conquestEvents: conquestResult.cards || [],
     cashflow: {
       subs: subs,

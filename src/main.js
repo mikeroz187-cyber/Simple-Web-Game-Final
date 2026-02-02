@@ -18,6 +18,7 @@
     ensureStoryLogState(window.gameState);
     ensureFlagsState(window.gameState);
     ensureSocialManualStrategyState(window.gameState);
+    ensureSocialCollabWeekState(window.gameState);
     ensureReputationState(window.gameState);
     ensureRecruitmentState(window.gameState);
     ensurePlayerUpgradesState(window.gameState);

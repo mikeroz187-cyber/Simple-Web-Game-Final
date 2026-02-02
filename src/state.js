@@ -201,7 +201,8 @@ function newGameState() {
     social: {
       posts: [],
       activeSocialStrategyId: CONFIG.social.strategy.defaultStrategyId,
-      manualStrategy: buildDefaultManualStrategyState()
+      manualStrategy: buildDefaultManualStrategyState(),
+      collab: buildDefaultSocialCollabWeekState()
     },
     unlocks: {
       locationTier1Unlocked: false,
@@ -295,6 +296,26 @@ function buildDefaultManualStrategyState() {
     dailyBudget: defaultBudget,
     allocations: getDefaultManualStrategyAllocations(),
     lastAppliedDay: null
+  };
+}
+
+function buildDefaultSocialCollabWeekState() {
+  const config = CONFIG.socialCollabWeek && typeof CONFIG.socialCollabWeek === "object"
+    ? CONFIG.socialCollabWeek
+    : {};
+  return {
+    status: "idle",
+    nextOfferDay: Number.isFinite(config.initialOfferDay) ? config.initialOfferDay : null,
+    lastOfferDay: null,
+    partnerIndex: 0,
+    attempt: {
+      partnerName: null,
+      startDay: null,
+      endDay: null,
+      daysCompleted: 0,
+      lastEvaluatedDay: null
+    },
+    permanentPromoReachBonusPct: 0
   };
 }
 
@@ -403,6 +424,58 @@ function ensureSocialManualStrategyState(gameState) {
     if (!hasLogEntry) {
       manualStrategy.lastAppliedDay = null;
     }
+  }
+}
+
+function ensureSocialCollabWeekState(gameState) {
+  if (!gameState || !gameState.social) {
+    return;
+  }
+  const defaults = buildDefaultSocialCollabWeekState();
+  if (!gameState.social.collab || typeof gameState.social.collab !== "object") {
+    gameState.social.collab = defaults;
+    return;
+  }
+  const collab = gameState.social.collab;
+  const validStatuses = ["idle", "offered", "active", "completed"];
+  if (validStatuses.indexOf(collab.status) === -1) {
+    collab.status = defaults.status;
+  }
+  if (collab.nextOfferDay !== null && !Number.isFinite(collab.nextOfferDay)) {
+    collab.nextOfferDay = defaults.nextOfferDay;
+  }
+  if (collab.lastOfferDay !== null && !Number.isFinite(collab.lastOfferDay)) {
+    collab.lastOfferDay = null;
+  }
+  if (!Number.isFinite(collab.partnerIndex) || collab.partnerIndex < 0) {
+    collab.partnerIndex = defaults.partnerIndex;
+  }
+  if (!collab.attempt || typeof collab.attempt !== "object") {
+    collab.attempt = defaults.attempt;
+  } else {
+    const attempt = collab.attempt;
+    if (attempt.partnerName !== null && typeof attempt.partnerName !== "string") {
+      attempt.partnerName = null;
+    }
+    if (attempt.startDay !== null && !Number.isFinite(attempt.startDay)) {
+      attempt.startDay = null;
+    }
+    if (attempt.endDay !== null && !Number.isFinite(attempt.endDay)) {
+      attempt.endDay = null;
+    }
+    if (!Number.isFinite(attempt.daysCompleted) || attempt.daysCompleted < 0) {
+      attempt.daysCompleted = defaults.attempt.daysCompleted;
+    } else {
+      attempt.daysCompleted = Math.floor(attempt.daysCompleted);
+    }
+    if (attempt.lastEvaluatedDay !== null && !Number.isFinite(attempt.lastEvaluatedDay)) {
+      attempt.lastEvaluatedDay = null;
+    }
+  }
+  if (!Number.isFinite(collab.permanentPromoReachBonusPct) || collab.permanentPromoReachBonusPct < 0) {
+    collab.permanentPromoReachBonusPct = defaults.permanentPromoReachBonusPct;
+  } else {
+    collab.permanentPromoReachBonusPct = Math.round(collab.permanentPromoReachBonusPct);
   }
 }
 

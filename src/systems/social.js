@@ -340,8 +340,11 @@ function postPromoContent(gameState, platform, contentId) {
     return { ok: false, message: "Invalid platform selection." };
   }
 
-  if (!gameState.social || !Array.isArray(gameState.social.posts)) {
+  if (!gameState.social || typeof gameState.social !== "object") {
     gameState.social = { posts: [] };
+  }
+  if (!Array.isArray(gameState.social.posts)) {
+    gameState.social.posts = [];
   }
 
   const entry = gameState.content.entries.find(function (item) {
@@ -409,6 +412,19 @@ function postPromoContent(gameState, platform, contentId) {
   gameState.player.onlyFansSubCarry = total - gained;
   const onlyFansSubscribersGained = Math.max(0, gained);
 
+  if (typeof ensureSocialCollabWeekState === "function") {
+    ensureSocialCollabWeekState(gameState);
+  }
+  const collabState = gameState.social && gameState.social.collab ? gameState.social.collab : null;
+  const bonusPct = collabState && Number.isFinite(collabState.permanentPromoReachBonusPct)
+    ? collabState.permanentPromoReachBonusPct
+    : 0;
+  if (bonusPct > 0) {
+    const mult = 1 + (bonusPct / 100);
+    socialFollowersGained = Math.max(0, Math.floor(socialFollowersGained * mult));
+    socialSubscribersGained = Math.max(0, Math.floor(socialSubscribersGained * mult));
+  }
+
   const postId = "post_" + (gameState.social.posts.length + 1);
   const post = {
     id: postId,
@@ -434,4 +450,73 @@ function postPromoContent(gameState, platform, contentId) {
       " social subs, +" + onlyFansSubscribersGained + " OF subs.",
     milestoneEvents: milestoneEvents
   };
+}
+
+function processCollabWeekOnDayEnd(gameState, dayToCheck) {
+  if (!gameState || !gameState.social) {
+    return [];
+  }
+  if (typeof ensureSocialCollabWeekState === "function") {
+    ensureSocialCollabWeekState(gameState);
+  }
+  const collab = gameState.social.collab;
+  if (!collab || collab.status !== "active") {
+    return [];
+  }
+  const attempt = collab.attempt || {};
+  if (!Number.isFinite(dayToCheck)) {
+    return [];
+  }
+  if (!Number.isFinite(attempt.startDay) || !Number.isFinite(attempt.endDay)) {
+    return [];
+  }
+  if (dayToCheck < attempt.startDay || dayToCheck > attempt.endDay) {
+    return [];
+  }
+  if (attempt.lastEvaluatedDay === dayToCheck) {
+    return [];
+  }
+  const required = Number.isFinite(CONFIG.socialCollabWeek.dailyUniquePromosRequired)
+    ? CONFIG.socialCollabWeek.dailyUniquePromosRequired
+    : 0;
+  const posts = Array.isArray(gameState.social.posts) ? gameState.social.posts : [];
+  const uniqueContentIds = new Set(
+    posts.filter(function (post) { return post.dayPosted === dayToCheck; })
+      .map(function (post) { return post.contentId; })
+  );
+  const uniqueCount = uniqueContentIds.size;
+  const durationDays = Number.isFinite(CONFIG.socialCollabWeek.durationDays)
+    ? CONFIG.socialCollabWeek.durationDays
+    : 0;
+  const retryDelay = Number.isFinite(CONFIG.socialCollabWeek.retryDelayDays)
+    ? CONFIG.socialCollabWeek.retryDelayDays
+    : 0;
+  if (uniqueCount >= required) {
+    const completed = Number.isFinite(attempt.daysCompleted) ? attempt.daysCompleted : 0;
+    attempt.daysCompleted = completed + 1;
+    attempt.lastEvaluatedDay = dayToCheck;
+    if (attempt.daysCompleted >= durationDays) {
+      const reward = CONFIG.socialCollabWeek.reward || {};
+      const repDelta = Number.isFinite(reward.reputationDelta) ? reward.reputationDelta : 0;
+      const bonusPct = Number.isFinite(reward.promoReachBonusPct) ? reward.promoReachBonusPct : 0;
+      collab.status = "completed";
+      collab.permanentPromoReachBonusPct = Math.max(0, collab.permanentPromoReachBonusPct + bonusPct);
+      gameState.player.reputation = Math.max(0, gameState.player.reputation + repDelta);
+      collab.nextOfferDay = null;
+      return [{ id: "act2_collab_success_day_" + dayToCheck, day: gameState.player.day }];
+    }
+    return [];
+  }
+
+  collab.status = "idle";
+  collab.nextOfferDay = gameState.player.day + retryDelay;
+  collab.partnerIndex = Number.isFinite(collab.partnerIndex) ? collab.partnerIndex + 1 : 1;
+  collab.attempt = {
+    partnerName: null,
+    startDay: null,
+    endDay: null,
+    daysCompleted: 0,
+    lastEvaluatedDay: null
+  };
+  return [{ id: "act2_collab_fail_day_" + dayToCheck, day: gameState.player.day }];
 }
