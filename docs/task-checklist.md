@@ -62,7 +62,7 @@
 
 ## Industry Takeover — In Progress
 - [x] Phase 1: Foundation (config + gameState + save/migration + docs)
-- [ ] Phase 2: Industry Nav + Industry Map screen shell
+- [x] Phase 2: Industry Nav + Industry Map screen shell
 - [ ] Phase 3: Studio Detail screen + performer list
 - [ ] Phase 4: Acquisition stages (intel/approach/turn/debut)
 - [ ] Phase 5: Boss confrontations (5-stage)
