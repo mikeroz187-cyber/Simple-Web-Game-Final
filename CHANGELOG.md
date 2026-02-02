@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Booking UI now uses a performer dropdown with an on-demand portrait profile card.
+  - Why: Match the updated booking screen layout while keeping selection clear and lightweight.
+  - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/task-checklist.md, CHANGELOG.md.
 - What: FIX removed non-impact Act 1/Act 2 story events from config and copy, leaving only gameplay-relevant events in the feed.
   - Why: Reduce event noise so the Story Log highlights reminders, unlocks, and effect-driven events only.
   - Files touched: src/config.js, src/systems/story.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

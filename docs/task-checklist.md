@@ -110,6 +110,7 @@
 - [x] UI Polish Pass v1 (Neon VIP Lounge + Bebas Neue + Hub dashboard + event feed cards).
 - [x] Recruit meet modal: Hire/Decline available immediately and slideshow media stays within the modal.
 - [x] Performer/recruit/persona display names updated to locked sexy list.
+- [x] Booking: Replace performer list with dropdown + performer portrait card.
 
 ## Bugfix / UI polish — COMPLETE ✓
 - [x] Content screen removes location thumbnail from the info panel (Bugfix A).
