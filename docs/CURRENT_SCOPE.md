@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** January 29, 2026
 
 ## Recently Completed
+- Act 2 Social Collab Week (Day 170 offer, 7-day unique promo streak, 14-day retry cadence, +3% permanent promo reach reward).
 - Hub UI fixes: correct debt days-left countdown, show daily overhead with OF payouts, and stabilize the Shop cashflow snapshot panel.
 - Booking update: raised Star Power cap to 10 and clarified booking summary with audience pull vs Star Power premium itemization.
 - Booking fixes: removed the Day 90 debt checkpoint hard-block, enforced the CONFIG.game.shoots_per_day daily cap, and itemized Star Power booking premiums in summaries and cost breakdowns.

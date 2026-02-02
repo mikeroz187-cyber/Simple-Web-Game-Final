@@ -50,6 +50,9 @@ This document describes the **current UI layout and interaction behavior** imple
 - **Promo Content list:** Only shows promos not fully posted (Instagram + X).
 - **Posted Status:** Per‑platform status for the selected promo.
 - **Actions:** Post to Instagram or X (each once per platform).
+- **Collab Week offer:** Day 170 offer appears as a decision modal with the mascot image `assets/images/mascots/talentscout_introducing.png`.
+- **Collab Week tracker:** While active, Social shows a tracker panel (day X/7, today Y/5 unique promos, streak progress).
+- **Story Log entries:** Success/fail outcomes add Story Log entries.
 
 ## Gallery
 - **Mode toggle:** Shoots (default) or Conquests.

@@ -114,6 +114,9 @@ This document summarizes the **current** `gameState` structure as implemented in
   }
 }
 ```
+- `collab` (status, nextOfferDay, partnerIndex, attempt fields, permanentPromoReachBonusPct).
+- Stored under `gameState.social` (nested) to keep saves compatible.
+- `permanentPromoReachBonusPct` affects promo post social gains only.
 
 ### `unlocks`
 - `locationTier1Unlocked` (legacy boolean)
