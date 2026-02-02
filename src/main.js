@@ -16,6 +16,7 @@
     ensureUnlocksState(window.gameState);
     ensureShootOutputsState(window.gameState);
     ensureStoryLogState(window.gameState);
+    ensureFlagsState(window.gameState);
     ensureSocialManualStrategyState(window.gameState);
     ensureReputationState(window.gameState);
     ensureRecruitmentState(window.gameState);

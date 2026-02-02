@@ -197,6 +197,10 @@ function renderHeaderStats(gameState) {
       "<span class=\"header-stat__value\">" + stat.value + "</span>" +
       "</div>";
   }).join("");
+  var staffingStatusLine = getStaffingCrisisStatusLine(gameState);
+  if (staffingStatusLine) {
+    html += "<div class=\"header-status header-status--warning\">" + staffingStatusLine + "</div>";
+  }
 
   container.innerHTML = html;
 
@@ -213,6 +217,22 @@ function renderHeaderStats(gameState) {
   if (typeof setPreviousValue === "function") {
     setPreviousValue("header-cash", cash);
   }
+}
+
+function getStaffingCrisisStatusLine(gameState) {
+  if (!gameState || !gameState.flags || !gameState.flags.act2StaffingCrisisActive) {
+    return "";
+  }
+  const config = typeof getStaffingPushConfig === "function" ? getStaffingPushConfig() : null;
+  if (!config) {
+    return "";
+  }
+  const penalty = config.penalty || {};
+  const overhead = Number.isFinite(penalty.crisisOverheadPerDay) ? penalty.crisisOverheadPerDay : 0;
+  const booking = Number.isFinite(penalty.crisisBookingCostPerShoot) ? penalty.crisisBookingCostPerShoot : 0;
+  const required = Number.isFinite(config.requiredActiveContracted) ? config.requiredActiveContracted : 0;
+  return "⚠ Staffing Crisis: +" + formatCurrency(overhead) + "/day, +" + formatCurrency(booking) +
+    " per shoot until " + required + " ACTIVE contracts";
 }
 
 function getEventIcon(entry) {
@@ -736,7 +756,9 @@ function renderBooking(gameState) {
     ? getStarPowerCostPremium(selectedPerformer, adjustedCost.finalCost)
     : { mult: 1, surcharge: 0, maxStar: null };
   var starPowerSurcharge = Number.isFinite(starPremium.surcharge) ? starPremium.surcharge : 0;
-  var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0) + starPowerSurcharge;
+  var staffingPenalty = getStaffingCrisisBookingPenalty(gameState);
+  var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0) + starPowerSurcharge +
+    (Number.isFinite(staffingPenalty) ? staffingPenalty : 0);
 
   // Booking mode cards
   var modeCardsHtml = '<div class="selection-grid selection-grid--2col">' +
@@ -877,6 +899,9 @@ function renderBooking(gameState) {
   var starPowerPremiumNote = (!isAgencyPack && starPowerSurcharge > 0)
     ? '<div class="helper-text">High-star talent costs more to book.</div>'
     : '';
+  var staffingPenaltyRow = (Number.isFinite(staffingPenalty) && staffingPenalty > 0)
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Staffing Crisis</span><span class="booking-summary__value">+' + formatCurrency(staffingPenalty) + '</span></div>'
+    : '';
   var starRow = (!isAgencyPack && selectedPerformer && Number.isFinite(effectiveStar))
     ? '<div class="booking-summary__row"><span class="booking-summary__label">Audience Pull (Star Power)</span><span class="booking-summary__value">x' + effectiveStar.toFixed(2) + '</span></div>'
     : '';
@@ -891,6 +916,7 @@ function renderBooking(gameState) {
     divaFeeRow +
     starPowerPremiumRow +
     starPowerPremiumNote +
+    staffingPenaltyRow +
     '<div class="divider"></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Total Cost</span><span class="booking-summary__value booking-summary__value--cost">' + formatCurrency(finalCost) + '</span></div>' +
     '<div class="button-row" style="margin-top:var(--gap-md);">' +

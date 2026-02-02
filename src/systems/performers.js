@@ -193,6 +193,46 @@ function getRenewalCostByType(performerType) {
   return 0;
 }
 
+function getStaffingPushConfig() {
+  if (CONFIG.act2 && CONFIG.act2.staffingPush && typeof CONFIG.act2.staffingPush === "object") {
+    return CONFIG.act2.staffingPush;
+  }
+  return null;
+}
+
+function getActiveContractedPerformersCount(gameState) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return 0;
+  }
+  return gameState.roster.performers.reduce(function (count, performer) {
+    if (!performer) {
+      return count;
+    }
+    const contract = getContractState(gameState, performer.id);
+    const daysRemaining = contract && Number.isFinite(contract.daysRemaining) ? contract.daysRemaining : 0;
+    return daysRemaining > 0 ? count + 1 : count;
+  }, 0);
+}
+
+function resolveStaffingCrisisIfRecovered(gameState) {
+  const config = getStaffingPushConfig();
+  if (!config || !gameState || !gameState.player) {
+    return [];
+  }
+  if (typeof ensureFlagsState === "function") {
+    ensureFlagsState(gameState);
+  }
+  if (!gameState.flags || !gameState.flags.act2StaffingCrisisActive) {
+    return [];
+  }
+  const activeCount = getActiveContractedPerformersCount(gameState);
+  if (activeCount < config.requiredActiveContracted) {
+    return [];
+  }
+  gameState.flags.act2StaffingCrisisActive = false;
+  return [{ id: "act2_staffing_crisis_resolved", day: gameState.player.day }];
+}
+
 function ensurePerformerManagementForId(gameState, performer) {
   if (!gameState) {
     return;

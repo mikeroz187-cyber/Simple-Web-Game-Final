@@ -53,6 +53,17 @@ function getRecruitmentCandidateById(performerId) {
   }) || null;
 }
 
+function isRecruitCandidateEligible(gameState, candidate) {
+  if (!gameState || !gameState.player || !candidate) {
+    return false;
+  }
+  const currentRep = Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0;
+  const currentDay = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
+  const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
+  const forceUnlockDay = Number.isFinite(candidate.forceUnlockDay) ? candidate.forceUnlockDay : null;
+  return currentRep >= repRequired || (forceUnlockDay !== null && currentDay >= forceUnlockDay);
+}
+
 function getAvailableRecruitCandidates(gameState) {
   const config = getRecruitmentConfig();
   const candidates = Array.isArray(config.candidates) ? config.candidates.slice() : [];
@@ -62,7 +73,6 @@ function getAvailableRecruitCandidates(gameState) {
   ensureRecruitmentState(gameState);
   const declined = new Set(gameState.recruitment.declinedIds || []);
   const hired = new Set(gameState.recruitment.hiredIds || []);
-  const currentRep = Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0;
   return candidates.filter(function (candidate) {
     if (!candidate || typeof candidate.performerId !== "string") {
       return false;
@@ -73,8 +83,7 @@ function getAvailableRecruitCandidates(gameState) {
     if (isPerformerInRoster(gameState, candidate.performerId)) {
       return false;
     }
-    const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
-    return currentRep >= repRequired;
+    return isRecruitCandidateEligible(gameState, candidate);
   }).sort(function (a, b) {
     const repA = Number.isFinite(a.repRequired) ? a.repRequired : 0;
     const repB = Number.isFinite(b.repRequired) ? b.repRequired : 0;
@@ -107,7 +116,6 @@ function getNewRecruitEligibilityEvents(gameState) {
   const declined = new Set(gameState.recruitment.declinedIds || []);
   const hired = new Set(gameState.recruitment.hiredIds || []);
   const notified = new Set(gameState.recruitment.notifiedIds || []);
-  const currentRep = Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0;
   const events = [];
 
   candidates.forEach(function (candidate) {
@@ -120,8 +128,7 @@ function getNewRecruitEligibilityEvents(gameState) {
     if (isPerformerInRoster(gameState, candidate.performerId)) {
       return;
     }
-    const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
-    if (currentRep < repRequired) {
+    if (!isRecruitCandidateEligible(gameState, candidate)) {
       return;
     }
     if (notified.has(candidate.performerId)) {
@@ -165,7 +172,7 @@ function hireRecruitCandidate(gameState, performerId) {
     return { ok: false, message: "Recruit not found." };
   }
   const repRequired = Number.isFinite(candidate.repRequired) ? candidate.repRequired : 0;
-  if (gameState.player.reputation < repRequired) {
+  if (!isRecruitCandidateEligible(gameState, candidate)) {
     return { ok: false, message: "Need Reputation ≥ " + repRequired + " to recruit this talent." };
   }
   if (isPerformerInRoster(gameState, performerId)) {

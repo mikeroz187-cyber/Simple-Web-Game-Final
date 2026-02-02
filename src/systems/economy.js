@@ -214,6 +214,19 @@ function getDailyOverhead(gameState) {
       label = label + " + Lease";
     }
   }
+  const staffingConfig = typeof getStaffingPushConfig === "function" ? getStaffingPushConfig() : null;
+  if (staffingConfig && gameState.flags && gameState.flags.act2StaffingCrisisActive) {
+    const penalty = staffingConfig.penalty || {};
+    const overheadPenalty = Number.isFinite(penalty.crisisOverheadPerDay) ? penalty.crisisOverheadPerDay : 0;
+    if (overheadPenalty > 0) {
+      amount += overheadPenalty;
+      if (!label) {
+        label = "Staffing Crisis";
+      } else {
+        label = label + " + Staffing Crisis";
+      }
+    }
+  }
   return { amount: Math.max(0, Math.round(amount)), label: label };
 }
 

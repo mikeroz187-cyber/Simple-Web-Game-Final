@@ -152,6 +152,31 @@ const STORY_EVENT_COPY = {
       "If you buy: +" +
       "{{leaseOverheadDelta}}/day overhead, roster cap {{leaseRosterCapBase}}→{{leaseRosterCapAfter}}, +{{leaseRepBonus}} Rep."
   },
+  act2_staffing_push_warning: {
+    title: "Staffing Push",
+    message: "Your scout drops a clipboard like it’s a threat.<br>" +
+      "‘We’re getting talked about. If you want to STAY talked about, you need a full bench.<br>" +
+      "{{staffingRequiredCount}} ACTIVE contracts by tonight. No excuses.’" +
+      "<br><br>Requirement: Reach {{staffingRequiredCount}} performers with ACTIVE contracts (renewals count). " +
+      "This will be checked when Day {{staffingCheckDay}} begins."
+  },
+  act2_staffing_push_success: {
+    title: "Fully Staffed",
+    message: "Fully staffed. Suddenly your studio looks expensive.<br>" +
+      "Everyone photographs better when the machine is humming.<br>" +
+      "HALO EFFECT: +{{staffingHaloDelta}} Star to everyone on the roster (max {{staffingHaloMaxStar}})."
+  },
+  act2_staffing_push_failure: {
+    title: "Staffing Crisis",
+    message: "You tried to run a ‘real studio’ on a skeleton crew.<br>" +
+      "Now you’re paying emergency rates until you fix it.<br>" +
+      "<br>Penalty Active: +{{staffingCrisisOverhead}}/day overhead and +{{staffingCrisisBooking}} per shoot until you reach {{staffingRequiredCount}} ACTIVE contracts."
+  },
+  act2_staffing_crisis_resolved: {
+    title: "Crisis Over",
+    message: "Crisis over. You’ve got bodies on call, glam on standby, and the vibe is back to premium.<br>" +
+      "The emergency tax disappears."
+  },
   act2_lease_offer_missed: {
     title: "Lease Window Missed",
     message: "You hesitated. The listing got snatched. It’s back on the board at {{leaseLatePrice}} now, and the room remembers the pause. Rep {{leaseRepPenalty}}."
@@ -448,6 +473,23 @@ function applyStoryTokens(message, gameState) {
     .replace(/\{\{leaseRepBonus\}\}/g, String(leaseConfig.repOnPurchase || 0))
     .replace(/\{\{leaseRosterCapBase\}\}/g, String(leaseConfig.rosterCapBase || 0))
     .replace(/\{\{leaseRosterCapAfter\}\}/g, String(leaseConfig.rosterCapAfterUpgrade || 0));
+  const staffingConfig = CONFIG.act2 && CONFIG.act2.staffingPush && typeof CONFIG.act2.staffingPush === "object"
+    ? CONFIG.act2.staffingPush
+    : null;
+  if (staffingConfig) {
+    const penaltyConfig = staffingConfig.penalty || {};
+    const progressionConfig = CONFIG.performers && CONFIG.performers.starPowerProgression
+      ? CONFIG.performers.starPowerProgression
+      : {};
+    const maxStarPower = Number.isFinite(progressionConfig.maxStarPower) ? progressionConfig.maxStarPower : 10;
+    resolved = resolved
+      .replace(/\{\{staffingRequiredCount\}\}/g, String(staffingConfig.requiredActiveContracted || 0))
+      .replace(/\{\{staffingCheckDay\}\}/g, String(staffingConfig.checkOnEnteringDay || 0))
+      .replace(/\{\{staffingHaloDelta\}\}/g, String(staffingConfig.haloStarDelta || 0))
+      .replace(/\{\{staffingHaloMaxStar\}\}/g, String(maxStarPower))
+      .replace(/\{\{staffingCrisisOverhead\}\}/g, formatValue(penaltyConfig.crisisOverheadPerDay || 0))
+      .replace(/\{\{staffingCrisisBooking\}\}/g, formatValue(penaltyConfig.crisisBookingCostPerShoot || 0));
+  }
   return resolved;
 }
 
