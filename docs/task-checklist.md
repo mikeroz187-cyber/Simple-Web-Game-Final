@@ -130,6 +130,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - [x] Bundle 6: Industry Map enforces one active acquisition journey; other targets disabled until resolved.
 - [x] Bundle 7: Poached performers become trophies (non-bookable), appear in Roster + Conquests selfie cards.
 - [x] Bundle 8: Studio acquisition reputation thresholds set to 75/78/80/83/85 and enforced in UI + system.
+- [x] Bundle 9: Studio bonus visibility in Hub/Booking; studio acquisition unlocks bosses in Gallery with 10-image placeholders and messaging.
 
 ---
 

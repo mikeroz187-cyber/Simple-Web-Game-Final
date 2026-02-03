@@ -1179,6 +1179,53 @@ function getAvailabilitySummary(gameState, performerId) {
   };
 }
 
+function getStudioBonusSummary(gameState) {
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder : [];
+  const studioConfigs = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
+    ? takeoverConfig.studios
+    : {};
+  const studioState = gameState && gameState.takeover && gameState.takeover.studios
+    ? gameState.takeover.studios
+    : {};
+  const bonusBuckets = {};
+  studioOrder.forEach(function (studioId) {
+    const config = studioConfigs[studioId];
+    const state = studioState[studioId];
+    if (!config || !state || state.status !== "defeated") {
+      return;
+    }
+    const bonus = config.bonusOnDefeat;
+    if (!bonus || bonus.type !== "contentMultiplier" || !bonus.category) {
+      return;
+    }
+    if (!bonusBuckets[bonus.category]) {
+      bonusBuckets[bonus.category] = 0;
+    }
+    bonusBuckets[bonus.category] += 1;
+  });
+  const categories = Object.keys(bonusBuckets);
+  const lines = categories.map(function (category) {
+    const multiplier = typeof getStudioDefeatThemeBonusMultiplier === "function"
+      ? getStudioDefeatThemeBonusMultiplier(gameState, category)
+      : 1;
+    const pct = Math.round((multiplier - 1) * 100);
+    const theme = typeof getThemeById === "function" ? getThemeById(category) : null;
+    const label = theme && theme.name ? theme.name : category;
+    return {
+      category: category,
+      label: label,
+      multiplier: multiplier,
+      pct: pct,
+      count: bonusBuckets[category]
+    };
+  });
+  const totalCount = categories.reduce(function (sum, category) {
+    return sum + bonusBuckets[category];
+  }, 0);
+  return { lines: lines, totalCount: totalCount };
+}
+
 function renderHub(gameState) {
   var container = document.getElementById("screen-hub");
   if (!container) {
@@ -1439,6 +1486,23 @@ function renderHub(gameState) {
     "</div>";
   }
 
+  var studioBonusSummary = getStudioBonusSummary(gameState);
+  var studioBonusLinesHtml = "";
+  if (!studioBonusSummary.lines.length) {
+    studioBonusLinesHtml = "<div class=\"strip-card__sub\">No studio bonuses yet.</div>";
+  } else {
+    studioBonusLinesHtml = studioBonusSummary.lines.map(function (line) {
+      var pctLabel = (line.pct >= 0 ? "+" : "") + line.pct + "%";
+      return "<div class=\"strip-card__sub\">" + line.label + ": " + pctLabel + " (x" + line.multiplier.toFixed(2) + ")</div>";
+    }).join("");
+    studioBonusLinesHtml += "<div class=\"strip-card__sub\">Total bonuses: " + studioBonusSummary.totalCount + "</div>";
+  }
+  var studioBonusCardHtml = "<div class=\"strip-card\">" +
+    "<div class=\"strip-card__title\">Studio Bonus</div>" +
+    "<div class=\"strip-card__value\">" + (studioBonusSummary.totalCount ? studioBonusSummary.totalCount + " Active" : "None") + "</div>" +
+    studioBonusLinesHtml +
+  "</div>";
+
   var competitionCardHtml = "<div class=\"strip-card\">" +
     "<div class=\"strip-card__title\">Competition</div>" +
     "<div class=\"strip-card__value\">" + competitionValue + "</div>" +
@@ -1469,6 +1533,7 @@ function renderHub(gameState) {
       managerButton +
     "</div>" +
     studioCardHtml +
+    studioBonusCardHtml +
   "</div>";
 
   // Footer controls
@@ -1563,6 +1628,12 @@ function renderBooking(gameState) {
   var bookingMode = uiState.booking.bookingMode || "core";
   var agencyPackUsedToday = Boolean(gameState.player.agencyPackUsedToday);
   var isAgencyPack = bookingMode === "agency_pack";
+  var maxShootsPerDay = typeof getMaxShootsPerDay === "function" ? getMaxShootsPerDay(gameState) : CONFIG.game.shoots_per_day;
+  var shootBonus = typeof getStudioUpgradeShootCapBonus === "function" ? getStudioUpgradeShootCapBonus(gameState) : 0;
+  var resolvedBonus = Number.isFinite(shootBonus) ? shootBonus : 0;
+  var hardCap = Number.isFinite(CONFIG.game.hard_shoots_per_day_cap) ? CONFIG.game.hard_shoots_per_day_cap : maxShootsPerDay;
+  var capNote = resolvedBonus > 0 ? " (Studio Bonus: +" + resolvedBonus + ", capped at " + hardCap + ")" : "";
+  var dailyCapLine = "Daily Cap: " + gameState.player.shootsToday + " / " + maxShootsPerDay + capNote;
 
   // Get performers
   var allPerformers = gameState.roster.performers || [];
@@ -1777,6 +1848,7 @@ function renderBooking(gameState) {
 
   // Assemble layout
   var contentHtml = '<h2 class="screen-title">Booking</h2>' +
+    '<div class="helper-text" style="margin-bottom:var(--gap-sm);">' + dailyCapLine + '</div>' +
     '<div class="booking-layout">' +
       '<div class="booking-layout__left">' +
         '<div class="panel"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
@@ -2516,12 +2588,17 @@ function renderGallery(gameState) {
 
   var uiState = getUiState();
   if (!uiState.gallery) {
-    uiState.gallery = { selectedContentId: null, mode: "shoots" };
+    uiState.gallery = { selectedContentId: null, mode: "shoots", bossSlides: {} };
   }
   if (!uiState.gallery.mode) {
     uiState.gallery.mode = "shoots";
   }
-  var galleryMode = uiState.gallery.mode === "conquests" ? "conquests" : "shoots";
+  if (!uiState.gallery.bossSlides || typeof uiState.gallery.bossSlides !== "object") {
+    uiState.gallery.bossSlides = {};
+  }
+  var galleryMode = uiState.gallery.mode === "conquests"
+    ? "conquests"
+    : (uiState.gallery.mode === "bosses" ? "bosses" : "shoots");
   var modeToggleHtml = "<div class=\"button-row\">" +
     createButton(
       "Shoots",
@@ -2536,6 +2613,13 @@ function renderGallery(gameState) {
       galleryMode === "conquests" ? "small primary" : "small secondary",
       false,
       "data-mode=\"conquests\""
+    ) +
+    createButton(
+      "Bosses",
+      "gallery-mode",
+      galleryMode === "bosses" ? "small primary" : "small secondary",
+      false,
+      "data-mode=\"bosses\""
     ) +
     "</div>";
 
@@ -2583,6 +2667,76 @@ function renderGallery(gameState) {
     container.innerHTML = renderAmbientLayers("screen-gallery") +
       "<div class=\"screen-content mascot-clearance\">" +
       conquestContentHtml +
+      "</div>";
+    return;
+  }
+
+  if (galleryMode === "bosses") {
+    if (typeof ensureTakeoverState === "function") {
+      ensureTakeoverState(gameState);
+    }
+    var takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+    var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder : [];
+    var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
+      ? takeoverConfig.studios
+      : {};
+    var bossPlaceholders = CONFIG.gallery && CONFIG.gallery.bossPlaceholders &&
+      Array.isArray(CONFIG.gallery.bossPlaceholders.defaultBoss)
+      ? CONFIG.gallery.bossPlaceholders.defaultBoss
+      : [];
+    var bossCards = studioOrder.map(function (studioId) {
+      var studioConfig = studiosConfig[studioId];
+      if (!studioConfig || !studioConfig.bossId) {
+        return "";
+      }
+      var bossId = studioConfig.bossId;
+      var unlocked = typeof hasBoss === "function"
+        ? hasBoss(gameState, bossId)
+        : (gameState.takeover && gameState.takeover.gallery &&
+          gameState.takeover.gallery.bosses && gameState.takeover.gallery.bosses[bossId]);
+      if (!unlocked) {
+        return "";
+      }
+      var bossMeta = studioConfig.bossMeta || {};
+      var bossName = bossMeta.name || bossId;
+      var bossBlurb = bossMeta.blurb || "";
+      var maxIndex = Math.max(0, bossPlaceholders.length - 1);
+      var currentIndex = Number.isFinite(uiState.gallery.bossSlides[bossId])
+        ? uiState.gallery.bossSlides[bossId]
+        : 0;
+      var safeIndex = clamp(currentIndex, 0, maxIndex);
+      uiState.gallery.bossSlides[bossId] = safeIndex;
+      var imagePath = bossPlaceholders.length ? bossPlaceholders[safeIndex] : "";
+      var prevDisabled = safeIndex <= 0;
+      var nextDisabled = safeIndex >= maxIndex;
+      var slideLabel = bossPlaceholders.length
+        ? "Image " + (safeIndex + 1) + " / " + bossPlaceholders.length
+        : "No images";
+      return "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">" + bossName + "</h3>" +
+        (bossBlurb ? "<div class=\"helper-text\" style=\"margin-bottom:var(--gap-sm);\">" + bossBlurb + "</div>" : "") +
+        "<div class=\"slideshow\">" +
+          "<img class=\"slideshow__image\" src=\"" + imagePath + "\" alt=\"" + bossName + " gallery image\">" +
+          "<div class=\"slideshow__controls\">" +
+            createButton("Prev", "boss-gallery-prev", "", prevDisabled, "data-id=\"" + bossId + "\"") +
+            "<span class=\"slideshow__meta\">" + slideLabel + "</span>" +
+            createButton("Next", "boss-gallery-next", "primary", nextDisabled, "data-id=\"" + bossId + "\"") +
+          "</div>" +
+        "</div>" +
+      "</div>";
+    }).filter(function (card) { return card; }).join("");
+
+    var bossContentHtml = "<h2 class=\"screen-title\">Gallery</h2>" +
+      modeToggleHtml +
+      "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">Bosses</h3>" +
+        (bossCards || "<div class=\"empty-state\"><div class=\"empty-state__description\">No bosses yet. Take over a studio to unlock one.</div></div>") +
+      "</div>" +
+      "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
+
+    container.innerHTML = renderAmbientLayers("screen-gallery") +
+      "<div class=\"screen-content mascot-clearance\">" +
+      bossContentHtml +
       "</div>";
     return;
   }

@@ -201,6 +201,41 @@ function getBossConfigForStudio(studioId) {
   return config.bosses[studio.bossId] || null;
 }
 
+function hasBoss(gameState, bossId) {
+  if (!gameState || !bossId) {
+    return false;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const takeover = gameState.takeover || {};
+  const gallery = takeover.gallery || {};
+  return Boolean(gallery.bosses && gallery.bosses[bossId]);
+}
+
+function unlockBoss(gameState, bossId, studioId) {
+  if (!gameState || !bossId) {
+    return { ok: false, added: false };
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  if (!gameState.takeover.gallery) {
+    gameState.takeover.gallery = { bosses: {}, trophies: {}, notes: [] };
+  }
+  if (!gameState.takeover.gallery.bosses || typeof gameState.takeover.gallery.bosses !== "object") {
+    gameState.takeover.gallery.bosses = {};
+  }
+  if (gameState.takeover.gallery.bosses[bossId]) {
+    return { ok: true, added: false };
+  }
+  gameState.takeover.gallery.bosses[bossId] = {
+    defeatedDay: gameState.player ? gameState.player.day : null,
+    studioId: studioId || null
+  };
+  return { ok: true, added: true };
+}
+
 function getBossConfrontationState(gameState, studioId) {
   if (!gameState || !studioId) {
     return null;
@@ -762,13 +797,7 @@ function defeatStudioBoss(gameState, studioId) {
   }
   const bossId = studioConfig.bossId || null;
   if (bossId) {
-    if (!gameState.takeover.gallery) {
-      gameState.takeover.gallery = { bosses: {}, trophies: {}, notes: [] };
-    }
-    if (!gameState.takeover.gallery.bosses || typeof gameState.takeover.gallery.bosses !== "object") {
-      gameState.takeover.gallery.bosses = {};
-    }
-    gameState.takeover.gallery.bosses[bossId] = { defeatedDay: gameState.player.day, studioId: studioId };
+    unlockBoss(gameState, bossId, studioId);
   }
   if (!gameState.takeover.gallery) {
     gameState.takeover.gallery = { bosses: {}, trophies: {}, notes: [] };

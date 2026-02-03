@@ -1872,14 +1872,18 @@ function setupEventHandlers() {
         if (typeof defeatStudioBoss === "function") {
           defeatStudioBoss(window.gameState, studioId);
         }
+        const studioConfig = typeof getTakeoverStudioConfig === "function"
+          ? getTakeoverStudioConfig(studioId)
+          : (CONFIG.takeover && CONFIG.takeover.studios ? CONFIG.takeover.studios[studioId] : null);
+        const bossDisplayName = studioConfig && studioConfig.bossMeta && studioConfig.bossMeta.name
+          ? studioConfig.bossMeta.name
+          : (bossConfig && bossConfig.name ? bossConfig.name : "Boss");
+        setUiMessage("Boss added to Gallery: " + bossDisplayName);
         if (shouldShowTakeoverVictoryModal(window.gameState)) {
           uiState.takeoverVictoryPending = true;
         }
         uiState.bossStageModal = null;
         clearModal();
-        const studioConfig = typeof getTakeoverStudioConfig === "function"
-          ? getTakeoverStudioConfig(studioId)
-          : (CONFIG.takeover && CONFIG.takeover.studios ? CONFIG.takeover.studios[studioId] : null);
         const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
         const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
         const trophyPath = studioConfig
@@ -2505,10 +2509,13 @@ function setupEventHandlers() {
     if (action === "gallery-mode") {
       const mode = actionEl.getAttribute("data-mode");
       if (!uiState.gallery) {
-        uiState.gallery = { selectedContentId: null, mode: "shoots" };
+        uiState.gallery = { selectedContentId: null, mode: "shoots", bossSlides: {} };
       }
-      if (mode === "shoots" || mode === "conquests") {
+      if (mode === "shoots" || mode === "conquests" || mode === "bosses") {
         uiState.gallery.mode = mode;
+        if (!uiState.gallery.bossSlides || typeof uiState.gallery.bossSlides !== "object") {
+          uiState.gallery.bossSlides = {};
+        }
       }
       setUiMessage("");
       renderApp(window.gameState);
@@ -2567,6 +2574,28 @@ function setupEventHandlers() {
       uiState.slideshow = { mode: "conquest", id: actionId, index: 0, origin: "gallery" };
       setUiMessage("");
       showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "boss-gallery-prev" || action === "boss-gallery-next") {
+      if (!uiState.gallery) {
+        uiState.gallery = { selectedContentId: null, mode: "shoots", bossSlides: {} };
+      }
+      if (!uiState.gallery.bossSlides || typeof uiState.gallery.bossSlides !== "object") {
+        uiState.gallery.bossSlides = {};
+      }
+      const bossId = actionId;
+      const placeholders = CONFIG.gallery && CONFIG.gallery.bossPlaceholders &&
+        Array.isArray(CONFIG.gallery.bossPlaceholders.defaultBoss)
+        ? CONFIG.gallery.bossPlaceholders.defaultBoss
+        : [];
+      const maxIndex = Math.max(0, placeholders.length - 1);
+      const currentIndex = Number.isFinite(uiState.gallery.bossSlides[bossId])
+        ? uiState.gallery.bossSlides[bossId]
+        : 0;
+      const delta = action === "boss-gallery-next" ? 1 : -1;
+      uiState.gallery.bossSlides[bossId] = clamp(currentIndex + delta, 0, maxIndex);
       renderApp(window.gameState);
       return;
     }

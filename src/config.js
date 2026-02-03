@@ -410,6 +410,11 @@ const CONFIG = {
         specialty: "Cosplay/Kawaii",
         difficulty: 2,
         bossId: "boss_yuki_tanaka",
+        bossMeta: {
+          bossId: "boss_yuki_tanaka",
+          name: "Yuki Tanaka",
+          blurb: "Candy-coated chaos with a velvet chokehold on her talent."
+        },
         performerIds: [
           "takeover_mika_sato",
           "takeover_pepper_chu",
@@ -430,6 +435,11 @@ const CONFIG = {
         specialty: "Latina/Curves",
         difficulty: 3,
         bossId: "boss_carmen_reyes",
+        bossMeta: {
+          bossId: "boss_carmen_reyes",
+          name: "Carmen Reyes",
+          blurb: "A velvet fist wrapped in family loyalty and ledger ink."
+        },
         performerIds: [
           "takeover_rosa_vega",
           "takeover_daniela_cruz",
@@ -450,6 +460,11 @@ const CONFIG = {
         specialty: "Alt/Edge",
         difficulty: 3,
         bossId: "boss_sasha_volkov",
+        bossMeta: {
+          bossId: "boss_sasha_volkov",
+          name: "Sasha Volkov",
+          blurb: "Ice queen with a payroll stack she refuses to share."
+        },
         performerIds: [
           "takeover_raven_darke",
           "takeover_zoe_vicious",
@@ -470,6 +485,11 @@ const CONFIG = {
         specialty: "Luxury/Glamour",
         difficulty: 4,
         bossId: "boss_dominique_vance",
+        bossMeta: {
+          bossId: "boss_dominique_vance",
+          name: "Dominique Vance",
+          blurb: "Silk contracts, steel claws, and a throne that never warms."
+        },
         performerIds: [
           "takeover_bianca_morel",
           "takeover_chanel_dubois",
@@ -490,6 +510,11 @@ const CONFIG = {
         specialty: "Confession/Taboo",
         difficulty: 5,
         bossId: "boss_victoria_kross",
+        bossMeta: {
+          bossId: "boss_victoria_kross",
+          name: "Victoria Kross",
+          blurb: "Holy on camera, ruthless in the back office."
+        },
         performerIds: [
           "takeover_scarlet_obrien",
           "takeover_mistress_ivy",
@@ -2171,4 +2196,20 @@ const CONFIG = {
   act2: {
     staffingPush: ACT2_STAFFING_PUSH_CONFIG
   }
+};
+
+CONFIG.gallery = CONFIG.gallery || {};
+CONFIG.gallery.bossPlaceholders = {
+  defaultBoss: [
+    "assets/images/placeholders/boss_01.png",
+    "assets/images/placeholders/boss_02.png",
+    "assets/images/placeholders/boss_03.png",
+    "assets/images/placeholders/boss_04.png",
+    "assets/images/placeholders/boss_05.png",
+    "assets/images/placeholders/boss_06.png",
+    "assets/images/placeholders/boss_07.png",
+    "assets/images/placeholders/boss_08.png",
+    "assets/images/placeholders/boss_09.png",
+    "assets/images/placeholders/boss_10.png"
+  ]
 };
