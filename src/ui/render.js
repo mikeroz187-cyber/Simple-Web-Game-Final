@@ -20,6 +20,9 @@ function getUiState() {
         selectedMessageId: null,
         trophySlideIndex: {}
       },
+      roster: {
+        selectedPerformerId: null
+      },
       bookingSlideshowIndex: 0,
       slideshow: {
         mode: null,
@@ -2213,54 +2216,80 @@ function renderRoster(gameState) {
     return;
   }
 
+  var uiState = getUiState();
+  if (!uiState.roster) {
+    uiState.roster = { selectedPerformerId: null };
+  }
+  if (!("selectedPerformerId" in uiState.roster)) {
+    uiState.roster.selectedPerformerId = null;
+  }
+
   var performers = gameState.roster.performers || [];
   var contractedPerformers = performers.filter(function(p) { return p.type === "core"; });
   var rosterSize = getContractedRosterCount(gameState);
   var maxRosterSize = getRecruitmentMaxRosterSize(gameState);
+  var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
+  var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+  var trophyThumb = trophySelfies[0] || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
 
-  // Performer grid
-  var performerCardsHtml = contractedPerformers.map(function(p) {
+  var talentIds = contractedPerformers.map(function(p) { return p.id; });
+  var trophyIds = trophyPerformers.map(function(entry) { return entry.performerId; });
+  var selectedPerformerId = uiState.roster.selectedPerformerId;
+  if (!selectedPerformerId || (talentIds.indexOf(selectedPerformerId) === -1 && trophyIds.indexOf(selectedPerformerId) === -1)) {
+    selectedPerformerId = talentIds.length ? talentIds[0] : null;
+    uiState.roster.selectedPerformerId = selectedPerformerId;
+  }
+
+  // Performer list (master)
+  var performerRowsHtml = contractedPerformers.map(function(p) {
     var status = isPerformerBookable(gameState, p);
-    var statusClass = status.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
-    var statusText = status.ok ? 'Available' : status.reason;
-    var portraitPath = getPerformerPortraitPath(p);
     var contractSummary = getContractSummary(gameState, p.id);
-    var availSummary = getAvailabilitySummary(gameState, p);
-    var divaLabelText = getDivaFeeLabelForPerformer(p);
-    var divaFeeExplanation = getDivaFeeExplanationForPerformer(p);
-    var renewalButtonHtml = "";
+    var statusText = status.ok ? 'Available' : (status.reason || 'Busy');
+    var statusClass = status.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
     if (contractSummary.isExpired) {
-      var baseRenewalCost = getRenewalCostByType(p.type);
-      var divaRenewalFee = getDivaRenewalFeeForPerformer(p);
-      var renewalLabel = divaRenewalFee > 0
-        ? 'Renew (' + formatCurrency(baseRenewalCost) + ' + Diva Fee ' + formatCurrency(divaRenewalFee) + ')'
-        : 'Renew (' + formatCurrency(baseRenewalCost) + ')';
-      renewalButtonHtml = '<div class="button-row" style="margin-top:6px;">' +
-        '<button class="button small secondary" data-action="renew-contract" data-id="' + p.id + '">' + renewalLabel + '</button>' +
-      '</div>';
+      statusText = 'Expired';
+      statusClass = 'performer-card__status--warning';
     }
+    var portraitPath = getPerformerPortraitPath(p);
+    var isSelected = selectedPerformerId === p.id;
 
-    return '<div class="performer-card">' +
-      '<img class="performer-card__portrait" src="' + portraitPath + '" alt="' + p.name + '">' +
-      '<div class="performer-card__info">' +
-        '<div class="performer-card__name">' + p.name + '</div>' +
-        '<div class="performer-card__type">' + getPerformerTypeLabel(p.type) + '</div>' +
-        '<div class="performer-card__stats">' +
-          '<span class="performer-card__stat">⭐ <span class="performer-card__stat-value">' + p.starPower + '</span></span>' +
-          '<span class="performer-card__stat">😓 <span class="performer-card__stat-value">' + p.fatigue + '</span></span>' +
-          '<span class="performer-card__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ <span class="performer-card__stat-value">' + p.loyalty + '</span></span>' +
+    return '<div class="roster-row' + (isSelected ? ' is-selected' : '') + '" data-action="roster-select" data-id="' + p.id +
+      '" data-performer-id="' + p.id + '">' +
+      '<img class="roster-row__thumb" src="' + portraitPath + '" alt="' + p.name + '">' +
+      '<div class="roster-row__main">' +
+        '<div class="roster-row__name">' + p.name + '</div>' +
+        '<div class="roster-row__meta">' +
+          '<span class="roster-row__stat">⭐ ' + p.starPower + '</span>' +
+          '<span class="roster-row__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ ' + p.loyalty + '</span>' +
         '</div>' +
-        (divaFeeExplanation ? '<div class="diva-fee-note" style="margin-top:4px;">⚠ ' + divaFeeExplanation + '</div>' : (divaLabelText ? '<div class="diva-fee-note" style="margin-top:4px;">⚠ ' + divaLabelText + ' Active</div>' : '')) +
-        '<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">' + contractSummary.label + '</div>' +
-        '<div style="font-size:10px;color:var(--text-muted);">' + availSummary.label + '</div>' +
-        '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
-        renewalButtonHtml +
       '</div>' +
+      '<div class="roster-row__status"><span class="performer-card__status ' + statusClass + '">' + statusText + '</span></div>' +
     '</div>';
   }).join('');
 
-  if (!performerCardsHtml) {
-    performerCardsHtml = '<div class="empty-state"><div class="empty-state__icon">👤</div><div class="empty-state__title">No Performers</div><div class="empty-state__description">Recruit performers to build your roster.</div></div>';
+  if (!performerRowsHtml) {
+    performerRowsHtml = '<div class="empty-state roster-empty"><div class="empty-state__icon">👤</div><div class="empty-state__title">No Performers</div><div class="empty-state__description">Recruit performers to build your roster.</div></div>';
+  }
+
+  var trophyRowsHtml = "";
+  if (trophyPerformers.length > 0) {
+    trophyRowsHtml = '<div class="roster-section-title">Trophies</div>' +
+      trophyPerformers.map(function (entry) {
+        var performerConfig = typeof getTakeoverPerformerConfig === "function"
+          ? getTakeoverPerformerConfig(entry.performerId)
+          : null;
+        var name = performerConfig && performerConfig.name ? performerConfig.name : "Trophy Performer";
+        var isSelected = selectedPerformerId === entry.performerId;
+        return '<div class="roster-row roster-row--trophy' + (isSelected ? ' is-selected' : '') +
+          '" data-action="roster-select" data-id="' + entry.performerId + '" data-performer-id="' + entry.performerId + '">' +
+          '<img class="roster-row__thumb" src="' + trophyThumb + '" alt="' + name + ' trophy">' +
+          '<div class="roster-row__main">' +
+            '<div class="roster-row__name">' + name + '</div>' +
+            '<div class="roster-row__meta"><span class="tag tag--gold">Trophy</span></div>' +
+          '</div>' +
+          '<div class="roster-row__status"><span class="helper-text">Not bookable</span></div>' +
+        '</div>';
+      }).join("");
   }
 
   // Recruitment panel
@@ -2363,42 +2392,101 @@ function renderRoster(gameState) {
     renewalsHtml = '<div class="panel"><h3 class="panel-title">⚠️ Expiring Contracts</h3>' + renewalItemsHtml + '</div>';
   }
 
-  // Trophies
-  var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
-  var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
-  var trophyThumb = trophySelfies[0] || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
-  var trophiesHtml = "";
-  if (trophyPerformers.length > 0) {
-    var trophyCardsHtml = trophyPerformers.map(function (entry) {
-      var performerConfig = typeof getTakeoverPerformerConfig === "function"
-        ? getTakeoverPerformerConfig(entry.performerId)
-        : null;
-      var name = performerConfig && performerConfig.name ? performerConfig.name : "Trophy Performer";
-      var imagePath = trophyThumb;
-      return '<div class="shop-card">' +
-        '<div class="conquest-detail__portrait" style="margin-bottom: var(--gap-sm);"><img class="thumb-sm" src="' +
-          imagePath + '" alt="' + name + ' trophy" /></div>' +
-        '<div class="shop-card__title">' + name + '</div>' +
-        '<div class="helper-text">Trophy (not bookable)</div>' +
-        '<div style="margin-top:6px;">' + renderTakeoverBadge("Trophy", "defeated") + '</div>' +
-        '</div>';
-    }).join("");
-    trophiesHtml = '<div class="panel"><h3 class="panel-title">Trophies</h3>' +
-      '<p class="helper-text">Poached talent becomes trophies. They don’t count against roster caps.</p>' +
-      '<div class="shop-grid">' + trophyCardsHtml + '</div></div>';
+  var selectedPerformer = selectedPerformerId
+    ? contractedPerformers.find(function(p) { return p.id === selectedPerformerId; })
+    : null;
+  var selectedTrophy = selectedPerformerId
+    ? trophyPerformers.find(function(entry) { return entry.performerId === selectedPerformerId; })
+    : null;
+  var detailHtml = "";
+  if (selectedPerformer) {
+    var detailPortraitPath = getPerformerPortraitPath(selectedPerformer);
+    var detailStatus = isPerformerBookable(gameState, selectedPerformer);
+    var detailContractSummary = getContractSummary(gameState, selectedPerformer.id);
+    var detailContractState = getContractState(gameState, selectedPerformer.id);
+    var detailAvailability = getAvailabilitySummary(gameState, selectedPerformer);
+    var divaLabelText = getDivaFeeLabelForPerformer(selectedPerformer);
+    var divaFeeExplanation = getDivaFeeExplanationForPerformer(selectedPerformer);
+    var detailStatusText = detailStatus.ok ? 'Available' : (detailStatus.reason || 'Busy');
+    var detailStatusClass = detailStatus.ok ? 'performer-card__status--available' : 'performer-card__status--unavailable';
+    if (detailContractSummary.isExpired) {
+      detailStatusText = 'Expired';
+      detailStatusClass = 'performer-card__status--warning';
+    }
+    var baseRenewalCost = getRenewalCostByType(selectedPerformer.type);
+    var divaRenewalFee = getDivaRenewalFeeForPerformer(selectedPerformer);
+    var renewalLabel = divaRenewalFee > 0
+      ? 'Renew (' + formatCurrency(baseRenewalCost) + ' + Diva Fee ' + formatCurrency(divaRenewalFee) + ')'
+      : 'Renew (' + formatCurrency(baseRenewalCost) + ')';
+    var showRenewal = detailContractSummary.isExpired ||
+      (detailContractState && detailContractState.daysRemaining > 0 && detailContractState.daysRemaining <= 7);
+    var contractLine = detailContractSummary.label;
+    if (detailContractSummary.isExpired) {
+      contractLine = "Contract expired.";
+    } else if (detailContractState && detailContractState.daysRemaining > 0 && detailContractState.daysRemaining <= 7) {
+      contractLine = "Contract expiring in " + detailContractState.daysRemaining + " days.";
+    }
+    detailHtml = '<div class="panel roster-detail-card">' +
+      '<div class="roster-detail__header">' +
+        '<img class="roster-detail__portrait" src="' + detailPortraitPath + '" alt="' + selectedPerformer.name + '">' +
+        '<div class="roster-detail__meta">' +
+          '<div class="roster-detail__name">' + selectedPerformer.name + '</div>' +
+          '<div class="roster-detail__headline">Star ' + selectedPerformer.starPower + ' • Loyalty ' + selectedPerformer.loyalty + '</div>' +
+          '<div class="performer-card__status ' + detailStatusClass + '">' + detailStatusText + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="roster-detail__section">' +
+        '<div class="stat-row"><span class="stat-row__label">Star Power</span><span class="stat-row__value">' + selectedPerformer.starPower + '</span></div>' +
+        '<div class="stat-row"><span class="stat-row__label">Fatigue</span><span class="stat-row__value">' + selectedPerformer.fatigue + '</span></div>' +
+        '<div class="stat-row"><span class="stat-row__label">Loyalty</span><span class="stat-row__value">' + selectedPerformer.loyalty + '</span></div>' +
+        (divaLabelText ? '<div class="stat-row"><span class="stat-row__label">Diva Fee</span><span class="stat-row__value">' + divaLabelText + '</span></div>' : '') +
+      '</div>' +
+      (divaFeeExplanation ? '<div class="diva-fee-note roster-detail__note">⚠ ' + divaFeeExplanation + '</div>' : '') +
+      '<div class="roster-detail__section">' +
+        '<div class="stat-row"><span class="stat-row__label">Contract</span><span class="stat-row__value">' + contractLine + '</span></div>' +
+        '<div class="stat-row"><span class="stat-row__label">Availability</span><span class="stat-row__value">' + detailAvailability.label + '</span></div>' +
+      '</div>' +
+      (showRenewal ? '<div class="button-row roster-detail__actions">' +
+        '<button class="button small secondary" data-action="renew-contract" data-id="' + selectedPerformer.id + '">' + renewalLabel + '</button>' +
+      '</div>' : '') +
+    '</div>';
+  } else if (selectedTrophy) {
+    var trophyConfig = typeof getTakeoverPerformerConfig === "function"
+      ? getTakeoverPerformerConfig(selectedTrophy.performerId)
+      : null;
+    var trophyName = trophyConfig && trophyConfig.name ? trophyConfig.name : "Trophy Performer";
+    detailHtml = '<div class="panel roster-detail-card">' +
+      '<div class="roster-detail__header">' +
+        '<img class="roster-detail__portrait" src="' + trophyThumb + '" alt="' + trophyName + ' trophy">' +
+        '<div class="roster-detail__meta">' +
+          '<div class="roster-detail__name">' + trophyName + '</div>' +
+          '<div class="roster-detail__headline"><span class="tag tag--gold">Trophy</span></div>' +
+          '<div class="helper-text" style="margin-top:6px;">Not bookable. Added via takeover.</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   } else {
-    trophiesHtml = '<div class="panel"><h3 class="panel-title">Trophies</h3>' +
-      '<p class="helper-text">No trophies yet. Acquire performers through the Industry Map.</p></div>';
+    detailHtml = '<div class="panel roster-detail-card">' +
+      '<div class="empty-state"><div class="empty-state__icon">👤</div><div class="empty-state__title">No Talent Selected</div>' +
+      '<div class="empty-state__description">Recruit performers to build your roster.</div></div>' +
+    '</div>';
   }
 
   // Layout
   var contentHtml = '<h2 class="screen-title">Roster</h2>' +
     rosterSummaryHtml +
     '<div class="roster-layout">' +
-      '<div class="roster-grid">' + performerCardsHtml + '</div>' +
-      '<div class="roster-sidebar">' + recruitmentHtml + expiredContractsHtml + renewalsHtml + '</div>' +
+      '<div class="roster-master">' +
+        '<div class="roster-section-title">Talent</div>' +
+        '<div class="roster-master__list">' + performerRowsHtml + trophyRowsHtml + '</div>' +
+      '</div>' +
+      '<div class="roster-detail">' +
+        detailHtml +
+        recruitmentHtml +
+        expiredContractsHtml +
+        renewalsHtml +
+      '</div>' +
     '</div>' +
-    trophiesHtml +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-roster") +
