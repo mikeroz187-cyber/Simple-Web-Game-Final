@@ -768,6 +768,12 @@ function renderIndustryStudio(gameState) {
     return "Stage";
   }
 
+  var activePerformerId = typeof getActiveTakeoverPerformerId === "function"
+    ? getActiveTakeoverPerformerId(gameState)
+    : (gameState && gameState.takeover && typeof gameState.takeover.activePerformerId === "string"
+      ? gameState.takeover.activePerformerId
+      : null);
+
   var performersHtml = performerIds.map(function (performerId) {
     var performer = performerConfig[performerId] || {};
     var performerStatus = performerState[performerId] && performerState[performerId].status
@@ -785,6 +791,7 @@ function renderIndustryStudio(gameState) {
     var actionDisabled = true;
     var actionAttr = "";
     var lockHtml = "";
+    var isLockedByActive = !studioDefeated && activePerformerId && performerId !== activePerformerId;
     if (performerStatus === "available") {
       actionLabel = "Begin Acquisition";
       actionDisabled = false;
@@ -829,7 +836,14 @@ function renderIndustryStudio(gameState) {
       actionDisabled = true;
       actionAttr = "";
     }
-    return "<div class=\"industry-performer-card\">" +
+    if (isLockedByActive) {
+      actionLabel = "Locked — Active Target";
+      actionDisabled = true;
+      actionAttr = "";
+      lockHtml = "<div class=\"helper-text\">Locked — active target in progress.</div>";
+    }
+    var cardClass = "industry-performer-card" + (isLockedByActive ? " is-disabled" : "");
+    return "<div class=\"" + cardClass + "\">" +
       "<div class=\"industry-performer__portrait\">" + performerPortraitHtml + "</div>" +
       "<div class=\"industry-performer__details\">" +
       "<div class=\"industry-performer__name\">" + performerName + "</div>" +

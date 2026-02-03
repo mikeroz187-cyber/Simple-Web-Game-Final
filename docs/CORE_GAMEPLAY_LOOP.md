@@ -25,6 +25,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Automation (optional):** If enabled, auto-book or auto-post can run once per day when you click **Advance Day**.
 - **Competition & variance:** After Day 181, competition standings and market shifts can modify Promo/Premium outputs, and Premium content may roll variance.
 - **Studio Identity:** At Day 181, a Hub modal picker lets you choose a Studio Identity branch. Selection is permanent and modifies Premium OF subs and Promo followers.
+- **Industry Takeover acquisition lock:** Only one performer acquisition journey can be active at a time. Starting intel on a target locks other Industry Map performers until that journey resolves.
 
 ### Day 170 — Social Collab Week (Talent Scout)
 - **Trigger:** Day 170 (repeats every 14 days if failed or declined via `nextOfferDay`).

@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Enforced a single active Industry Takeover acquisition journey and disabled other targets while it is in progress, plus documented the lock behavior.
+  - Why: Ensure only one takeover acquisition runs at a time and make the lock state explicit in the UI and docs.
+  - Files touched: src/systems/takeover.js, src/state.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Renamed the Save nav button to Options, added a New Game reset with confirmation, and documented canonical save/load rules.
   - Why: Provide an explicit Options entry point, allow safe per-slot resets, and centralize persistence guidance.
   - Files touched: index.html, styles.css, src/ui/render.js, src/ui/events.js, src/save.js, docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/VISION/ACT3_SCOPE.md, docs/SYSTEM_AFTER_HOURS.md, docs/VISION/VISION_OVERVIEW.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/GAMESTATE_DATA_MODEL.md, docs/late-game/DATA_STRUCTURE.md, docs/SCOPE_MVP.md, docs/late-game/IMPLEMENTATION_PLAN.md.

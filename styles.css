@@ -2321,6 +2321,10 @@ body {
   background: rgba(0, 0, 0, 0.2);
 }
 
+.industry-performer-card.is-disabled {
+  opacity: 0.45;
+}
+
 .industry-performer__details {
   display: flex;
   flex-direction: column;
