@@ -45,6 +45,10 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
   - Shows non‑freelance performers only.
   - Displays Star Power, fatigue, loyalty, contract status, and daily availability.
   - **Renew Contract** button appears when a contract expires.
+- **Trophies panel:**
+  - Shows Industry Map trophies (poached performers).
+  - Trophy cards display a badge and a “not bookable” status line.
+  - Trophies do **not** count against roster caps and have no contract actions.
 
 ## Social
 - **Social Strategies:** Choose between Balanced / Growth Focus / MRR Focus.
@@ -76,6 +80,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Stage triggers:** Trigger rules can include `minDay` and `requiresDebtCleared` gates before the stat/equipment checks are evaluated.
 - **Actions:** Accept (unlocks reward pack), Close (dismisses message), View Reward (opens slideshow).
 - **Unlocked packs list:** Shows unlocked reward packs with **View** button.
+- **Trophies section:** One-time trophy cards with a single-phase “Selfies” slideshow; always available once earned.
 
 ## Slideshow (Shared Screen)
 - **Recruit Meet:** 10‑slide “Private Audition” with Next button and Hire/Decline on final slide.

@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Converted takeover acquisitions into trophies with Conquests selfie cards and a roster trophies panel, and ensured trophies are non-bookable.
+  - Why: Align Industry Map acquisitions with the trophy-only rule and prevent trophies from affecting roster limits or bookings.
+  - Files touched: src/config.js, src/state.js, src/systems/conquests.js, src/systems/takeover.js, src/systems/performers.js, src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Enforced a single active Industry Takeover acquisition journey and disabled other targets while it is in progress, plus documented the lock behavior.
   - Why: Ensure only one takeover acquisition runs at a time and make the lock state explicit in the UI and docs.
   - Files touched: src/systems/takeover.js, src/state.js, src/ui/render.js, src/ui/events.js, styles.css, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
