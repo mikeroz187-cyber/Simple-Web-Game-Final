@@ -66,6 +66,10 @@ On a poach attempt:
 - **Victory condition:** Defeat **all 5** rival bosses.
 - **Result:** Victory modal + Empire screen, then free play continues indefinitely.
 
+## UI Notes
+- UI: Added compact status badges across takeover cards and boss/roster rows.
+- UI: Added lightweight progress bars for studio acquisition and Empire trophies.
+
 ---
 
 ## Art/Asset Conventions
