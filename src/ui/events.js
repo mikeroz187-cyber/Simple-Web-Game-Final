@@ -574,6 +574,13 @@ function showStudioUpgradeModal(gameState) {
   const formatValue = typeof formatCurrency === "function"
     ? formatCurrency
     : function (value) { return "$" + Math.round(value).toLocaleString(); };
+  const cashOnHand = Number.isFinite(gameState.player.cash) ? gameState.player.cash : 0;
+  const buildCashShortfallText = function (shortfall) {
+    if (!Number.isFinite(shortfall) || shortfall <= 0) {
+      return "Not enough cash";
+    }
+    return "Not enough cash — need " + formatValue(shortfall);
+  };
   const day = Number.isFinite(gameState.player.day) ? gameState.player.day : 0;
   const offerExpiresDay = Number.isFinite(studioState.offerExpiresDay) ? studioState.offerExpiresDay : null;
   const offerActive = studioState.decision === "none" && Number.isFinite(offerExpiresDay) && day <= offerExpiresDay;
@@ -655,16 +662,44 @@ function showStudioUpgradeModal(gameState) {
     const termDays = Number.isFinite(financeConfig.termDays) ? financeConfig.termDays : 0;
     const financedAmount = Number.isFinite(financeConfig.totalFinancedAmount) ? financeConfig.totalFinancedAmount : 0;
     const dailyPayment = termDays > 0 ? Math.ceil(financedAmount / termDays) : 0;
+    const cashShortfall = Math.max(0, cashPrice - cashOnHand);
+    const financeShortfall = Math.max(0, downPayment - cashOnHand);
+    const cashDisabled = cashShortfall > 0;
+    const financeDisabled = financeConfig.enabled === true && financeShortfall > 0;
+    const cashHelperText = cashDisabled
+      ? "<div class=\"helper-text\">" + buildCashShortfallText(cashShortfall) + "</div>"
+      : "";
+    const financeHelperText = financeDisabled
+      ? "<div class=\"helper-text\">" + buildCashShortfallText(financeShortfall) + "</div>"
+      : "";
+    const cashButtonHtml = "<div style=\"display:flex;flex-direction:column;gap:4px;align-items:flex-start;\">" +
+      "<button class=\"button primary\" data-action=\"studio-upgrade-buy-cash\"" + (cashDisabled ? " disabled" : "") + ">Pay Cash — " +
+      formatValue(cashPrice) + "</button>" +
+      cashHelperText +
+      "</div>";
+    const financeButtonHtml = financeConfig.enabled === true
+      ? "<div style=\"display:flex;flex-direction:column;gap:4px;align-items:flex-start;\">" +
+        "<button class=\"button\" data-action=\"studio-upgrade-buy-finance\"" + (financeDisabled ? " disabled" : "") + ">Finance — " +
+        formatValue(downPayment) + " down + " + formatValue(dailyPayment) + "/day (" + termDays + " days)</button>" +
+        financeHelperText +
+        "</div>"
+      : "";
     buttonsHtml =
-      "<button class=\"button primary\" data-action=\"studio-upgrade-buy-cash\">Pay Cash — " + formatValue(cashPrice) + "</button>" +
-      (financeConfig.enabled === true
-        ? "<button class=\"button\" data-action=\"studio-upgrade-buy-finance\">Finance — " + formatValue(downPayment) +
-          " down + " + formatValue(dailyPayment) + "/day (" + termDays + " days)</button>"
-        : "") +
+      cashButtonHtml +
+      financeButtonHtml +
       "<button class=\"button\" data-action=\"studio-upgrade-decline\">Pass</button>";
   } else if (lateAvailable) {
-    buttonsHtml = "<button class=\"button primary\" data-action=\"studio-upgrade-buy-late\">Buy Late — " +
-      formatValue(config.latePrice || 0) + "</button>" +
+    const latePrice = Number.isFinite(config.latePrice) ? config.latePrice : 0;
+    const lateShortfall = Math.max(0, latePrice - cashOnHand);
+    const lateDisabled = lateShortfall > 0;
+    const lateHelperText = lateDisabled
+      ? "<div class=\"helper-text\">" + buildCashShortfallText(lateShortfall) + "</div>"
+      : "";
+    buttonsHtml = "<div style=\"display:flex;flex-direction:column;gap:4px;align-items:flex-start;\">" +
+      "<button class=\"button primary\" data-action=\"studio-upgrade-buy-late\"" + (lateDisabled ? " disabled" : "") + ">Buy Late — " +
+      formatValue(latePrice) + "</button>" +
+      lateHelperText +
+      "</div>" +
       "<button class=\"button\" data-action=\"dismiss-modal\">Close</button>";
   }
 
@@ -1147,7 +1182,18 @@ function setupEventHandlers() {
 
     if (action === "studio-upgrade-buy-cash") {
       const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : {};
-      const result = startStudioUpgradeCashPurchase(window.gameState, config.cashPrice);
+      const cashPrice = Number.isFinite(config.cashPrice) ? config.cashPrice : 0;
+      const cashOnHand = Number.isFinite(window.gameState && window.gameState.player && window.gameState.player.cash)
+        ? window.gameState.player.cash
+        : 0;
+      if (cashOnHand < cashPrice) {
+        setUiMessage("Not enough cash.");
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "warning");
+        }
+        return;
+      }
+      const result = startStudioUpgradeCashPurchase(window.gameState, cashPrice);
       setUiMessage(result.message || "");
       if (result.ok) {
         const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
@@ -1166,6 +1212,19 @@ function setupEventHandlers() {
     }
 
     if (action === "studio-upgrade-buy-finance") {
+      const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : {};
+      const financeConfig = config.finance || {};
+      const downPayment = Number.isFinite(financeConfig.downPayment) ? financeConfig.downPayment : 0;
+      const cashOnHand = Number.isFinite(window.gameState && window.gameState.player && window.gameState.player.cash)
+        ? window.gameState.player.cash
+        : 0;
+      if (cashOnHand < downPayment) {
+        setUiMessage("Not enough cash.");
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "warning");
+        }
+        return;
+      }
       const result = startStudioUpgradeFinance(window.gameState);
       setUiMessage(result.message || "");
       if (result.ok) {
@@ -1204,6 +1263,18 @@ function setupEventHandlers() {
     }
 
     if (action === "studio-upgrade-buy-late") {
+      const config = CONFIG.studioUpgrade && typeof CONFIG.studioUpgrade === "object" ? CONFIG.studioUpgrade : {};
+      const latePrice = Number.isFinite(config.latePrice) ? config.latePrice : 0;
+      const cashOnHand = Number.isFinite(window.gameState && window.gameState.player && window.gameState.player.cash)
+        ? window.gameState.player.cash
+        : 0;
+      if (cashOnHand < latePrice) {
+        setUiMessage("Not enough cash.");
+        if (typeof showToast === "function") {
+          showToast("Not enough cash.", "warning");
+        }
+        return;
+      }
       const result = buyLateStudioUpgrade(window.gameState);
       setUiMessage(result.message || "");
       if (result.ok) {

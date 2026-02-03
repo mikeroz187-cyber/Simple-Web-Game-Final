@@ -430,6 +430,13 @@ function buyLateStudioUpgrade(gameState) {
   if (studioState.decision !== "declined" && studioState.decision !== "missed") {
     return { ok: false, message: "Late buy is not available yet." };
   }
+  const latePrice = Number.isFinite(config.latePrice) ? config.latePrice : 0;
+  const cashOnHand = gameState && gameState.player && Number.isFinite(gameState.player.cash)
+    ? gameState.player.cash
+    : 0;
+  if (cashOnHand < latePrice) {
+    return { ok: false, message: "Not enough cash for the late buy." };
+  }
   return startStudioUpgradeCashPurchase(gameState, config.latePrice);
 }
 
