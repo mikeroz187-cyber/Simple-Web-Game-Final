@@ -351,6 +351,10 @@ function renderIndustryMap(gameState) {
   var takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
   var unlocked = typeof isTakeoverUnlocked === "function" ? isTakeoverUnlocked(gameState) : false;
   var unlockDay = Number.isFinite(takeoverConfig.unlockDay) ? takeoverConfig.unlockDay : 181;
+  var studioRepThresholds = Array.isArray(takeoverConfig.studioRepThresholds) ? takeoverConfig.studioRepThresholds : [];
+  var currentRep = gameState && gameState.player && Number.isFinite(gameState.player.reputation)
+    ? gameState.player.reputation
+    : 0;
 
   if (!unlocked) {
     container.innerHTML = "<div class=\"screen-content\">" +
@@ -429,12 +433,14 @@ function renderIndustryMap(gameState) {
     "<div class=\"helper-text takeover-retaliation-line\">" + retaliationLabel + "</div>" +
   "</div>";
 
-  var studioCardsHtml = studioOrder.map(function (studioId) {
+  var studioCardsHtml = studioOrder.map(function (studioId, studioIndex) {
     var studioConfig = studiosConfig[studioId] || {};
     var studioState = takeoverState.studios && takeoverState.studios[studioId]
       ? takeoverState.studios[studioId]
       : {};
     var studioDefeated = studioState && studioState.status === "defeated";
+    var requiredRep = Number.isFinite(studioRepThresholds[studioIndex]) ? studioRepThresholds[studioIndex] : 0;
+    var repLocked = requiredRep > 0 && currentRep < requiredRep;
     var title = studioConfig.name || "Unknown Studio";
     var tagline = studioConfig.tagline || studioConfig.description || "No intel yet.";
     var statusText = "Available";
@@ -472,6 +478,10 @@ function renderIndustryMap(gameState) {
       statusText = "Defeated";
       statusVariant = "defeated";
     }
+    if (repLocked && !studioDefeated) {
+      statusText = "Locked";
+      statusVariant = "locked";
+    }
     var badgeHtml = renderTakeoverBadge(statusText, statusVariant);
     var bonusLineHtml = "";
     if (studioDefeated && studioConfig.bonusOnDefeat && studioConfig.bonusOnDefeat.category) {
@@ -487,6 +497,8 @@ function renderIndustryMap(gameState) {
       bossHint = "Boss: Defeated";
     }
     var progressHtml = renderTakeoverProgress(acquiredLabel, acquiredCount, performerTotal);
+    var repHint = repLocked ? "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">Need Rep " +
+      requiredRep + "</div>" : "";
     return "<div class=\"shop-card industry-map-card\">" +
       "<div class=\"industry-map-card__badge\">" + badgeHtml + "</div>" +
       imageHtml +
@@ -495,9 +507,11 @@ function renderIndustryMap(gameState) {
       "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-xs);\">" + acquiredLabel + "</div>" +
       "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">" + bossHint + "</div>" +
       "<div class=\"industry-map-card__progress\">" + progressHtml + "</div>" +
+      repHint +
       bonusLineHtml +
       "<div class=\"industry-map-card__actions\">" +
-      "<button class=\"button primary\" data-action=\"industry-view-studio\" data-studio-id=\"" + studioId + "\">View Studio</button>" +
+      "<button class=\"button primary\"" + (repLocked && !studioDefeated ? " disabled" : "") +
+      " data-action=\"industry-view-studio\" data-studio-id=\"" + studioId + "\">View Studio</button>" +
       "</div>" +
       "</div>";
   }).join("");

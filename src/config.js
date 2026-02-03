@@ -358,6 +358,7 @@ const CONFIG = {
       tier3: 75,
       boss: 100
     },
+    studioRepThresholds: [75, 78, 80, 83, 85],
     costs: {
       intel: 4000,
       approach: 9000,
