@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Restructured the Booking screen into a two-pane layout with a Config Bar for mode/location/theme/content type selections.
+  - Why: Provide the Bundle 11A layout scaffold and keep booking controls compact ahead of the quick-book grid.
+  - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Rebuilt the Roster screen into a master/detail layout with selectable talent rows, trophy list handling, and a performer detail card with renew actions.
   - Why: Deliver Bundle 10’s roster UX redesign while keeping contract and trophy rules clear.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

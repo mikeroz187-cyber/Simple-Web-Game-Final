@@ -20,6 +20,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Booking mode:**
   - **Core Performer** (select a contracted performer).
   - **Agency Sample Pack** (no performer required; once per day).
+- **Layout:** Two-pane layout with a Config Bar at the top-left; performer quick-book grid is the next step.
 - **Selections:** Performer (core only), Location, Theme, Content Type.
 - **Shoot cost panel:** Shows computed cost (base + location; agency pack adds flat fee).
 - **Confirm Shoot:** Enabled only when all requirements are satisfied.

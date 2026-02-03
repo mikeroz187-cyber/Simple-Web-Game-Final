@@ -3311,6 +3311,42 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "booking-set-mode") {
+      const uiState = getUiState();
+      const nextMode = target.value || "core";
+      uiState.booking.bookingMode = nextMode;
+      if (nextMode === "agency_pack") {
+        uiState.booking.performerIdA = null;
+      }
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "booking-set-location") {
+      const uiState = getUiState();
+      uiState.booking.locationId = target.value || null;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "booking-set-theme") {
+      const uiState = getUiState();
+      uiState.booking.themeId = target.value || null;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "booking-set-content-type") {
+      const uiState = getUiState();
+      uiState.booking.contentType = target.value || null;
+      setUiMessage("");
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "toggle-automation-enabled") {
       ensureAutomationState(window.gameState);
       window.gameState.automation.enabled = Boolean(target.checked);
