@@ -1,6 +1,7 @@
 # GameState Data Model (Current)
 
 This document summarizes the **current** `gameState` structure as implemented in `src/state.js` and enforced by save validation.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ## Top-Level Keys
 - `version`, `createdAt`, `updatedAt`

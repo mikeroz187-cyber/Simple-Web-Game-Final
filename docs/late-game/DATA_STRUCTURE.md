@@ -3,6 +3,7 @@
 ## Overview
 
 This document defines all data structures for the Industry Takeover system: config schemas, gameState extensions, and content data formats.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ---
 

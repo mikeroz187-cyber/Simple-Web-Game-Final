@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Renamed the Save nav button to Options, added a New Game reset with confirmation, and documented canonical save/load rules.
+  - Why: Provide an explicit Options entry point, allow safe per-slot resets, and centralize persistence guidance.
+  - Files touched: index.html, styles.css, src/ui/render.js, src/ui/events.js, src/save.js, docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/MVP/MVP_OVERVIEW.md, docs/MVP/MVP_TEST_SCENARIOS.md, docs/MVP/MVP_TECH_GUARDRAILS.md, docs/MVP/MVP_UI_BLUEPRINT.md, docs/MASTER_IMPLEMENTATION_PLAN.md, docs/VISION/ACT3_SCOPE.md, docs/SYSTEM_AFTER_HOURS.md, docs/VISION/VISION_OVERVIEW.md, docs/VISION/ACT3_UI_BLUEPRINT.md, docs/VISION/ACT2_SCOPE.md, docs/VISION/ACT2_SYSTEMS.md, docs/VISION/ACT2_UI_BLUEPRINT.md, docs/GAMESTATE_DATA_MODEL.md, docs/late-game/DATA_STRUCTURE.md, docs/SCOPE_MVP.md, docs/late-game/IMPLEMENTATION_PLAN.md.
 - What: Added a Social "Post All" action to publish the same promo to Insta + X with shared eligibility checks and unique promo counting.
   - Why: Allow a single-click cross-post while ensuring it counts as one promo and blocks when either network is unavailable.
   - Files touched: src/ui/render.js, src/ui/events.js, src/systems/social.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

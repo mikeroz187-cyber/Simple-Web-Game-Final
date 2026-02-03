@@ -220,6 +220,13 @@ function renderHeaderStats(gameState) {
   }
 }
 
+function updateOptionsNavLabel() {
+  var label = document.querySelector("[data-action=\"toggle-save-menu\"] .nav-item__label");
+  if (label) {
+    label.textContent = "Options";
+  }
+}
+
 function getStaffingCrisisStatusLine(gameState) {
   if (!gameState || !gameState.flags || !gameState.flags.act2StaffingCrisisActive) {
     return "";
@@ -293,6 +300,7 @@ function updateCompetitionNavVisibility(gameState) {
 
 function renderApp(gameState) {
   getUiState();
+  updateOptionsNavLabel();
   updateIndustryMapNavVisibility(gameState);
   updateEmpireNavVisibility(gameState);
   updateCompetitionNavVisibility(gameState);

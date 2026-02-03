@@ -1,6 +1,7 @@
 # UI Layout & Interaction Model (Current)
 
 This document describes the **current UI layout and interaction behavior** implemented in `src/ui/render.js` and `src/ui/events.js`.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ## Hub
 - **Status panel:** Day, Days Left, Shoots Today, Cash, Debt Remaining, Social Followers/Subs, OF Subs, MRR, Reputation, Next Action.
@@ -10,7 +11,8 @@ This document describes the **current UI layout and interaction behavior** imple
 - **Automation panel:** Toggles for Automation Enabled, Auto‑Book, Auto‑Post with daily cap note.
 - **Save slot panel:** Select active slot; Save Now / Load Save use the selected slot; Autosave writes to Autosave.
 - **Primary actions:** Booking, Analytics, Social, Gallery, Story Log, Roster, Shop, Pay Down Debt quick buttons on the Hub.
-- **Global actions:** Save Now, Load Save, Export Save, Import Save, Advance Day.
+- **Global actions:** Options (Save Now, Load, Export, Import, New Game) and Advance Day.
+- **Options menu:** Bottom-left nav button labeled **Options** opens the save/options dropdown; **New Game** lives in a Danger Zone section with confirmation.
 - **Debug panel (optional):** Only visible with `?debug=1`.
 
 ## Booking

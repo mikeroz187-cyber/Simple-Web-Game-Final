@@ -3,6 +3,7 @@
 This document specifies the After Hours encounter system — a power-fantasy mechanic where performers approach the player with transactional offers after the workday ends.
 
 **Status:** Spec complete, pending implementation
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ---
 
