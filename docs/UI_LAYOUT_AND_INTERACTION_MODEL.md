@@ -20,14 +20,17 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Booking mode:**
   - **Core Performer** (select a contracted performer).
   - **Agency Sample Pack** (no performer required; once per day).
-- **Layout:** Two-pane layout with a Config Bar at the top-left, a Performer Quick-Book Grid in the left pane, and the Booking summary panel on the right.
-- **Selections:** Mode, Location, Theme, Content Type (from the Config Bar); performer selection is handled from the grid.
-- **Performer Quick-Book Grid:** Shows all non-trophy roster performers with portraits, name, and compact star/loyalty stats.
-- **Per-card status + CTA:**
-  - Status text shows one primary reason: **Available**, **Already shot today**, **Contract expired**, or **Daily cap reached**.
-  - **Book Shoot** is enabled only when the card status is **Available**; otherwise the button reads **Unavailable** and is disabled.
-- **Shoot cost panel:** Shows computed cost (base + location; agency pack adds flat fee).
-- **Confirm Shoot:** Enabled only when all requirements are satisfied.
+- **Layout:** Config Bar at the top, performer dropdown below, then a **Select → Preview → Confirm** layout with a portrait preview on the left and stacked info panels on the right.
+- **Performer dropdown:**
+  - Shows all non-trophy roster performers.
+  - Options show **Name ★{starPower} — Status** with status values **Available**, **Contract expired**, **Already shot today**, or **Daily cap reached**.
+  - Unavailable performers remain visible but are disabled with their status reason.
+  - In Agency Pack mode, the performer selector is disabled and shows “Agency selection.”
+- **Portrait preview:** 9:16 portrait frame; shows placeholder copy until a performer is selected, then renders the performer portrait.
+- **Performer stats panel:** Name, star rating (visual + numeric ★X), loyalty (❤️), and availability status.
+- **Shoot summary panel:** Mode, Performer, Location, Theme, and Type.
+- **Cost breakdown panel:** Itemized base cost, location fee, subtotal, content type multiplier subtotal, plus any star power premium, diva fee, or staffing penalties, followed by a bold total.
+- **Confirm Shoot:** Only confirmation action; button label includes total cost and remains disabled until selections are valid and affordable.
 
 ## Content
 - **Latest shoot preview:** Five‑image slideshow with Prev/Next controls.

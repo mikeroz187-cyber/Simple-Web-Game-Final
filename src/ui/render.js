@@ -1656,7 +1656,6 @@ function renderBooking(gameState) {
   var divaLoyaltyValue = (!isAgencyPack && selectedPerformer)
     ? (Number.isFinite(selectedPerformer.loyalty) ? selectedPerformer.loyalty : CONFIG.performers.starting_loyalty)
     : null;
-  var effectiveStar = (!isAgencyPack && selectedPerformer) ? getEffectiveStarPower(selectedPerformer) : null;
 
   // Get locations
   var locationIds = (CONFIG.locations.tier0_ids || [])
@@ -1685,10 +1684,10 @@ function renderBooking(gameState) {
   var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0) + starPowerSurcharge +
     (Number.isFinite(staffingPenalty) ? staffingPenalty : 0);
 
-  // Performer quick-book grid
+  // Performer status + select
   var currentShoots = Number.isFinite(gameState.player.shootsToday) ? gameState.player.shootsToday : 0;
   var dailyCapReached = currentShoots >= maxShootsPerDay;
-  var performerGridHtml = corePerformers.map(function (performer) {
+  function getPerformerStatus(performer) {
     var performerId = performer.id;
     var contract = getContractState(gameState, performerId);
     var daysRemaining = contract && Number.isFinite(contract.daysRemaining) ? contract.daysRemaining : 0;
@@ -1699,38 +1698,44 @@ function renderBooking(gameState) {
       : 0;
     var dailyCap = getPerformerDailyBookingCap(performer);
     var alreadyShotToday = dailyCap > 0 && consecutiveBookings >= dailyCap;
-
     var statusText = dailyCapReached
       ? "Daily cap reached"
       : (contractExpired
         ? "Contract expired"
         : (alreadyShotToday ? "Already shot today" : "Available"));
-    var isAvailable = statusText === "Available";
-    var statusClass = isAvailable
-      ? "performer-card__status--available"
-      : (statusText === "Already shot today" ? "performer-card__status--warning" : "performer-card__status--unavailable");
-    var portraitPath = getPerformerPortraitPath(performer);
-    var isSelected = performerId === selectedPerformerId;
-    return '<div class="booking-performer-card' + (isSelected ? ' is-selected' : '') + '"' +
-      ' data-action="select-performer-a" data-id="' + performerId + '">' +
-      '<img class="booking-performer-card__portrait" src="' + portraitPath + '" alt="' + performer.name + '">' +
-      '<div class="booking-performer-card__name">' + performer.name + '</div>' +
-      '<div class="booking-performer-card__stats">' +
-        '<span class="booking-performer-card__stat">⭐ ' + performer.starPower + '</span>' +
-        '<span class="booking-performer-card__stat" title="Loyalty — keep her booked or she gets expensive.">❤️ ' + performer.loyalty + '</span>' +
-      '</div>' +
-      '<button class="button small primary booking-performer-card__cta" data-action="booking-book-performer" data-performer-id="' +
-        performerId + '"' + (isAvailable ? '' : ' disabled') + '>' + (isAvailable ? 'Book Shoot' : 'Unavailable') + '</button>' +
-      '<div class="performer-card__status ' + statusClass + '">' + statusText + '</div>' +
-    '</div>';
-  }).join('');
-
-  if (!performerGridHtml) {
-    performerGridHtml = '<div class="empty-state"><div class="empty-state__icon">👤</div>' +
-      '<div class="empty-state__title">No Performers</div>' +
-      '<div class="empty-state__description">Recruit performers to start booking shoots.</div></div>';
+    return {
+      text: statusText,
+      isAvailable: statusText === "Available"
+    };
   }
-  var performerHtml = '<div class="booking-performer-grid">' + performerGridHtml + '</div>';
+  var performerSelectHtml = '';
+  if (isAgencyPack) {
+    performerSelectHtml = '<div class="booking-performer-select">' +
+      '<label class="form-label" for="booking-performer-select">Performer</label>' +
+      '<select id="booking-performer-select" class="select-control" data-action="select-performer-a" disabled>' +
+        '<option selected>Agency selection</option>' +
+      '</select>' +
+    '</div>';
+  } else {
+    var performerOptionsHtml = corePerformers.map(function (performer) {
+      var status = getPerformerStatus(performer);
+      var performerId = performer.id;
+      var isSelected = performerId === selectedPerformerId;
+      var label = performer.name + " ★" + performer.starPower + " — " + status.text;
+      return '<option value="' + performerId + '"' + (isSelected ? ' selected' : '') +
+        (status.isAvailable ? '' : ' disabled') + '>' + label + '</option>';
+    }).join('');
+    var performerPlaceholder = corePerformers.length
+      ? '<option value="" disabled' + (selectedPerformerId ? '' : ' selected') + '>Select a performer\u2026</option>'
+      : '<option value="" disabled selected>No performers available</option>';
+    performerSelectHtml = '<div class="booking-performer-select">' +
+      '<label class="form-label" for="booking-performer-select">Performer</label>' +
+      '<select id="booking-performer-select" class="select-control" data-action="select-performer-a">' +
+        performerPlaceholder +
+        performerOptionsHtml +
+      '</select>' +
+    '</div>';
+  }
 
   // Config bar options
   var locationOptionsHtml = locationIds.map(function(locId) {
@@ -1804,57 +1809,109 @@ function renderBooking(gameState) {
   var canAfford = gameState.player.cash >= finalCost;
   var canConfirm = performerValid && locationValid && selectedTheme && selectedContentType && canAfford && !(isAgencyPack && agencyPackUsedToday);
 
-  // Summary
+  // Summary + panels
   var divaFeeReason = (!isAgencyPack && divaFee > 0 && selectedPerformer)
     ? "Low loyalty " + divaLoyaltyValue + (divaLabel ? " \u2014 " + divaLabel : "")
     : "";
-  var divaFeeRow = (!isAgencyPack && divaFee > 0)
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Diva Fee</span><span class="booking-summary__value">+' + formatCurrency(divaFee) + (divaFeeReason ? ' (' + divaFeeReason + ')' : '') + '</span></div>'
-    : '';
-  var starRatingRow = (!isAgencyPack && selectedPerformer && Number.isFinite(selectedPerformer.starPower))
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Rating</span><span class="booking-summary__value">★' + selectedPerformer.starPower + '</span></div>'
-    : '';
-  var starPowerPremiumRow = (!isAgencyPack && starPowerSurcharge > 0)
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Power Premium (★' + starPremium.maxStar + ' x' + starPremium.mult.toFixed(2) + ')</span><span class="booking-summary__value">+' + formatCurrency(starPowerSurcharge) + '</span></div>'
-    : '';
-  var starPowerPremiumNote = (!isAgencyPack && starPowerSurcharge > 0)
-    ? '<div class="helper-text">High-star talent costs more to book.</div>'
-    : '';
-  var staffingPenaltyRow = (Number.isFinite(staffingPenalty) && staffingPenalty > 0)
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Staffing Crisis</span><span class="booking-summary__value">+' + formatCurrency(staffingPenalty) + '</span></div>'
-    : '';
-  var starRow = (!isAgencyPack && selectedPerformer && Number.isFinite(effectiveStar))
-    ? '<div class="booking-summary__row"><span class="booking-summary__label">Audience Pull (Star Power)</span><span class="booking-summary__value">x' + effectiveStar.toFixed(2) + '</span></div>'
-    : '';
-  var summaryHtml = '<div class="booking-summary">' +
+  var starRatingValue = (!isAgencyPack && selectedPerformer && Number.isFinite(selectedPerformer.starPower))
+    ? Math.max(0, Math.min(10, Math.round(selectedPerformer.starPower)))
+    : null;
+  var starVisualCount = starRatingValue !== null ? Math.max(0, Math.min(5, Math.round(starRatingValue / 2))) : 0;
+  var starVisual = starRatingValue !== null
+    ? ("★★★★★".slice(0, starVisualCount) + "☆☆☆☆☆".slice(0, 5 - starVisualCount))
+    : "";
+  var selectedStatus = (!isAgencyPack && selectedPerformer) ? getPerformerStatus(selectedPerformer) : null;
+  var performerStatsHtml = '<div class="booking-panel booking-panel--stats">' +
+    '<div class="panel-title">Performer Stats</div>' +
+    (selectedPerformer
+      ? '<div class="booking-performer-name">' + selectedPerformer.name + '</div>' +
+        '<div class="booking-performer-stars">' + starVisual + ' <span class="booking-performer-stars__value">★' +
+          starRatingValue + '</span></div>' +
+        '<div class="booking-performer-meta">' +
+          '<span>❤️ ' + selectedPerformer.loyalty + '</span>' +
+          '<span class="booking-performer-status">' + (selectedStatus ? selectedStatus.text : '—') + '</span>' +
+        '</div>'
+      : '<div class="booking-empty-copy">Select a performer to preview stats.</div>') +
+  '</div>';
+  var shootSummaryHtml = '<div class="booking-panel">' +
+    '<div class="panel-title">Shoot Summary</div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Mode</span><span class="booking-summary__value">' + (isAgencyPack ? 'Agency Pack' : 'Core') + '</span></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Performer</span><span class="booking-summary__value">' + (isAgencyPack ? 'Agency' : (selectedPerformer ? selectedPerformer.name : '—')) + '</span></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Location</span><span class="booking-summary__value">' + (selectedLocation ? selectedLocation.name : '—') + '</span></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Theme</span><span class="booking-summary__value">' + (selectedTheme ? selectedTheme.name : '—') + '</span></div>' +
     '<div class="booking-summary__row"><span class="booking-summary__label">Type</span><span class="booking-summary__value">' + (selectedContentType || '—') + '</span></div>' +
-    starRatingRow +
-    starRow +
-    divaFeeRow +
+  '</div>';
+  var baseShootCost = isAgencyPack
+    ? (CONFIG.agencyPacks && Number.isFinite(CONFIG.agencyPacks.flatFee) ? CONFIG.agencyPacks.flatFee : 0)
+    : (Number.isFinite(CONFIG.economy.base_shoot_cost) ? CONFIG.economy.base_shoot_cost : 0);
+  var baseShootLabel = isAgencyPack ? "Agency pack fee" : "Base shoot cost";
+  var locationFee = (selectedLocation && Number.isFinite(selectedLocation.cost)) ? selectedLocation.cost : 0;
+  var baseSubtotal = Math.round(baseShootCost + locationFee);
+  var contentTypeLabel = selectedContentType ? selectedContentType : "Select type";
+  var contentTypeLine = selectedContentType
+    ? contentTypeLabel + " x" + adjustedCost.mult.toFixed(2)
+    : contentTypeLabel;
+  var contentTypeValue = selectedContentType ? formatCurrency(adjustedCost.finalCost) : "—";
+  var divaFeeRow = (!isAgencyPack && divaFee > 0)
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Diva Fee</span><span class="booking-summary__value">+' + formatCurrency(divaFee) + (divaFeeReason ? ' (' + divaFeeReason + ')' : '') + '</span></div>'
+    : '';
+  var starPowerPremiumRow = (!isAgencyPack && starPowerSurcharge > 0)
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Star Power Premium (★' + starPremium.maxStar + ' x' + starPremium.mult.toFixed(2) + ')</span><span class="booking-summary__value">+' + formatCurrency(starPowerSurcharge) + '</span></div>'
+    : '';
+  var staffingPenaltyRow = (Number.isFinite(staffingPenalty) && staffingPenalty > 0)
+    ? '<div class="booking-summary__row"><span class="booking-summary__label">Staffing Crisis</span><span class="booking-summary__value">+' + formatCurrency(staffingPenalty) + '</span></div>'
+    : '';
+  var confirmHelperText = "";
+  if (!canConfirm) {
+    if (!canAfford) {
+      confirmHelperText = "Not enough cash.";
+    } else if (!performerValid && !isAgencyPack) {
+      confirmHelperText = "Select an available performer.";
+    } else if (!locationValid) {
+      confirmHelperText = "Select a valid location.";
+    } else if (!selectedTheme) {
+      confirmHelperText = "Select a theme.";
+    } else if (!selectedContentType) {
+      confirmHelperText = "Select a content type.";
+    } else if (isAgencyPack && agencyPackUsedToday) {
+      confirmHelperText = "Agency pack already used today.";
+    }
+  }
+  var costBreakdownHtml = '<div class="booking-panel booking-panel--cost">' +
+    '<div class="panel-title">Cost Breakdown</div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">' + baseShootLabel + '</span><span class="booking-summary__value">' +
+      formatCurrency(baseShootCost) + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Location fee</span><span class="booking-summary__value">' +
+      formatCurrency(locationFee) + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Subtotal (Base + Location)</span><span class="booking-summary__value">' +
+      formatCurrency(baseSubtotal) + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Content Type (' + contentTypeLine + ')</span><span class="booking-summary__value">' +
+      contentTypeValue + '</span></div>' +
     starPowerPremiumRow +
-    starPowerPremiumNote +
+    divaFeeRow +
     staffingPenaltyRow +
     '<div class="divider"></div>' +
-    '<div class="booking-summary__row"><span class="booking-summary__label">Total Cost</span><span class="booking-summary__value booking-summary__value--cost">' + formatCurrency(finalCost) + '</span></div>' +
+    '<div class="booking-summary__row"><span class="booking-summary__label">Total</span><span class="booking-summary__value booking-summary__value--cost">' + formatCurrency(finalCost) + '</span></div>' +
     '<div class="button-row" style="margin-top:var(--gap-md);">' +
-      '<button class="button primary" data-action="confirm-shoot"' + (canConfirm ? '' : ' disabled') + ' style="flex:1;">📷 Confirm Shoot</button>' +
+      '<button class="button primary" data-action="confirm-shoot"' + (canConfirm ? '' : ' disabled') + ' style="flex:1;">🎬 CONFIRM SHOOT — ' +
+        formatCurrency(finalCost) + '</button>' +
     '</div>' +
+    (confirmHelperText ? '<div class="helper-text">' + confirmHelperText + '</div>' : '') +
   '</div>';
 
-  // Assemble layout
+  var portraitHtml = selectedPerformer
+    ? '<img class="booking-portrait__image" src="' + getPerformerPortraitPath(selectedPerformer) + '" alt="' + selectedPerformer.name + '">' 
+    : '<div class="booking-portrait__placeholder"><div class="booking-portrait__icon">🎞️</div><div>Select a Performer</div></div>';
   var contentHtml = '<h2 class="screen-title">Booking</h2>' +
     '<div class="helper-text" style="margin-bottom:var(--gap-sm);">' + dailyCapLine + '</div>' +
-    '<div class="booking-layout">' +
-      '<div class="booking-left">' +
-        configBarHtml +
-        '<div class="booking-left-body">' + performerHtml + '</div>' +
-      '</div>' +
-      '<div class="booking-right">' +
-        summaryHtml +
+    configBarHtml +
+    performerSelectHtml +
+    '<div class="booking-preview-layout">' +
+      '<div class="booking-portrait">' + portraitHtml + '</div>' +
+      '<div class="booking-panels">' +
+        performerStatsHtml +
+        shootSummaryHtml +
+        costBreakdownHtml +
       '</div>' +
     '</div>' +
     renderStatusMessage() +
