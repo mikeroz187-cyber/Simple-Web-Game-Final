@@ -1299,12 +1299,17 @@ function renderHub(gameState) {
   var selectedBranch = typeof getSelectedReputationBranch === "function" ? getSelectedReputationBranch(gameState) : null;
   var reputationConfig = CONFIG.reputation || {};
   var selectionStartDay = reputationConfig.selectionStartDay || 181;
-  var identityValue = selectedBranch ? selectedBranch.label : (day >= selectionStartDay ? "Choose Identity" : "Locked");
-  var identitySub = selectedBranch ?
+  var hasSelectedBranch = Boolean(selectedBranch);
+  var isUnlocked = day >= selectionStartDay;
+  var identityValue = hasSelectedBranch ? selectedBranch.label : (isUnlocked ? "Choose Identity" : "Locked");
+  var identitySub = hasSelectedBranch ?
     "OF " + formatMultiplier(selectedBranch.ofSubsMult) + ", Followers " + formatMultiplier(selectedBranch.followersMult) :
-    (day >= selectionStartDay ? "Select your path" : "Unlocks Day " + selectionStartDay);
-  var identityBadge = selectedBranch ? "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>" :
-    (day >= selectionStartDay ? "" : "<span class=\"strip-card__badge strip-card__badge--locked\">Locked</span>");
+    (isUnlocked ? "Select your path" : "Unlocks Day " + selectionStartDay);
+  var identityBadge = hasSelectedBranch ? "<span class=\"strip-card__badge strip-card__badge--active\">Active</span>" :
+    (isUnlocked ? "" : "<span class=\"strip-card__badge strip-card__badge--locked\">Locked</span>");
+  var identityButton = (!hasSelectedBranch && isUnlocked)
+    ? "<button class=\"button primary\" data-action=\"open-identity-modal\" style=\"margin-top:6px;padding:4px 8px;font-size:10px;min-height:auto;\">Choose</button>"
+    : "";
 
   // Legacy milestones card
   var legacyConfig = CONFIG.legacyMilestones || { milestoneOrder: [], milestones: {} };
@@ -1411,6 +1416,7 @@ function renderHub(gameState) {
       "<div class=\"strip-card__value\">" + identityValue + "</div>" +
       "<div class=\"strip-card__sub\">" + identitySub + "</div>" +
       identityBadge +
+      identityButton +
     "</div>" +
     "<div class=\"strip-card\">" +
       "<div class=\"strip-card__title\">Legacy Milestones</div>" +

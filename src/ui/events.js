@@ -132,6 +132,54 @@ function showDecisionModal(opts) {
     "</div>";
 }
 
+function showIdentityModal(gameState) {
+  const modalRoot = qs("#modal-root");
+  if (!modalRoot || !gameState || !gameState.player) {
+    return;
+  }
+  const reputationConfig = CONFIG.reputation || {};
+  const branches = Array.isArray(reputationConfig.branches) ? reputationConfig.branches : [];
+  if (branches.length === 0) {
+    return;
+  }
+
+  const playerRep = Number.isFinite(gameState.player.reputation) ? gameState.player.reputation : 0;
+  const branchesHtml = branches.map(function (branch) {
+    if (!branch || !branch.id) {
+      return "";
+    }
+    const label = branch.label || branch.id;
+    const blurb = branch.blurb || "";
+    const requiredRep = Number.isFinite(branch.requiredReputation) ? branch.requiredReputation : 0;
+    const ofMult = Number.isFinite(branch.ofSubsMult) ? branch.ofSubsMult : 1;
+    const followersMult = Number.isFinite(branch.followersMult) ? branch.followersMult : 1;
+    const modifiersLine = "Premium OF Subs x" + ofMult.toFixed(2) + ", Followers x" + followersMult.toFixed(2);
+    const disabled = playerRep < requiredRep;
+    const helperText = disabled ? "<div style=\"margin-top:6px;color:var(--text-muted);font-size:12px;\">Need Rep " + requiredRep + "</div>" : "";
+    return "<div style=\"border:var(--border-width) solid var(--glass-border);border-radius:var(--radius-md);padding:12px;background:rgba(18,12,28,0.35);\">" +
+      "<div style=\"font-weight:600;color:var(--text-bright);\">" + label + "</div>" +
+      "<div style=\"color:var(--text-muted);margin-top:4px;\">" + blurb + "</div>" +
+      "<div style=\"color:var(--text-muted);margin-top:6px;font-size:12px;\">" + modifiersLine + "</div>" +
+      "<div class=\"button-row\" style=\"margin-top:10px;\">" +
+        "<button class=\"button primary\" data-action=\"select-identity-branch\" data-branch-id=\"" + branch.id + "\"" + (disabled ? " disabled" : "") + ">Choose</button>" +
+      "</div>" +
+      helperText +
+    "</div>";
+  }).join("");
+
+  modalRoot.innerHTML =
+    "<div class=\"modal-overlay\">" +
+    "<div class=\"modal-card\">" +
+    "<h3 class=\"modal-title\">Studio Identity</h3>" +
+    "<p class=\"modal-message\">Pick the mask you wear. The platforms reward the lie you sell best.<br>Choose once. It locks. Forever.</p>" +
+    "<div style=\"display:grid;gap:10px;margin-top:12px;\">" + branchesHtml + "</div>" +
+    "<div class=\"button-row\" style=\"margin-top:12px;\">" +
+      "<button class=\"button\" data-action=\"dismiss-modal\">Close</button>" +
+    "</div>" +
+    "</div>" +
+    "</div>";
+}
+
 // See docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md for the current Industry Takeover behavior.
 function shouldShowTakeoverVictoryModal(gameState) {
   const victory = gameState && gameState.takeover && gameState.takeover.victory
@@ -1091,6 +1139,41 @@ function setupEventHandlers() {
         uiState.bossStageModal = null;
       }
       clearModal();
+      return;
+    }
+
+    if (action === "open-identity-modal") {
+      event.preventDefault();
+      event.stopPropagation();
+      const selectedBranch = typeof getSelectedReputationBranch === "function" ? getSelectedReputationBranch(window.gameState) : null;
+      if (selectedBranch) {
+        setUiMessage("Identity already locked.");
+        return;
+      }
+      const selectionStartDay = CONFIG.reputation && Number.isFinite(CONFIG.reputation.selectionStartDay)
+        ? CONFIG.reputation.selectionStartDay
+        : 181;
+      if (!window.gameState || !window.gameState.player || window.gameState.player.day < selectionStartDay) {
+        return;
+      }
+      showIdentityModal(window.gameState);
+      return;
+    }
+
+    if (action === "select-identity-branch") {
+      event.preventDefault();
+      event.stopPropagation();
+      const branchId = actionEl.getAttribute("data-branch-id");
+      const result = typeof selectReputationBranch === "function"
+        ? selectReputationBranch(window.gameState, branchId)
+        : { ok: false, message: "Selection failed." };
+      if (result && result.ok) {
+        setUiMessage(result.message || "Identity locked.");
+        clearModal();
+        renderApp(window.gameState);
+      } else {
+        setUiMessage(result && result.message ? result.message : "Selection failed.");
+      }
       return;
     }
 

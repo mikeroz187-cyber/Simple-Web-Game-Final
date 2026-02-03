@@ -53,6 +53,7 @@
 - [x] Competition system (auto-enables Day 181, weekly rival updates).
 - [x] Market shifts (config-driven Promo/Premium multipliers).
 - [x] Studio Identity (reputation branch selection with modifiers).
+- [x] Studio Identity: modal picker works at Day 181; selection locks; Hub reflects choice.
 - [x] Act 3 story events (Days 200/225/245/270 + effects).
 - [x] Content variance (Premium OF subs variance from Day 181).
 - [x] Legacy milestones with cash rewards.
