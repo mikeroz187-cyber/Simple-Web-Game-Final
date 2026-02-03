@@ -132,6 +132,7 @@ function showDecisionModal(opts) {
     "</div>";
 }
 
+// See docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md for the current Industry Takeover behavior.
 function shouldShowTakeoverVictoryModal(gameState) {
   const victory = gameState && gameState.takeover && gameState.takeover.victory
     ? gameState.takeover.victory

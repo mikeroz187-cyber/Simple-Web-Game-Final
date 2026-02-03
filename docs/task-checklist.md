@@ -71,6 +71,7 @@
 
 ## Release Checklist / Doc Audit — COMPLETE ✓
 - [x] Release Checklist / Doc Audit (docs)
+- [x] Release Checklist / Doc Audit (code comments)
 
 ---
 

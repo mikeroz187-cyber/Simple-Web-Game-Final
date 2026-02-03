@@ -314,6 +314,7 @@ function renderApp(gameState) {
   renderShop(gameState);
 }
 
+// See docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md for the current Industry Takeover behavior.
 function renderIndustryMap(gameState) {
   var container = document.getElementById("screen-industry-map");
   if (!container) {

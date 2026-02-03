@@ -336,6 +336,7 @@ const CONFIG = {
       label: "Social bonus"
     }
   },
+  // See docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md for the current Industry Takeover behavior.
   takeover: {
     enabled: true,
     unlockDay: 181,
