@@ -4,7 +4,10 @@ This document is a **status snapshot only**. It **does not restrict** features o
 
 **Last Updated:** February 03, 2026
 
+**Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
+
 ## Recently Completed
+- Act 3 takeover UX sanity sweep for Industry Map, Studio Detail, and Empire navigation/clarity.
 - Industry Takeover UI micro-polish for Act 3 screens (badges, progress bars, compact grids).
 - Release Checklist complete.
 - Industry Takeover system fully implemented (all 5 studios) and docs audit completed.

@@ -2038,6 +2038,9 @@ function setupEventHandlers() {
     if (action === "industry-back-to-map") {
       event.preventDefault();
       event.stopPropagation();
+      if (typeof setIndustrySelectedStudioId === "function") {
+        setIndustrySelectedStudioId(null);
+      }
       showScreen("screen-industry-map");
       renderApp(window.gameState);
       return;
@@ -2585,31 +2588,8 @@ function setupEventHandlers() {
       const pendingPoach = retaliationState && retaliationState.pending && retaliationState.pending.type === "poach_attempt"
         ? retaliationState.pending
         : null;
-      // Modal priority: collab offer -> takeover unlock -> retaliation -> victory -> remaining story cards.
-      if (collabOffer) {
-        const otherStoryEvents = storyEvents.filter(function (event) {
-          return event && event.id !== collabOffer.id;
-        });
-        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
-        showCollabOfferDecisionModal(collabOffer.id, extraCards, window.gameState);
-      } else if (takeoverUnlock) {
-        const otherStoryEvents = storyEvents.filter(function (event) {
-          return event && event.id !== takeoverUnlock.id;
-        });
-        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
-        const copy = getStoryEventCopy(takeoverUnlock.id, window.gameState);
-        const messageHtml = String(copy.message || "").replace(/\n/g, "<br>");
-        showDecisionModal({
-          title: copy.title,
-          messageHtml: messageHtml,
-          imagePath: "assets/images/mascots/talentscout_introducing.png",
-          primaryLabel: "Open Industry Map",
-          primaryAction: "nav-industry-map",
-          secondaryLabel: "Later",
-          secondaryAction: "dismiss-modal",
-          extraHtml: buildCollabExtraHtml(extraCards)
-        });
-      } else if (pendingPoach) {
+      // Modal priority: retaliation -> victory -> takeover unlock -> remaining story cards.
+      if (pendingPoach) {
         const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
         const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
         const performerConfig = typeof getTakeoverPerformerConfig === "function"
@@ -2643,6 +2623,29 @@ function setupEventHandlers() {
         });
       } else if (showTakeoverVictoryModal(window.gameState, buildCollabExtraHtml(eventCards))) {
         // Victory modal shown.
+      } else if (takeoverUnlock) {
+        const otherStoryEvents = storyEvents.filter(function (event) {
+          return event && event.id !== takeoverUnlock.id;
+        });
+        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
+        const copy = getStoryEventCopy(takeoverUnlock.id, window.gameState);
+        const messageHtml = String(copy.message || "").replace(/\n/g, "<br>");
+        showDecisionModal({
+          title: copy.title,
+          messageHtml: messageHtml,
+          imagePath: "assets/images/mascots/talentscout_introducing.png",
+          primaryLabel: "Open Industry Map",
+          primaryAction: "nav-industry-map",
+          secondaryLabel: "Later",
+          secondaryAction: "dismiss-modal",
+          extraHtml: buildCollabExtraHtml(extraCards)
+        });
+      } else if (collabOffer) {
+        const otherStoryEvents = storyEvents.filter(function (event) {
+          return event && event.id !== collabOffer.id;
+        });
+        const extraCards = buildStoryEventCards(otherStoryEvents).concat(automationResult.cards).concat(conquestEvents);
+        showCollabOfferDecisionModal(collabOffer.id, extraCards, window.gameState);
       } else if (eventCards.length) {
         showEventCards(eventCards);
       }
