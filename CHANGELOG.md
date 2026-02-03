@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Enforced booking caps (1 shoot/day per performer, hard 10/day total), locked booking themes to MVP only, renamed Office to Professional, and removed Act 3 themes.
+  - Why: Align Bundle 1 rules with updated caps and MVP-only theme availability.
+  - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/DATA_THEMES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Finalized Act 3 takeover UX sanity sweep with fallback navigation, clearer takeover button states, and updated modal priority ordering.
   - Why: Prevent takeover UI dead-ends and keep day-advance modals consistent without changing mechanics or saves.
   - Files touched: src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

@@ -205,7 +205,8 @@ const CONFIG = {
     loan_principal: 5000,
     loan_total_due: 25000,
     debt_due_day: 90,
-    shoots_per_day: 5
+    shoots_per_day: 10,
+    hard_shoots_per_day_cap: 10
   },
   economy: {
     promo_followers_gain: 115,
@@ -880,7 +881,7 @@ const CONFIG = {
     freelance_count: 5,
     default_star_power: 1,
     default_max_bookings_per_day: 1,
-    max_daily_bookings_cap: 3,
+    max_daily_bookings_cap: 1,
     max_fatigue: 100,
     fatigue_per_shoot: 10,
     fatigue_recovery_per_day: 5,
@@ -2071,7 +2072,7 @@ const CONFIG = {
         },
         office: {
           id: "office",
-          name: "Office",
+          name: "Professional",
           description: "After-hours authority — desks, suits, and someone ‘breaking rules.’",
           modifiers: { followersMult: 0.95, ofSubsMult: 1.08 }
         },
@@ -2092,47 +2093,6 @@ const CONFIG = {
     act2: {
       theme_ids: [],
       themes: {}
-    },
-    act3: {
-      theme_ids: [
-        "cosplay",
-        "curves",
-        "alt",
-        "luxury",
-        "confession"
-      ],
-      themes: {
-        cosplay: {
-          id: "cosplay",
-          name: "Cosplay",
-          description: "Costumes and canon, twisted into your own private fan service.",
-          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
-        },
-        curves: {
-          id: "curves",
-          name: "Curves",
-          description: "Soft power, heavy heat. Every frame sells the shape.",
-          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
-        },
-        alt: {
-          id: "alt",
-          name: "Alt",
-          description: "Ink, leather, and a stare that dares them to flinch.",
-          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
-        },
-        luxury: {
-          id: "luxury",
-          name: "Luxury",
-          description: "Silk, gold, and velvet promises that come with a signature.",
-          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
-        },
-        confession: {
-          id: "confession",
-          name: "Confession",
-          description: "Secrets whispered close, then sold back as a thrill.",
-          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
-        }
-      }
     }
   },
   afterHours: {

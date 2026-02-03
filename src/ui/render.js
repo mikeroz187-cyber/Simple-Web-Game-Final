@@ -1542,16 +1542,6 @@ function renderBooking(gameState) {
 
   // Get themes
   var themeIds = (CONFIG.themes.mvp.theme_ids || []).slice();
-  if (typeof isTakeoverUnlocked === "function" && isTakeoverUnlocked(gameState)) {
-    var act3ThemeIds = CONFIG.themes.act3 && Array.isArray(CONFIG.themes.act3.theme_ids)
-      ? CONFIG.themes.act3.theme_ids
-      : [];
-    act3ThemeIds.forEach(function (themeId) {
-      if (themeIds.indexOf(themeId) === -1) {
-        themeIds.push(themeId);
-      }
-    });
-  }
   var selectedThemeId = uiState.booking.themeId;
   var selectedTheme = selectedThemeId ? getThemeById(selectedThemeId) : null;
 
@@ -3234,9 +3224,6 @@ function getThemeById(themeId) {
   }
   if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
     return CONFIG.themes.act2.themes[themeId];
-  }
-  if (CONFIG.themes.act3 && CONFIG.themes.act3.themes && CONFIG.themes.act3.themes[themeId]) {
-    return CONFIG.themes.act3.themes[themeId];
   }
   return null;
 }
