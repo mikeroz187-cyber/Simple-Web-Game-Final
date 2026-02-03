@@ -18,10 +18,17 @@ Add "Industry" to the main navigation bar (visible only after Day 181):
 [Hub] [Booking] [Content] [Social] [Analytics] [Gallery] [Industry]
 ```
 
+Add "Empire" only after full takeover victory (all 5 studios defeated):
+
+```
+[Hub] [Booking] [Content] [Social] [Analytics] [Gallery] [Industry] [Empire]
+```
+
 ### Nav State
 - **Before Day 181:** "Industry" nav item hidden
 - **Day 181+:** "Industry" nav item visible
 - **Active state:** Highlighted when on Industry Map or Studio Detail screens
+- **After Victory:** "Empire" nav item visible
 
 ---
 
@@ -45,12 +52,12 @@ Add "Industry" to the main navigation bar (visible only after Day 181):
 |                                                                 |
 |  +------------------+              +------------------+          |
 |  | STUDIO CARD      |              | STUDIO CARD      |          |
-|  | Honey Trap       |              | Velvet Lens      |          |
+|  | Honey Trap       |              | Velvet Vault      |          |
 |  +------------------+              +------------------+          |
 |                                                                 |
 |  +------------------+              +------------------+          |
 |  | STUDIO CARD      |              | STUDIO CARD      |          |
-|  | Midnight Media   |              | Black Lace       |          |
+|  | Midnight Media   |              | Saint Sin       |          |
 |  +------------------+              +------------------+          |
 |                                                                 |
 +----------------------------------------------------------------+
@@ -129,7 +136,19 @@ Add "Industry" to the main navigation bar (visible only after Day 181):
 
 ---
 
-### 2.2 Studio Detail Screen
+### 2.2 Empire Screen
+
+**Purpose:** Endgame summary once all studios are defeated.
+
+**Key Elements:**
+- Title + subtitle (“All five studios. One owner.”)
+- Summary stats (studios defeated, performers owned, bosses defeated, takeover attempts)
+- Trophy grid (one tile per studio, locked/unlocked state)
+- CTA: “Back to Hub” (free play continues)
+
+---
+
+### 2.3 Studio Detail Screen
 
 **Purpose:** View rival studio roster, begin acquisitions
 

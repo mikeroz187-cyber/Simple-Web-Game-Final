@@ -125,7 +125,10 @@ function buildDefaultConquestsState() {
 }
 
 function getDefaultTakeoverState() {
-  const studioIds = ["neon_cherry", "honey_trap", "midnight_media"];
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const studioIds = Array.isArray(takeoverConfig.studioOrder) && takeoverConfig.studioOrder.length
+    ? takeoverConfig.studioOrder.slice()
+    : ["neon_cherry", "honey_trap", "midnight_media"];
   const studios = {};
   studioIds.forEach(function (studioId) {
     studios[studioId] = { status: "active", defeatedDay: null, bossConfrontation: null };
@@ -133,8 +136,11 @@ function getDefaultTakeoverState() {
   return {
     unlocked: false,
     unlockedDay: null,
-    victoryAchieved: false,
-    victoryDay: null,
+    victory: {
+      achieved: false,
+      achievedDay: null,
+      modalShown: false
+    },
     studios: studios,
     performers: {},
     bossConfrontations: {},
@@ -662,11 +668,27 @@ function ensureTakeoverState(gameState) {
   if (!Number.isFinite(takeover.unlockedDay)) {
     takeover.unlockedDay = null;
   }
-  if (typeof takeover.victoryAchieved !== "boolean") {
-    takeover.victoryAchieved = defaults.victoryAchieved;
+  if (!takeover.victory || typeof takeover.victory !== "object" || Array.isArray(takeover.victory)) {
+    const legacyAchieved = typeof takeover.victoryAchieved === "boolean"
+      ? takeover.victoryAchieved
+      : defaults.victory.achieved;
+    const legacyDay = Number.isFinite(takeover.victoryDay)
+      ? takeover.victoryDay
+      : null;
+    takeover.victory = {
+      achieved: legacyAchieved,
+      achievedDay: legacyDay,
+      modalShown: false
+    };
   }
-  if (!Number.isFinite(takeover.victoryDay)) {
-    takeover.victoryDay = null;
+  if (typeof takeover.victory.achieved !== "boolean") {
+    takeover.victory.achieved = defaults.victory.achieved;
+  }
+  if (!Number.isFinite(takeover.victory.achievedDay)) {
+    takeover.victory.achievedDay = null;
+  }
+  if (typeof takeover.victory.modalShown !== "boolean") {
+    takeover.victory.modalShown = false;
   }
   if (!takeover.studios || typeof takeover.studios !== "object" || Array.isArray(takeover.studios)) {
     takeover.studios = defaults.studios;

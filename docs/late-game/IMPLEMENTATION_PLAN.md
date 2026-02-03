@@ -15,7 +15,7 @@ This document provides a phased, step-by-step implementation plan for the Indust
 - Roster cap becomes 40 at Day 181 unlock (recruitment cap override).
 - Reputation cap is 100 (global).
 - Crisis floor is 10 by default (takeover-specific logic later).
-- First playable slice is A3 (3 studios initially).
+- Full Act 3 takeover lineup ships with 5 studios.
 
 ---
 
@@ -43,7 +43,7 @@ Ensure takeover documentation lives in `docs/late-game` and update any reference
 Update existing rival references to use new studio names.
 
 **Files to update:**
-- `docs/DATA_RIVALS.md` — Note that Night Slate → Midnight Media, Luxe Pixel → Velvet Lens
+- `docs/DATA_RIVALS.md` — Note that Night Slate → Midnight Media, Luxe Pixel → Velvet Vault
 - `src/config.js` — Add migration comments
 
 ### Definition of Done
@@ -124,14 +124,14 @@ Add the player-facing entry point for Industry Takeover with a visible Industry 
 
 ### Tasks (Completed)
 - [x] Add the Industry Map nav item (hidden until takeover unlock at Day 181).
-- [x] Render the Industry Map screen shell with the A3 studio trio (Neon Cherry, Honey Trap, Midnight Media).
+- [x] Render the Industry Map screen shell with the full studio lineup.
 - [x] Add the Day 181 story event and decision modal with “Open Industry Map” CTA.
 - [x] Keep navigation/state safe for save/load and non-unlocked states.
 
 ### Definition of Done
 - [x] Industry nav hidden before Day 181
 - [x] Industry nav appears on/after Day 181
-- [x] Industry Map screen renders the 3 A3 studios
+- [x] Industry Map screen renders the 5 takeover studios
 - [x] Day 181 unlock modal routes to Industry Map
 - [x] State persists across save/load
 
@@ -140,18 +140,18 @@ Add the player-facing entry point for Industry Takeover with a visible Industry 
 ## Phase 3: Studio Detail Screen — ✅ Completed
 
 ### Objective
-Deliver the Studio Detail screen reachable from the Industry Map, showing boss intel and the A3 performer roster with status pills.
+Deliver the Studio Detail screen reachable from the Industry Map, showing boss intel and the performer roster with status pills.
 
 ### Tasks (Completed)
 - [x] Enable “View Studio” navigation from Industry Map cards.
 - [x] Add the Studio Detail screen shell (locked/unselected states included).
 - [x] Render boss card with portrait fallback and rep requirement copy.
-- [x] Render performer roster list for Neon Cherry, Honey Trap, and Midnight Media with status pills.
+- [x] Render performer roster list for all takeover studios with status pills.
 - [x] Include disabled CTAs for boss confrontation and acquisition actions (Phase 4 will implement mechanics).
 
 ### Definition of Done
 - [x] Industry Map “View Studio” routes to Studio Detail.
-- [x] Studio Detail shows header, boss card, and performer roster for A3 studios.
+- [x] Studio Detail shows header, boss card, and performer roster for takeover studios.
 - [x] Status pills render safely with sensible defaults.
 - [x] Buttons are visible but disabled (Phase 4 will activate).
 
@@ -197,112 +197,23 @@ Implement the acquisition stage flow (intel → approach → turn → debut) and
 
 ---
 
-## Phase 7: Rival Retaliation & Re-acquisition
+## Phase 7: Full Act 3 Expansion + Victory/Endgame — ✅ Completed
 
 ### Objective
-Implement rival counterattacks and the ability to re-acquire lost performers.
+Expand the takeover roster to 5 studios and deliver the victory/endgame flow.
 
-### Tasks
-
-#### 7.1 Implement Retaliation System
-**File:** `src/systems/takeover.js`
-
-```javascript
-function checkRetaliation() {
-  // Called on day advance
-  const lastEvent = gameState.takeover.retaliation.lastEventDay;
-  const daysSince = lastEvent ? gameState.player.day - lastEvent : Infinity;
-  
-  if (daysSince < CONFIG.takeover.retaliation.minDaysBetweenEvents) return null;
-  
-  // Random check for event
-  const chance = Math.min(1, (daysSince - CONFIG.takeover.retaliation.minDaysBetweenEvents) / 
-    (CONFIG.takeover.retaliation.maxDaysBetweenEvents - CONFIG.takeover.retaliation.minDaysBetweenEvents));
-  
-  if (Math.random() > chance) return null;
-  
-  // Determine event type
-  return generateRetaliationEvent();
-}
-
-function generateRetaliationEvent() {
-  // Weighted random: poach attempt (60%), rep strike (30%), alliance (10%)
-  // Return event object
-}
-
-function executePoachAttempt(performerId, rivalStudioId) {
-  // Mark performer as under poach attempt
-  // Return event data for modal
-}
-
-function resolvePoachAttempt(performerId, playerDefends) {
-  if (playerDefends) {
-    // Deduct counter-offer cost
-    // Add rep bonus
-    gameState.takeover.stats.poachAttemptsDefended++;
-  } else {
-    // Performer lost
-    losePerformer(performerId, rivalStudioId);
-    gameState.takeover.stats.poachAttemptsLost++;
-  }
-}
-
-function losePerformer(performerId, toStudioId) {
-  const performer = gameState.takeover.performers[performerId];
-  performer.status = 'lost';
-  performer.lostDay = gameState.player.day;
-  performer.lostTo = toStudioId;
-  
-  // Remove from roster
-  removePerformerFromRoster(performerId);
-  
-  gameState.takeover.stats.performersLost++;
-  
-  save();
-}
-```
-
-#### 7.2 Implement Re-acquisition
-**File:** `src/systems/takeover.js`
-
-```javascript
-function startReacquisition(performerId) {
-  // Same as startAcquisition but:
-  // - isReacquisition = true
-  // - Skip slideshow content
-  // - Abbreviated text
-}
-```
-
-#### 7.3 Create Retaliation Event Modals
-**Create:** `src/ui/retaliation-modal.js`
-
-- Poach attempt modal with counter-offer option
-- Rep strike notification
-- Alliance warning notification
-
-#### 7.4 Hook Retaliation to Day Advance
-**File:** `src/systems/progression.js` or `src/main.js`
-
-Check for retaliation events on day advance, show modal if triggered.
-
-### Definition of Done
-- [ ] Retaliation events trigger every 7-14 days
-- [ ] Poach attempts show modal with counter-offer
-- [ ] Paying counter-offer keeps performer
-- [ ] Declining loses performer
-- [ ] Lost performers show "LOST" status on their studio
-- [ ] Can re-acquire lost performers
-- [ ] Re-acquisition skips image content
-- [ ] Rep strikes apply damage based on rep shield
-- [ ] Alliances increase costs temporarily
+### Shipped (Phase 7)
+- [x] Added Velvet Vault and Saint Sin with bosses and performers (5 studios total).
+- [x] Updated Industry Map/Studio Detail to render all takeover studios.
+- [x] Added victory detection + one-time “INDUSTRY OWNED” modal.
+- [x] Unlocked the Empire endgame screen with trophy grid and summary.
 
 ---
 
-## Phase 8: Gallery Integration & Victory
+## Phase 8: Gallery Integration
 
 ### Objective
-Integrate takeover content into gallery and implement victory sequence.
+Integrate takeover content into the gallery.
 
 ### Tasks
 

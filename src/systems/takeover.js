@@ -5,6 +5,33 @@ function getTakeoverConfig() {
   return { enabled: false };
 }
 
+function checkTakeoverVictory(gameState) {
+  if (!gameState || !gameState.player) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const takeover = gameState.takeover || {};
+  const victory = takeover.victory || {};
+  if (victory.achieved) {
+    return;
+  }
+  const config = getTakeoverConfig();
+  const studioOrder = Array.isArray(config.studioOrder) ? config.studioOrder : [];
+  if (!studioOrder.length) {
+    return;
+  }
+  const defeatedCount = studioOrder.filter(function (studioId) {
+    return takeover.studios && takeover.studios[studioId] && takeover.studios[studioId].status === "defeated";
+  }).length;
+  if (defeatedCount === studioOrder.length) {
+    victory.achieved = true;
+    victory.achievedDay = gameState.player.day;
+    takeover.victory = victory;
+  }
+}
+
 function normalizeTakeoverTier(tierValue) {
   if (typeof tierValue === "string") {
     return tierValue;
@@ -716,6 +743,7 @@ function defeatStudioBoss(gameState, studioId) {
       : 1;
     gameState.takeover.stats.performersAcquired = recomputeTakeoverAcquiredCount(gameState);
   }
+  checkTakeoverVictory(gameState);
 }
 
 function takeoverOnDayAdvanced(gameState) {
@@ -751,5 +779,6 @@ function takeoverOnDayAdvanced(gameState) {
     }
   });
   recomputeTakeoverAvailability(gameState);
+  checkTakeoverVictory(gameState);
   maybeGeneratePoachAttempt(gameState);
 }

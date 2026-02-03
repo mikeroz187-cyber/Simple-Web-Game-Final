@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Expanded Industry Takeover to 5 studios with Velvet Vault/Saint Sin content, new act 3 themes, victory tracking, and the Empire endgame screen + modal flow.
+  - Why: Complete Phase 7 takeover scope with full studio lineup and a one-time victory/endgame experience.
+  - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js, index.html.
+- What: Updated late-game takeover documentation, scope snapshot, and task checklist for Phase 7 completion and Empire screen guidance.
+  - Why: Keep docs aligned with the full five-studio takeover structure and new victory/endgame flow.
+  - Files touched: docs/late-game/DATA_STRUCTURE.md, docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/FRONTEND_GUIDELINES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Replaced Competition after Day 181 with Industry Takeover gating and added retaliation poach attempts with modal choices, roster removal, and rep-floor handling.
   - Why: Deliver Phase 6 takeover escalation and retire legacy Competition pressure once Industry Takeover unlocks.
   - Files touched: src/config.js, src/state.js, src/utils/rng.js, src/systems/competition.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js.
