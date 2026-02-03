@@ -2315,6 +2315,24 @@ function renderSocial(gameState) {
   var canPost = Boolean(selectedEntry);
   var hasPostedInstagram = selectedEntry ? hasPosted(gameState, selectedEntry.id, 'Instagram') : false;
   var hasPostedX = selectedEntry ? hasPosted(gameState, selectedEntry.id, 'X') : false;
+  var canPostInstagramNow = canPost && !hasPostedInstagram;
+  var canPostXNow = canPost && !hasPostedX;
+  var canPostAll = canPostInstagramNow && canPostXNow;
+  var postAllReason = "";
+  if (!canPostAll) {
+    if (!canPost) {
+      postAllReason = "Select a promo to post.";
+    } else if (!canPostInstagramNow && !canPostXNow) {
+      postAllReason = "Both networks unavailable today.";
+    } else if (!canPostInstagramNow) {
+      postAllReason = "Insta unavailable today.";
+    } else if (!canPostXNow) {
+      postAllReason = "X unavailable today.";
+    }
+  }
+  var postAllHelperHtml = postAllReason
+    ? '<div class="helper-text" style="margin-top:var(--gap-xs);">' + postAllReason + '</div>'
+    : "";
 
   // Recent posts
   var recentPosts = posts.slice().reverse().slice(0, 5);
@@ -2391,9 +2409,11 @@ function renderSocial(gameState) {
           '<h3 class="panel-title">Available to Post</h3>' +
           '<div class="social-panel__content">' + availableListHtml + '</div>' +
           '<div class="button-row" style="margin-top:var(--gap-sm);">' +
-            '<button class="button small primary" data-action="post-instagram"' + (canPost && !hasPostedInstagram ? '' : ' disabled') + '>Post to IG</button>' +
-            '<button class="button small" data-action="post-x"' + (canPost && !hasPostedX ? '' : ' disabled') + '>Post to X</button>' +
+            '<button class="button small primary" data-action="post-instagram"' + (canPostInstagramNow ? '' : ' disabled') + '>Post to IG</button>' +
+            '<button class="button small" data-action="post-x"' + (canPostXNow ? '' : ' disabled') + '>Post to X</button>' +
+            '<button class="button small secondary" data-action="social-post-all"' + (canPostAll ? '' : ' disabled') + '>Post All</button>' +
           '</div>' +
+          postAllHelperHtml +
         '</div>' +
       '</div>' +
       '<div class="social-panel">' +

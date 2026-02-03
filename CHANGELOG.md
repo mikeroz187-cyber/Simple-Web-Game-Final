@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a Social "Post All" action to publish the same promo to Insta + X with shared eligibility checks and unique promo counting.
+  - Why: Allow a single-click cross-post while ensuring it counts as one promo and blocks when either network is unavailable.
+  - Files touched: src/ui/render.js, src/ui/events.js, src/systems/social.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Enabled the Studio Identity Hub card to open a branch-selection modal at Day 181 and lock the chosen identity.
   - Why: Make the Studio Identity choice actionable and permanent once unlocked in Act 3.
   - Files touched: src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/DATA_REPUTATION_BRANCHES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

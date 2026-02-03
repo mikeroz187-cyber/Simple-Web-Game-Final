@@ -456,6 +456,80 @@ function postPromoContent(gameState, platform, contentId) {
   };
 }
 
+function postPromoAllNetworks(gameState, promoPayload) {
+  if (!gameState || !promoPayload || !promoPayload.contentId) {
+    return { ok: false, message: "Cannot Post All: select a Promo content entry first." };
+  }
+
+  if (!CONFIG.social_platforms || !Array.isArray(CONFIG.social_platforms.platforms)) {
+    return { ok: false, message: "Cannot Post All: social platforms unavailable." };
+  }
+
+  const platforms = CONFIG.social_platforms.platforms;
+  if (platforms.indexOf("Instagram") === -1 || platforms.indexOf("X") === -1) {
+    return { ok: false, message: "Cannot Post All: required platforms unavailable." };
+  }
+
+  const contentId = promoPayload.contentId;
+  const entries = gameState.content && Array.isArray(gameState.content.entries)
+    ? gameState.content.entries
+    : [];
+  const entry = entries.find(function (item) {
+    return item && item.id === contentId;
+  });
+  if (!entry || entry.contentType !== "Promo") {
+    return { ok: false, message: "Cannot Post All: Promo content required for posting." };
+  }
+
+  const posts = gameState.social && Array.isArray(gameState.social.posts) ? gameState.social.posts : [];
+  const hasPostedInstagram = posts.some(function (post) {
+    return post.contentId === contentId && post.platform === "Instagram";
+  });
+  const hasPostedX = posts.some(function (post) {
+    return post.contentId === contentId && post.platform === "X";
+  });
+
+  if (hasPostedInstagram && hasPostedX) {
+    return { ok: false, message: "Cannot Post All: both networks already posted for this Promo." };
+  }
+  if (hasPostedInstagram) {
+    return { ok: false, message: "Cannot Post All: Instagram already posted for this Promo." };
+  }
+  if (hasPostedX) {
+    return { ok: false, message: "Cannot Post All: X already posted for this Promo." };
+  }
+
+  const instagramResult = postPromoContent(gameState, "Instagram", contentId);
+  if (!instagramResult.ok) {
+    return { ok: false, message: "Cannot Post All: " + instagramResult.message };
+  }
+  const xResult = postPromoContent(gameState, "X", contentId);
+  if (!xResult.ok) {
+    return { ok: false, message: "Cannot Post All: " + xResult.message };
+  }
+
+  const combinedEvents = []
+    .concat(instagramResult.milestoneEvents || [])
+    .concat(xResult.milestoneEvents || []);
+  const seenIds = new Set();
+  const milestoneEvents = combinedEvents.filter(function (event) {
+    if (!event || !event.id) {
+      return false;
+    }
+    if (seenIds.has(event.id)) {
+      return false;
+    }
+    seenIds.add(event.id);
+    return true;
+  });
+
+  return {
+    ok: true,
+    message: "Posted to Insta + X (counts as 1).",
+    milestoneEvents: milestoneEvents
+  };
+}
+
 function processCollabWeekOnDayEnd(gameState, dayToCheck) {
   if (!gameState || !gameState.social) {
     return [];
