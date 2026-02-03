@@ -25,10 +25,7 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 - Pay Debt
 
 ## Global Actions
-- Save Now
-- Load Save
-- Export Save
-- Import Save
+- Options (Save Now, Load, Export, Import, New Game)
 - Advance Day
 
 ## Booking
@@ -54,6 +51,7 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 - Manual Social Strategy: Apply Strategy, Auto‑normalize
 - Post to Instagram
 - Post to X
+- Post All
 
 ## Gallery / Slideshow
 - View Shoot Photos

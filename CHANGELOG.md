@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Cleaned up dead references, standardized UI labels/helper copy, and reconciled docs for the Bundle 11 build.
+  - Why: Keep the cleanup bundle aligned with the merged implementation and remove stale Act 3 theme references.
+  - Files touched: src/ui/render.js, src/ui/events.js, src/systems/takeover.js, src/systems/story.js, styles.css, docs/DATA_UI_COPY.md, docs/DATA_THEMES.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, docs/late-game/GAME_FLOW.md, CHANGELOG.md.
 - What: Replaced the Booking performer selector with a quick-book grid and wired per-card Book Shoot actions to the existing booking flow.
   - Why: Deliver Bundle 11B’s shoot-first UX while keeping booking mechanics unchanged.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

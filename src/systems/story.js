@@ -333,7 +333,7 @@ const STORY_EVENT_COPY = {
       "This isn’t competition anymore. It’s acquisition. Own them and the industry bends.\n\n" +
       "What changes now:\n" +
       "• Industry Map unlocked\n" +
-      "• New themes + studio bonuses\n" +
+      "• Studio bonuses visible\n" +
       "• Rival retaliation begins\n\n" +
       "Open the Industry Map and start picking them apart."
   },

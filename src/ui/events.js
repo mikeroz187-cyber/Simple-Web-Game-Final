@@ -1531,7 +1531,7 @@ function setupEventHandlers() {
         ? canStartTakeoverAcquisition(window.gameState, performerId)
         : { ok: true };
       if (!acquisitionGate.ok) {
-        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        setUiMessage(acquisitionGate.message || "One target at a time");
         return;
       }
       const performerConfig = typeof getTakeoverPerformerConfig === "function"
@@ -2115,7 +2115,7 @@ function setupEventHandlers() {
         ? canStartTakeoverAcquisition(window.gameState, performerId)
         : { ok: true };
       if (!acquisitionGate.ok) {
-        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        setUiMessage(acquisitionGate.message || "One target at a time");
         return;
       }
       const performerConfig = typeof getTakeoverPerformerConfig === "function"
@@ -2202,7 +2202,7 @@ function setupEventHandlers() {
         ? canStartTakeoverAcquisition(window.gameState, performerId)
         : { ok: true };
       if (!acquisitionGate.ok) {
-        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        setUiMessage(acquisitionGate.message || "One target at a time");
         return;
       }
       const performerState = typeof getTakeoverPerformerState === "function"

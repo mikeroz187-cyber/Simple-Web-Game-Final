@@ -153,7 +153,7 @@ function canStartTakeoverAcquisition(gameState, performerId) {
   const takeover = gameState.takeover || {};
   const activeId = typeof takeover.activePerformerId === "string" ? takeover.activePerformerId : null;
   if (activeId && performerId && activeId !== performerId) {
-    return { ok: false, message: "You're already working one target. Finish it first." };
+    return { ok: false, message: "One target at a time" };
   }
   return { ok: true };
 }

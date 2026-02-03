@@ -23,7 +23,7 @@ This isn’t competition anymore. It’s acquisition. Own them and the industry 
 
 What changes now:
 • Industry Map unlocked
-• New themes + studio bonuses
+• Studio bonuses visible
 • Rival retaliation begins
 
 [Open Industry Map]
