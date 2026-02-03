@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added a Studio Bonus summary card and booking cap note, plus a Gallery Bosses view with boss unlock messaging and placeholder registry.
+  - Why: Make studio acquisition rewards visible and keep boss gallery unlocks surfaced in the UI for Bundle 9.
+  - Files touched: src/config.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Set studio acquisition reputation gates to 75/78/80/83/85 and enforced the lock state in Industry Map plus defensive system checks.
   - Why: Keep studio acquisition pacing consistent and prevent acquisitions below the required reputation.
   - Files touched: src/config.js, src/systems/takeover.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

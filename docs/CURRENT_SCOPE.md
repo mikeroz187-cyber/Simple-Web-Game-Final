@@ -8,6 +8,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundle 9: Studio bonus visibility in Hub/Booking; studio acquisition unlocks bosses in Gallery with 10-image placeholders and messaging.
 - Bundle 8: Studio acquisition reputation thresholds set to 75/78/80/83/85 with UI + system enforcement.
 - Bundle 7: Poached performers now become trophies (non-bookable), visible in Roster + Conquests with selfie cards.
 - Bundle 6: Enforced a single active Industry Takeover acquisition journey and disabled other targets until resolved.

@@ -13,6 +13,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Primary actions:** Booking, Analytics, Social, Gallery, Story Log, Roster, Shop, Pay Down Debt quick buttons on the Hub.
 - **Global actions:** Options (Save Now, Load, Export, Import, New Game) and Advance Day.
 - **Options menu:** Bottom-left nav button labeled **Options** opens the save/options dropdown; **New Game** lives in a Danger Zone section with confirmation.
+- **Studio Bonus card:** Shows active studio bonus multipliers with a total count.
 - **Debug panel (optional):** Only visible with `?debug=1`.
 
 ## Booking
@@ -61,11 +62,12 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Story Log entries:** Success/fail outcomes add Story Log entries.
 
 ## Gallery
-- **Mode toggle:** Shoots (default) or Conquests.
+- **Mode toggle:** Shoots (default), Conquests, or Bosses.
 - **Entry list:** Shows all content entries (day, performer, location, theme, type).
 - **Details panel:** Selected entry metadata + **View Shoot Photos** button.
 - **Output cards:** Summary cards for recent shoot results.
 - **Conquests view:** Lists unlocked Conquest packs with **View** buttons when the Conquests mode is active.
+- **Bosses view:** Lists unlocked studio bosses with name, blurb, and a 10‑image placeholder slideshow.
 
 ## Industry Map / Studio Detail
 - **Industry Map:** Shows the five takeover studios with status badges and progress.
