@@ -127,6 +127,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - [x] Bundle 2: Studio upgrade CTAs disable when unaffordable and show "Not enough cash" helper text.
 - [x] Bundle 4: Social Post All (Insta + X), unique count = 1, disabled if either network unavailable.
 - [x] Bundle 5: Save button renamed to Options; Options modal includes New Game (confirm, wipes current slot only).
+- [x] Bundle 6: Industry Map enforces one active acquisition journey; other targets disabled until resolved.
 
 ---
 

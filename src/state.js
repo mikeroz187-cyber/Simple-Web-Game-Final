@@ -142,6 +142,7 @@ function getDefaultTakeoverState() {
       modalShown: false
     },
     studios: studios,
+    activePerformerId: null,
     performers: {},
     bossConfrontations: {},
     gallery: {
@@ -692,6 +693,9 @@ function ensureTakeoverState(gameState) {
   }
   if (!takeover.studios || typeof takeover.studios !== "object" || Array.isArray(takeover.studios)) {
     takeover.studios = defaults.studios;
+  }
+  if (takeover.activePerformerId !== null && typeof takeover.activePerformerId !== "string") {
+    takeover.activePerformerId = null;
   }
   const studioDefaults = defaults.studios;
   Object.keys(studioDefaults).forEach(function (studioId) {

@@ -8,6 +8,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundle 6: Enforced a single active Industry Takeover acquisition journey and disabled other targets until resolved.
 - Bundle 5: Renamed the Save button to Options and added New Game (confirm + reset current slot only) in the Options menu.
 - Bundle 4: Added Social "Post All" (Insta + X) with unique promo counting and disabled state when either network is unavailable.
 - Bundle 3: Studio Identity Hub Choose button + modal picker at Day 181, selection locks for the run.

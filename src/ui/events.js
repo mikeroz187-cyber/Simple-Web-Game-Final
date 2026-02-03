@@ -1527,6 +1527,13 @@ function setupEventHandlers() {
         uiState.takeoverModal = null;
         return;
       }
+      const acquisitionGate = typeof canStartTakeoverAcquisition === "function"
+        ? canStartTakeoverAcquisition(window.gameState, performerId)
+        : { ok: true };
+      if (!acquisitionGate.ok) {
+        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        return;
+      }
       const performerConfig = typeof getTakeoverPerformerConfig === "function"
         ? getTakeoverPerformerConfig(performerId)
         : null;
@@ -1555,6 +1562,11 @@ function setupEventHandlers() {
       performerState.stageReady = false;
       performerState.attemptCount = Number.isFinite(performerState.attemptCount) ? performerState.attemptCount + 1 : 1;
       performerState.lockReason = null;
+      if (typeof setActiveTakeoverPerformerId === "function") {
+        setActiveTakeoverPerformerId(window.gameState, performerId);
+      } else if (window.gameState.takeover && typeof window.gameState.takeover === "object") {
+        window.gameState.takeover.activePerformerId = performerId;
+      }
       uiState.takeoverModal = null;
       clearModal();
       const logEntry = buildTakeoverStoryLogEntry(
@@ -1711,6 +1723,11 @@ function setupEventHandlers() {
       performerState.nextAvailableDay = window.gameState.player.day + 7;
       performerState.lastOutcome = "aborted";
       performerState.lockReason = "cooldown";
+      if (typeof clearActiveTakeoverPerformerId === "function") {
+        clearActiveTakeoverPerformerId(window.gameState, performerConfig.id);
+      } else if (window.gameState.takeover && window.gameState.takeover.activePerformerId === performerConfig.id) {
+        window.gameState.takeover.activePerformerId = null;
+      }
       const logEntry = buildTakeoverStoryLogEntry(
         window.gameState,
         performerConfig.name || "Performer",
@@ -1797,6 +1814,11 @@ function setupEventHandlers() {
         performerState.stageReady = false;
         performerState.lastOutcome = "completed";
         performerState.lockReason = null;
+        if (typeof clearActiveTakeoverPerformerId === "function") {
+          clearActiveTakeoverPerformerId(window.gameState, performerConfig.id);
+        } else if (window.gameState.takeover && window.gameState.takeover.activePerformerId === performerConfig.id) {
+          window.gameState.takeover.activePerformerId = null;
+        }
         if (window.gameState.takeover && window.gameState.takeover.stats) {
           const stats = window.gameState.takeover.stats;
           stats.performersAcquired = Number.isFinite(stats.performersAcquired) ? stats.performersAcquired + 1 : 1;
@@ -2094,6 +2116,13 @@ function setupEventHandlers() {
       event.preventDefault();
       event.stopPropagation();
       const performerId = actionId;
+      const acquisitionGate = typeof canStartTakeoverAcquisition === "function"
+        ? canStartTakeoverAcquisition(window.gameState, performerId)
+        : { ok: true };
+      if (!acquisitionGate.ok) {
+        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        return;
+      }
       const performerConfig = typeof getTakeoverPerformerConfig === "function"
         ? getTakeoverPerformerConfig(performerId)
         : null;
@@ -2174,6 +2203,13 @@ function setupEventHandlers() {
       event.preventDefault();
       event.stopPropagation();
       const performerId = actionId;
+      const acquisitionGate = typeof canStartTakeoverAcquisition === "function"
+        ? canStartTakeoverAcquisition(window.gameState, performerId)
+        : { ok: true };
+      if (!acquisitionGate.ok) {
+        setUiMessage(acquisitionGate.message || "You're already working one target. Finish it first.");
+        return;
+      }
       const performerState = typeof getTakeoverPerformerState === "function"
         ? getTakeoverPerformerState(window.gameState, performerId)
         : null;

@@ -63,6 +63,11 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Output cards:** Summary cards for recent shoot results.
 - **Conquests view:** Lists unlocked Conquest packs with **View** buttons when the Conquests mode is active.
 
+## Industry Map / Studio Detail
+- **Industry Map:** Shows the five takeover studios with status badges and progress.
+- **Studio Detail:** Performer cards list each target with status, stage info, and acquisition actions.
+- **Active acquisition lock:** When an acquisition journey is active, other performer cards are greyed out/disabled and show a short locked label until the journey resolves.
+
 ## Conquests
 - **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).
 - **Multi-character flow:** Inbox aggregates messages across conquest characters; unlocked packs show the character label.

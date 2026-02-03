@@ -109,6 +109,63 @@ function getTakeoverPerformerState(gameState, performerId) {
   return takeover.performers && takeover.performers[performerId] ? takeover.performers[performerId] : null;
 }
 
+function getActiveTakeoverPerformerId(gameState) {
+  if (!gameState) {
+    return null;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const takeover = gameState.takeover || {};
+  return typeof takeover.activePerformerId === "string" ? takeover.activePerformerId : null;
+}
+
+function canStartTakeoverAcquisition(gameState, performerId) {
+  if (!gameState) {
+    return { ok: false, message: "Missing game state." };
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const takeover = gameState.takeover || {};
+  const activeId = typeof takeover.activePerformerId === "string" ? takeover.activePerformerId : null;
+  if (activeId && performerId && activeId !== performerId) {
+    return { ok: false, message: "You're already working one target. Finish it first." };
+  }
+  return { ok: true };
+}
+
+function setActiveTakeoverPerformerId(gameState, performerId) {
+  if (!gameState) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  if (!gameState.takeover || typeof gameState.takeover !== "object") {
+    return;
+  }
+  gameState.takeover.activePerformerId = performerId || null;
+}
+
+function clearActiveTakeoverPerformerId(gameState, performerId) {
+  if (!gameState) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  if (!gameState.takeover || typeof gameState.takeover !== "object") {
+    return;
+  }
+  const activeId = typeof gameState.takeover.activePerformerId === "string"
+    ? gameState.takeover.activePerformerId
+    : null;
+  if (!performerId || activeId === performerId) {
+    gameState.takeover.activePerformerId = null;
+  }
+}
+
 function getBossConfigForStudio(studioId) {
   const config = getTakeoverConfig();
   if (!studioId || !config.studios || !config.bosses) {
