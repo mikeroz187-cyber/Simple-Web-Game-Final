@@ -1693,6 +1693,60 @@ body {
   gap: 4px;
 }
 
+.booking-performer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.booking-performer-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  background: rgba(0, 0, 0, 0.2);
+  border: var(--border-width) solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--gap-sm);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.booking-performer-card.is-selected {
+  border-color: var(--accent);
+  background: var(--glass-active);
+}
+
+.booking-performer-card__portrait {
+  width: 100%;
+  height: 150px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.3);
+  border: var(--border-width) solid var(--glass-border);
+}
+
+.booking-performer-card__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.booking-performer-card__stats {
+  display: flex;
+  gap: var(--gap-sm);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.booking-performer-card__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.booking-performer-card__cta {
+  margin-top: var(--gap-xs);
+}
+
 .booking-summary {
   background: rgba(0, 0, 0, 0.2);
   border: var(--border-width) solid var(--glass-border);
