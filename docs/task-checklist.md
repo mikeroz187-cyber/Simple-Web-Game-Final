@@ -92,6 +92,7 @@
 - [x] Agency Sample Pack booking mode (promo-strong, premium-weak).
 - [x] Booking locations reduced to 3 tiers (Bedroom/Shower/Office) with unlock gating.
 - [x] Themes locked to 4 MVP themes.
+- [x] Booking caps: 1 shoot/day per performer; hard cap 10/day total; themes locked to MVP; Office->Professional; act3 themes removed.
 - [x] Themes have meaningful tradeoffs (followersMult vs ofSubsMult) + Booking UI shows effects.
 - [x] Post-debt Market Saturation tiers (Premium OF subs only) + activation story popup.
 - [x] Social footprint bonus boosts Premium gains (capped, config-driven, visible in Analytics).

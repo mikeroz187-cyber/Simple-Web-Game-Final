@@ -7,8 +7,8 @@ This document describes the **current implemented loop** and rules as they exist
 - **Day 90 debt gate:** Day 90 still triggers the win/loss story check, but booking is not blocked after debt is cleared.
 - **Debt target:** Act 1 starts with **$25,000** due by Day 90; clearing it is the Act 1 gate that unlocks post-debt systems.
 - **Debt payoff controls:** The Hub includes config-driven quick-pay buttons plus Pay Max to reduce debt in chunks before Day 90.
-- **Daily shoots cap:** Booking is capped by `CONFIG.game.shoots_per_day`, plus performer availability and contracts.
-- **Per‑performer daily cap:** Each contracted performer has a daily booking cap (default 1/day, max 3/day) tracked as consecutive bookings and reset on day advance.
+- **Daily shoots cap:** Booking uses `CONFIG.game.shoots_per_day`, but is clamped by `CONFIG.game.hard_shoots_per_day_cap` (hard cap 10). Studio upgrade bonuses do not raise the hard cap.
+- **Per‑performer daily cap:** Each contracted performer is limited to 1 shoot per day via `CONFIG.performers.max_daily_bookings_cap`, tracked as consecutive bookings and reset on day advance.
 - **Agency Sample Pack:** Optional booking mode available once per day (flat fee + location cost, five-image bundle output).
 - **Contracts & availability:** Contracts count down daily; expired contracts must be renewed to book. Fatigue builds per shoot and recovers daily; hitting max fatigue forces rest days.
 - **Promo vs Premium:**
@@ -38,7 +38,7 @@ This document describes the **current implemented loop** and rules as they exist
 5. **Advance Day** to reset daily availability and apply daily OF payout plus overhead.
 
 ## Daily Pacing Rules
-- **Performer caps:** Daily booking caps are per performer (default 1/day, max 3/day). High‑stamina recruits can exceed the default.
+- **Performer caps:** Daily booking caps are per performer (1/day) and tracked as consecutive bookings.
 - **Agency Pack limit:** One Agency Sample Pack per day, tracked via `agencyPackUsedToday`.
 - **Fatigue & rest:** Fatigue increases per shoot, recovers daily; performers at max fatigue receive a rest-day requirement.
 - **Contracts:** Core contracts last 90 days; freelance/Act 2 contracts last 30 days and must be renewed when expired.

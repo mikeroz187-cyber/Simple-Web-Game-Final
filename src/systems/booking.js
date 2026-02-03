@@ -462,9 +462,6 @@ function getThemeById(themeId) {
   if (CONFIG.themes.act2 && CONFIG.themes.act2.themes && CONFIG.themes.act2.themes[themeId]) {
     return CONFIG.themes.act2.themes[themeId];
   }
-  if (CONFIG.themes.act3 && CONFIG.themes.act3.themes && CONFIG.themes.act3.themes[themeId]) {
-    return CONFIG.themes.act3.themes[themeId];
-  }
   return null;
 }
 
@@ -472,7 +469,11 @@ function getMaxShootsPerDay(gameState) {
   const base = Number.isFinite(CONFIG.game.shoots_per_day) ? CONFIG.game.shoots_per_day : 5;
   const bonus = typeof getStudioUpgradeShootCapBonus === "function" ? getStudioUpgradeShootCapBonus(gameState) : 0;
   const resolvedBonus = Number.isFinite(bonus) ? bonus : 0;
-  return Math.max(0, base + resolvedBonus);
+  const tentative = base + resolvedBonus;
+  const hardCap = Number.isFinite(CONFIG.game.hard_shoots_per_day_cap)
+    ? CONFIG.game.hard_shoots_per_day_cap
+    : base;
+  return Math.min(hardCap, Math.max(0, tentative));
 }
 
 function tryAutoBookOne(gameState) {
