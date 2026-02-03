@@ -345,6 +345,7 @@ function renderIndustryMap(gameState) {
 
   if (!unlocked) {
     container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
       "<h2 id=\"screen-industry-map-title\" class=\"screen-title\">Industry Map</h2>" +
       "<div class=\"panel\">" +
         "<h3 class=\"panel-title\">Available Day " + unlockDay + "</h3>" +
@@ -370,6 +371,18 @@ function renderIndustryMap(gameState) {
   var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
     ? takeoverConfig.studios
     : {};
+  if (!studioOrder.length || Object.keys(studiosConfig).length === 0) {
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
+      "<h2 id=\"screen-industry-map-title\" class=\"screen-title\">Industry Map</h2>" +
+      "<div class=\"panel\">" +
+        "<h3 class=\"panel-title\">Data missing</h3>" +
+        "<p class=\"helper-text\">Industry takeover data could not be loaded. Please return to the Hub.</p>" +
+        "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
   var performerState = takeoverState.performers && typeof takeoverState.performers === "object"
     ? takeoverState.performers
     : {};
@@ -457,12 +470,21 @@ function renderIndustryMap(gameState) {
       bonusLineHtml = "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">Bonus: +10% " +
         bonusThemeName + " theme outputs</div>";
     }
+    var bossHint = "Boss: Locked (need " + Math.max(0, bossVulnerableThreshold - acquiredCount) + " more)";
+    if (bossVulnerable && !studioDefeated) {
+      bossHint = "Boss: Vulnerable";
+    }
+    if (studioDefeated) {
+      bossHint = "Boss: Defeated";
+    }
     var progressHtml = renderTakeoverProgress(acquiredLabel, acquiredCount, performerTotal);
     return "<div class=\"shop-card industry-map-card\">" +
       "<div class=\"industry-map-card__badge\">" + badgeHtml + "</div>" +
       imageHtml +
       "<div class=\"shop-card__title\">" + title + "</div>" +
       "<div class=\"shop-card__description\">" + tagline + "</div>" +
+      "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-xs);\">" + acquiredLabel + "</div>" +
+      "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">" + bossHint + "</div>" +
       "<div class=\"industry-map-card__progress\">" + progressHtml + "</div>" +
       bonusLineHtml +
       "<div class=\"industry-map-card__actions\">" +
@@ -472,6 +494,7 @@ function renderIndustryMap(gameState) {
   }).join("");
 
   container.innerHTML = "<div class=\"screen-content\">" +
+    "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
     "<h2 id=\"screen-industry-map-title\" class=\"screen-title\">Industry Map</h2>" +
     "<p class=\"helper-text\">Studios aren’t competitors anymore. They’re inventory.</p>" +
     summaryHtml +
@@ -494,10 +517,11 @@ function renderIndustryStudio(gameState) {
 
   if (!unlocked) {
     container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">← Back to Industry Map</button>" +
       "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
       "<div class=\"panel\">" +
-      "<h3 class=\"panel-title\">Locked</h3>" +
-      "<p class=\"helper-text\">Industry Takeover unlocks later. Come back on Day " +
+      "<h3 class=\"panel-title\">Available Day " + (Number.isFinite(takeoverConfig.unlockDay) ? takeoverConfig.unlockDay : 181) + "</h3>" +
+      "<p class=\"helper-text\">Industry Takeover unlocks on Day " +
       (Number.isFinite(takeoverConfig.unlockDay) ? takeoverConfig.unlockDay : 181) + ".</p>" +
       "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
       "</div>" +
@@ -509,6 +533,7 @@ function renderIndustryStudio(gameState) {
   var selectedStudioId = typeof getIndustrySelectedStudioId === "function" ? getIndustrySelectedStudioId() : null;
   if (!selectedStudioId) {
     container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">← Back to Industry Map</button>" +
       "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
       "<div class=\"panel\">" +
       "<p class=\"helper-text\">Select a studio from the Industry Map.</p>" +
@@ -523,10 +548,11 @@ function renderIndustryStudio(gameState) {
       setIndustrySelectedStudioId(null);
     }
     container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">← Back to Industry Map</button>" +
       "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">Studio Detail</h2>" +
       "<div class=\"panel\">" +
-      "<p class=\"helper-text\">Select a studio from the Industry Map.</p>" +
-      "<button class=\"button\" data-action=\"industry-back-to-map\">Back to Industry Map</button>" +
+      "<p class=\"helper-text\">That studio could not be found. Return to the Industry Map to choose another target.</p>" +
+      "<button class=\"button\" data-action=\"industry-back-to-map\">Return to Industry Map</button>" +
       "</div>" +
       "</div>";
     return;
@@ -583,7 +609,6 @@ function renderIndustryStudio(gameState) {
   var performerState = takeoverState.performers && typeof takeoverState.performers === "object"
     ? takeoverState.performers
     : {};
-  var currentDay = gameState && gameState.player ? gameState.player.day : 0;
   var currentRep = gameState && gameState.player && Number.isFinite(gameState.player.reputation)
     ? gameState.player.reputation
     : 0;
@@ -648,22 +673,22 @@ function renderIndustryStudio(gameState) {
     bossStageLineHtml = "<div class=\"helper-text industry-boss__stage\">Stage " + stageNumber + "/" +
       bossStages.length + " — " + bossStageLabel + "</div>";
   }
-  var bossButtonLabel = "Confront Boss (Coming Soon)";
+  var bossButtonLabel = "Confront Boss";
   var bossButtonDisabled = true;
   var bossButtonAttr = "";
   if (studioDefeated) {
-    bossButtonLabel = "Confront Boss (Defeated)";
+    bossButtonLabel = "Studio Owned";
     bossButtonDisabled = true;
   } else if (bossConfrontation && bossConfrontation.status === "in_progress") {
     if (bossConfrontation.stageReady) {
-      bossButtonLabel = "Resolve Boss Stage: " + bossStageLabel;
+      bossButtonLabel = "Resolve Stage";
       bossButtonDisabled = false;
       bossButtonAttr = " data-action=\"industry-resolve-boss-stage\" data-studio-id=\"" + selectedStudioId + "\"";
     } else if (bossStageReadyDay !== null) {
-      bossButtonLabel = bossStageLabel + " — ready Day " + bossStageReadyDay;
+      bossButtonLabel = "Ready Day " + bossStageReadyDay;
       bossButtonDisabled = true;
     } else {
-      bossButtonLabel = bossStageLabel + " — in progress";
+      bossButtonLabel = "Stage in Progress";
       bossButtonDisabled = true;
     }
   } else if (bossVulnerable) {
@@ -679,10 +704,10 @@ function renderIndustryStudio(gameState) {
       bossButtonDisabled = false;
       bossButtonAttr = " data-action=\"industry-begin-boss\" data-studio-id=\"" + selectedStudioId + "\"";
     } else if (currentRep < requiredRep) {
-      bossButtonLabel = "Requires Reputation " + requiredRep + " (You: " + currentRep + ")";
+      bossButtonLabel = "Need Rep " + requiredRep;
       bossButtonDisabled = true;
     } else if (gameState.player.cash < bossCost) {
-      bossButtonLabel = "Need " + formatCurrency(bossCost) + " (You: " + formatCurrency(gameState.player.cash) + ")";
+      bossButtonLabel = "Need " + formatCurrency(bossCost);
       bossButtonDisabled = true;
     }
   }
@@ -695,10 +720,10 @@ function renderIndustryStudio(gameState) {
       return "In Progress";
     }
     if (status === "acquired") {
-      return "Defeated";
+      return "Acquired";
     }
     if (status === "lost") {
-      return "Locked";
+      return "Lost";
     }
     return "Locked";
   }
@@ -763,28 +788,33 @@ function renderIndustryStudio(gameState) {
         actionDisabled = false;
         actionAttr = " data-action=\"industry-resolve-stage\" data-id=\"" + performerId + "\" data-origin=\"" + selectedStudioId + "\"";
       } else {
-        var daysRemaining = Number.isFinite(performerData.stageCompleteDay)
-          ? Math.max(0, performerData.stageCompleteDay - currentDay)
-          : 0;
-        actionLabel = "In Progress: " + stageLabel + " (" + daysRemaining + "d)";
+        var stageReadyDay = Number.isFinite(performerData.stageCompleteDay)
+          ? performerData.stageCompleteDay
+          : null;
+        actionLabel = stageLabel + " — Ready Day " + (stageReadyDay !== null ? stageReadyDay : "?");
         actionDisabled = true;
       }
     } else if (performerStatus === "acquired") {
-      actionLabel = "Go to Roster";
-      actionDisabled = false;
-      actionAttr = " data-action=\"nav-roster\"";
+      actionLabel = "On Your Roster";
+      actionDisabled = true;
     } else if (performerStatus === "locked") {
       if (performerData.lockReason === "cooldown" && Number.isFinite(performerData.nextAvailableDay)) {
-        lockHtml = "<div class=\"helper-text\">Cooling off — available Day " + performerData.nextAvailableDay + "</div>";
+        actionLabel = "Cooling off — Day " + performerData.nextAvailableDay;
+        actionDisabled = true;
       } else {
         var repRequirement = typeof getPerformerRepRequirement === "function"
           ? getPerformerRepRequirement(performerData.tier || performer.tier)
           : 0;
-        if (currentRep < repRequirement) {
-          lockHtml = "<div class=\"helper-text\">Locked — requires Reputation " + repRequirement +
-            " (you: " + currentRep + ")</div>";
-        }
+        actionLabel = "Locked — Rep " + repRequirement;
+        actionDisabled = true;
       }
+    } else if (performerStatus === "lost") {
+      if (Number.isFinite(performerData.nextAvailableDay)) {
+        actionLabel = "Lost — Available Day " + performerData.nextAvailableDay;
+      } else {
+        actionLabel = "Lost";
+      }
+      actionDisabled = true;
     }
     if (studioDefeated) {
       actionLabel = "Studio Defeated";
@@ -852,7 +882,23 @@ function renderEmpire(gameState) {
   if (typeof ensureTakeoverState === "function") {
     ensureTakeoverState(gameState);
   }
+  var victory = gameState && gameState.takeover && gameState.takeover.victory
+    ? gameState.takeover.victory
+    : null;
+  var empireUnlocked = victory && victory.achieved;
   var takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  if (!empireUnlocked) {
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
+      "<h2 id=\"screen-empire-title\" class=\"screen-title\">Empire</h2>" +
+      "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Defeat all studios to unlock</h3>" +
+      "<p class=\"helper-text\">Own every studio in the Industry Map to unlock your Empire summary.</p>" +
+      "<button class=\"button primary\" data-action=\"nav-industry-map\">Open Industry Map</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
   var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice() : [];
   var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
     ? takeoverConfig.studios
@@ -921,11 +967,9 @@ function renderEmpire(gameState) {
   }).join("");
 
   container.innerHTML = "<div class=\"screen-content\">" +
+    "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
     "<h2 id=\"screen-empire-title\" class=\"screen-title\">Empire</h2>" +
     "<p class=\"helper-text\">Five studios. Yours.</p>" +
-    "<div class=\"empire-actions\">" +
-    "<button class=\"button primary\" data-action=\"nav-hub\">Back to Hub</button>" +
-    "</div>" +
     summaryHtml +
     "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Trophies</h3>" +

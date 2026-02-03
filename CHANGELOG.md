@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Finalized Act 3 takeover UX sanity sweep with fallback navigation, clearer takeover button states, and updated modal priority ordering.
+  - Why: Prevent takeover UI dead-ends and keep day-advance modals consistent without changing mechanics or saves.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Applied Act 3 takeover UI micro-polish with badges, progress bars, and compact grids for Industry Map, Studio Detail, and Empire.
   - Why: Improve late-game readability and hierarchy without altering mechanics or save data.
   - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.

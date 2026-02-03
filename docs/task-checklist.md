@@ -68,6 +68,7 @@
 - [x] Phase 5: Boss confrontations (5-stage)
 - [x] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
 - [x] Phase 7: Add remaining 2 studios + victory condition/endgame
+- [x] Act 3 UX sanity sweep (Industry Map, Studio Detail, Empire)
 
 ## Release Checklist / Doc Audit — COMPLETE ✓
 - [x] Release Checklist / Doc Audit (docs)
