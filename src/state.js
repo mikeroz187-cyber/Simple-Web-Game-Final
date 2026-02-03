@@ -120,7 +120,8 @@ function buildDefaultConquestsState() {
     enabled: Boolean(config.enabled),
     characters: characters,
     inbox: [],
-    unlockedPacks: []
+    unlockedPacks: [],
+    trophyPerformers: []
   };
 }
 

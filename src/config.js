@@ -1244,6 +1244,15 @@ const CONFIG = {
   conquests: {
     enabled: true,
     placeholderPortraitPath: "assets/images/mascots/placeholder.svg",
+    trophySelfiePlaceholders: {
+      default: [
+        "assets/images/placeholders/trophy_selfie_1.png",
+        "assets/images/placeholders/trophy_selfie_2.png",
+        "assets/images/placeholders/trophy_selfie_3.png",
+        "assets/images/placeholders/trophy_selfie_4.png",
+        "assets/images/placeholders/trophy_selfie_5.png"
+      ]
+    },
     thresholds: CONQUEST_THRESHOLDS,
     characters: {
       producer: {

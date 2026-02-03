@@ -425,6 +425,9 @@ function getEligiblePoachTargets(gameState) {
     if (!performer || performer.status !== "acquired") {
       return false;
     }
+    if (typeof isTrophyPerformer === "function" && isTrophyPerformer(gameState, performerId)) {
+      return true;
+    }
     if (typeof isPerformerInRoster === "function") {
       return isPerformerInRoster(gameState, performerId);
     }
@@ -687,6 +690,9 @@ function resolvePoachLoss(gameState) {
     performerState.lastOutcome = "poached";
     performerState.lockReason = null;
   }
+  if (typeof removeTrophyPerformer === "function") {
+    removeTrophyPerformer(gameState, performerId);
+  }
   removeTakeoverPerformerFromRoster(gameState, performerId);
   const performerConfig = getTakeoverPerformerConfig(performerId) || {};
   if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
@@ -768,19 +774,21 @@ function defeatStudioBoss(gameState, studioId) {
     performerState.lockReason = null;
     const performerEntry = performerConfig[performerId];
     if (performerEntry) {
-      const added = addTakeoverPerformerToRoster(gameState, performerEntry);
+      const added = typeof addTrophyPerformer === "function"
+        ? addTrophyPerformer(gameState, performerEntry.id)
+        : { ok: true };
       if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
         const logEntry = buildTakeoverStoryLogEntry(
           gameState,
           performerEntry.name || "Performer",
-          "Auto-acquired: " + (performerEntry.name || "Performer") + " (studio defeat)",
+          "Auto-acquired: " + (performerEntry.name || "Performer") + " (trophy secured)",
           "auto_acquired_day" + gameState.player.day
         );
         if (logEntry) {
           addStoryLogEntry(gameState, logEntry);
         }
       }
-      if (!added) {
+      if (added && added.ok === false) {
         return;
       }
     }

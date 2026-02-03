@@ -324,6 +324,9 @@ function isPerformerBookable(gameState, performer) {
   if (!gameState || !performer) {
     return { ok: false, reason: "Performer not found." };
   }
+  if (typeof isTrophyPerformer === "function" && isTrophyPerformer(gameState, performer.id)) {
+    return { ok: false, reason: "Trophy performer — not bookable." };
+  }
   ensurePerformerManagementForId(gameState, performer);
   const contract = getContractState(gameState, performer.id);
   const daysRemaining = contract && Number.isFinite(contract.daysRemaining) ? contract.daysRemaining : 0;

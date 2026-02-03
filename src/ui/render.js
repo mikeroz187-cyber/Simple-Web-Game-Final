@@ -17,7 +17,8 @@ function getUiState() {
         mode: "shoots"
       },
       conquests: {
-        selectedMessageId: null
+        selectedMessageId: null,
+        trophySlideIndex: {}
       },
       bookingSlideshowIndex: 0,
       slideshow: {
@@ -810,7 +811,7 @@ function renderIndustryStudio(gameState) {
         actionDisabled = true;
       }
     } else if (performerStatus === "acquired") {
-      actionLabel = "On Your Roster";
+      actionLabel = "Trophy Secured";
       actionDisabled = true;
     } else if (performerStatus === "locked") {
       if (performerData.lockReason === "cooldown" && Number.isFinite(performerData.nextAvailableDay)) {
@@ -1551,7 +1552,15 @@ function renderBooking(gameState) {
 
   // Get performers
   var allPerformers = gameState.roster.performers || [];
-  var corePerformers = allPerformers.filter(function(p) { return p.type === "core"; });
+  var corePerformers = allPerformers.filter(function(p) {
+    if (!p || p.type !== "core") {
+      return false;
+    }
+    if (typeof isTrophyPerformer === "function" && isTrophyPerformer(gameState, p.id)) {
+      return false;
+    }
+    return true;
+  });
   var selectedPerformerId = uiState.booking.performerIdA;
   var selectedPerformer = selectedPerformerId ? corePerformers.find(function(p) { return p.id === selectedPerformerId; }) : null;
   var divaFee = (!isAgencyPack && selectedPerformer) ? getDivaShootFeeForPerformer(selectedPerformer) : 0;
@@ -2268,6 +2277,34 @@ function renderRoster(gameState) {
     renewalsHtml = '<div class="panel"><h3 class="panel-title">⚠️ Expiring Contracts</h3>' + renewalItemsHtml + '</div>';
   }
 
+  // Trophies
+  var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
+  var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+  var trophyThumb = trophySelfies[0] || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+  var trophiesHtml = "";
+  if (trophyPerformers.length > 0) {
+    var trophyCardsHtml = trophyPerformers.map(function (entry) {
+      var performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(entry.performerId)
+        : null;
+      var name = performerConfig && performerConfig.name ? performerConfig.name : "Trophy Performer";
+      var imagePath = trophyThumb;
+      return '<div class="shop-card">' +
+        '<div class="conquest-detail__portrait" style="margin-bottom: var(--gap-sm);"><img class="thumb-sm" src="' +
+          imagePath + '" alt="' + name + ' trophy" /></div>' +
+        '<div class="shop-card__title">' + name + '</div>' +
+        '<div class="helper-text">Trophy (not bookable)</div>' +
+        '<div style="margin-top:6px;">' + renderTakeoverBadge("Trophy", "defeated") + '</div>' +
+        '</div>';
+    }).join("");
+    trophiesHtml = '<div class="panel"><h3 class="panel-title">Trophies</h3>' +
+      '<p class="helper-text">Poached talent becomes trophies. They don’t count against roster caps.</p>' +
+      '<div class="shop-grid">' + trophyCardsHtml + '</div></div>';
+  } else {
+    trophiesHtml = '<div class="panel"><h3 class="panel-title">Trophies</h3>' +
+      '<p class="helper-text">No trophies yet. Acquire performers through the Industry Map.</p></div>';
+  }
+
   // Layout
   var contentHtml = '<h2 class="screen-title">Roster</h2>' +
     rosterSummaryHtml +
@@ -2275,6 +2312,7 @@ function renderRoster(gameState) {
       '<div class="roster-grid">' + performerCardsHtml + '</div>' +
       '<div class="roster-sidebar">' + recruitmentHtml + expiredContractsHtml + renewalsHtml + '</div>' +
     '</div>' +
+    trophiesHtml +
     '<div class="button-row"><button class="button ghost" data-action="nav-hub">← Back to Hub</button></div>';
 
   container.innerHTML = renderAmbientLayers("screen-roster") +
@@ -2808,6 +2846,58 @@ function renderConquests(gameState) {
       "</div>";
   }
 
+  var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
+  var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+  var trophyPlaceholder = trophySelfies[0] || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+  var trophySectionHtml = "";
+  if (trophyPerformers.length > 0) {
+    var trophyCardsHtml = trophyPerformers.map(function (entry) {
+      var performerId = entry.performerId;
+      var performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(performerId)
+        : null;
+      var name = performerConfig && performerConfig.name ? performerConfig.name : "Trophy Performer";
+      var slideCount = trophySelfies.length ? trophySelfies.length : 1;
+      var storedIndex = uiState.conquests && uiState.conquests.trophySlideIndex
+        ? uiState.conquests.trophySlideIndex[performerId]
+        : 0;
+      var safeIndex = Math.min(Math.max(0, Number.isFinite(storedIndex) ? storedIndex : 0), slideCount - 1);
+      if (uiState.conquests && uiState.conquests.trophySlideIndex) {
+        uiState.conquests.trophySlideIndex[performerId] = safeIndex;
+      }
+      var slidePath = trophySelfies.length ? trophySelfies[safeIndex] : trophyPlaceholder;
+      var slideNumber = slideCount ? safeIndex + 1 : 0;
+      var prevDisabled = safeIndex <= 0;
+      var nextDisabled = safeIndex >= slideCount - 1;
+      var controlsHtml = "<div class=\"slideshow-controls\">" +
+        createButton("Prev", "trophy-selfie-prev", "small", prevDisabled, "data-id=\"" + performerId + "\"") +
+        createButton("Next", "trophy-selfie-next", "small primary", nextDisabled, "data-id=\"" + performerId + "\"") +
+        "<span class=\"slideshow-counter\">Selfie " + slideNumber + " of " + slideCount + "</span>" +
+        "</div>";
+      return "<div class=\"shop-card\">" +
+        "<div class=\"conquest-detail__portrait\" style=\"margin-bottom: var(--gap-sm);\">" +
+          "<img class=\"thumb-sm\" src=\"" + slidePath + "\" alt=\"" + name + " selfie\" />" +
+        "</div>" +
+        "<div class=\"shop-card__title\">" + name + "</div>" +
+        "<div class=\"helper-text\">Selfies — Trophy Reward</div>" +
+        "<div class=\"empire-trophy__badge\">" + renderTakeoverBadge("Trophy", "defeated") + "</div>" +
+        "<div class=\"slideshow-layout\" style=\"margin-top: var(--gap-sm);\">" +
+          controlsHtml +
+        "</div>" +
+        "</div>";
+    }).join("");
+    trophySectionHtml = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Trophies</h3>" +
+      "<p class=\"helper-text\">One-time conquests. Five shameless selfies. Yours to keep.</p>" +
+      "<div class=\"shop-grid\">" + trophyCardsHtml + "</div>" +
+      "</div>";
+  } else {
+    trophySectionHtml = "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Trophies</h3>" +
+      "<p class=\"helper-text\">No trophies yet. Poach performers from the Industry Map to unlock selfies here.</p>" +
+      "</div>";
+  }
+
   var contentHtml = "<div class=\"screen-header\">" +
     "<h2 class=\"screen-title\" id=\"screen-conquests-title\">Conquests</h2>" +
     "<p class=\"helper-text\">Messages from power players. Accept to unlock exclusive reward packs.</p>" +
@@ -2830,6 +2920,7 @@ function renderConquests(gameState) {
     "</div>" +
     "</div>" +
     "</div>" +
+    trophySectionHtml +
     "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
 
   container.innerHTML = renderAmbientLayers("screen-conquests") +

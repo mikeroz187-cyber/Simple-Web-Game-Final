@@ -429,7 +429,7 @@ function showTakeoverStageModal(gameState) {
       ? "Rep hit: None on this angle."
       : ("Rep hit applied: " + repDelta + " (" + weaknessLabel + ")."));
   } else if (stage === "debut") {
-    messageLines.push("Added to roster.");
+    messageLines.push("Trophy secured.");
     messageLines.push("+3 Reputation (capped at 100).");
   }
   const stageMetaHtml = "<div class=\"takeover-stage-meta\">" +
@@ -1770,43 +1770,9 @@ function setupEventHandlers() {
         if (typeof applyTakeoverReputationDelta === "function") {
           applyTakeoverReputationDelta(window.gameState, repReward);
         }
-        const rosterSize = typeof getContractedRosterCount === "function"
-          ? getContractedRosterCount(window.gameState)
-          : (window.gameState.roster && Array.isArray(window.gameState.roster.performers)
-            ? window.gameState.roster.performers.length
-            : 0);
-        const maxRosterSize = typeof getRecruitmentMaxRosterSize === "function"
-          ? getRecruitmentMaxRosterSize(window.gameState)
-          : 0;
-        if (maxRosterSize > 0 && rosterSize >= maxRosterSize) {
-          if (typeof showToast === "function") {
-            showToast("Roster full. Free a slot before finalizing.", "error");
-          }
-          return;
-        }
-        if (!window.gameState.roster || !Array.isArray(window.gameState.roster.performers)) {
-          window.gameState.roster = { performers: [] };
-        }
-        const rosterEntry = {
-          id: performerConfig.id,
-          name: performerConfig.name,
-          type: "act2",
-          starPower: Number.isFinite(performerConfig.starPower) ? performerConfig.starPower : CONFIG.performers.default_star_power,
-          starPowerShoots: 0,
-          portraitPath: performerConfig.portraitPath || (CONFIG.takeover && CONFIG.takeover.placeholderPortraitPath) || "",
-          fatigue: 0,
-          loyalty: CONFIG.performers.starting_loyalty
-        };
-        if (typeof isPerformerInRoster === "function" && isPerformerInRoster(window.gameState, rosterEntry.id)) {
-          if (typeof showToast === "function") {
-            showToast("Performer already on roster.", "info");
-          }
-          return;
-        }
-        window.gameState.roster.performers.push(rosterEntry);
-        if (typeof ensurePerformerManagementForId === "function") {
-          ensurePerformerManagementForId(window.gameState, rosterEntry);
-        }
+        const trophyResult = typeof addTrophyPerformer === "function"
+          ? addTrophyPerformer(window.gameState, performerConfig.id)
+          : { ok: true, message: "" };
         performerState.status = "acquired";
         performerState.currentStage = null;
         performerState.stageStartDay = null;
@@ -1826,11 +1792,14 @@ function setupEventHandlers() {
         const logEntry = buildTakeoverStoryLogEntry(
           window.gameState,
           performerConfig.name || "Performer",
-          "Acquired: " + (performerConfig.name || "Performer") + " (now on your roster)",
+          "Acquired: " + (performerConfig.name || "Performer") + " (trophy secured)",
           "acquired_day" + window.gameState.player.day
         );
         if (logEntry) {
           addStoryLogEntry(window.gameState, logEntry);
+        }
+        if (trophyResult && trophyResult.message && typeof showToast === "function") {
+          showToast(trophyResult.message, "success");
         }
         uiState.takeoverStageModal = null;
         clearModal();
@@ -1919,7 +1888,7 @@ function setupEventHandlers() {
         showDecisionModal({
           title: (studioConfig && studioConfig.name ? studioConfig.name : "Studio") + " — ACQUIRED",
           messageHtml: "<ul>" +
-            "<li>✓ Remaining performers auto-acquired</li>" +
+            "<li>✓ Remaining performers auto-secured as trophies</li>" +
             "<li>✓ Trophy unlocked (studio bonus applied)</li>" +
             "<li>✓ Boss added to collection</li>" +
             "<li>✓ +25 Reputation (capped at 100)</li>" +
@@ -1959,6 +1928,28 @@ function setupEventHandlers() {
       uiState.bossStageModal = null;
       clearModal();
       saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "trophy-selfie-prev" || action === "trophy-selfie-next") {
+      const performerId = actionId;
+      if (!performerId) {
+        return;
+      }
+      if (!uiState.conquests) {
+        uiState.conquests = { selectedMessageId: null, trophySlideIndex: {} };
+      }
+      if (!uiState.conquests.trophySlideIndex) {
+        uiState.conquests.trophySlideIndex = {};
+      }
+      const selfiePaths = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+      const maxIndex = Math.max(0, selfiePaths.length - 1);
+      const currentIndex = Number.isFinite(uiState.conquests.trophySlideIndex[performerId])
+        ? uiState.conquests.trophySlideIndex[performerId]
+        : 0;
+      const delta = action === "trophy-selfie-next" ? 1 : -1;
+      uiState.conquests.trophySlideIndex[performerId] = clamp(currentIndex + delta, 0, maxIndex);
       renderApp(window.gameState);
       return;
     }

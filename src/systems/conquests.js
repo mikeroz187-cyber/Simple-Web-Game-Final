@@ -54,6 +54,69 @@ function ensureConquestsState(gameState) {
   if (!Array.isArray(gameState.conquests.unlockedPacks)) {
     gameState.conquests.unlockedPacks = [];
   }
+  if (!Array.isArray(gameState.conquests.trophyPerformers)) {
+    gameState.conquests.trophyPerformers = [];
+  }
+}
+
+function getTrophySelfiePaths() {
+  const config = getConquestsConfig();
+  const placeholders = config.trophySelfiePlaceholders && Array.isArray(config.trophySelfiePlaceholders.default)
+    ? config.trophySelfiePlaceholders.default
+    : [];
+  return placeholders.filter(Boolean);
+}
+
+function getTrophyPerformers(gameState) {
+  if (!gameState || !gameState.conquests || !Array.isArray(gameState.conquests.trophyPerformers)) {
+    return [];
+  }
+  return gameState.conquests.trophyPerformers.slice();
+}
+
+function isTrophyPerformer(gameState, performerId) {
+  if (!performerId || !gameState || !gameState.conquests || !Array.isArray(gameState.conquests.trophyPerformers)) {
+    return false;
+  }
+  return gameState.conquests.trophyPerformers.some(function (entry) {
+    return entry && entry.performerId === performerId;
+  });
+}
+
+function addTrophyPerformer(gameState, performerId) {
+  if (!gameState || !performerId) {
+    return { ok: false, message: "Trophy data missing." };
+  }
+  ensureConquestsState(gameState);
+  if (isTrophyPerformer(gameState, performerId)) {
+    return { ok: false, message: "Trophy already secured." };
+  }
+  const entry = {
+    performerId: performerId,
+    acquiredDay: gameState.player && Number.isFinite(gameState.player.day) ? gameState.player.day : null
+  };
+  gameState.conquests.trophyPerformers.push(entry);
+  const performerConfig = typeof getTakeoverPerformerConfig === "function"
+    ? getTakeoverPerformerConfig(performerId)
+    : null;
+  const name = performerConfig && performerConfig.name ? performerConfig.name : "Performer";
+  return { ok: true, message: "Trophy acquired: " + name + " — added to Conquests." };
+}
+
+function removeTrophyPerformer(gameState, performerId) {
+  if (!gameState || !performerId) {
+    return false;
+  }
+  ensureConquestsState(gameState);
+  const list = gameState.conquests.trophyPerformers;
+  const index = list.findIndex(function (entry) {
+    return entry && entry.performerId === performerId;
+  });
+  if (index < 0) {
+    return false;
+  }
+  list.splice(index, 1);
+  return true;
 }
 
 function getConquestStatValue(gameState, stat) {
