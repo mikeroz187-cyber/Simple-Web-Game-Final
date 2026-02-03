@@ -8,6 +8,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundle 11B merged: Booking shoot-first grid + per-card booking.
 - Bundle 11A merged: Booking layout scaffold + Config Bar.
 - Bundle 10: Roster redesigned with master/detail layout, selectable list, detail card, and trophy handling.
 - Bundle 9: Studio bonus visibility in Hub/Booking; studio acquisition unlocks bosses in Gallery with 10-image placeholders and messaging.

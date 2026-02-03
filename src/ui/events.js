@@ -2323,6 +2323,91 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "booking-book-performer") {
+      const performerId = actionEl.getAttribute("data-performer-id");
+      if (!performerId) {
+        setUiMessage("Select a performer.");
+        renderApp(window.gameState);
+        return;
+      }
+      const performer = window.gameState.roster && Array.isArray(window.gameState.roster.performers)
+        ? window.gameState.roster.performers.find(function (entry) {
+          return entry.id === performerId;
+        })
+        : null;
+      if (!performer) {
+        setUiMessage("Performer not found.");
+        renderApp(window.gameState);
+        return;
+      }
+      if (typeof isTrophyPerformer === "function" && isTrophyPerformer(window.gameState, performerId)) {
+        setUiMessage("Not bookable.");
+        renderApp(window.gameState);
+        return;
+      }
+      const maxShootsPerDay = typeof getMaxShootsPerDay === "function"
+        ? getMaxShootsPerDay(window.gameState)
+        : CONFIG.game.shoots_per_day;
+      const currentShoots = Number.isFinite(window.gameState.player.shootsToday)
+        ? window.gameState.player.shootsToday
+        : 0;
+      if (currentShoots >= maxShootsPerDay) {
+        setUiMessage("Daily cap reached.");
+        renderApp(window.gameState);
+        return;
+      }
+      const contract = getContractState(window.gameState, performerId);
+      const daysRemaining = contract && Number.isFinite(contract.daysRemaining) ? contract.daysRemaining : 0;
+      if (daysRemaining <= 0 || (contract && contract.status === "expired")) {
+        setUiMessage("Contract expired — renew in Roster.");
+        renderApp(window.gameState);
+        return;
+      }
+      const availability = getAvailabilityState(window.gameState, performerId);
+      const consecutiveBookings = availability && Number.isFinite(availability.consecutiveBookings)
+        ? availability.consecutiveBookings
+        : 0;
+      const dailyCap = getPerformerDailyBookingCap(performer);
+      if (dailyCap > 0 && consecutiveBookings >= dailyCap) {
+        setUiMessage("Already shot today.");
+        renderApp(window.gameState);
+        return;
+      }
+
+      const selection = {
+        performerIdA: performerId,
+        locationId: uiState.booking.locationId,
+        themeId: uiState.booking.themeId,
+        contentType: uiState.booking.contentType,
+        bookingMode: uiState.booking.bookingMode || "core"
+      };
+      const result = confirmBooking(window.gameState, selection);
+      setUiMessage(result.message || "");
+      if (result.ok) {
+        resetBookingSelection();
+        uiState.bookingSlideshowIndex = 0;
+        appendStoryLogEntries(window.gameState, result.storyEvents);
+        const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+        if (!saveResult.ok) {
+          setUiMessage(saveResult.message);
+        }
+        const eventCards = buildMilestoneEventCards(result.milestoneEvents).concat(
+          buildStoryEventCards(result.storyEvents)
+        );
+        if (eventCards.length) {
+          showEventCards(eventCards);
+        }
+        renderApp(window.gameState);
+        showScreen("screen-content");
+        if (typeof showToast === "function") {
+          showToast("Shoot booked!", "success");
+        }
+        return;
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "confirm-shoot") {
       const result = confirmBooking(window.gameState, uiState.booking);
       setUiMessage(result.message || "");

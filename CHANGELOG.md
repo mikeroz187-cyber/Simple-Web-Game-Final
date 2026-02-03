@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Replaced the Booking performer selector with a quick-book grid and wired per-card Book Shoot actions to the existing booking flow.
+  - Why: Deliver Bundle 11B’s shoot-first UX while keeping booking mechanics unchanged.
+  - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Restructured the Booking screen into a two-pane layout with a Config Bar for mode/location/theme/content type selections.
   - Why: Provide the Bundle 11A layout scaffold and keep booking controls compact ahead of the quick-book grid.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

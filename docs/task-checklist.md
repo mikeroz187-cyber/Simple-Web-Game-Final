@@ -137,6 +137,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ## UI / Cosmetic / QoL — Implemented
 - [x] Bundle 11A: Booking two-pane layout + Config Bar scaffold (grid in next bundle).
+- [x] Bundle 11B: Booking quick-book performer grid with per-card Book Shoot wiring (no mechanic changes).
 - [x] UI Polish Pass v1 (Neon VIP Lounge + Bebas Neue + Hub dashboard + event feed cards).
 - [x] Recruit meet modal: Hire/Decline available immediately and slideshow media stays within the modal.
 - [x] Performer/recruit/persona display names updated to locked sexy list.
