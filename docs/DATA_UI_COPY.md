@@ -30,8 +30,13 @@ UI copy is defined inline in `src/ui/render.js`, `src/ui/events.js`, and the sys
 
 ## Booking
 - Booking Mode: **Core Performer**, **Agency Sample Pack**
-- Booking Summary: **Star Rating**, **Audience Pull (Star Power)**, **Diva Fee** (when active), **Star Power Premium** (when active)
-- Confirm Shoot
+- Performer (label)
+- Performer dropdown placeholder: **Select a performer…**
+- Performer dropdown disabled label (Agency Pack): **Agency selection**
+- Portrait placeholder: **Select a Performer**
+- Panels: **Performer Stats**, **Shoot Summary**, **Cost Breakdown**
+- Cost line labels: **Base shoot cost** / **Agency pack fee**, **Location fee**, **Subtotal (Base + Location)**, **Content Type (Premium x1.50)**, **Star Power Premium**, **Diva Fee**, **Staffing Crisis**, **Total**
+- Confirm Shoot: **🎬 CONFIRM SHOOT — $X**
 - Back to Hub
 
 ## Content / Analytics

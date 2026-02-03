@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Replaced the Booking quick-book grid with a Select → Preview → Confirm flow using a performer dropdown, portrait preview, and itemized cost breakdown tied to the existing booking totals.
+  - Why: Give players a clear preview and cost context before committing to a shoot while keeping booking logic intact.
+  - Files touched: src/ui/render.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/DATA_UI_COPY.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Cleaned up dead references, standardized UI labels/helper copy, and reconciled docs for the Bundle 11 build.
   - Why: Keep the cleanup bundle aligned with the merged implementation and remove stale Act 3 theme references.
   - Files touched: src/ui/render.js, src/ui/events.js, src/systems/takeover.js, src/systems/story.js, styles.css, docs/DATA_UI_COPY.md, docs/DATA_THEMES.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CURRENT_SCOPE.md, docs/task-checklist.md, docs/late-game/GAME_FLOW.md, CHANGELOG.md.
