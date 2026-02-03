@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Disabled Studio Upgrade offer purchase buttons when unaffordable and added "Not enough cash" helper text, with guards in the upgrade purchase flow.
+  - Why: Prevent unaffordable upgrade purchases at the UI and system level while keeping the offer flow clear.
+  - Files touched: src/ui/events.js, src/systems/economy.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Enforced booking caps (1 shoot/day per performer, hard 10/day total), locked booking themes to MVP only, renamed Office to Professional, and removed Act 3 themes.
   - Why: Align Bundle 1 rules with updated caps and MVP-only theme availability.
   - Files touched: src/config.js, src/systems/booking.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/DATA_THEMES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

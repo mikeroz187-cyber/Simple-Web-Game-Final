@@ -17,6 +17,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Pacing guideline:** Early days (≈1–30) favor Promo-heavy output (roughly 2 Promo / 1 Premium) to build footprint; mid/late days should gradually lean Premium-heavy as scaling kicks in.
 - **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
 - **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance. After debt is cleared, a one-time **Hire Manager** upgrade reduces overhead by 15% (config-driven). In Act 2, the **Studio Lease Upgrade** adds +$100/day overhead if purchased.
+- **Studio upgrade offer UI:** Purchase buttons disable when unaffordable and display "Not enough cash" helper text.
 - **Day 120 Staffing Push:** Reach 7 performers with **ACTIVE contracts** by the end of Day 120 (checked when Day 121 begins). Renewals count. Success grants **Halo Staffing** (+1 Star to every roster performer, max 10). Failure triggers a **Staffing Crisis** with daily overhead and per‑shoot booking penalties until the roster has 7 ACTIVE contracts again.
 - **Roster caps:** Contracted performers are capped at 5 by default; the Studio Lease Upgrade raises the cap to 7.
 - **Reputation:** Increases from milestone rewards (followers, OF subs, MRR thresholds). It gates Tier 2 location unlocks, recruitment candidates, and studio identity selection.
