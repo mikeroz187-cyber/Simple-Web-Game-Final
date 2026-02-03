@@ -50,7 +50,7 @@ Time to take it from them.
 |   5 performers         X performers              |
 |   ★★☆☆☆               $XXX,XXX MRR              |
 |                                                  |
-|   [HONEY TRAP]         [VELVET LENS]             |
+|   [HONEY TRAP]         [VELVET VAULT]             |
 |   Carmen Reyes         Dominique Vance           |
 |   5 performers         5 performers              |
 |   ★★★☆☆               ★★★★☆                     |
@@ -102,7 +102,7 @@ Defense Cost: $25,000
 ### Layout
 ```
 +--------------------------------------------------+
-| VELVET LENS                        [Back to Map] |
+| VELVET VAULT                        [Back to Map] |
 | "Luxury isn't a look. It's a standard."          |
 +--------------------------------------------------+
 | BOSS: Dominique Vance                            |
@@ -303,7 +303,7 @@ Player clicks through all 5 images. Final screen:
 | She's yours now.                         |
 |                                          |
 | Bianca Morel has agreed to leave         |
-| Velvet Lens and join your studio.        |
+| Velvet Vault and join your studio.        |
 |                                          |
 | [PROCEED TO DEBUT]                       |
 +------------------------------------------+
@@ -357,7 +357,7 @@ Player clicks through all 5 images. Final screen:
 |                                          |
 | ✓ Available for booking                  |
 | ✓ 16 images added to Gallery             |
-| ✓ Velvet Lens weakened                   |
+| ✓ Velvet Vault weakened                   |
 |                                          |
 | Performers remaining: 4                  |
 | Boss status: LOCKED (need 2 more)        |
@@ -381,7 +381,7 @@ Player clicks [BEGIN CONFRONTATION] on vulnerable boss (3+ performers acquired)
 | [Boss Portrait]                          |
 |                                          |
 | You've taken three of her best.          |
-| Velvet Lens is wounded.                  |
+| Velvet Vault is wounded.                  |
 | Dominique wants to talk.                 |
 |                                          |
 | Cost: $150,000                           |
@@ -431,16 +431,16 @@ And you dictate thoroughly.
 ### Victory Screen
 ```
 +------------------------------------------+
-| VELVET LENS — ACQUIRED                   |
+| VELVET VAULT — ACQUIRED                   |
 +------------------------------------------+
 | [Trophy Image]                           |
 |                                          |
 | Dominique Vance has submitted.           |
-| Velvet Lens is yours.                    |
+| Velvet Vault is yours.                    |
 |                                          |
 | ✓ 2 remaining performers auto-acquired   |
 | ✓ Boss collection entry unlocked         |
-| ✓ Studio brand bonus: +10% glamour content|
+| ✓ Studio brand bonus: +10% luxury content|
 | ✓ +25 Reputation (capped at 100)         |
 |                                          |
 | STUDIOS REMAINING: 2/5                   |
@@ -448,6 +448,29 @@ And you dictate thoroughly.
 | [RETURN TO MAP]            [VIEW GALLERY]|
 +------------------------------------------+
 ```
+
+### Victory Modal + Empire Screen
+
+When the final studio boss is defeated (all 5 studios marked defeated), trigger a one-time victory modal:
+
+- **Title:** INDUSTRY OWNED  
+- **Body:**  
+  - "Five studios. Twenty-five contracts. One signature."  
+  - "You didn’t beat the market — you bought it."  
+- **Rewards list:**  
+  - ✓ All studios defeated  
+  - ✓ Empire screen unlocked  
+  - ✓ Free play continues  
+- **Primary CTA:** Open Empire  
+- **Secondary CTA:** Later  
+
+After acknowledging the modal, unlock the Empire screen:
+
+- **Title:** Empire  
+- **Subtitle:** “All five studios. One owner.”  
+- **Summary:** studios defeated, performers owned (25), bosses defeated, total takeover attempts  
+- **Trophy grid:** one tile per studio showing trophy art and unlocked/locked status  
+- **CTA:** Back to Hub (free play continues)
 
 ---
 

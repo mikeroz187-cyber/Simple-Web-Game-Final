@@ -132,6 +132,41 @@ function showDecisionModal(opts) {
     "</div>";
 }
 
+function shouldShowTakeoverVictoryModal(gameState) {
+  const victory = gameState && gameState.takeover && gameState.takeover.victory
+    ? gameState.takeover.victory
+    : null;
+  return Boolean(victory && victory.achieved && !victory.modalShown);
+}
+
+function showTakeoverVictoryModal(gameState, extraHtml) {
+  if (!shouldShowTakeoverVictoryModal(gameState)) {
+    return false;
+  }
+  const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+  const victory = gameState.takeover.victory;
+  victory.modalShown = true;
+  showDecisionModal({
+    title: "INDUSTRY OWNED",
+    messageHtml: "Five studios. Twenty-five contracts. One signature.<br>" +
+      "You didn’t beat the market — you bought it." +
+      "<ul style=\"margin-top: 10px;\">" +
+        "<li>✓ All studios defeated</li>" +
+        "<li>✓ Empire screen unlocked</li>" +
+        "<li>✓ Free play continues</li>" +
+      "</ul>",
+    imagePath: "assets/images/mascots/talentscout_introducing.png",
+    imageFallbackPath: placeholderPath,
+    primaryLabel: "Open Empire",
+    primaryAction: "nav-empire",
+    secondaryLabel: "Later",
+    secondaryAction: "dismiss-modal",
+    extraHtml: extraHtml || ""
+  });
+  return true;
+}
+
 function getTakeoverStageLabel(stage) {
   if (stage === "intel") {
     return "Intel";
@@ -1643,6 +1678,9 @@ function setupEventHandlers() {
         if (typeof defeatStudioBoss === "function") {
           defeatStudioBoss(window.gameState, studioId);
         }
+        if (shouldShowTakeoverVictoryModal(window.gameState)) {
+          uiState.takeoverVictoryPending = true;
+        }
         uiState.bossStageModal = null;
         clearModal();
         const studioConfig = typeof getTakeoverStudioConfig === "function"
@@ -1793,6 +1831,17 @@ function setupEventHandlers() {
     if (action === "nav-industry-map") {
       clearModal();
       showScreen("screen-industry-map");
+      renderApp(window.gameState);
+      if (uiState.takeoverVictoryPending) {
+        uiState.takeoverVictoryPending = false;
+        showTakeoverVictoryModal(window.gameState);
+      }
+      return;
+    }
+
+    if (action === "nav-empire") {
+      clearModal();
+      showScreen("screen-empire");
       renderApp(window.gameState);
       return;
     }
@@ -1970,6 +2019,10 @@ function setupEventHandlers() {
       clearModal();
       showScreen("screen-industry-studio");
       renderApp(window.gameState);
+      if (uiState.takeoverVictoryPending) {
+        uiState.takeoverVictoryPending = false;
+        showTakeoverVictoryModal(window.gameState);
+      }
       return;
     }
 
@@ -2504,6 +2557,7 @@ function setupEventHandlers() {
       const pendingPoach = retaliationState && retaliationState.pending && retaliationState.pending.type === "poach_attempt"
         ? retaliationState.pending
         : null;
+      // Modal priority: collab offer -> takeover unlock -> retaliation -> victory -> remaining story cards.
       if (collabOffer) {
         const otherStoryEvents = storyEvents.filter(function (event) {
           return event && event.id !== collabOffer.id;
@@ -2559,6 +2613,8 @@ function setupEventHandlers() {
           secondaryAction: "industry-resolve-poach-loss",
           extraHtml: buildCollabExtraHtml(eventCards)
         });
+      } else if (showTakeoverVictoryModal(window.gameState, buildCollabExtraHtml(eventCards))) {
+        // Victory modal shown.
       } else if (eventCards.length) {
         showEventCards(eventCards);
       }

@@ -271,6 +271,17 @@ function updateIndustryMapNavVisibility(gameState) {
   navItem.style.display = unlocked ? "" : "none";
 }
 
+function updateEmpireNavVisibility(gameState) {
+  var navItem = document.getElementById("nav-empire-item");
+  if (!navItem) {
+    return;
+  }
+  var victory = gameState && gameState.takeover && gameState.takeover.victory
+    ? gameState.takeover.victory
+    : null;
+  navItem.style.display = victory && victory.achieved ? "" : "none";
+}
+
 function updateCompetitionNavVisibility(gameState) {
   var navItem = document.getElementById("nav-competition-item");
   if (!navItem) {
@@ -283,6 +294,7 @@ function updateCompetitionNavVisibility(gameState) {
 function renderApp(gameState) {
   getUiState();
   updateIndustryMapNavVisibility(gameState);
+  updateEmpireNavVisibility(gameState);
   updateCompetitionNavVisibility(gameState);
   renderHeaderStats(gameState);
   renderHub(gameState);
@@ -295,6 +307,7 @@ function renderApp(gameState) {
   renderConquests(gameState);
   renderIndustryMap(gameState);
   renderIndustryStudio(gameState);
+  renderEmpire(gameState);
   renderCompetition(gameState);
   renderSlideshow(gameState);
   renderStoryLog(gameState);
@@ -334,7 +347,7 @@ function renderIndustryMap(gameState) {
   var bossesDefeated = Number.isFinite(stats.bossesDefeated) ? stats.bossesDefeated : 0;
   var performersByStudio = {};
 
-  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice(0, 3) : [];
+  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice() : [];
   var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
     ? takeoverConfig.studios
     : {};
@@ -459,7 +472,7 @@ function renderIndustryStudio(gameState) {
     return;
   }
 
-  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice(0, 3) : [];
+  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice() : [];
   var selectedStudioId = typeof getIndustrySelectedStudioId === "function" ? getIndustrySelectedStudioId() : null;
   if (!selectedStudioId) {
     container.innerHTML = "<div class=\"screen-content\">" +
@@ -754,6 +767,92 @@ function renderIndustryStudio(gameState) {
     "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Performer Roster</h3>" +
     "<div class=\"industry-performer-list\">" + performersHtml + "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function renderEmpire(gameState) {
+  var container = document.getElementById("screen-empire");
+  if (!container) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  var takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+  var studioOrder = Array.isArray(takeoverConfig.studioOrder) ? takeoverConfig.studioOrder.slice() : [];
+  var studiosConfig = takeoverConfig.studios && typeof takeoverConfig.studios === "object"
+    ? takeoverConfig.studios
+    : {};
+  var takeoverState = gameState && gameState.takeover ? gameState.takeover : {};
+  var studiosState = takeoverState.studios && typeof takeoverState.studios === "object"
+    ? takeoverState.studios
+    : {};
+  var performersState = takeoverState.performers && typeof takeoverState.performers === "object"
+    ? takeoverState.performers
+    : {};
+  var retaliationState = takeoverState.retaliation && typeof takeoverState.retaliation === "object"
+    ? takeoverState.retaliation
+    : {};
+  var defeatedCount = studioOrder.filter(function (studioId) {
+    return studiosState[studioId] && studiosState[studioId].status === "defeated";
+  }).length;
+  var bossCount = defeatedCount;
+  var performerTotal = studioOrder.reduce(function (total, studioId) {
+    var studioConfig = studiosConfig[studioId] || {};
+    var performerIds = Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds : [];
+    return total + performerIds.length;
+  }, 0);
+  var performerAcquired = Object.keys(performersState).filter(function (performerId) {
+    return performersState[performerId] && performersState[performerId].status === "acquired";
+  }).length;
+  var placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+
+  var summaryHtml = "<div class=\"panel\">" +
+    "<h3 class=\"panel-title\">Empire Summary</h3>" +
+    "<div class=\"secondary-stats-row\" style=\"border-top:none; padding-top:0;\">" +
+      "<div class=\"secondary-stat\"><span>Studios defeated:</span><span class=\"secondary-stat__value\">" +
+        defeatedCount + "/" + studioOrder.length + "</span></div>" +
+      "<div class=\"secondary-stat\"><span>Performers owned:</span><span class=\"secondary-stat__value\">" +
+        performerAcquired + "/" + performerTotal + "</span></div>" +
+      "<div class=\"secondary-stat\"><span>Bosses defeated:</span><span class=\"secondary-stat__value\">" +
+        bossCount + "/" + studioOrder.length + "</span></div>" +
+      "<div class=\"secondary-stat\"><span>Total takeover attempts:</span><span class=\"secondary-stat__value\">" +
+        (Number.isFinite(retaliationState.totalAttempts) ? retaliationState.totalAttempts : 0) + "</span></div>" +
+    "</div>" +
+  "</div>";
+
+  var trophyTilesHtml = studioOrder.map(function (studioId) {
+    var studioConfig = studiosConfig[studioId] || {};
+    var studioName = studioConfig.name || "Studio";
+    var studioDefeated = studiosState[studioId] && studiosState[studioId].status === "defeated";
+    var trophyPath = "assets/images/takeover/" + studioId + "/trophy.png";
+    var trophyAttr = placeholderPath ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "";
+    var statusLabel = studioDefeated ? "Unlocked" : "Locked";
+    var statusPill = studioDefeated
+      ? "<div class=\"pill pill--success\" style=\"margin-top: var(--gap-xs);\">Unlocked</div>"
+      : "<div class=\"pill pill--muted\" style=\"margin-top: var(--gap-xs);\">Locked</div>";
+    return "<div class=\"shop-card\">" +
+      "<div class=\"conquest-detail__portrait\" style=\"margin-bottom: var(--gap-sm);\"><img src=\"" +
+        trophyPath + "\" alt=\"" + studioName + " trophy\"" + trophyAttr + " /></div>" +
+      "<div class=\"shop-card__title\">" + studioName + "</div>" +
+      "<div class=\"helper-text\" style=\"margin-bottom: var(--gap-sm);\">" + statusLabel + "</div>" +
+      statusPill +
+      "</div>";
+  }).join("");
+
+  container.innerHTML = "<div class=\"screen-content\">" +
+    "<h2 id=\"screen-empire-title\" class=\"screen-title\">Empire</h2>" +
+    "<p class=\"helper-text\">All five studios. One owner.</p>" +
+    summaryHtml +
+    "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Trophies</h3>" +
+      "<div class=\"shop-grid\">" + trophyTilesHtml + "</div>" +
+    "</div>" +
+    "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Free Play</h3>" +
+      "<p class=\"helper-text\">You own the industry. The market still pays for heat. Keep producing.</p>" +
+      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
     "</div>" +
     "</div>";
 }

@@ -459,12 +459,54 @@ const CONFIG = {
           category: "alt",
           value: 1.10
         }
+      },
+      velvet_vault: {
+        id: "velvet_vault",
+        name: "Velvet Vault",
+        tagline: "Luxury locked tight. You hold the key.",
+        specialty: "Luxury/Glamour",
+        difficulty: 4,
+        bossId: "boss_dominique_vance",
+        performerIds: [
+          "takeover_bianca_morel",
+          "takeover_chanel_dubois",
+          "takeover_natasha_kaine",
+          "takeover_serena_lake",
+          "takeover_isabelle_fontaine"
+        ],
+        bonusOnDefeat: {
+          type: "contentMultiplier",
+          category: "luxury",
+          value: 1.10
+        }
+      },
+      saint_sin: {
+        id: "saint_sin",
+        name: "Saint Sin",
+        tagline: "Confession is currency. Pay up.",
+        specialty: "Confession/Taboo",
+        difficulty: 5,
+        bossId: "boss_victoria_kross",
+        performerIds: [
+          "takeover_scarlet_obrien",
+          "takeover_mistress_ivy",
+          "takeover_delilah_thorn",
+          "takeover_anastasia_devereux",
+          "takeover_lilith_kane"
+        ],
+        bonusOnDefeat: {
+          type: "contentMultiplier",
+          category: "confession",
+          value: 1.10
+        }
       }
     },
     studioOrder: [
       "neon_cherry",
       "honey_trap",
-      "midnight_media"
+      "midnight_media",
+      "velvet_vault",
+      "saint_sin"
     ],
     bosses: {
       boss_yuki_tanaka: {
@@ -496,6 +538,26 @@ const CONFIG = {
         weakness: "Hypocrisy. She preaches anti-capitalism while hoarding the profits.",
         confrontationStyle: "Exposure and unmasking",
         portraitPath: "assets/images/takeover/midnight_media/boss_sasha_volkov/portrait.png"
+      },
+      boss_dominique_vance: {
+        id: "boss_dominique_vance",
+        name: "Dominique Vance",
+        studioId: "velvet_vault",
+        age: 38,
+        description: "Luxury tyrant in silk gloves. Every contract feels like a collar.",
+        weakness: "She can't stand anyone escaping her orbit. Offer her a bigger throne.",
+        confrontationStyle: "Control through decadence",
+        portraitPath: "assets/images/takeover/velvet_vault/boss_dominique_vance/portrait.png"
+      },
+      boss_victoria_kross: {
+        id: "boss_victoria_kross",
+        name: "Victoria Kross",
+        studioId: "saint_sin",
+        age: 41,
+        description: "Devout in public, vicious in private. Turns confession into leverage.",
+        weakness: "She needs the world to believe she's the savior. Break the illusion.",
+        confrontationStyle: "Exposure through confession",
+        portraitPath: "assets/images/takeover/saint_sin/boss_victoria_kross/portrait.png"
       }
     },
     performers: {
@@ -663,6 +725,116 @@ const CONFIG = {
         archetypeLine: "Too cool for everyone until you make it a challenge.",
         description: "Punk icon, too cool for everyone. Except you. Maybe.",
         portraitPath: "assets/images/takeover/midnight_media/takeover_vex_morrow/portrait.png"
+      },
+      takeover_bianca_morel: {
+        id: "takeover_bianca_morel",
+        name: "Bianca Morel",
+        studioId: "velvet_vault",
+        tier: "tier1",
+        starPower: 3,
+        weaknessType: "ambition",
+        archetypeLine: "Climbing the luxury ladder one signature at a time.",
+        description: "Wants to be Dominique. Literally. Would do anything to climb.",
+        portraitPath: "assets/images/takeover/velvet_vault/takeover_bianca_morel/portrait.png"
+      },
+      takeover_chanel_dubois: {
+        id: "takeover_chanel_dubois",
+        name: "Chanel DuBois",
+        studioId: "velvet_vault",
+        tier: "tier1",
+        starPower: 3,
+        weaknessType: "neglect",
+        archetypeLine: "Luxury's old favorite, itching to be chosen again.",
+        description: "The 'old face' being phased out for newer models. Still has years left. Pissed about it.",
+        portraitPath: "assets/images/takeover/velvet_vault/takeover_chanel_dubois/portrait.png"
+      },
+      takeover_natasha_kaine: {
+        id: "takeover_natasha_kaine",
+        name: "Natasha Kaine",
+        studioId: "velvet_vault",
+        tier: "tier2",
+        starPower: 4,
+        weaknessType: "debt",
+        archetypeLine: "Designer tastes, discount bankroll, and a balance sheet full of secrets.",
+        description: "Rich girl cosplay—actually broke. Keeps up appearances on credit cards.",
+        portraitPath: "assets/images/takeover/velvet_vault/takeover_natasha_kaine/portrait.png"
+      },
+      takeover_serena_lake: {
+        id: "takeover_serena_lake",
+        name: "Serena Lake",
+        studioId: "velvet_vault",
+        tier: "tier3",
+        starPower: 4,
+        weaknessType: "secret",
+        archetypeLine: "A velvet smile hiding a scandal you can cash in.",
+        description: "She's the one sleeping with Dominique's husband. She doesn't know you know. Yet.",
+        portraitPath: "assets/images/takeover/velvet_vault/takeover_serena_lake/portrait.png"
+      },
+      takeover_isabelle_fontaine: {
+        id: "takeover_isabelle_fontaine",
+        name: "Isabelle Fontaine",
+        studioId: "velvet_vault",
+        tier: "tier3",
+        starPower: 5,
+        weaknessType: "pride",
+        archetypeLine: "The queen of couture, terrified her crown is costume jewelry.",
+        description: "THE star. Magazine covers, brand deals. Terrified someone will realize she's not as smart as she looks.",
+        portraitPath: "assets/images/takeover/velvet_vault/takeover_isabelle_fontaine/portrait.png"
+      },
+      takeover_scarlet_obrien: {
+        id: "takeover_scarlet_obrien",
+        name: "Scarlet O'Brien",
+        studioId: "saint_sin",
+        tier: "tier1",
+        starPower: 3,
+        weaknessType: "ambition",
+        archetypeLine: "Confessional darling who wants the pulpit all to herself.",
+        description: "Wants to be the next Victoria. Willing to go through YOU to get there.",
+        portraitPath: "assets/images/takeover/saint_sin/takeover_scarlet_obrien/portrait.png"
+      },
+      takeover_mistress_ivy: {
+        id: "takeover_mistress_ivy",
+        name: "Mistress Ivy",
+        studioId: "saint_sin",
+        tier: "tier1",
+        starPower: 3,
+        weaknessType: "neglect",
+        archetypeLine: "A faithful enforcer who's tired of being left at the altar.",
+        description: "Senior performer. Victoria's taking her for granted. She's noticed.",
+        portraitPath: "assets/images/takeover/saint_sin/takeover_mistress_ivy/portrait.png"
+      },
+      takeover_delilah_thorn: {
+        id: "takeover_delilah_thorn",
+        name: "Delilah Thorn",
+        studioId: "saint_sin",
+        tier: "tier2",
+        starPower: 4,
+        weaknessType: "debt",
+        archetypeLine: "Luxury penitent with a debt ledger you can turn into a leash.",
+        description: "Expensive tastes. Borrowed from Victoria personally. Now she's trapped.",
+        portraitPath: "assets/images/takeover/saint_sin/takeover_delilah_thorn/portrait.png"
+      },
+      takeover_anastasia_devereux: {
+        id: "takeover_anastasia_devereux",
+        name: "Anastasia Devereux",
+        studioId: "saint_sin",
+        tier: "tier2",
+        starPower: 4,
+        weaknessType: "secret",
+        archetypeLine: "Holier-than-thou on camera, soft as lace in private.",
+        description: "Vanilla. Completely vanilla in her personal life. The 'hardcore domme' watches rom-coms.",
+        portraitPath: "assets/images/takeover/saint_sin/takeover_anastasia_devereux/portrait.png"
+      },
+      takeover_lilith_kane: {
+        id: "takeover_lilith_kane",
+        name: "Lilith Kane",
+        studioId: "saint_sin",
+        tier: "tier3",
+        starPower: 5,
+        weaknessType: "pride",
+        archetypeLine: "The heir who kneels only to sharpen her claim.",
+        description: "Victoria's heir apparent. Would kneel for Victoria forever—but she'll never be #1 while Victoria's around.",
+        portraitPath: "assets/images/takeover/saint_sin/takeover_lilith_kane/portrait.png"
       }
     }
   },
@@ -1924,7 +2096,9 @@ const CONFIG = {
       theme_ids: [
         "cosplay",
         "curves",
-        "alt"
+        "alt",
+        "luxury",
+        "confession"
       ],
       themes: {
         cosplay: {
@@ -1943,6 +2117,18 @@ const CONFIG = {
           id: "alt",
           name: "Alt",
           description: "Ink, leather, and a stare that dares them to flinch.",
+          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
+        },
+        luxury: {
+          id: "luxury",
+          name: "Luxury",
+          description: "Silk, gold, and velvet promises that come with a signature.",
+          modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
+        },
+        confession: {
+          id: "confession",
+          name: "Confession",
+          description: "Secrets whispered close, then sold back as a thrill.",
           modifiers: { followersMult: 1.0, ofSubsMult: 1.0 }
         }
       }

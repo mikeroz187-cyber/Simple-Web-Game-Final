@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** February 02, 2026 (Industry Takeover Phase 6 retaliation + competition swap)
+**Last Updated:** February 03, 2026 (Industry Takeover Phase 7 victory + Empire screen)
 
 ---
 
@@ -67,7 +67,7 @@
 - [x] Phase 4: Acquisition stages (intel/approach/turn/debut)
 - [x] Phase 5: Boss confrontations (5-stage)
 - [x] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
-- [ ] Phase 7: Add remaining 2 studios + victory condition/endgame
+- [x] Phase 7: Add remaining 2 studios + victory condition/endgame
 
 ---
 
@@ -194,6 +194,14 @@
 ## Debug / Dev Tools — Implemented
 - [x] Debug panel gated by `?debug=1` (set day, set stats).
 - [x] Manual milestone check runner.
+
+---
+
+## Polish / Balance — Final Pass (Pending)
+- [ ] Tune costs and cadence for takeover pacing.
+- [ ] Full copy pass on takeover modals and Empire screen.
+- [ ] Placeholder image registry pass (ensure swap-ready paths).
+- [ ] Small UI spacing polish (no redesign).
 
 ---
 

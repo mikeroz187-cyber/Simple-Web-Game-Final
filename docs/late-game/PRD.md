@@ -47,10 +47,10 @@ Industry Takeover solves all five by making conquest the core late-game loop.
 | Neon Cherry | Yuki Tanaka | Cosplay/Kawaii | ★★☆☆☆ |
 | Honey Trap Productions | Carmen Reyes | Latina/Curves | ★★★☆☆ |
 | Midnight Media | Sasha Volkov | Alt/Edge | ★★★☆☆ |
-| Velvet Lens | Dominique Vance | Luxury/Glamour | ★★★★☆ |
-| Black Lace Studios | Victoria Kross | BDSM/Fetish | ★★★★★ |
+| Velvet Vault | Dominique Vance | Luxury/Glamour | ★★★★☆ |
+| Saint Sin | Victoria Kross | Confession/Taboo | ★★★★★ |
 
-**Note:** Midnight Media and Velvet Lens retrofit the existing Act 3 rivals (Night Slate Media → Midnight Media, Luxe Pixel Studios → Velvet Lens). The other three are new additions.
+**Note:** Midnight Media retrofits the existing Act 3 rival (Night Slate Media → Midnight Media). Velvet Vault and Saint Sin are new additions.
 
 Each studio has:
 - 1 Boss (the owner—ultimate target)
@@ -193,7 +193,7 @@ Acquired performers become full roster members:
 3. Transition to free play mode (continue indefinitely)
 
 **Post-Victory Free Play:**
-- All 30 acquired performers available
+- All 25 acquired performers available
 - No new rivals spawn
 - Player can continue regular shoots/content
 - Gallery complete

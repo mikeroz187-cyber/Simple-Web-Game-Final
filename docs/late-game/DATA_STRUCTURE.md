@@ -4,8 +4,6 @@
 
 This document defines all data structures for the Industry Takeover system: config schemas, gameState extensions, and content data formats.
 
-**Playable Slice A3:** Only the first 3 studios are implemented initially; remaining studios will be added later.
-
 ---
 
 ## 1. Config Additions (src/config.js)
@@ -154,10 +152,10 @@ CONFIG.takeover.studios = {
     }
   },
 
-  velvet_lens: {
-    id: "velvet_lens",
-    name: "Velvet Lens",
-    tagline: "Luxury isn't a look. It's a standard.",
+  velvet_vault: {
+    id: "velvet_vault",
+    name: "Velvet Vault",
+    tagline: "Luxury locked tight. You hold the key.",
     specialty: "Luxury/Glamour",
     difficulty: 4,
     bossId: "boss_dominique_vance",
@@ -170,16 +168,16 @@ CONFIG.takeover.studios = {
     ],
     bonusOnDefeat: {
       type: "contentMultiplier",
-      category: "glamour",
+      category: "luxury",
       value: 1.10
     }
   },
 
-  black_lace: {
-    id: "black_lace",
-    name: "Black Lace Studios",
-    tagline: "We don't make content. We make experiences.",
-    specialty: "BDSM/Fetish",
+  saint_sin: {
+    id: "saint_sin",
+    name: "Saint Sin",
+    tagline: "Confession is currency. Pay up.",
+    specialty: "Confession/Taboo",
     difficulty: 5,
     bossId: "boss_victoria_kross",
     performerIds: [
@@ -191,7 +189,7 @@ CONFIG.takeover.studios = {
     ],
     bonusOnDefeat: {
       type: "contentMultiplier",
-      category: "fetish",
+      category: "confession",
       value: 1.10
     }
   }
@@ -202,8 +200,8 @@ CONFIG.takeover.studioOrder = [
   "neon_cherry",
   "honey_trap",
   "midnight_media",
-  "velvet_lens",
-  "black_lace"
+  "velvet_vault",
+  "saint_sin"
 ];
 ```
 
@@ -247,23 +245,23 @@ CONFIG.takeover.bosses = {
   boss_dominique_vance: {
     id: "boss_dominique_vance",
     name: "Dominique Vance",
-    studioId: "velvet_lens",
-    age: 45,
-    description: "Timeless. Chanel, pearls, perfect blowout. Old money disdain for new money hustle.",
-    weakness: "Her husband is cheating with one of her own girls. She doesn't know which one.",
-    confrontationStyle: "Psychological warfare",
-    portraitPath: "assets/images/takeover/velvet_lens/boss_dominique_vance/portrait.png"
+    studioId: "velvet_vault",
+    age: 38,
+    description: "Luxury tyrant in silk gloves. Every contract feels like a collar.",
+    weakness: "She can't stand anyone escaping her orbit. Offer her a bigger throne.",
+    confrontationStyle: "Control through decadence",
+    portraitPath: "assets/images/takeover/velvet_vault/boss_dominique_vance/portrait.png"
   },
 
   boss_victoria_kross: {
     id: "boss_victoria_kross",
     name: "Victoria Kross",
-    studioId: "black_lace",
-    age: 38,
-    description: "Tall, severe, architectural bone structure. Always in black. Every word is intentional.",
-    weakness: "Control is exhausting. Deep down, she wants someone worthy of taking the reins.",
-    confrontationStyle: "Domination reversal",
-    portraitPath: "assets/images/takeover/black_lace/boss_victoria_kross/portrait.png"
+    studioId: "saint_sin",
+    age: 41,
+    description: "Devout in public, vicious in private. Turns confession into leverage.",
+    weakness: "She needs the world to believe she's the savior. Break the illusion.",
+    confrontationStyle: "Exposure through confession",
+    portraitPath: "assets/images/takeover/saint_sin/boss_victoria_kross/portrait.png"
   }
 };
 ```
@@ -458,56 +456,56 @@ CONFIG.takeover.performers = {
   takeover_bianca_morel: {
     id: "takeover_bianca_morel",
     name: "Bianca Morel",
-    studioId: "velvet_lens",
+    studioId: "velvet_vault",
     tier: "tier1",
     starPower: 3,
     weaknessType: "ambition",
     description: "Wants to be Dominique. Literally. Would do anything to climb.",
-    portraitPath: "assets/images/takeover/velvet_lens/takeover_bianca_morel/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_vault/takeover_bianca_morel/portrait.png"
   },
 
   takeover_chanel_dubois: {
     id: "takeover_chanel_dubois",
     name: "Chanel DuBois",
-    studioId: "velvet_lens",
+    studioId: "velvet_vault",
     tier: "tier1",
     starPower: 3,
     weaknessType: "neglect",
     description: "The 'old face' being phased out for newer models. Still has years left. Pissed about it.",
-    portraitPath: "assets/images/takeover/velvet_lens/takeover_chanel_dubois/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_vault/takeover_chanel_dubois/portrait.png"
   },
 
   takeover_natasha_kaine: {
     id: "takeover_natasha_kaine",
     name: "Natasha Kaine",
-    studioId: "velvet_lens",
+    studioId: "velvet_vault",
     tier: "tier2",
     starPower: 4,
     weaknessType: "debt",
     description: "Rich girl cosplay—actually broke. Keeps up appearances on credit cards.",
-    portraitPath: "assets/images/takeover/velvet_lens/takeover_natasha_kaine/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_vault/takeover_natasha_kaine/portrait.png"
   },
 
   takeover_serena_lake: {
     id: "takeover_serena_lake",
     name: "Serena Lake",
-    studioId: "velvet_lens",
+    studioId: "velvet_vault",
     tier: "tier3",
     starPower: 4,
     weaknessType: "secret",
     description: "She's the one sleeping with Dominique's husband. She doesn't know you know. Yet.",
-    portraitPath: "assets/images/takeover/velvet_lens/takeover_serena_lake/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_vault/takeover_serena_lake/portrait.png"
   },
 
   takeover_isabelle_fontaine: {
     id: "takeover_isabelle_fontaine",
     name: "Isabelle Fontaine",
-    studioId: "velvet_lens",
+    studioId: "velvet_vault",
     tier: "tier3",
     starPower: 5,
     weaknessType: "pride",
     description: "THE star. Magazine covers, brand deals. Terrified someone will realize she's not as smart as she looks.",
-    portraitPath: "assets/images/takeover/velvet_lens/takeover_isabelle_fontaine/portrait.png"
+    portraitPath: "assets/images/takeover/velvet_vault/takeover_isabelle_fontaine/portrait.png"
   },
 
   // ═══════════════════════════════════════════
@@ -517,56 +515,56 @@ CONFIG.takeover.performers = {
   takeover_scarlet_obrien: {
     id: "takeover_scarlet_obrien",
     name: "Scarlet O'Brien",
-    studioId: "black_lace",
+    studioId: "saint_sin",
     tier: "tier1",
     starPower: 3,
     weaknessType: "ambition",
     description: "Wants to be the next Victoria. Willing to go through YOU to get there.",
-    portraitPath: "assets/images/takeover/black_lace/takeover_scarlet_obrien/portrait.png"
+    portraitPath: "assets/images/takeover/saint_sin/takeover_scarlet_obrien/portrait.png"
   },
 
   takeover_mistress_ivy: {
     id: "takeover_mistress_ivy",
     name: "Mistress Ivy",
-    studioId: "black_lace",
+    studioId: "saint_sin",
     tier: "tier1",
     starPower: 3,
     weaknessType: "neglect",
     description: "Senior performer. Victoria's taking her for granted. She's noticed.",
-    portraitPath: "assets/images/takeover/black_lace/takeover_mistress_ivy/portrait.png"
+    portraitPath: "assets/images/takeover/saint_sin/takeover_mistress_ivy/portrait.png"
   },
 
   takeover_delilah_thorn: {
     id: "takeover_delilah_thorn",
     name: "Delilah Thorn",
-    studioId: "black_lace",
+    studioId: "saint_sin",
     tier: "tier2",
     starPower: 4,
     weaknessType: "debt",
     description: "Expensive tastes. Borrowed from Victoria personally. Now she's trapped.",
-    portraitPath: "assets/images/takeover/black_lace/takeover_delilah_thorn/portrait.png"
+    portraitPath: "assets/images/takeover/saint_sin/takeover_delilah_thorn/portrait.png"
   },
 
   takeover_anastasia_devereux: {
     id: "takeover_anastasia_devereux",
     name: "Anastasia Devereux",
-    studioId: "black_lace",
+    studioId: "saint_sin",
     tier: "tier2",
     starPower: 4,
     weaknessType: "secret",
     description: "Vanilla. Completely vanilla in her personal life. The 'hardcore domme' watches rom-coms.",
-    portraitPath: "assets/images/takeover/black_lace/takeover_anastasia_devereux/portrait.png"
+    portraitPath: "assets/images/takeover/saint_sin/takeover_anastasia_devereux/portrait.png"
   },
 
   takeover_lilith_kane: {
     id: "takeover_lilith_kane",
     name: "Lilith Kane",
-    studioId: "black_lace",
+    studioId: "saint_sin",
     tier: "tier3",
     starPower: 5,
     weaknessType: "pride",
     description: "Victoria's heir apparent. Would kneel for Victoria forever—but she'll never be #1 while Victoria's around.",
-    portraitPath: "assets/images/takeover/black_lace/takeover_lilith_kane/portrait.png"
+    portraitPath: "assets/images/takeover/saint_sin/takeover_lilith_kane/portrait.png"
   }
 };
 
@@ -591,8 +589,11 @@ gameState.takeover = {
   // System status
   unlocked: false,
   unlockedDay: null,
-  victoryAchieved: false,
-  victoryDay: null,
+  victory: {
+    achieved: false,
+    achievedDay: null,
+    modalShown: false
+  },
 
   // Studio tracking
   studios: {
@@ -604,8 +605,8 @@ gameState.takeover = {
     },
     honey_trap: { status: "active", defeatedDay: null, bossConfrontation: null },
     midnight_media: { status: "active", defeatedDay: null, bossConfrontation: null },
-    velvet_lens: { status: "active", defeatedDay: null, bossConfrontation: null },
-    black_lace: { status: "active", defeatedDay: null, bossConfrontation: null }
+    velvet_vault: { status: "active", defeatedDay: null, bossConfrontation: null },
+    saint_sin: { status: "active", defeatedDay: null, bossConfrontation: null }
   },
 
   // Performer acquisition tracking
@@ -677,20 +678,24 @@ function getDefaultTakeoverState() {
   return {
     unlocked: false,
     unlockedDay: null,
-    victoryAchieved: false,
-    victoryDay: null,
+    victory: {
+      achieved: false,
+      achievedDay: null,
+      modalShown: false
+    },
     studios: {
       neon_cherry: { status: "active", defeatedDay: null, bossConfrontation: null },
       honey_trap: { status: "active", defeatedDay: null, bossConfrontation: null },
       midnight_media: { status: "active", defeatedDay: null, bossConfrontation: null },
-      velvet_lens: { status: "active", defeatedDay: null, bossConfrontation: null },
-      black_lace: { status: "active", defeatedDay: null, bossConfrontation: null }
+      velvet_vault: { status: "active", defeatedDay: null, bossConfrontation: null },
+      saint_sin: { status: "active", defeatedDay: null, bossConfrontation: null }
     },
     performers: {},
     bossConfrontations: {},
     gallery: {
-      performers: [],
-      bosses: []
+      bosses: {},
+      trophies: {},
+      notes: []
     },
     retaliation: {
       nextPoachDay: null,
@@ -930,10 +935,10 @@ assets/
       midnight_media/
         [same structure]
       
-      velvet_lens/
+      velvet_vault/
         [same structure]
       
-      black_lace/
+      saint_sin/
         [same structure]
       
       ui/
