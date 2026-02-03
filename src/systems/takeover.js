@@ -98,6 +98,20 @@ function getTakeoverStudioConfig(studioId) {
   return config.studios[studioId] || null;
 }
 
+function getStudioRequiredReputation(studioId) {
+  const config = getTakeoverConfig();
+  const thresholds = Array.isArray(config.studioRepThresholds) ? config.studioRepThresholds : [];
+  const studioOrder = Array.isArray(config.studioOrder) ? config.studioOrder : [];
+  if (!studioId || thresholds.length === 0 || studioOrder.length === 0) {
+    return 0;
+  }
+  const studioIndex = studioOrder.indexOf(studioId);
+  if (studioIndex < 0 || !Number.isFinite(thresholds[studioIndex])) {
+    return 0;
+  }
+  return thresholds[studioIndex];
+}
+
 function getTakeoverPerformerState(gameState, performerId) {
   if (!gameState || !performerId) {
     return null;
@@ -123,6 +137,15 @@ function getActiveTakeoverPerformerId(gameState) {
 function canStartTakeoverAcquisition(gameState, performerId) {
   if (!gameState) {
     return { ok: false, message: "Missing game state." };
+  }
+  const performerConfig = getTakeoverPerformerConfig(performerId);
+  const studioId = performerConfig && performerConfig.studioId ? performerConfig.studioId : null;
+  const requiredRep = getStudioRequiredReputation(studioId);
+  const currentRep = gameState.player && Number.isFinite(gameState.player.reputation)
+    ? gameState.player.reputation
+    : 0;
+  if (Number.isFinite(requiredRep) && requiredRep > 0 && currentRep < requiredRep) {
+    return { ok: false, message: "Need Rep " + requiredRep + " to acquire this studio." };
   }
   if (typeof ensureTakeoverState === "function") {
     ensureTakeoverState(gameState);

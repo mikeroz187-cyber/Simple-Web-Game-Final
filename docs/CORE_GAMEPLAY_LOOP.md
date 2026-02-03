@@ -27,6 +27,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Studio Identity:** At Day 181, a Hub modal picker lets you choose a Studio Identity branch. Selection is permanent and modifies Premium OF subs and Promo followers.
 - **Industry Takeover acquisition lock:** Only one performer acquisition journey can be active at a time. Starting intel on a target locks other Industry Map performers until that journey resolves.
 - **Takeover trophies:** Successfully poached performers become **Trophies**. They appear in Roster and Conquests, are not bookable, and do not count toward roster caps.
+- **Studio acquisition rep gates:** 75/78/80/83/85 (Studios 1–5).
 
 ### Day 170 — Social Collab Week (Talent Scout)
 - **Trigger:** Day 170 (repeats every 14 days if failed or declined via `nextOfferDay`).

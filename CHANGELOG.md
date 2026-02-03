@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Set studio acquisition reputation gates to 75/78/80/83/85 and enforced the lock state in Industry Map plus defensive system checks.
+  - Why: Keep studio acquisition pacing consistent and prevent acquisitions below the required reputation.
+  - Files touched: src/config.js, src/systems/takeover.js, src/ui/render.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Converted takeover acquisitions into trophies with Conquests selfie cards and a roster trophies panel, and ensured trophies are non-bookable.
   - Why: Align Industry Map acquisitions with the trophy-only rule and prevent trophies from affecting roster limits or bookings.
   - Files touched: src/config.js, src/state.js, src/systems/conquests.js, src/systems/takeover.js, src/systems/performers.js, src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
