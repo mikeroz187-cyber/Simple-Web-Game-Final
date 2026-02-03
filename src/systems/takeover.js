@@ -286,6 +286,142 @@ function applyTakeoverReputationDelta(gameState, delta) {
   return gameState.player.reputation;
 }
 
+function getRetaliationConfig() {
+  const config = getTakeoverConfig();
+  if (config && config.retaliation && typeof config.retaliation === "object") {
+    return config.retaliation;
+  }
+  return {};
+}
+
+function scheduleNextPoachDay(gameState) {
+  if (!gameState || !gameState.player) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const retaliation = gameState.takeover && gameState.takeover.retaliation ? gameState.takeover.retaliation : null;
+  if (!retaliation) {
+    return;
+  }
+  const retaliationConfig = getRetaliationConfig();
+  const minDelay = Number.isFinite(retaliationConfig.minDaysBetweenEvents)
+    ? retaliationConfig.minDaysBetweenEvents
+    : 7;
+  const maxDelay = Number.isFinite(retaliationConfig.maxDaysBetweenEvents)
+    ? retaliationConfig.maxDaysBetweenEvents
+    : 14;
+  const roll = typeof randomIntInclusive === "function" ? randomIntInclusive(minDelay, maxDelay) : minDelay;
+  retaliation.nextPoachDay = gameState.player.day + roll;
+}
+
+function getActiveRivalStudios(gameState) {
+  if (!gameState || !gameState.takeover || !gameState.takeover.studios) {
+    return [];
+  }
+  const config = getTakeoverConfig();
+  const studioOrder = Array.isArray(config.studioOrder)
+    ? config.studioOrder.slice()
+    : Object.keys(gameState.takeover.studios);
+  return studioOrder.filter(function (studioId) {
+    const studio = gameState.takeover.studios[studioId];
+    return studio && studio.status !== "defeated";
+  });
+}
+
+function getEligiblePoachTargets(gameState) {
+  if (!gameState || !gameState.takeover || !gameState.takeover.performers) {
+    return [];
+  }
+  const performers = gameState.takeover.performers;
+  const acquired = Object.keys(performers).filter(function (performerId) {
+    const performer = performers[performerId];
+    if (!performer || performer.status !== "acquired") {
+      return false;
+    }
+    if (typeof isPerformerInRoster === "function") {
+      return isPerformerInRoster(gameState, performerId);
+    }
+    if (!gameState.roster || !Array.isArray(gameState.roster.performers)) {
+      return false;
+    }
+    return gameState.roster.performers.some(function (entry) {
+      return entry && entry.id === performerId;
+    });
+  });
+  if (acquired.length === 0) {
+    return [];
+  }
+  const activeStudios = getActiveRivalStudios(gameState);
+  if (!activeStudios.length) {
+    return acquired;
+  }
+  const filtered = acquired.filter(function (performerId) {
+    const performer = performers[performerId];
+    return performer && performer.studioId && activeStudios.indexOf(performer.studioId) >= 0;
+  });
+  return filtered.length ? filtered : acquired;
+}
+
+function maybeGeneratePoachAttempt(gameState) {
+  if (!gameState || !gameState.player) {
+    return;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  if (typeof isTakeoverUnlocked === "function" && !isTakeoverUnlocked(gameState)) {
+    return;
+  }
+  const retaliation = gameState.takeover && gameState.takeover.retaliation ? gameState.takeover.retaliation : null;
+  if (!retaliation || retaliation.pending) {
+    return;
+  }
+  if (!Number.isFinite(retaliation.nextPoachDay) || gameState.player.day < retaliation.nextPoachDay) {
+    return;
+  }
+  const activeStudios = getActiveRivalStudios(gameState);
+  if (!activeStudios.length) {
+    return;
+  }
+  const eligibleTargets = getEligiblePoachTargets(gameState);
+  if (!eligibleTargets.length) {
+    return;
+  }
+  const retaliationConfig = getRetaliationConfig();
+  const targetIndex = typeof randomIntInclusive === "function"
+    ? randomIntInclusive(0, eligibleTargets.length - 1)
+    : 0;
+  const targetPerformerId = eligibleTargets[targetIndex];
+  const targetState = gameState.takeover.performers[targetPerformerId] || {};
+  const rivalPool = activeStudios.filter(function (studioId) {
+    return studioId && studioId !== targetState.studioId;
+  });
+  const studioChoices = rivalPool.length ? rivalPool : activeStudios;
+  const rivalIndex = typeof randomIntInclusive === "function"
+    ? randomIntInclusive(0, studioChoices.length - 1)
+    : 0;
+  const rivalStudioId = studioChoices[rivalIndex];
+  const defendCost = Number.isFinite(retaliationConfig.poachDefenseCost)
+    ? retaliationConfig.poachDefenseCost
+    : 25000;
+  const repPenaltyOnLoss = Number.isFinite(retaliationConfig.poachRepPenaltyOnLoss)
+    ? retaliationConfig.poachRepPenaltyOnLoss
+    : -10;
+  retaliation.pending = {
+    type: "poach_attempt",
+    createdDay: gameState.player.day,
+    targetPerformerId: targetPerformerId,
+    rivalStudioId: rivalStudioId,
+    defendCost: defendCost,
+    repPenaltyOnLoss: repPenaltyOnLoss,
+    repPenaltyOnDefense: 0
+  };
+  retaliation.totalAttempts = Number.isFinite(retaliation.totalAttempts) ? retaliation.totalAttempts + 1 : 1;
+  scheduleNextPoachDay(gameState);
+}
+
 function recomputeTakeoverAvailability(gameState) {
   if (!gameState || !gameState.player) {
     return;
@@ -356,6 +492,139 @@ function addTakeoverPerformerToRoster(gameState, performerConfig) {
     ensurePerformerManagementForId(gameState, rosterEntry);
   }
   return true;
+}
+
+function removeTakeoverPerformerFromRoster(gameState, performerId) {
+  if (!gameState || !gameState.roster || !Array.isArray(gameState.roster.performers)) {
+    return false;
+  }
+  const index = gameState.roster.performers.findIndex(function (entry) {
+    return entry && entry.id === performerId;
+  });
+  if (index < 0) {
+    return false;
+  }
+  gameState.roster.performers.splice(index, 1);
+  if (gameState.performerManagement && typeof gameState.performerManagement === "object") {
+    const management = gameState.performerManagement;
+    if (management.contracts && typeof management.contracts === "object") {
+      delete management.contracts[performerId];
+    }
+    if (management.availability && typeof management.availability === "object") {
+      delete management.availability[performerId];
+    }
+    if (management.retentionFlags && typeof management.retentionFlags === "object") {
+      delete management.retentionFlags[performerId];
+    }
+  }
+  return true;
+}
+
+function resolvePoachDefense(gameState) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "Missing player state." };
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const retaliation = gameState.takeover && gameState.takeover.retaliation ? gameState.takeover.retaliation : null;
+  const pending = retaliation && retaliation.pending ? retaliation.pending : null;
+  if (!pending || pending.type !== "poach_attempt") {
+    return { ok: false, message: "No poach attempt to resolve." };
+  }
+  const defendCost = Number.isFinite(pending.defendCost) ? pending.defendCost : 0;
+  if (gameState.player.cash < defendCost) {
+    return { ok: false, message: "Not enough cash to defend." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - defendCost);
+  retaliation.totalDefenses = Number.isFinite(retaliation.totalDefenses) ? retaliation.totalDefenses + 1 : 1;
+  retaliation.lastResolvedDay = gameState.player.day;
+  retaliation.pending = null;
+  if (!Number.isFinite(retaliation.nextPoachDay)) {
+    scheduleNextPoachDay(gameState);
+  }
+  const performerConfig = getTakeoverPerformerConfig(pending.targetPerformerId) || {};
+  if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
+    const performerName = performerConfig.name || "Performer";
+    const logEntry = buildTakeoverStoryLogEntry(
+      gameState,
+      performerName,
+      "Poach attempt blocked — you paid to keep " + performerName + ".",
+      "poach_defended_day" + gameState.player.day
+    );
+    if (logEntry) {
+      addStoryLogEntry(gameState, logEntry);
+    }
+  }
+  if (gameState.takeover && gameState.takeover.stats) {
+    gameState.takeover.stats.poachAttemptsDefended = Number.isFinite(gameState.takeover.stats.poachAttemptsDefended)
+      ? gameState.takeover.stats.poachAttemptsDefended + 1
+      : 1;
+  }
+  return { ok: true };
+}
+
+function resolvePoachLoss(gameState) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "Missing player state." };
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const retaliation = gameState.takeover && gameState.takeover.retaliation ? gameState.takeover.retaliation : null;
+  const pending = retaliation && retaliation.pending ? retaliation.pending : null;
+  if (!pending || pending.type !== "poach_attempt") {
+    return { ok: false, message: "No poach attempt to resolve." };
+  }
+  const performerId = pending.targetPerformerId;
+  const repPenalty = Number.isFinite(pending.repPenaltyOnLoss) ? pending.repPenaltyOnLoss : -10;
+  if (typeof applyTakeoverReputationDelta === "function") {
+    applyTakeoverReputationDelta(gameState, repPenalty);
+  }
+  retaliation.totalLosses = Number.isFinite(retaliation.totalLosses) ? retaliation.totalLosses + 1 : 1;
+  retaliation.lastResolvedDay = gameState.player.day;
+  retaliation.pending = null;
+  if (!Number.isFinite(retaliation.nextPoachDay)) {
+    scheduleNextPoachDay(gameState);
+  }
+  const retaliationConfig = getRetaliationConfig();
+  const cooldownDays = Number.isFinite(retaliationConfig.lostCooldownDays)
+    ? retaliationConfig.lostCooldownDays
+    : 14;
+  const performerState = getTakeoverPerformerState(gameState, performerId);
+  if (performerState) {
+    performerState.status = "lost";
+    performerState.currentStage = null;
+    performerState.stageStartDay = null;
+    performerState.stageCompleteDay = null;
+    performerState.stageReady = false;
+    performerState.nextAvailableDay = gameState.player.day + cooldownDays;
+    performerState.lastOutcome = "poached";
+    performerState.lockReason = null;
+  }
+  removeTakeoverPerformerFromRoster(gameState, performerId);
+  const performerConfig = getTakeoverPerformerConfig(performerId) || {};
+  if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
+    const performerName = performerConfig.name || "Performer";
+    const logEntry = buildTakeoverStoryLogEntry(
+      gameState,
+      performerName,
+      "Poached — " + performerName + " walked. Rival blood is coming.",
+      "poach_loss_day" + gameState.player.day
+    );
+    if (logEntry) {
+      addStoryLogEntry(gameState, logEntry);
+    }
+  }
+  if (gameState.takeover && gameState.takeover.stats) {
+    gameState.takeover.stats.poachAttemptsLost = Number.isFinite(gameState.takeover.stats.poachAttemptsLost)
+      ? gameState.takeover.stats.poachAttemptsLost + 1
+      : 1;
+    gameState.takeover.stats.performersLost = Number.isFinite(gameState.takeover.stats.performersLost)
+      ? gameState.takeover.stats.performersLost + 1
+      : 1;
+  }
+  return { ok: true, performerId: performerId };
 }
 
 function defeatStudioBoss(gameState, studioId) {
@@ -482,4 +751,5 @@ function takeoverOnDayAdvanced(gameState) {
     }
   });
   recomputeTakeoverAvailability(gameState);
+  maybeGeneratePoachAttempt(gameState);
 }

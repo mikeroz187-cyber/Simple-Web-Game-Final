@@ -73,6 +73,30 @@ Time to take it from them.
 
 ---
 
+## 2.1 Retaliation Beat (Poach Attempt)
+
+When takeover is active, rivals retaliate every 7–14 days (if they still exist and you have takeover-acquired talent).
+
+**Modal:**
+```
+TITLE: "Poach Attempt"
+
+TEXT:
+“A rival studio slid into her DMs with money and an exit plan.
+They’re not trying to win. They’re trying to take what’s yours.”
+
+Target: <PerformerName>
+Defense Cost: $25,000
+
+[PAY $25,000 — KEEP HER]   [LET HER GO]
+```
+
+**Outcomes:**
+- **Pay to keep her:** No loss, no reputation hit.
+- **Let her go:** Performer removed from roster, takeover performer state marked **lost** with a 14-day cooldown, and **-10 reputation** (takeover floor 10).
+
+---
+
 ## 3. Studio Detail Screen
 
 ### Layout

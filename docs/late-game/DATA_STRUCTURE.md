@@ -73,6 +73,9 @@ CONFIG.takeover = {
   retaliation: {
     minDaysBetweenEvents: 7,
     maxDaysBetweenEvents: 14,
+    poachDefenseCost: 25000,
+    poachRepPenaltyOnLoss: -10,
+    lostCooldownDays: 14,
     poachBaseCost: 8000,         // Base counter-offer cost
     poachCostPerStarPower: 2000, // Additional per star power
     allianceDurationDays: 14,
@@ -645,9 +648,12 @@ gameState.takeover = {
 
   // Retaliation tracking
   retaliation: {
-    lastEventDay: null,
-    activeAlliance: null,  // { studioIds: [], expiresDay: X } or null
-    poachAttempts: []      // History for analytics
+    nextPoachDay: null,   // Next eligible day for a poach attempt
+    pending: null,        // Active poach attempt payload (if any)
+    lastResolvedDay: null,
+    totalAttempts: 0,
+    totalLosses: 0,
+    totalDefenses: 0
   },
 
   // Statistics
@@ -687,9 +693,12 @@ function getDefaultTakeoverState() {
       bosses: []
     },
     retaliation: {
-      lastEventDay: null,
-      activeAlliance: null,
-      poachAttempts: []
+      nextPoachDay: null,
+      pending: null,
+      lastResolvedDay: null,
+      totalAttempts: 0,
+      totalLosses: 0,
+      totalDefenses: 0
     },
     stats: {
       totalSpent: 0,

@@ -390,6 +390,9 @@ const CONFIG = {
     retaliation: {
       minDaysBetweenEvents: 7,
       maxDaysBetweenEvents: 14,
+      poachDefenseCost: 25000,
+      poachRepPenaltyOnLoss: -10,
+      lostCooldownDays: 14,
       poachBaseCost: 8000,
       poachCostPerStarPower: 2000,
       allianceDurationDays: 14,

@@ -8,6 +8,8 @@ Industry Takeover is the Act 3+ endgame system for Studio Empire. It transforms 
 
 **Core Fantasy:** You've built an empire. Now you're going to own the entire industry.
 
+**Competition Replacement:** Once Industry Takeover unlocks (Day 181), the legacy Competition loop is retired and the takeover map becomes the new pressure system.
+
 ---
 
 ## Problem Statement
@@ -151,21 +153,20 @@ Boss confrontation stages:
 
 ## Rival Retaliation (Occasional Pressure)
 
-Rivals fight back approximately every 7-14 days:
+Rivals fight back approximately every 7–14 days once takeover is unlocked.
 
-### Poaching Attempts
-A rival targets one of your performers (prioritizing low loyalty).
-- Player sees warning with counter-offer cost
-- Pay to keep them, or lose them
-- Lost performers return to their original studio (or become "free agents")
+### Poach Attempt
+Trigger requirements:
+- Industry Takeover unlocked (Day 181+)
+- At least one rival studio still active
+- At least one takeover-acquired performer on your roster
 
-### Reputation Strikes
-Rival spreads rumors about your methods.
-- Reputation damage based on your current rep (shield mechanic)
-
-### Temporary Alliances
-Two rivals share intel.
-- Their performers become harder to approach for 14 days
+Flow:
+- Player receives a decision modal with two choices:
+  - **Pay $25,000 to keep her** (no loss)
+  - **Let her go** (performer removed from roster)
+- Losing a performer applies **-10 reputation**, respecting the takeover crisis floor of 10.
+- Lost performers are marked **lost** and can only be re-acquired after a 14-day cooldown.
 
 ---
 
