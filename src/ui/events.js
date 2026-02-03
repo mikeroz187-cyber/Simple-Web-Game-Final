@@ -2351,6 +2351,16 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "roster-select") {
+      const performerId = actionEl.getAttribute("data-performer-id") || actionId;
+      if (!uiState.roster) {
+        uiState.roster = { selectedPerformerId: null };
+      }
+      uiState.roster.selectedPerformerId = performerId;
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "renew-contract") {
       const performerId = actionId;
       const result = renewPerformerContract(window.gameState, performerId);

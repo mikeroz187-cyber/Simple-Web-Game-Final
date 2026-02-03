@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Rebuilt the Roster screen into a master/detail layout with selectable talent rows, trophy list handling, and a performer detail card with renew actions.
+  - Why: Deliver Bundle 10’s roster UX redesign while keeping contract and trophy rules clear.
+  - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added a Studio Bonus summary card and booking cap note, plus a Gallery Bosses view with boss unlock messaging and placeholder registry.
   - Why: Make studio acquisition rewards visible and keep boss gallery unlocks surfaced in the UI for Bundle 9.
   - Files touched: src/config.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

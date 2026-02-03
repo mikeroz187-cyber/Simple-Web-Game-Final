@@ -1878,27 +1878,163 @@ body {
 
 /* Roster Screen */
 .roster-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  display: flex;
   gap: var(--gap-md);
   flex: 1;
   min-height: 0;
 }
 
-.roster-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+.roster-master {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
   gap: var(--gap-sm);
-  align-content: start;
+  max-height: calc(100vh - 260px);
+}
+
+.roster-master__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
   overflow-y: auto;
   padding-right: var(--gap-xs);
 }
 
-.roster-sidebar {
+.roster-detail {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
   overflow-y: auto;
+  min-width: 0;
+}
+
+.roster-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.roster-row {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(12, 8, 20, 0.45);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.roster-row:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.roster-row.is-selected {
+  border-color: rgba(255, 45, 122, 0.6);
+  box-shadow: 0 10px 20px rgba(255, 45, 122, 0.12);
+  transform: translateY(-1px);
+}
+
+.roster-row__thumb {
+  width: 40px;
+  height: 54px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.roster-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.roster-row__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roster-row__meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.roster-row__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.roster-row__status {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.roster-detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.roster-detail__header {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+}
+
+.roster-detail__portrait {
+  width: 140px;
+  height: 190px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.roster-detail__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roster-detail__name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.roster-detail__headline {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.roster-detail__section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roster-detail__actions {
+  margin-top: 4px;
+}
+
+.roster-detail__note {
+  margin-top: 2px;
+}
+
+.roster-empty {
+  padding: var(--gap-md);
 }
 
 /* Gallery Screen */
@@ -3264,7 +3400,7 @@ body {
 /* Smooth scrollbar for panels */
 .live-feed__list,
 .story-log-list,
-.roster-grid,
+.roster-master__list,
 .gallery-grid,
 .social-panel__content {
   scrollbar-width: thin;
@@ -3273,7 +3409,7 @@ body {
 
 .live-feed__list::-webkit-scrollbar,
 .story-log-list::-webkit-scrollbar,
-.roster-grid::-webkit-scrollbar,
+.roster-master__list::-webkit-scrollbar,
 .gallery-grid::-webkit-scrollbar,
 .social-panel__content::-webkit-scrollbar {
   width: 6px;
@@ -3281,7 +3417,7 @@ body {
 
 .live-feed__list::-webkit-scrollbar-track,
 .story-log-list::-webkit-scrollbar-track,
-.roster-grid::-webkit-scrollbar-track,
+.roster-master__list::-webkit-scrollbar-track,
 .gallery-grid::-webkit-scrollbar-track,
 .social-panel__content::-webkit-scrollbar-track {
   background: transparent;
@@ -3289,7 +3425,7 @@ body {
 
 .live-feed__list::-webkit-scrollbar-thumb,
 .story-log-list::-webkit-scrollbar-thumb,
-.roster-grid::-webkit-scrollbar-thumb,
+.roster-master__list::-webkit-scrollbar-thumb,
 .gallery-grid::-webkit-scrollbar-thumb,
 .social-panel__content::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
@@ -3298,7 +3434,7 @@ body {
 
 .live-feed__list::-webkit-scrollbar-thumb:hover,
 .story-log-list::-webkit-scrollbar-thumb:hover,
-.roster-grid::-webkit-scrollbar-thumb:hover,
+.roster-master__list::-webkit-scrollbar-thumb:hover,
 .gallery-grid::-webkit-scrollbar-thumb:hover,
 .social-panel__content::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3);

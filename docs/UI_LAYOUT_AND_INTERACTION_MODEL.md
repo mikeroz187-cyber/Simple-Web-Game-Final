@@ -42,13 +42,16 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
   - If roster full → “Roster full.”
   - If no eligible candidate → “Gain reputation to attract new talent.”
   - Otherwise shows a single candidate with **Meet** and **Decline** actions.
-- **Contracted Talent panel:**
-  - Shows non‑freelance performers only.
-  - Displays Star Power, fatigue, loyalty, contract status, and daily availability.
-  - **Renew Contract** button appears when a contract expires.
-- **Trophies panel:**
-  - Shows Industry Map trophies (poached performers).
-  - Trophy cards display a badge and a “not bookable” status line.
+- **Master/detail layout:**
+  - Left column is a scrollable **Talent** list with compact rows (portrait, name, status pill, star + loyalty icons).
+  - Right column shows the **selected performer** detail card (large portrait, stats, contract status, and actions).
+  - Selection persists in UI state and defaults to the first available talent if none is selected.
+- **Detail card rules:**
+  - Shows Star Power, fatigue, loyalty, Diva Fee messaging, contract summary, and availability.
+  - **Renew Contract** button appears when a contract expires or is expiring soon.
+- **Trophies section (left column):**
+  - Appears under a **Trophies** header with a Trophy badge and “Not bookable” status line.
+  - Trophy details show a “Not bookable. Added via takeover.” note and do **not** show contract actions.
   - Trophies do **not** count against roster caps and have no contract actions.
 
 ## Social
