@@ -14,6 +14,7 @@ This document describes the **current implemented loop** and rules as they exist
 - **Promo vs Premium:**
   - **Promo** content generates results only when posted on Social.
   - **Premium** content immediately adds OnlyFans subscribers and increases MRR.
+  - **Post All** publishes the same promo to Insta + X and counts as 1 unique promo post. It is disabled if either network is unavailable.
 - **Pacing guideline:** Early days (≈1–30) favor Promo-heavy output (roughly 2 Promo / 1 Premium) to build footprint; mid/late days should gradually lean Premium-heavy as scaling kicks in.
 - **OnlyFans cashflow:** OF subscribers generate daily cash payouts on day advance (config-driven). MRR is informational and corresponds to this cashflow.
 - **Scaling overhead:** Daily overhead scales by OF subscribers and is deducted on day advance. After debt is cleared, a one-time **Hire Manager** upgrade reduces overhead by 15% (config-driven). In Act 2, the **Studio Lease Upgrade** adds +$100/day overhead if purchased.

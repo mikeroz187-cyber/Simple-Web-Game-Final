@@ -7,6 +7,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundle 4: Added Social "Post All" (Insta + X) with unique promo counting and disabled state when either network is unavailable.
 - Bundle 3: Studio Identity Hub Choose button + modal picker at Day 181, selection locks for the run.
 - Bundle 2: Studio upgrade offer CTAs now disable when unaffordable and show "Not enough cash" helper text.
 - Bundle 1 booking caps: 1 shoot/day per performer, hard cap 10/day total, MVP-only themes, Office renamed to Professional, Act 3 themes removed.

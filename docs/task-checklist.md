@@ -124,6 +124,7 @@
 - [x] Star Power >6 adds booking cost premium and displays on Booking summary card.
 - [x] Booking UI clarifies audience multiplier vs cost premium.
 - [x] Bundle 2: Studio upgrade CTAs disable when unaffordable and show "Not enough cash" helper text.
+- [x] Bundle 4: Social Post All (Insta + X), unique count = 1, disabled if either network unavailable.
 
 ---
 

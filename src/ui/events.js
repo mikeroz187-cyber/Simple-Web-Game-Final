@@ -2372,6 +2372,38 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "social-post-all") {
+      const selectedContentId = uiState.social.selectedContentId;
+      const canPost = Boolean(selectedContentId);
+      const canPostInstagramNow = canPost && !hasPosted(window.gameState, selectedContentId, "Instagram");
+      const canPostXNow = canPost && !hasPosted(window.gameState, selectedContentId, "X");
+      if (!canPostInstagramNow || !canPostXNow) {
+        setUiMessage("Cannot Post All — one network is unavailable today.");
+        renderApp(window.gameState);
+        return;
+      }
+      const promoPayload = { contentId: selectedContentId };
+      const result = postPromoAllNetworks(window.gameState, promoPayload);
+      setUiMessage(result.message || "");
+      if (!result.ok) {
+        renderApp(window.gameState);
+        return;
+      }
+      const saveResult = saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      if (!saveResult.ok) {
+        setUiMessage(saveResult.message);
+      }
+      const milestoneCards = buildMilestoneEventCards(result.milestoneEvents || []);
+      if (milestoneCards.length) {
+        showEventCards(milestoneCards);
+      }
+      if (typeof showToast === "function") {
+        showToast("Posted to social media!", "success");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "post-instagram" || action === "post-x") {
       const platform = action === "post-instagram" ? "Instagram" : "X";
       const pipelineBefore = typeof getOfPipeline === "function" ? getOfPipeline(window.gameState) : null;
