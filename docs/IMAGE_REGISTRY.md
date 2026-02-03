@@ -11,6 +11,9 @@ If a takeover image is missing, the UI falls back to:
 
 ## Takeover
 
+### Placeholder Fallback (Takeover Portraits)
+- `assets/images/placeholders/location_placeholder.svg` (CONFIG.takeover.placeholderPortraitPath)
+
 ### Performer Portrait
 - `assets/images/takeover/<studioId>/<performerId>/portrait.png`
 

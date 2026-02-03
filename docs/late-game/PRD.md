@@ -8,7 +8,7 @@ Industry Takeover is the Act 3+ endgame system for Studio Empire. It transforms 
 
 **Core Fantasy:** You've built an empire. Now you're going to own the entire industry.
 
-**Competition Replacement:** Once Industry Takeover unlocks (Day 181), the legacy Competition loop is retired and the takeover map becomes the new pressure system.
+**Competition Replacement:** Once Industry Takeover unlocks (Day 181), the legacy Competition loop is retired/hidden and the takeover map becomes the new pressure system.
 
 ---
 
@@ -143,7 +143,7 @@ Boss confrontation stages:
 ### Reputation as Shield
 | Your Rep | Attack Impact |
 |----------|---------------|
-| 100+ | Minimal damage, poach attempts auto-fail |
+| 100 (cap) | Minimal damage, poach attempts auto-fail |
 | 75-99 | Reduced impact, poach attempts cost $ to counter |
 | 50-74 | Normal impact |
 | 25-49 | Vulnerable, poach attempts may succeed |
