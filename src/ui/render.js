@@ -1685,21 +1685,6 @@ function renderBooking(gameState) {
   var finalCost = adjustedCost.finalCost + (Number.isFinite(divaFee) ? divaFee : 0) + starPowerSurcharge +
     (Number.isFinite(staffingPenalty) ? staffingPenalty : 0);
 
-  // Booking mode cards
-  var modeCardsHtml = '<div class="selection-grid selection-grid--2col">' +
-    '<div class="selection-card' + (bookingMode === 'core' ? ' is-selected' : '') + '" data-action="select-booking-mode" data-id="core">' +
-      '<div class="selection-card__title">Core Performer</div>' +
-      '<div class="selection-card__subtitle">Book your contracted talent</div>' +
-      '<div class="selection-card__meta">Full premium potential</div>' +
-    '</div>' +
-    '<div class="selection-card' + (bookingMode === 'agency_pack' ? ' is-selected' : '') + (agencyPackUsedToday ? ' is-disabled' : '') + '" data-action="select-booking-mode" data-id="agency_pack">' +
-      (agencyPackUsedToday ? '<span class="selection-card__badge">Used Today</span>' : '') +
-      '<div class="selection-card__title">Agency Sample Pack</div>' +
-      '<div class="selection-card__subtitle">5-image variety bundle</div>' +
-      '<div class="selection-card__meta">Good for promos</div>' +
-    '</div>' +
-  '</div>';
-
   // Performer selection (only for core mode)
   var performerHtml = '';
   if (!isAgencyPack) {
@@ -1753,8 +1738,8 @@ function renderBooking(gameState) {
       '<p style="color:var(--text-muted);font-size:13px;">Agency provides a 5-image sample pack matched to your selected theme and location.</p></div>';
   }
 
-  // Location selection
-  var locationCardsHtml = locationIds.map(function(locId) {
+  // Config bar options
+  var locationOptionsHtml = locationIds.map(function(locId) {
     var loc = CONFIG.locations.catalog[locId];
     if (!loc) return '';
     var isSelected = locId === selectedLocationId;
@@ -1763,44 +1748,61 @@ function renderBooking(gameState) {
     var tier2RepReq = CONFIG.locations.tier2ReputationRequirement || 0;
     var tier2RepLocked = loc.tier === 2 && gameState.player.reputation < tier2RepReq;
     var isLocked = tier1Locked || tier2Locked || tier2RepLocked;
-    var lockReason = tier1Locked || tier2Locked ? 'Locked' : (tier2RepLocked ? 'Rep ' + tier2RepReq + ' required' : '');
-    var thumbPath = getLocationThumbnailPath(loc);
-    return '<div class="location-card' + (isSelected ? ' is-selected' : '') + (isLocked ? ' is-disabled' : '') + '" data-action="select-location" data-id="' + locId + '">' +
-      '<img class="location-card__thumb" src="' + thumbPath + '" alt="' + loc.name + '">' +
-      '<div class="location-card__info">' +
-        '<div class="location-card__name">' + loc.name + '</div>' +
-        '<div class="location-card__meta">' +
-          '<span class="location-card__cost">' + formatCurrency(loc.cost) + '</span>' +
-          (isLocked ? ' <span class="location-card__lock">• ' + lockReason + '</span>' : '') +
-        '</div>' +
-      '</div>' +
-    '</div>';
+    var lockReason = tier1Locked || tier2Locked ? "Locked" : (tier2RepLocked ? "Rep " + tier2RepReq + " required" : "");
+    return '<option value="' + locId + '"' + (isSelected ? ' selected' : '') + (isLocked ? ' disabled' : '') + '>' +
+      loc.name + (isLocked ? " (" + lockReason + ")" : "") +
+    '</option>';
   }).join('');
 
-  // Theme selection
-  var themeCardsHtml = themeIds.map(function(themeId) {
+  var themeOptionsHtml = themeIds.map(function(themeId) {
     var theme = getThemeById(themeId);
     if (!theme) return '';
     var isSelected = themeId === selectedThemeId;
-    var effectsLabel = formatThemeEffects(theme);
-    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-theme" data-id="' + themeId + '">' +
-      '<div class="selection-card__title">' + theme.name + '</div>' +
-      '<div class="selection-card__subtitle">' + theme.description + '</div>' +
-      '<div class="selection-card__meta selection-card__meta--highlight">' + effectsLabel + '</div>' +
-    '</div>';
+    return '<option value="' + themeId + '"' + (isSelected ? ' selected' : '') + '>' + theme.name + '</option>';
   }).join('');
 
-  // Content type selection
   var contentTypes = CONFIG.content_types.available || ['Promo', 'Premium'];
-  var contentTypeHtml = contentTypes.map(function(type) {
+  var hasContentTypes = Array.isArray(contentTypes) && contentTypes.length > 0;
+  var contentTypeOptionsHtml = hasContentTypes ? contentTypes.map(function(type) {
     var isSelected = type === selectedContentType;
-    var isPremium = type === 'Premium';
-    return '<div class="selection-card' + (isSelected ? ' is-selected' : '') + '" data-action="select-content-type" data-id="' + type + '" style="text-align:center;">' +
-      (isPremium ? '<span class="selection-card__badge selection-card__badge--premium">💎</span>' : '') +
-      '<div class="selection-card__title">' + type + '</div>' +
-      '<div class="selection-card__meta">' + (isPremium ? 'Higher cost, OF subs' : 'Social reach') + '</div>' +
-    '</div>';
-  }).join('');
+    return '<option value="' + type + '"' + (isSelected ? ' selected' : '') + '>' + type + '</option>';
+  }).join('') : '';
+
+  var modeOptionsHtml = '<option value="core"' + (bookingMode === 'core' ? ' selected' : '') + '>Core Performer</option>' +
+    '<option value="agency_pack"' +
+      (bookingMode === 'agency_pack' ? ' selected' : '') +
+      ((agencyPackUsedToday && bookingMode !== 'agency_pack') ? ' disabled' : '') +
+    '>Agency Sample Pack' + (agencyPackUsedToday ? ' (Used Today)' : '') + '</option>';
+
+  var configBarHtml = '<div class="booking-configbar">' +
+    '<div class="booking-configbar__group">' +
+      '<label class="form-label" for="booking-mode-select">Mode</label>' +
+      '<select id="booking-mode-select" class="select-control" data-action="booking-set-mode">' +
+        modeOptionsHtml +
+      '</select>' +
+    '</div>' +
+    '<div class="booking-configbar__group">' +
+      '<label class="form-label" for="booking-location-select">Location</label>' +
+      '<select id="booking-location-select" class="select-control" data-action="booking-set-location">' +
+        '<option value=""' + (selectedLocationId ? '' : ' selected') + '>Select location</option>' +
+        locationOptionsHtml +
+      '</select>' +
+    '</div>' +
+    '<div class="booking-configbar__group">' +
+      '<label class="form-label" for="booking-theme-select">Theme</label>' +
+      '<select id="booking-theme-select" class="select-control" data-action="booking-set-theme">' +
+        '<option value=""' + (selectedThemeId ? '' : ' selected') + '>Select theme</option>' +
+        themeOptionsHtml +
+      '</select>' +
+    '</div>' +
+    (hasContentTypes ? '<div class="booking-configbar__group">' +
+      '<label class="form-label" for="booking-content-type-select">Content Type</label>' +
+      '<select id="booking-content-type-select" class="select-control" data-action="booking-set-content-type">' +
+        '<option value=""' + (selectedContentType ? '' : ' selected') + '>Select type</option>' +
+        contentTypeOptionsHtml +
+      '</select>' +
+    '</div>' : '') +
+  '</div>';
 
   // Validation
   var performerValid = isAgencyPack || (selectedPerformer && isPerformerBookable(gameState, selectedPerformer).ok);
@@ -1853,14 +1855,11 @@ function renderBooking(gameState) {
   var contentHtml = '<h2 class="screen-title">Booking</h2>' +
     '<div class="helper-text" style="margin-bottom:var(--gap-sm);">' + dailyCapLine + '</div>' +
     '<div class="booking-layout">' +
-      '<div class="booking-layout__left">' +
-        '<div class="panel"><h3 class="panel-title">Booking Mode</h3>' + modeCardsHtml + '</div>' +
-        performerHtml +
+      '<div class="booking-left">' +
+        configBarHtml +
+        '<div class="booking-left-body">' + performerHtml + '</div>' +
       '</div>' +
-      '<div class="booking-layout__right">' +
-        '<div class="panel"><h3 class="panel-title">Location</h3>' + locationCardsHtml + '</div>' +
-        '<div class="panel"><h3 class="panel-title">Theme</h3><div class="selection-grid selection-grid--2col">' + themeCardsHtml + '</div></div>' +
-        '<div class="panel"><h3 class="panel-title">Content Type</h3><div class="selection-grid selection-grid--2col">' + contentTypeHtml + '</div></div>' +
+      '<div class="booking-right">' +
         summaryHtml +
       '</div>' +
     '</div>' +
