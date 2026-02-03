@@ -14,6 +14,7 @@ This catalog defines Studio Identity branches and their modifiers. Values mirror
 - Branch selection unlocks at **Day 181** (`CONFIG.reputation.selectionStartDay`).
 - Once selected, the branch is **locked** for the run.
 - Modifiers apply to Promo follower gain and Premium OF subs.
+- UI: At Day 181+, the Hub shows a Choose button that opens a modal to pick a branch. Picking locks for the run.
 
 ## Config Mapping
 Values map to:

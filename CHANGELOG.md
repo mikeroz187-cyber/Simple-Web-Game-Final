@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Enabled the Studio Identity Hub card to open a branch-selection modal at Day 181 and lock the chosen identity.
+  - Why: Make the Studio Identity choice actionable and permanent once unlocked in Act 3.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/CORE_GAMEPLAY_LOOP.md, docs/DATA_REPUTATION_BRANCHES.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Disabled Studio Upgrade offer purchase buttons when unaffordable and added "Not enough cash" helper text, with guards in the upgrade purchase flow.
   - Why: Prevent unaffordable upgrade purchases at the UI and system level while keeping the offer flow clear.
   - Files touched: src/ui/events.js, src/systems/economy.js, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
