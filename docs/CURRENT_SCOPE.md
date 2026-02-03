@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** February 03, 2026
 
 ## Recently Completed
+- Release Checklist complete.
 - Industry Takeover system fully implemented (all 5 studios) and docs audit completed.
 - Industry Takeover Phase 7: Added Velvet Vault + Saint Sin studios, expanded Industry Map to 5 studios, and shipped victory/Empire endgame flow.
 - Industry Takeover Phase 6: Competition swap after Day 181 plus retaliation poach attempts with pay/lose resolution.

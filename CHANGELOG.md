@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added entry-point takeover overview comments in key takeover code sections and marked the doc audit checklist complete.
+  - Why: Point future updates to the current takeover behavior overview and confirm the audit status in docs.
+  - Files touched: src/systems/takeover.js, src/ui/render.js, src/ui/events.js, src/config.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Added late-game takeover overview + index docs and refreshed takeover documentation references and image registry details.
   - Why: Provide a concise implemented-system summary and align late-game docs with current takeover behavior.
   - Files touched: docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, docs/late-game/README.md, docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/DATA_STRUCTURE.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/IMAGE_REGISTRY.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.

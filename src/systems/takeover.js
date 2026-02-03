@@ -1,3 +1,4 @@
+// See docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md for the current Industry Takeover behavior.
 function getTakeoverConfig() {
   if (CONFIG.takeover && typeof CONFIG.takeover === "object") {
     return CONFIG.takeover;
