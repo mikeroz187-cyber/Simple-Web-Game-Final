@@ -407,12 +407,16 @@ function renderIndustryMap(gameState) {
     }
     var imagePath = studioConfig.mapCardImagePath || placeholderPath;
     var imageHtml = imagePath
-      ? "<div class=\"conquest-detail__portrait\" style=\"margin-bottom: var(--gap-sm);\"><img src=\"" + imagePath +
+      ? "<div class=\"industry-map-card__portrait\"><img src=\"" + imagePath +
         "\" alt=\"\" /></div>"
       : "";
     var acquiredCount = performersByStudio[studioId] || 0;
-    var acquiredLabel = acquiredCount + "/" + (Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds.length : 0) + " acquired";
+    var acquiredLabel = "Acquired " + acquiredCount + "/" +
+      (Array.isArray(studioConfig.performerIds) ? studioConfig.performerIds.length : 0);
     var bossVulnerable = acquiredCount >= bossVulnerableThreshold;
+    if (bossVulnerable && !studioDefeated) {
+      statusText = "Vulnerable";
+    }
     var bossVulnerableHtml = bossVulnerable && !studioDefeated
       ? "<div class=\"pill pill--warning\" style=\"margin-bottom: var(--gap-sm);\">Boss: VULNERABLE</div>"
       : "";
@@ -425,7 +429,7 @@ function renderIndustryMap(gameState) {
     var defeatedBadgeHtml = studioDefeated
       ? "<div class=\"pill pill--success\" style=\"margin-bottom: var(--gap-sm);\">DEFEATED</div>"
       : "";
-    return "<div class=\"shop-card\">" +
+    return "<div class=\"shop-card industry-map-card\">" +
       imageHtml +
       "<div class=\"shop-card__title\">" + title + "</div>" +
       "<div class=\"shop-card__description\">" + tagline + "</div>" +
@@ -444,7 +448,7 @@ function renderIndustryMap(gameState) {
     summaryHtml +
     "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Studios</h3>" +
-      "<div class=\"shop-grid\">" + studioCardsHtml + "</div>" +
+      "<div class=\"shop-grid industry-grid\">" + studioCardsHtml + "</div>" +
     "</div>" +
     "</div>";
 }
@@ -560,15 +564,22 @@ function renderIndustryStudio(gameState) {
   var bossStageReadyDay = Number.isFinite(bossConfrontation && bossConfrontation.stageCompleteDay)
     ? bossConfrontation.stageCompleteDay
     : null;
+  var bossRequiredRep = Number.isFinite(takeoverConfig.boss && takeoverConfig.boss.requiredReputation)
+    ? takeoverConfig.boss.requiredReputation
+    : (takeoverConfig.repRequirements && Number.isFinite(takeoverConfig.repRequirements.boss)
+      ? takeoverConfig.repRequirements.boss
+      : 100);
+  var bossRequiredPerformers = Number.isFinite(takeoverConfig.performersToVulnerableBoss)
+    ? takeoverConfig.performersToVulnerableBoss
+    : 3;
   var bossVulnerable = typeof isBossVulnerable === "function"
     ? isBossVulnerable(gameState, selectedStudioId)
-    : acquiredCount >= (Number.isFinite(takeoverConfig.performersToVulnerableBoss) ? takeoverConfig.performersToVulnerableBoss : 3);
+    : acquiredCount >= bossRequiredPerformers;
   var bossStartable = typeof canStartBossConfrontation === "function"
     ? canStartBossConfrontation(gameState, selectedStudioId)
     : false;
-  var bossStatusLine = "Boss Status: LOCKED (need " + Math.max(0, (Number.isFinite(takeoverConfig.performersToVulnerableBoss)
-    ? takeoverConfig.performersToVulnerableBoss
-    : 3) - acquiredCount) + " more acquisitions)";
+  var bossStatusLine = "Boss Status: LOCKED (need " +
+    Math.max(0, bossRequiredPerformers - acquiredCount) + " more acquisitions)";
   if (studioDefeated) {
     bossStatusLine = "Boss Status: Defeated";
   } else if (bossConfrontation && bossConfrontation.status === "in_progress") {
@@ -604,7 +615,7 @@ function renderIndustryStudio(gameState) {
     var bossConfigData = takeoverConfig.boss || {};
     var requiredRep = Number.isFinite(bossConfigData.requiredReputation)
       ? bossConfigData.requiredReputation
-      : 100;
+      : bossRequiredRep;
     var bossCost = Number.isFinite(bossConfigData.cost)
       ? bossConfigData.cost
       : 150000;
@@ -680,7 +691,7 @@ function renderIndustryStudio(gameState) {
     var performerPortrait = performer.portraitPath || placeholderPath;
     var performerPortraitAttr = performerPortrait ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "";
     var performerPortraitHtml = performerPortrait
-      ? "<img src=\"" + performerPortrait + "\" alt=\"" + performerName + "\" class=\"industry-portrait\"" + performerPortraitAttr + " />"
+      ? "<img src=\"" + performerPortrait + "\" alt=\"" + performerName + "\" class=\"industry-portrait industry-portrait--small\"" + performerPortraitAttr + " />"
       : "";
     var actionLabel = "Locked";
     var actionDisabled = true;
@@ -741,7 +752,7 @@ function renderIndustryStudio(gameState) {
 
   container.innerHTML = "<div class=\"screen-content\">" +
     "<button class=\"button\" data-action=\"industry-back-to-map\">← Back to Industry Map</button>" +
-    "<div class=\"panel\">" +
+    "<div class=\"panel industry-studio-panel\">" +
     "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">" + studioName + "</h2>" +
     "<p class=\"helper-text\">" + studioTagline + "</p>" +
     "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">Status: " + statusLabel + "</div>" +
@@ -752,14 +763,14 @@ function renderIndustryStudio(gameState) {
     acquiredCount + " / " + performerIds.length + "</span></div>" +
     "</div>" +
     "</div>" +
-    "<div class=\"panel\">" +
+    "<div class=\"panel industry-boss-panel\">" +
     "<h3 class=\"panel-title\">Boss: " + bossName + "</h3>" +
     "<div class=\"industry-boss-card\">" +
     "<div class=\"industry-boss__portrait\">" + bossPortraitHtml + "</div>" +
     "<div class=\"industry-boss__details\">" +
     "<p class=\"helper-text\">" + bossStatusLine + "</p>" +
-    "<p class=\"helper-text\">Boss confrontation at Reputation: 100 (cap)</p>" +
-    "<p class=\"helper-text\">Take 3 performers from this studio to draw them out.</p>" +
+    "<p class=\"helper-text\">Boss confrontation at Reputation: " + bossRequiredRep + " (cap)</p>" +
+    "<p class=\"helper-text\">Take " + bossRequiredPerformers + " performers from this studio to draw them out.</p>" +
     "<button class=\"button primary\"" + (bossButtonDisabled ? " disabled" : "") + bossButtonAttr + ">" + bossButtonLabel + "</button>" +
     "</div>" +
     "</div>" +
@@ -813,11 +824,11 @@ function renderEmpire(gameState) {
     "<div class=\"secondary-stats-row\" style=\"border-top:none; padding-top:0;\">" +
       "<div class=\"secondary-stat\"><span>Studios defeated:</span><span class=\"secondary-stat__value\">" +
         defeatedCount + "/" + studioOrder.length + "</span></div>" +
-      "<div class=\"secondary-stat\"><span>Performers owned:</span><span class=\"secondary-stat__value\">" +
+      "<div class=\"secondary-stat\"><span>Performers acquired:</span><span class=\"secondary-stat__value\">" +
         performerAcquired + "/" + performerTotal + "</span></div>" +
       "<div class=\"secondary-stat\"><span>Bosses defeated:</span><span class=\"secondary-stat__value\">" +
         bossCount + "/" + studioOrder.length + "</span></div>" +
-      "<div class=\"secondary-stat\"><span>Total takeover attempts:</span><span class=\"secondary-stat__value\">" +
+      "<div class=\"secondary-stat\"><span>Takeover attempts:</span><span class=\"secondary-stat__value\">" +
         (Number.isFinite(retaliationState.totalAttempts) ? retaliationState.totalAttempts : 0) + "</span></div>" +
     "</div>" +
   "</div>";
@@ -843,16 +854,16 @@ function renderEmpire(gameState) {
 
   container.innerHTML = "<div class=\"screen-content\">" +
     "<h2 id=\"screen-empire-title\" class=\"screen-title\">Empire</h2>" +
-    "<p class=\"helper-text\">All five studios. One owner.</p>" +
+    "<p class=\"helper-text\">Five studios. Yours.</p>" +
     summaryHtml +
     "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Trophies</h3>" +
-      "<div class=\"shop-grid\">" + trophyTilesHtml + "</div>" +
+      "<div class=\"shop-grid empire-grid\">" + trophyTilesHtml + "</div>" +
     "</div>" +
     "<div class=\"panel\">" +
       "<h3 class=\"panel-title\">Free Play</h3>" +
       "<p class=\"helper-text\">You own the industry. The market still pays for heat. Keep producing.</p>" +
-      "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
+      "<button class=\"button primary\" data-action=\"nav-hub\">Back to Hub</button>" +
     "</div>" +
     "</div>";
 }

@@ -197,7 +197,7 @@ function getBossStageLabel(stageKey) {
     return "Power Play";
   }
   if (stageKey === "fall") {
-    return "Fall";
+    return "The Fall";
   }
   if (stageKey === "terms") {
     return "Terms";

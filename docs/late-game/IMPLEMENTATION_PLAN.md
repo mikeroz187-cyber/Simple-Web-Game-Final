@@ -210,6 +210,16 @@ Expand the takeover roster to 5 studios and deliver the victory/endgame flow.
 
 ---
 
+## Polish Pass (Post-Phase 7)
+
+### Objective
+Tighten takeover copy, pacing, and UI readability without changing mechanics.
+
+### Notes
+- Copy pass on takeover modals, boss stages, and Empire summary labels.
+- Layout polish for Industry Map, Studio Detail, and Empire screens.
+- Config-only tuning for takeover costs and retaliation pressure.
+
 ## Phase 8: Gallery Integration
 
 ### Objective

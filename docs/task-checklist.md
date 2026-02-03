@@ -197,11 +197,12 @@
 
 ---
 
-## Polish / Balance — Final Pass (Pending)
-- [ ] Tune costs and cadence for takeover pacing.
-- [ ] Full copy pass on takeover modals and Empire screen.
-- [ ] Placeholder image registry pass (ensure swap-ready paths).
-- [ ] Small UI spacing polish (no redesign).
+## Polish / Balance — Final Pass (Complete ✓)
+- [x] Polish & Balance pass (takeover pacing, copy, placeholder registry, UI spacing).
+- [x] Tune costs and cadence for takeover pacing.
+- [x] Full copy pass on takeover modals and Empire screen.
+- [x] Placeholder image registry pass (ensure swap-ready paths).
+- [x] Small UI spacing polish (no redesign).
 
 ---
 

@@ -85,20 +85,20 @@ Each performer acquisition has 4 stages:
 
 | Stage | Name | Duration | Cost | Content |
 |-------|------|----------|------|---------|
-| 1 | Intel | 2 days | $5,000 | Learn weakness, unlock profile |
-| 2 | Approach | 2 days | $10,000 | Make contact, establish dynamic |
-| 3 | Turn | 2 days | $25,000 | Exploit weakness (main NSFW content) |
-| 4 | Debut | 2 days | $5,000 | First shoot at your studio |
+| 1 | Intel | 2 days | $4,000 | Learn weakness, unlock profile |
+| 2 | Approach | 2 days | $9,000 | Make contact, establish dynamic |
+| 3 | Turn | 2 days | $22,000 | Exploit weakness (main NSFW content) |
+| 4 | Debut | 2 days | $6,000 | First shoot at your studio |
 
-**Total per Tier 1 performer:** 8 days, $45,000
-**Tier 2 multiplier:** 1.5x cost ($67,500)
-**Tier 3 multiplier:** 2x cost ($90,000)
+**Total per Tier 1 performer:** 8 days, $41,000
+**Tier 2 multiplier:** 1.5x cost ($61,500)
+**Tier 3 multiplier:** 2x cost ($82,000)
 
 ### Boss Confrontation
 
 When 3+ performers have been acquired from a studio, the Boss becomes vulnerable.
 
-**Boss Confrontation Cost:** $150,000 + 100 reputation required
+**Boss Confrontation Cost:** $140,000 + 100 reputation required
 **Duration:** 10 days (5 stages × 2 days each)
 **Current art cap:** Boss stage slideshows are capped at 5 images (placeholder).
 
@@ -137,7 +137,7 @@ Boss confrontation stages:
 | Sabotage action | -25 |
 | Successful debut shoot | +3 |
 | Defeating a boss | +25 |
-| Defending against poach | +5 |
+| Defending against poach | 0 |
 | Passive recovery | +1/week |
 
 ### Reputation as Shield
@@ -163,7 +163,7 @@ Trigger requirements:
 
 Flow:
 - Player receives a decision modal with two choices:
-  - **Pay $25,000 to keep her** (no loss)
+  - **Pay $20,000 to keep her** (no loss)
   - **Let her go** (performer removed from roster)
 - Losing a performer applies **-10 reputation**, respecting the takeover crisis floor of 10.
 - Lost performers are marked **lost** and can only be re-acquired after a 14-day cooldown.
