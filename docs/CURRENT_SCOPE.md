@@ -11,6 +11,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 - Industry Takeover Phase 4: 4-stage acquisition loop (intel/approach/turn/debut), stage-ready resolve UX, tier-scaled costs, weakness rep penalties, debut rewards, and roster integration.
 - Industry Takeover Phase 3: Studio Detail screen with boss card, performer roster, and View Studio navigation from the Industry Map (actions disabled).
 - Industry Takeover Phase 2: Industry Map nav entry, screen shell, and Day 181 unlock CTA.
+- Industry Takeover polish & balance pass: copy refresh, UI readability tuning, config cost adjustments, and image registry documentation.
 - Act 2 Social Collab Week (Day 170 offer, 7-day unique promo streak, 14-day retry cadence, +3% permanent promo reach reward).
 - Hub UI fixes: correct debt days-left countdown, show daily overhead with OF payouts, and stabilize the Shop cashflow snapshot panel.
 - Booking update: raised Star Power cap to 10 and clarified booking summary with audience pull vs Star Power premium itemization.
@@ -54,10 +55,10 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Polish/Balance pass — takeover pacing, copy pass, placeholder registry
+- Release checklist / doc audit
 
 ## Next 3–7 Candidate Tasks
-- Polish/Balance pass for takeover pacing, copy, and placeholder registry.
+- Release checklist / doc audit.
 - Ambient Art Phase 2: Reactive mascot pose logic based on game state
 - Ambient Art Phase 3: Generate test artwork for mascot positions
 - Ambient Art Phase 4: Replace placeholders with final artwork

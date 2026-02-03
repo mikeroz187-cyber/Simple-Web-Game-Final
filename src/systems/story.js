@@ -329,8 +329,12 @@ const STORY_EVENT_COPY = {
   },
   act3_takeover_unlock_day181: {
     title: "Industry Takeover",
-    message: "Your Talent Scout drops a folder on your desk. Three rival studios. Loose contracts. Desperate talent.\n\n" +
-      "This isn’t competition anymore. It’s acquisition.\n\n" +
+    message: "Your Talent Scout drops a folder on your desk. Five rival studios. Loose contracts. Desperate talent.\n\n" +
+      "This isn’t competition anymore. It’s acquisition. Own them and the industry bends.\n\n" +
+      "What changes now:\n" +
+      "• Industry Map unlocked\n" +
+      "• New themes + studio bonuses\n" +
+      "• Rival retaliation begins\n\n" +
       "Open the Industry Map and start picking them apart."
   },
   act3_brand_legacy_day200: {

@@ -344,7 +344,7 @@ const CONFIG = {
     daysPerStage: 2,
     bossConfrontationStages: 5,
     boss: {
-      cost: 150000,
+      cost: 140000,
       stages: ["summons", "negotiation", "power_play", "fall", "terms"],
       daysPerStage: 2,
       requiredReputation: 100,
@@ -357,11 +357,11 @@ const CONFIG = {
       boss: 100
     },
     costs: {
-      intel: 5000,
-      approach: 10000,
-      turn: 25000,
-      debut: 5000,
-      bossConfrontation: 150000
+      intel: 4000,
+      approach: 9000,
+      turn: 22000,
+      debut: 6000,
+      bossConfrontation: 140000
     },
     tierMultipliers: {
       tier1: 1.0,
@@ -390,7 +390,7 @@ const CONFIG = {
     retaliation: {
       minDaysBetweenEvents: 7,
       maxDaysBetweenEvents: 14,
-      poachDefenseCost: 25000,
+      poachDefenseCost: 20000,
       poachRepPenaltyOnLoss: -10,
       lostCooldownDays: 14,
       poachBaseCost: 8000,

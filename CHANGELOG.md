@@ -11,6 +11,15 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Polished takeover modal copy (unlock, acquisition stages, boss stages, victory) and aligned stage labels with endgame tone.
+  - Why: Clarify endgame pacing and make takeover beats punchier without adding mechanics.
+  - Files touched: src/systems/story.js, src/ui/events.js, src/systems/takeover.js, CHANGELOG.md.
+- What: Tightened Industry Map, Studio Detail, and Empire layouts with compact grids and clearer status presentation.
+  - Why: Improve desktop readability for late-game takeover screens.
+  - Files touched: src/ui/render.js, styles.css, CHANGELOG.md.
+- What: Retuned takeover costs/retaliation values, refreshed late-game docs, and added an image registry reference.
+  - Why: Keep balance knobs and documentation aligned with the production takeover experience.
+  - Files touched: src/config.js, docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/DATA_STRUCTURE.md, docs/late-game/FRONTEND_GUIDELINES.md, docs/IMAGE_REGISTRY.md, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
 - What: Expanded Industry Takeover to 5 studios with Velvet Vault/Saint Sin content, new act 3 themes, victory tracking, and the Empire endgame screen + modal flow.
   - Why: Complete Phase 7 takeover scope with full studio lineup and a one-time victory/endgame experience.
   - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js, index.html.

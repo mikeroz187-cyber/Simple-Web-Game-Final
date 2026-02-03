@@ -270,19 +270,26 @@ function buildTakeoverStoryLogEntry(gameState, performerName, message, suffix) {
 
 function getBossStageCopy(stageKey) {
   if (stageKey === "summons") {
-    return "She contacts you. Neutral ground. Just talking. You both know that's a lie.";
+    return "She summons you to neutral ground.<br>" +
+      "Calm voice. Tight smile. She thinks it’s a conversation.";
   }
   if (stageKey === "negotiation") {
-    return "\"A merger,\" she offers. \"Equal partners.\" You laugh. She doesn't.";
+    return "\"A merger,\" she offers. \"Equal partners.\"<br>" +
+      "You don't blink. She hears the no anyway.";
   }
   if (stageKey === "power_play") {
-    return "Threats now. Lawyers. Old favors. None of it lands.";
+    return "Threats next. Lawyers. Old favors. Emergency calls.<br>" +
+      "None of it lands. You’re already bigger.";
   }
   if (stageKey === "fall") {
-    return "The moment she realizes she's not negotiating anymore. She's surrendering.";
+    return "It hits her mid-sentence.<br>" +
+      "She isn't negotiating anymore.<br>" +
+      "She's falling.";
   }
   if (stageKey === "terms") {
-    return "The terms are yours to dictate. And you dictate thoroughly.";
+    return "You lay down the terms.<br>" +
+      "She signs.<br>" +
+      "The studio is yours.";
   }
   return "The room tilts. The leverage shifts. You're in control.";
 }
@@ -334,25 +341,44 @@ function showTakeoverStageModal(gameState) {
     createButton("Next", "takeover-stage-next", "primary", nextDisabled) +
     "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
     "</div>";
-  const messageLines = [];
-  if (stage === "intel") {
-    messageLines.push("<strong>Weakness Identified:</strong> " + weaknessLabel);
-    messageLines.push("\"" + weaknessAngle + "\"");
-  } else if (stage === "approach") {
-    messageLines.push("She’s responding. She thinks she’s choosing this.");
-    messageLines.push("Turn rep cost: " + (repDelta === 0 ? "None" : repDelta) + " (Weakness: " + weaknessLabel + ")");
-  } else if (stage === "turn") {
-    messageLines.push("She’s yours now. The hook is set.");
-    messageLines.push("Rep cost (paid at Turn start): " + (repDelta === 0 ? "None" : repDelta) + " (Weakness: " + weaknessLabel + ")");
-  } else if (stage === "debut") {
-    messageLines.push("Her first shoot under your banner. Make it official.");
-  }
-  const messageHtml = messageLines.join("<br>");
+  const currentDay = gameState && gameState.player && Number.isFinite(gameState.player.day)
+    ? gameState.player.day
+    : 0;
   const nextStage = getTakeoverStageNext(stage);
   const tier = performerState && performerState.tier ? performerState.tier : (performerConfig ? performerConfig.tier : "tier1");
+  const costPaid = typeof getStageCost === "function"
+    ? getStageCost(stage, tier)
+    : 0;
   const nextCost = nextStage && typeof getStageCost === "function"
     ? getStageCost(nextStage, tier)
-    : 0;
+    : null;
+  const stageDuration = typeof getStageDurationDays === "function" ? getStageDurationDays() : 2;
+  const readyDay = performerState && Number.isFinite(performerState.stageCompleteDay)
+    ? performerState.stageCompleteDay
+    : currentDay;
+  const messageLines = [];
+  if (stage === "intel") {
+    messageLines.push("<strong>Angle found:</strong> " + weaknessLabel);
+    messageLines.push("\"" + weaknessAngle + "\"");
+  } else if (stage === "approach") {
+    messageLines.push("Contact made. She leans in.");
+    messageLines.push("Next move: The Turn.");
+  } else if (stage === "turn") {
+    messageLines.push("She bends. The hook holds.");
+    messageLines.push(repDelta === 0
+      ? "Rep hit: None on this angle."
+      : ("Rep hit applied: " + repDelta + " (" + weaknessLabel + ")."));
+  } else if (stage === "debut") {
+    messageLines.push("Added to roster.");
+    messageLines.push("+3 Reputation (capped at 100).");
+  }
+  const stageMetaHtml = "<div class=\"takeover-stage-meta\">" +
+    "<div><span>Cost Paid:</span><span>" + formatCurrency(costPaid) + "</span></div>" +
+    "<div><span>Next Cost:</span><span>" + (nextCost !== null ? formatCurrency(nextCost) : "—") + "</span></div>" +
+    "<div><span>Duration:</span><span>" + stageDuration + " days</span></div>" +
+    "<div><span>Ready Day:</span><span>Day " + readyDay + "</span></div>" +
+    "</div>";
+  const messageHtml = messageLines.join("<br>");
   const primaryLabel = stage === "debut"
     ? "Finalize Acquisition"
     : "Proceed to " + getTakeoverStageLabel(nextStage) + " (Pay " + formatCurrency(nextCost) + ")";
@@ -369,6 +395,7 @@ function showTakeoverStageModal(gameState) {
     controlsHtml +
     "</div>" +
     "<p class=\"modal-message\" style=\"margin-top:12px;\">" + messageHtml + "</p>" +
+    stageMetaHtml +
     "<div class=\"button-row\" style=\"margin-top:12px;\">" +
     primaryButton +
     abortButton +

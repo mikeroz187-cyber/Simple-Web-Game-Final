@@ -278,13 +278,13 @@ For cost confirmations:
 +------------------------------------------+
 | BEGIN INTEL: Bianca Morel                |
 +------------------------------------------+
-| Cost: $5,000                             |
+| Cost: $4,000                             |
 | Duration: 2 days                         |
 |                                          |
 | Dig into her background. Find the angle. |
 |                                          |
 +------------------------------------------+
-| [CANCEL]              [PAY $5,000]       |
+| [CANCEL]              [PAY $4,000]       |
 +------------------------------------------+
 ```
 
@@ -355,14 +355,14 @@ Reputation: 87
 Always show player's current cash alongside costs:
 
 ```
-Cost: $25,000
+Cost: $22,000
 Your cash: $847,000
-[PAY $25,000]
+[PAY $22,000]
 ```
 
 If insufficient:
 ```
-Cost: $25,000
+Cost: $22,000
 Your cash: $12,000
 [INSUFFICIENT FUNDS] (disabled)
 ```
@@ -483,7 +483,7 @@ Consistent with existing performer displays:
 ```
 +------------------------------------------+
 | Cannot proceed                           |
-| Required: $25,000 | You have: $12,000    |
+| Required: $22,000 | You have: $12,000    |
 | [CLOSE]                                  |
 +------------------------------------------+
 ```

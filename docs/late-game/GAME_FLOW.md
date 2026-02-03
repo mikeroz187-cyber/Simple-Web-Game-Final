@@ -14,20 +14,19 @@ This document describes the player-facing flow of the Industry Takeover system, 
 
 ### Unlock Event
 ```
-TITLE: "The Competition"
+TITLE: "Industry Takeover"
 
 TEXT:
-You've made it. The debt is history. The studio is profitable. 
-Your name means something now.
+Your Talent Scout drops a folder on your desk. Five rival studios. Loose contracts. Desperate talent.
 
-But you're not alone up here.
+This isn’t competition anymore. It’s acquisition. Own them and the industry bends.
 
-Five studios control this industry. They have the talent. 
-They have the reach. They have everything you want.
+What changes now:
+• Industry Map unlocked
+• New themes + studio bonuses
+• Rival retaliation begins
 
-Time to take it from them.
-
-[VIEW INDUSTRY MAP]
+[Open Industry Map]
 ```
 
 ### Post-Unlock
@@ -86,9 +85,9 @@ TEXT:
 They’re not trying to win. They’re trying to take what’s yours.”
 
 Target: <PerformerName>
-Defense Cost: $25,000
+Defense Cost: $20,000
 
-[PAY $25,000 — KEEP HER]   [LET HER GO]
+[PAY $20,000 — KEEP HER]   [LET HER GO]
 ```
 
 **Outcomes:**
@@ -159,17 +158,17 @@ Player clicks [BEGIN ACQUISITION] on available performer
 +------------------------------------------+
 | INTEL: Bianca Morel                      |
 +------------------------------------------+
-| Cost: $5,000                             |
+| Cost: $4,000                             |
 | Duration: 2 days                         |
 |                                          |
 | Dig into her background. Find the angle. |
 |                                          |
-| [PAY $5,000 — BEGIN INTEL]    [CANCEL]   |
+| [PAY $4,000 — BEGIN INTEL]    [CANCEL]   |
 +------------------------------------------+
 ```
 
 **On confirm:**
-- Deduct $5,000
+- Deduct $4,000
 - Set acquisition state to Stage 1
 - Set completion day (current day + 2)
 
@@ -202,14 +201,14 @@ Player clicks [BEGIN ACQUISITION] on available performer
 +------------------------------------------+
 | APPROACH: Bianca Morel                   |
 +------------------------------------------+
-| Cost: $10,000                            |
+| Cost: $9,000                             |
 | Duration: 2 days                         |
 | Rep Cost: None (Ambition type)           |
 |                                          |
 | Make contact. Let her know you're        |
 | interested. See how she responds.        |
 |                                          |
-| [PAY $10,000 — MAKE CONTACT]   [ABORT]   |
+| [PAY $9,000 — MAKE CONTACT]   [ABORT]   |
 +------------------------------------------+
 ```
 
@@ -259,14 +258,14 @@ Player clicks through 2 approach images with narrative text.
 +------------------------------------------+
 | THE TURN: Bianca Morel                   |
 +------------------------------------------+
-| Cost: $25,000                            |
+| Cost: $22,000                            |
 | Duration: 2 days                         |
 | Rep Cost: None (Ambition type)           |
 |                                          |
 | Time to close the deal. She wants the    |
 | spotlight. Show her what that costs.     |
 |                                          |
-| [PAY $25,000 — BEGIN]          [ABORT]   |
+| [PAY $22,000 — BEGIN]          [ABORT]   |
 +------------------------------------------+
 ```
 
@@ -316,13 +315,13 @@ Player clicks through all 5 images. Final screen:
 +------------------------------------------+
 | DEBUT SHOOT: Bianca Morel                |
 +------------------------------------------+
-| Cost: $5,000 (production costs)          |
+| Cost: $6,000 (production costs)          |
 | Duration: 2 days                         |
 |                                          |
 | Her first official shoot under your      |
 | banner. Make it count.                   |
 |                                          |
-| [PAY $5,000 — SHOOT DEBUT]     [CANCEL]  |
+| [PAY $6,000 — SHOOT DEBUT]     [CANCEL]  |
 +------------------------------------------+
 ```
 
@@ -384,14 +383,14 @@ Player clicks [BEGIN CONFRONTATION] on vulnerable boss (3+ performers acquired)
 | Velvet Vault is wounded.                  |
 | Dominique wants to talk.                 |
 |                                          |
-| Cost: $150,000                           |
+| Cost: $140,000                           |
 | Duration: 10 days                        |
 | Reputation Required: 100 (You have: 100) |
 |                                          |
 | This ends one of two ways:               |
 | She submits. Or you walk away.           |
 |                                          |
-| [PAY $150,000 — ACCEPT MEETING] [DECLINE]|
+| [PAY $140,000 — ACCEPT MEETING] [DECLINE]|
 +------------------------------------------+
 ```
 
@@ -399,33 +398,35 @@ Player clicks [BEGIN CONFRONTATION] on vulnerable boss (3+ performers acquired)
 
 **Stage 1: The Summons**
 ```
-She calls. Neutral ground. Just talking.
-You both know that's a lie.
+She summons you to neutral ground.
+Calm voice. Tight smile. She thinks it’s a conversation.
 ```
 
 **Stage 2: The Negotiation**
 ```
 "A merger," she offers. "Equal partners."
-You laugh. She doesn't.
+You don't blink. She hears the no anyway.
 ```
 
 **Stage 3: The Power Play**
 ```
-Threats now. Lawyers. Contacts. Old favors.
-None of it lands. You're bigger than her ghosts.
+Threats next. Lawyers. Old favors. Emergency calls.
+None of it lands. You’re already bigger.
 ```
 
 **Stage 4: The Fall**
 ```
-You see it in her eyes. The moment she knows.
-She's not negotiating anymore. She's surrendering.
+It hits her mid-sentence.
+She isn't negotiating anymore.
+She's falling.
 ```
 
 **Stage 5: The Terms**
 ```
 [5-image sequence - placeholder cap for boss stages]
-The terms are yours to dictate.
-And you dictate thoroughly.
+You lay down the terms.
+She signs.
+The studio is yours.
 ```
 
 ### Victory Screen
@@ -467,8 +468,8 @@ When the final studio boss is defeated (all 5 studios marked defeated), trigger 
 After acknowledging the modal, unlock the Empire screen:
 
 - **Title:** Empire  
-- **Subtitle:** “All five studios. One owner.”  
-- **Summary:** studios defeated, performers owned (25), bosses defeated, total takeover attempts  
+- **Subtitle:** “Five studios. Yours.”  
+- **Summary:** studios defeated, performers acquired (25), bosses defeated, takeover attempts  
 - **Trophy grid:** one tile per studio showing trophy art and unlocked/locked status  
 - **CTA:** Back to Hub (free play continues)
 
@@ -489,45 +490,14 @@ After acknowledging the modal, unlock the Empire screen:
 | Kendra's loyalty: 45 (vulnerable)        |
 | Your reputation: 72 (normal defense)     |
 |                                          |
-| Counter-offer cost: $12,000              |
+| Counter-offer cost: $20,000              |
 |                                          |
-| [PAY $12,000 — KEEP HER]   [LET HER GO]  |
+| [PAY $20,000 — KEEP HER]   [LET HER GO]  |
 +------------------------------------------+
 ```
 
-**If player pays:** Kendra stays, +5 reputation
+**If player pays:** Kendra stays (no reputation change)
 **If player declines:** Kendra leaves, -10 reputation, she becomes "LOST" on her original studio
-
-### Reputation Strike (Occasional)
-```
-+------------------------------------------+
-| ⚠️ REPUTATION ATTACK                      |
-+------------------------------------------+
-| Victoria Kross leaked rumors about your  |
-| "recruitment methods."                   |
-|                                          |
-| Your reputation defense: 85 (strong)     |
-| Damage reduced to: -8 reputation         |
-|                                          |
-| [ACKNOWLEDGE]                            |
-+------------------------------------------+
-```
-
-### Temporary Alliance (Rare)
-```
-+------------------------------------------+
-| ⚠️ RIVAL ALLIANCE                         |
-+------------------------------------------+
-| Neon Cherry and Honey Trap are sharing   |
-| intel about your operations.             |
-|                                          |
-| For the next 14 days:                    |
-| • Their performers are harder to approach|
-| • Acquisition costs +25%                 |
-|                                          |
-| [ACKNOWLEDGE]                            |
-+------------------------------------------+
-```
 
 ---
 
@@ -550,7 +520,7 @@ When a performer is lost to poaching, they appear as "LOST" on their original st
 | She left. Now she's back on the market.  |
 | Time to remind her where she belongs.    |
 |                                          |
-| Cost: $45,000 (full acquisition)         |
+| Cost: $41,000 (full acquisition)         |
 | Duration: 8 days                         |
 |                                          |
 | Note: No new content—she's already       |
@@ -570,33 +540,23 @@ Final boss defeated (all 5 studios acquired)
 ### Victory Modal
 ```
 +------------------------------------------+
-| 🏆 TOTAL DOMINATION                       |
+| INDUSTRY OWNED                           |
 +------------------------------------------+
 | [Victory Artwork]                        |
 |                                          |
-| You own it all.                          |
+| Five studios. Twenty-five contracts.     |
+| One signature.                           |
 |                                          |
-| Five studios. Thirty performers.         |
-| Every competitor crushed.                |
-| Every rival on her knees.                |
+| ✓ All studios defeated                   |
+| ✓ Empire screen unlocked                 |
+| ✓ Free play continues                    |
 |                                          |
-| The industry doesn't have a leader.      |
-| It has a king.                           |
-|                                          |
-| And that's you.                          |
-|                                          |
-| FINAL STATS:                             |
-| • Days to victory: 247                   |
-| • Total spent: $1,847,000                |
-| • Performers acquired: 30                |
-| • Reputation peak: 142                   |
-|                                          |
-| [CONTINUE TO FREE PLAY]                  |
+| [OPEN EMPIRE]               [LATER]      |
 +------------------------------------------+
 ```
 
 ### Post-Victory State
-- All 30 performers in roster
+- All 25 performers in roster
 - All 5 boss gallery entries unlocked
 - No new rivals spawn
 - Regular gameplay continues indefinitely
