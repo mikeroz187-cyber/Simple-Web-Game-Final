@@ -6,7 +6,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 ## Hub
 - **Status panel:** Day, Days Left, Shoots Today, Cash, Debt Remaining, Social Followers/Subs, OF Subs, MRR, Reputation, Next Action.
 - **Competition panel:** Shows start day before activation; after Day 181 shows standings + active market shift.
-- **Studio Identity panel:** Reputation-branch selection (Day ≥ 181 and Reputation ≥ threshold), then locked display.
+- **Studio Identity panel:** Reputation-branch selection (Day ≥ 181 and Reputation ≥ threshold), rep-gated branch buttons, then locked display.
 - **Legacy Milestones panel:** Progress list with status (Complete/In Progress).
 - **Automation panel:** Toggles for Automation Enabled, Auto‑Book, Auto‑Post with daily cap note.
 - **Save slot panel:** Select active slot; Save Now / Load Save use the selected slot; Autosave writes to Autosave.
@@ -65,6 +65,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Promo Content list:** Only shows promos not fully posted (Instagram + X).
 - **Posted Status:** Per‑platform status for the selected promo.
 - **Actions:** Post to Instagram or X (each once per platform).
+- **Post All:** Cross-posts to Instagram + X, counts as one unique promo, and disables if either network is unavailable.
 - **Collab Week offer:** Day 170 offer appears as a decision modal with the mascot image `assets/images/mascots/talentscout_introducing.png`.
 - **Collab Week tracker:** While active, Social shows a tracker panel (day X/7, today Y/5 unique promos, streak progress).
 - **Story Log entries:** Success/fail outcomes add Story Log entries.
@@ -80,7 +81,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 ## Industry Map / Studio Detail
 - **Industry Map:** Shows the five takeover studios with status badges and progress.
 - **Studio Detail:** Performer cards list each target with status, stage info, and acquisition actions.
-- **Active acquisition lock:** When an acquisition journey is active, other performer cards are greyed out/disabled and show a short locked label until the journey resolves.
+- **Active acquisition lock:** When an acquisition journey is active, other performer cards are greyed out/disabled and show a “One target at a time” label until the journey resolves.
 
 ## Conquests
 - **Inbox list:** Character name, subject line, stage badge, and status (Unread/Accepted/Dismissed).

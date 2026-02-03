@@ -78,6 +78,11 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ---
 
+## Cleanup Bundles — COMPLETE ✓
+- [x] Cleanup: removed dead references; standardized UI labels; docs reconciled post Bundles 1–11.
+
+---
+
 ## Post-MVP Fixes / QoL — Implemented
 - [x] Metrics split (Social Followers/Subs + OnlyFans Subs).
 - [x] MRR derived from OF subs with daily cash income.

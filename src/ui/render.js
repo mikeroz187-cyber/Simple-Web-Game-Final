@@ -838,7 +838,7 @@ function renderIndustryStudio(gameState) {
         var repRequirement = typeof getPerformerRepRequirement === "function"
           ? getPerformerRepRequirement(performerData.tier || performer.tier)
           : 0;
-        actionLabel = "Locked — Rep " + repRequirement;
+        actionLabel = "Need Rep " + repRequirement;
         actionDisabled = true;
       }
     } else if (performerStatus === "lost") {
@@ -855,10 +855,10 @@ function renderIndustryStudio(gameState) {
       actionAttr = "";
     }
     if (isLockedByActive) {
-      actionLabel = "Locked — Active Target";
+      actionLabel = "One target at a time";
       actionDisabled = true;
       actionAttr = "";
-      lockHtml = "<div class=\"helper-text\">Locked — active target in progress.</div>";
+      lockHtml = "<div class=\"helper-text\">One target at a time</div>";
     }
     var cardClass = "industry-performer-card" + (isLockedByActive ? " is-disabled" : "");
     return "<div class=\"" + cardClass + "\">" +
@@ -1388,7 +1388,7 @@ function renderHub(gameState) {
   var selectionStartDay = reputationConfig.selectionStartDay || 181;
   var hasSelectedBranch = Boolean(selectedBranch);
   var isUnlocked = day >= selectionStartDay;
-  var identityValue = hasSelectedBranch ? selectedBranch.label : (isUnlocked ? "Choose Identity" : "Locked");
+  var identityValue = hasSelectedBranch ? selectedBranch.label : (isUnlocked ? "Choose" : "Locked");
   var identitySub = hasSelectedBranch ?
     "OF " + formatMultiplier(selectedBranch.ofSubsMult) + ", Followers " + formatMultiplier(selectedBranch.followersMult) :
     (isUnlocked ? "Select your path" : "Unlocks Day " + selectionStartDay);
@@ -2415,7 +2415,7 @@ function renderRoster(gameState) {
       (detailContractState && detailContractState.daysRemaining > 0 && detailContractState.daysRemaining <= 7);
     var contractLine = detailContractSummary.label;
     if (detailContractSummary.isExpired) {
-      contractLine = "Contract expired.";
+      contractLine = "Contract expired";
     } else if (detailContractState && detailContractState.daysRemaining > 0 && detailContractState.daysRemaining <= 7) {
       contractLine = "Contract expiring in " + detailContractState.daysRemaining + " days.";
     }

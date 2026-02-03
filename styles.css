@@ -476,14 +476,6 @@ body {
   outline-offset: 2px;
 }
 
-.button:disabled,
-.button.is-disabled {
-  cursor: not-allowed;
-  opacity: 0.35;
-  box-shadow: none;
-  transform: none;
-}
-
 /* Primary - Hot Pink */
 .button.primary {
   background: var(--accent);
@@ -543,6 +535,14 @@ body {
 
 .button.danger:hover:not(:disabled):not(.is-disabled) {
   background: rgba(255, 51, 68, 0.1);
+}
+
+.button:disabled,
+.button.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Small variant */
@@ -1026,6 +1026,7 @@ body {
 .helper-text {
   color: var(--text-muted);
   font-size: 12px;
+  line-height: 1.4;
 }
 
 .muted {

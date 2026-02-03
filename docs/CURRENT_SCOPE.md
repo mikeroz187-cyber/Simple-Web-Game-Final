@@ -8,6 +8,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundles 1–11 merged. Cleanup bundle merged (docs + dead refs).
 - Bundle 11B merged: Booking shoot-first grid + per-card booking.
 - Bundle 11A merged: Booking layout scaffold + Config Bar.
 - Bundle 10: Roster redesigned with master/detail layout, selectable list, detail card, and trophy handling.
@@ -26,7 +27,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - Industry Takeover system fully implemented (all 5 studios) and docs audit completed.
 - Industry Takeover Phase 7: Added Velvet Vault + Saint Sin studios, expanded Industry Map to 5 studios, and shipped victory/Empire endgame flow.
 - Industry Takeover Phase 6: Competition swap after Day 181 plus retaliation poach attempts with pay/lose resolution.
-- Industry Takeover Phase 5: Boss confrontation flow (5 stages/10 days), studio defeat rewards, boss/trophy tracking, and Act 3 theme bonuses (+10% on matching themes).
+- Industry Takeover Phase 5: Boss confrontation flow (5 stages/10 days), studio defeat rewards, boss/trophy tracking, and studio theme bonuses (+10% on matching themes).
 - Industry Takeover Phase 4: 4-stage acquisition loop (intel/approach/turn/debut), stage-ready resolve UX, tier-scaled costs, weakness rep penalties, debut rewards, and roster integration.
 - Industry Takeover Phase 3: Studio Detail screen with boss card, performer roster, and View Studio navigation from the Industry Map (actions disabled).
 - Industry Takeover Phase 2: Industry Map nav entry, screen shell, and Day 181 unlock CTA.
