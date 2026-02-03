@@ -1,5 +1,6 @@
 **Status:** Historical planning reference. This document is not authoritative for the current build.
 Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 # Master Implementation Plan (MVP → Act 2 → Act 3)
 

@@ -1,6 +1,7 @@
 **Status:** Historical MVP reference. This document is not authoritative for the current build.
 
 **Current behavior lives in:** `docs/CORE_GAMEPLAY_LOOP.md` (Current Game Rules) and `docs/GAMESTATE_DATA_MODEL.md`.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ## Current Build Notes (Summary)
 - The live build uses **manual Advance Day** with **per‑performer daily caps** (no global 5‑shoot cap).

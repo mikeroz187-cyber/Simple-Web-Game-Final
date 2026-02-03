@@ -378,6 +378,18 @@ body {
   color: var(--text-bright);
 }
 
+.nav-save-heading {
+  padding: 6px 12px 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nav-save-note {
+  padding: 0 12px 6px;
+}
+
 .screen {
   display: none;
   background: var(--glass-bg);

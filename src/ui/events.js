@@ -132,6 +132,17 @@ function showDecisionModal(opts) {
     "</div>";
 }
 
+function showNewGameConfirmModal() {
+  showDecisionModal({
+    title: "New Game",
+    messageHtml: "Start a new game? This will overwrite your current save.",
+    primaryLabel: "Confirm New Game",
+    primaryAction: "new-game-confirmed",
+    secondaryLabel: "Cancel",
+    secondaryAction: "dismiss-modal"
+  });
+}
+
 function showIdentityModal(gameState) {
   const modalRoot = qs("#modal-root");
   if (!modalRoot || !gameState || !gameState.player) {
@@ -1012,6 +1023,7 @@ function setupEventHandlers() {
     var loadSaveBtn = saveDropdown.querySelector("[data-action=\"load-save\"]");
     var exportSaveBtn = saveDropdown.querySelector("[data-action=\"export-save\"]");
     var importSaveBtn = saveDropdown.querySelector("[data-action=\"import-save\"]");
+    var newGameBtn = saveDropdown.querySelector("[data-action=\"new-game-confirm\"]");
 
     if (saveNowBtn) {
       saveNowBtn.addEventListener("click", function (event) {
@@ -1106,6 +1118,15 @@ function setupEventHandlers() {
           setUiMessage(result.message || "");
           renderApp(window.gameState);
         });
+      });
+    }
+
+    if (newGameBtn) {
+      newGameBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        saveDropdown.classList.remove("is-open");
+        showNewGameConfirmModal();
       });
     }
   }
@@ -2919,6 +2940,37 @@ function setupEventHandlers() {
         setUiMessage(result.message || "");
         renderApp(window.gameState);
       });
+      return;
+    }
+
+    if (action === "new-game-confirmed") {
+      const result = resetSaveSlotToNewGame(uiState.save.selectedSlotId);
+      if (result.ok) {
+        window.gameState = result.gameState;
+        ensureAutomationState(window.gameState);
+        ensureUnlocksState(window.gameState);
+        ensureShootOutputsState(window.gameState);
+        ensureStoryLogState(window.gameState);
+        ensureFlagsState(window.gameState);
+        ensureSocialManualStrategyState(window.gameState);
+        ensureSocialCollabWeekState(window.gameState);
+        ensureReputationState(window.gameState);
+        ensureRecruitmentState(window.gameState);
+        ensurePlayerUpgradesState(window.gameState);
+        if (typeof ensureAfterHoursState === "function") {
+          ensureAfterHoursState(window.gameState);
+        }
+        if (typeof ensureConquestsState === "function") {
+          ensureConquestsState(window.gameState);
+        }
+        if (typeof initCompetitionStateIfMissing === "function") {
+          initCompetitionStateIfMissing(window.gameState);
+        }
+        clearModal();
+        showScreen("screen-hub");
+      }
+      setUiMessage(result.message || "");
+      renderApp(window.gameState);
       return;
     }
 

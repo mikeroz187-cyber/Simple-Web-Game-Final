@@ -3,6 +3,7 @@
 ## Overview
 
 This document provides a phased, step-by-step implementation plan for the Industry Takeover system. Each phase is independently testable and builds on previous phases.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 **Total Estimated Phases:** 8  
 **Estimated Implementation Time:** 4-6 weeks (depending on pace)

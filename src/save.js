@@ -72,6 +72,15 @@ function resetSave(slotId) {
   }
 }
 
+function resetSaveSlotToNewGame(slotId) {
+  const freshState = newGameState();
+  const saveResult = saveGame(freshState, slotId);
+  if (!saveResult.ok) {
+    return { ok: false, message: saveResult.message || "Reset failed." };
+  }
+  return { ok: true, gameState: freshState, message: "New game started." };
+}
+
 function exportSaveToFile(gameState) {
   if (!gameState) {
     return { ok: false, message: "No game state to export." };

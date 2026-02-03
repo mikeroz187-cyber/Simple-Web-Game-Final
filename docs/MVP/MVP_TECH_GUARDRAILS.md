@@ -2,6 +2,7 @@
 Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
 Legacy references to CURRENT_SCOPE are historical; CURRENT_SCOPE is now a non‑binding focus snapshot.
 Note: The current build uses `src/config.js`; `config.toml` is a legacy reference.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 # MVP Technical Guardrails (Implementation Constitution)
 

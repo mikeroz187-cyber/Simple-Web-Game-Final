@@ -2,6 +2,7 @@
 > Current behavior lives in `docs/CORE_GAMEPLAY_LOOP.md` and `docs/GAMESTATE_DATA_MODEL.md`.
 
 > Note: Current runtime config lives in `src/config.js`; `config.toml` is legacy.
+> See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 # Vision Overview (Act 2 + Act 3)
 

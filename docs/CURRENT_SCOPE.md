@@ -1,12 +1,14 @@
 # Current Focus (Not a Constraint)
 
 This document is a **status snapshot only**. It **does not restrict** features or future work; it simply summarizes what is implemented and what the team is focusing on right now.
+See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 **Last Updated:** February 03, 2026
 
 **Act 3 Takeover Status:** Shipped / ready (v1.0, February 03, 2026)
 
 ## Recently Completed
+- Bundle 5: Renamed the Save button to Options and added New Game (confirm + reset current slot only) in the Options menu.
 - Bundle 4: Added Social "Post All" (Insta + X) with unique promo counting and disabled state when either network is unavailable.
 - Bundle 3: Studio Identity Hub Choose button + modal picker at Day 181, selection locks for the run.
 - Bundle 2: Studio upgrade offer CTAs now disable when unaffordable and show "Not enough cash" helper text.
