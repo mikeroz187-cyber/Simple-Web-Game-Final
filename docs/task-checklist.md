@@ -69,6 +69,9 @@
 - [x] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
 - [x] Phase 7: Add remaining 2 studios + victory condition/endgame
 
+## Release Checklist / Doc Audit — COMPLETE ✓
+- [x] Release Checklist / Doc Audit (docs)
+
 ---
 
 ## Post-MVP Fixes / QoL — Implemented

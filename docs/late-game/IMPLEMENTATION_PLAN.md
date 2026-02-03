@@ -11,7 +11,7 @@ This document provides a phased, step-by-step implementation plan for the Indust
 
 ## Decisions Locked
 
-- Takeover replaces Competition starting Day 181 (Phase to come).
+- Takeover replaces/hidden after Day 181 unlock (implemented).
 - Roster cap becomes 40 at Day 181 unlock (recruitment cap override).
 - Reputation cap is 100 (global).
 - Crisis floor is 10 by default (takeover-specific logic later).

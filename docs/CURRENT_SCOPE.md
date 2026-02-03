@@ -5,6 +5,7 @@ This document is a **status snapshot only**. It **does not restrict** features o
 **Last Updated:** February 03, 2026
 
 ## Recently Completed
+- Industry Takeover system fully implemented (all 5 studios) and docs audit completed.
 - Industry Takeover Phase 7: Added Velvet Vault + Saint Sin studios, expanded Industry Map to 5 studios, and shipped victory/Empire endgame flow.
 - Industry Takeover Phase 6: Competition swap after Day 181 plus retaliation poach attempts with pay/lose resolution.
 - Industry Takeover Phase 5: Boss confrontation flow (5 stages/10 days), studio defeat rewards, boss/trophy tracking, and Act 3 theme bonuses (+10% on matching themes).
@@ -55,7 +56,6 @@ This document is a **status snapshot only**. It **does not restrict** features o
 ## Currently Working On
 - Ambient Character Art System — layout refinement complete, testing positioning
 - After Hours System Phase 1-2 — knock detection and basic modal flow
-- Release checklist / doc audit
 
 ## Next 3–7 Candidate Tasks
 - Release checklist / doc audit.

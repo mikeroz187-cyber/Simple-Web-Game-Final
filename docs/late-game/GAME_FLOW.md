@@ -355,7 +355,7 @@ Player clicks through all 5 images. Final screen:
 | BIANCA MOREL has joined your roster.     |
 |                                          |
 | ✓ Available for booking                  |
-| ✓ 16 images added to Gallery             |
+| ✓ Takeover gallery updated               |
 | ✓ Velvet Vault weakened                   |
 |                                          |
 | Performers remaining: 4                  |
@@ -599,13 +599,7 @@ New addition:
 ```
 
 ### Individual Performer Gallery View
-Shows all 16 images in slideshow format:
-- 1 portrait
-- 2 approach
-- 8 turn
-- 5 debut
+Shows the performer portrait plus stage slideshows (intel/approach/turn/debut), each capped at **max 5 images**.
 
 ### Individual Boss Gallery View
-Shows all 6 images (current cap):
-- 1 portrait
-- 5 confrontation sequence
+Shows the boss portrait plus the confrontation slideshow (max 5 images).

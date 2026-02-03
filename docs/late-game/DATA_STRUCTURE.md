@@ -841,7 +841,7 @@ CONFIG.takeover.content = {
             text: "And she's yours."
           }
         ],
-        completeText: "MIKA SATO has joined your roster.\n\n✓ Available for booking\n✓ 16 images added to Gallery\n✓ Neon Cherry weakened"
+        completeText: "MIKA SATO has joined your roster.\n\n✓ Available for booking\n✓ Takeover gallery updated\n✓ Neon Cherry weakened"
       }
     },
 
