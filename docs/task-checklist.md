@@ -1,6 +1,6 @@
 # Studio Empire — Task Checklist
 
-**Last Updated:** February 03, 2026 (Industry Takeover Phase 3 studio detail)
+**Last Updated:** February 02, 2026 (Industry Takeover Phase 6 retaliation + competition swap)
 
 ---
 
@@ -66,8 +66,8 @@
 - [x] Phase 3: Studio Detail screen + performer list
 - [x] Phase 4: Acquisition stages (intel/approach/turn/debut)
 - [x] Phase 5: Boss confrontations (5-stage)
-- [ ] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
-- [ ] Phase 7: Victory + endgame bonuses
+- [x] Phase 6: Disable/replace Competition at Day 181 + Retaliation events
+- [ ] Phase 7: Add remaining 2 studios + victory condition/endgame
 
 ---
 

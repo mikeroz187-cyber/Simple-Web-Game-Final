@@ -188,15 +188,12 @@ Implement the acquisition stage flow (intel → approach → turn → debut) and
 
 ---
 
-## Phase 6: Competition Swap + Retaliation Events (Next)
+## Phase 6: Competition Swap + Retaliation Events — ✅ Completed
 
-### Objective
-Disable or replace the Competition loop at Day 181 and introduce retaliation events.
-
-### Tasks (Next)
-- [ ] Disable/replace Competition at Day 181.
-- [ ] Add retaliation/poaching events tied to takeover status.
-- [ ] Ensure the takeover reputation floor (10) and global cap (100) are enforced during retaliation.
+### Shipped (Phase 6)
+- [x] Competition is hidden/inert after Day 181 takeover unlock (Industry Takeover replaces it).
+- [x] Retaliation poach attempt system added with scheduling and eligible target logic.
+- [x] Poach decision modal (pay to defend or lose performer) with roster removal + rep floor enforcement.
 
 ---
 

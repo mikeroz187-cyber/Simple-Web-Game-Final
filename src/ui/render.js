@@ -271,9 +271,19 @@ function updateIndustryMapNavVisibility(gameState) {
   navItem.style.display = unlocked ? "" : "none";
 }
 
+function updateCompetitionNavVisibility(gameState) {
+  var navItem = document.getElementById("nav-competition-item");
+  if (!navItem) {
+    return;
+  }
+  var takeoverUnlocked = typeof isTakeoverUnlocked === "function" ? isTakeoverUnlocked(gameState) : false;
+  navItem.style.display = takeoverUnlocked ? "none" : "";
+}
+
 function renderApp(gameState) {
   getUiState();
   updateIndustryMapNavVisibility(gameState);
+  updateCompetitionNavVisibility(gameState);
   renderHeaderStats(gameState);
   renderHub(gameState);
   renderBooking(gameState);
@@ -285,6 +295,7 @@ function renderApp(gameState) {
   renderConquests(gameState);
   renderIndustryMap(gameState);
   renderIndustryStudio(gameState);
+  renderCompetition(gameState);
   renderSlideshow(gameState);
   renderStoryLog(gameState);
   renderShop(gameState);
@@ -347,6 +358,12 @@ function renderIndustryMap(gameState) {
   var bossVulnerableThreshold = Number.isFinite(takeoverConfig.performersToVulnerableBoss)
     ? takeoverConfig.performersToVulnerableBoss
     : 3;
+  var retaliationState = takeoverState.retaliation && typeof takeoverState.retaliation === "object"
+    ? takeoverState.retaliation
+    : {};
+  var retaliationLabel = Number.isFinite(retaliationState.nextPoachDay)
+    ? ("Retaliation: Next attempt likely around Day " + retaliationState.nextPoachDay)
+    : "Retaliation: Active";
 
   var summaryHtml = "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Overview</h3>" +
@@ -355,6 +372,7 @@ function renderIndustryMap(gameState) {
       "<div class=\"secondary-stat\"><span>Performers acquired:</span><span class=\"secondary-stat__value\">" + performersAcquired + "</span></div>" +
       "<div class=\"secondary-stat\"><span>Bosses defeated:</span><span class=\"secondary-stat__value\">" + bossesDefeated + "</span></div>" +
     "</div>" +
+    "<div class=\"helper-text\" style=\"margin-top: var(--gap-xs);\">" + retaliationLabel + "</div>" +
   "</div>";
 
   var studioCardsHtml = studioOrder.map(function (studioId) {
@@ -714,6 +732,7 @@ function renderIndustryStudio(gameState) {
     "<h2 id=\"screen-industry-studio-title\" class=\"screen-title\">" + studioName + "</h2>" +
     "<p class=\"helper-text\">" + studioTagline + "</p>" +
     "<div class=\"pill pill--muted\" style=\"margin-bottom: var(--gap-sm);\">Status: " + statusLabel + "</div>" +
+    (!studioDefeated ? "<div class=\"helper-text\">Rivals are watching. Keep cash ready.</div>" : "") +
     (studioDefeated ? "<div class=\"helper-text\">Studio Status: Defeated</div>" : "") +
     "<div class=\"secondary-stats-row\" style=\"border-top:none; padding-top:0;\">" +
     "<div class=\"secondary-stat\"><span>Acquired from this studio:</span><span class=\"secondary-stat__value\">" +
@@ -735,6 +754,31 @@ function renderIndustryStudio(gameState) {
     "<div class=\"panel\">" +
     "<h3 class=\"panel-title\">Performer Roster</h3>" +
     "<div class=\"industry-performer-list\">" + performersHtml + "</div>" +
+    "</div>" +
+    "</div>";
+}
+
+function renderCompetition(gameState) {
+  var container = document.getElementById("screen-competition");
+  if (!container) {
+    return;
+  }
+  var takeoverUnlocked = typeof isTakeoverUnlocked === "function" ? isTakeoverUnlocked(gameState) : false;
+  if (takeoverUnlocked) {
+    container.innerHTML = "<div class=\"screen-content\">" +
+      "<h2 class=\"screen-title\">Competition Replaced</h2>" +
+      "<div class=\"panel\">" +
+      "<p class=\"helper-text\">You don’t \"compete\" anymore. You acquire.</p>" +
+      "<button class=\"button primary\" data-action=\"nav-industry-map\">Open Industry Map</button>" +
+      "</div>" +
+      "</div>";
+    return;
+  }
+  container.innerHTML = "<div class=\"screen-content\">" +
+    "<h2 class=\"screen-title\">Competition</h2>" +
+    "<div class=\"panel\">" +
+    "<p class=\"helper-text\">Competition updates live in the Hub overview.</p>" +
+    "<button class=\"button\" data-action=\"nav-hub\">Back to Hub</button>" +
     "</div>" +
     "</div>";
 }
@@ -1129,13 +1173,15 @@ function renderHub(gameState) {
     "</div>";
   }
 
+  var competitionCardHtml = "<div class=\"strip-card\">" +
+    "<div class=\"strip-card__title\">Competition</div>" +
+    "<div class=\"strip-card__value\">" + competitionValue + "</div>" +
+    "<div class=\"strip-card__sub\">" + competitionSub + "</div>" +
+    competitionBadge +
+  "</div>";
+  var takeoverUnlocked = typeof isTakeoverUnlocked === "function" ? isTakeoverUnlocked(gameState) : false;
   var cardsStripHtml = "<div class=\"cards-strip\">" +
-    "<div class=\"strip-card\">" +
-      "<div class=\"strip-card__title\">Competition</div>" +
-      "<div class=\"strip-card__value\">" + competitionValue + "</div>" +
-      "<div class=\"strip-card__sub\">" + competitionSub + "</div>" +
-      competitionBadge +
-    "</div>" +
+    (takeoverUnlocked ? "" : competitionCardHtml) +
     "<div class=\"strip-card\">" +
       "<div class=\"strip-card__title\">Studio Identity</div>" +
       "<div class=\"strip-card__value\">" + identityValue + "</div>" +

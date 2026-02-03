@@ -144,9 +144,12 @@ function getDefaultTakeoverState() {
       notes: []
     },
     retaliation: {
-      lastEventDay: null,
-      activeAlliance: null,
-      poachAttempts: []
+      nextPoachDay: null,
+      pending: null,
+      lastResolvedDay: null,
+      totalAttempts: 0,
+      totalLosses: 0,
+      totalDefenses: 0
     },
     stats: {
       totalSpent: 0,
@@ -802,17 +805,44 @@ function ensureTakeoverState(gameState) {
     takeover.gallery.notes = [];
   }
   if (!takeover.retaliation || typeof takeover.retaliation !== "object" || Array.isArray(takeover.retaliation)) {
-    takeover.retaliation = { lastEventDay: null, activeAlliance: null, poachAttempts: [] };
-  } else {
-    if (!Number.isFinite(takeover.retaliation.lastEventDay)) {
-      takeover.retaliation.lastEventDay = null;
-    }
-    if (takeover.retaliation.activeAlliance !== null && typeof takeover.retaliation.activeAlliance !== "object") {
-      takeover.retaliation.activeAlliance = null;
-    }
-    if (!Array.isArray(takeover.retaliation.poachAttempts)) {
-      takeover.retaliation.poachAttempts = [];
-    }
+    takeover.retaliation = {
+      nextPoachDay: null,
+      pending: null,
+      lastResolvedDay: null,
+      totalAttempts: 0,
+      totalLosses: 0,
+      totalDefenses: 0
+    };
+  }
+  if (!Number.isFinite(takeover.retaliation.nextPoachDay)) {
+    takeover.retaliation.nextPoachDay = null;
+  }
+  if (takeover.retaliation.pending !== null && typeof takeover.retaliation.pending !== "object") {
+    takeover.retaliation.pending = null;
+  }
+  if (!Number.isFinite(takeover.retaliation.lastResolvedDay)) {
+    takeover.retaliation.lastResolvedDay = null;
+  }
+  if (!Number.isFinite(takeover.retaliation.totalAttempts) || takeover.retaliation.totalAttempts < 0) {
+    takeover.retaliation.totalAttempts = 0;
+  }
+  if (!Number.isFinite(takeover.retaliation.totalLosses) || takeover.retaliation.totalLosses < 0) {
+    takeover.retaliation.totalLosses = 0;
+  }
+  if (!Number.isFinite(takeover.retaliation.totalDefenses) || takeover.retaliation.totalDefenses < 0) {
+    takeover.retaliation.totalDefenses = 0;
+  }
+  const unlockDay = Number.isFinite(takeoverConfig.unlockDay) ? takeoverConfig.unlockDay : null;
+  const currentDay = gameState.player && Number.isFinite(gameState.player.day) ? gameState.player.day : null;
+  const minDelay = Number.isFinite(takeoverConfig.retaliation && takeoverConfig.retaliation.minDaysBetweenEvents)
+    ? takeoverConfig.retaliation.minDaysBetweenEvents
+    : 7;
+  const maxDelay = Number.isFinite(takeoverConfig.retaliation && takeoverConfig.retaliation.maxDaysBetweenEvents)
+    ? takeoverConfig.retaliation.maxDaysBetweenEvents
+    : 14;
+  if (takeover.retaliation.nextPoachDay === null && currentDay !== null && unlockDay !== null && currentDay >= unlockDay) {
+    const roll = typeof randomIntInclusive === "function" ? randomIntInclusive(minDelay, maxDelay) : minDelay;
+    takeover.retaliation.nextPoachDay = currentDay + roll;
   }
   if (!takeover.stats || typeof takeover.stats !== "object" || Array.isArray(takeover.stats)) {
     takeover.stats = defaults.stats;

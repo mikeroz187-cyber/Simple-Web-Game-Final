@@ -103,6 +103,7 @@ function showDecisionModal(opts) {
   const imageFallbackPath = opts.imageFallbackPath || "";
   const primaryLabel = opts.primaryLabel || "Confirm";
   const primaryAction = opts.primaryAction || "dismiss-modal";
+  const primaryDisabled = opts.primaryDisabled === true;
   const secondaryLabel = opts.secondaryLabel || "Cancel";
   const secondaryAction = opts.secondaryAction || "dismiss-modal";
   const extraHtml = opts.extraHtml || "";
@@ -122,7 +123,7 @@ function showDecisionModal(opts) {
     "<p class=\"modal-message\">" + messageHtml + "</p>" +
     extraHtml +
     "<div class=\"button-row\" style=\"margin-top:12px;\">" +
-    "<button class=\"button primary\" data-action=\"" + primaryAction + "\">" + primaryLabel + "</button>" +
+    "<button class=\"button primary\" data-action=\"" + primaryAction + "\"" + (primaryDisabled ? " disabled" : "") + ">" + primaryLabel + "</button>" +
     "<button class=\"button\" data-action=\"" + secondaryAction + "\">" + secondaryLabel + "</button>" +
     "</div>" +
     "</div>" +
@@ -1779,6 +1780,16 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "nav-competition") {
+      if (typeof isTakeoverUnlocked === "function" && isTakeoverUnlocked(window.gameState)) {
+        showScreen("screen-competition");
+      } else {
+        showScreen("screen-competition");
+      }
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "nav-industry-map") {
       clearModal();
       showScreen("screen-industry-map");
@@ -1793,6 +1804,36 @@ function setupEventHandlers() {
       var studioId = studioEl ? studioEl.getAttribute("data-studio-id") : null;
       setIndustrySelectedStudioId(studioId);
       showScreen("screen-industry-studio");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-resolve-poach-defense") {
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof resolvePoachDefense === "function") {
+        resolvePoachDefense(window.gameState);
+      }
+      clearModal();
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "industry-resolve-poach-loss") {
+      event.preventDefault();
+      event.stopPropagation();
+      var result = typeof resolvePoachLoss === "function"
+        ? resolvePoachLoss(window.gameState)
+        : { ok: false };
+      if (result && result.ok && result.performerId) {
+        if (!uiState.booking) {
+          uiState.booking = { performerIdA: null, locationId: null, themeId: null, contentType: null };
+        }
+        if (uiState.booking.performerIdA === result.performerId) {
+          uiState.booking.performerIdA = null;
+        }
+      }
+      clearModal();
       renderApp(window.gameState);
       return;
     }
@@ -2457,6 +2498,12 @@ function setupEventHandlers() {
       const takeoverUnlock = findTakeoverUnlockEvent(storyEvents);
       const storyCards = buildStoryEventCards(storyEvents);
       const eventCards = storyCards.concat(automationResult.cards).concat(conquestEvents);
+      const retaliationState = window.gameState.takeover && window.gameState.takeover.retaliation
+        ? window.gameState.takeover.retaliation
+        : null;
+      const pendingPoach = retaliationState && retaliationState.pending && retaliationState.pending.type === "poach_attempt"
+        ? retaliationState.pending
+        : null;
       if (collabOffer) {
         const otherStoryEvents = storyEvents.filter(function (event) {
           return event && event.id !== collabOffer.id;
@@ -2479,6 +2526,38 @@ function setupEventHandlers() {
           secondaryLabel: "Later",
           secondaryAction: "dismiss-modal",
           extraHtml: buildCollabExtraHtml(extraCards)
+        });
+      } else if (pendingPoach) {
+        const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+        const placeholderPath = takeoverConfig.placeholderPortraitPath || CONFIG.LOCATION_PLACEHOLDER_THUMB_PATH || "";
+        const performerConfig = typeof getTakeoverPerformerConfig === "function"
+          ? getTakeoverPerformerConfig(pendingPoach.targetPerformerId)
+          : null;
+        const performerName = performerConfig && performerConfig.name ? performerConfig.name : "Performer";
+        const defendCost = Number.isFinite(pendingPoach.defendCost) ? pendingPoach.defendCost : 0;
+        const cashOnHand = Number.isFinite(window.gameState.player.cash) ? window.gameState.player.cash : 0;
+        const canAfford = cashOnHand >= defendCost;
+        const costLabel = formatCurrency(defendCost);
+        const cashLabel = formatCurrency(cashOnHand);
+        const primaryLabel = canAfford
+          ? ("Pay " + costLabel + " — Keep Her")
+          : ("Need " + costLabel + " (You: " + cashLabel + ")");
+        const messageHtml =
+          "A rival studio slid into her DMs with money and an exit plan.<br>" +
+          "They’re not trying to win. They’re trying to take what’s yours." +
+          "<br><br><strong>Target:</strong> " + performerName +
+          "<br><strong>Defense Cost:</strong> " + costLabel;
+        showDecisionModal({
+          title: "Poach Attempt",
+          messageHtml: messageHtml,
+          imagePath: "assets/images/mascots/talentscout_introducing.png",
+          imageFallbackPath: placeholderPath,
+          primaryLabel: primaryLabel,
+          primaryAction: "industry-resolve-poach-defense",
+          primaryDisabled: !canAfford,
+          secondaryLabel: "Let Her Go",
+          secondaryAction: "industry-resolve-poach-loss",
+          extraHtml: buildCollabExtraHtml(eventCards)
         });
       } else if (eventCards.length) {
         showEventCards(eventCards);

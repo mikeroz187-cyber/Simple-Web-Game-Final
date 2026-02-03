@@ -11,6 +11,12 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Replaced Competition after Day 181 with Industry Takeover gating and added retaliation poach attempts with modal choices, roster removal, and rep-floor handling.
+  - Why: Deliver Phase 6 takeover escalation and retire legacy Competition pressure once Industry Takeover unlocks.
+  - Files touched: src/config.js, src/state.js, src/utils/rng.js, src/systems/competition.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js.
+- What: Updated late-game documentation and scope/checklist to reflect Phase 6 completion and retaliation flow.
+  - Why: Keep docs aligned with the shipped takeover competition swap and retaliation mechanics.
+  - Files touched: docs/CURRENT_SCOPE.md, docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/DATA_STRUCTURE.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Implemented Phase 5 boss confrontations for A3 studios with stage-ready flow, studio defeat rewards, gallery tracking, and theme-based bonuses on booking outputs.
   - Why: Deliver the Industry Takeover boss loop and studio defeat rewards for Act 3 content expansion while honoring reputation caps.
   - Files touched: src/config.js, src/state.js, src/systems/takeover.js, src/systems/economy.js, src/systems/booking.js, src/systems/social.js, src/ui/render.js, src/ui/events.js.

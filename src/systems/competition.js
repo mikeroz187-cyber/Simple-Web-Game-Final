@@ -31,6 +31,9 @@ function getCompetitionStartDay(config) {
 
 function isCompetitionEnabled(config, day, gameState) {
   const resolvedConfig = config || getCompetitionConfig();
+  if (typeof isTakeoverUnlocked === "function" && isTakeoverUnlocked(gameState)) {
+    return false;
+  }
   if (resolvedConfig && resolvedConfig.enabled === false) {
     return false;
   }
@@ -251,6 +254,9 @@ function addCompetitionStoryLogEntry(gameState, day, rank, total) {
 
 function maybeApplyWeeklyCompetitionCheck(gameState, currentDay) {
   const config = getCompetitionConfig();
+  if (typeof isTakeoverUnlocked === "function" && isTakeoverUnlocked(gameState)) {
+    return { ok: false, checked: false };
+  }
   if (!isCompetitionEnabled(config, currentDay, gameState)) {
     return { ok: false, checked: false };
   }
