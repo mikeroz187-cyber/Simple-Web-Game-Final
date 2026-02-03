@@ -3687,3 +3687,196 @@ body.after-hours-active .ambient-mascot {
 .outcome-bonus {
   color: #d4af37;
 }
+
+/* === Industry Takeover Micro-Polish === */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-body);
+  border: var(--border-width) solid transparent;
+}
+
+.badge--defeated {
+  background: rgba(0, 255, 136, 0.15);
+  border-color: rgba(0, 255, 136, 0.3);
+  color: var(--success);
+}
+
+.badge--vulnerable {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: var(--vip);
+}
+
+.badge--available {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.3);
+  color: var(--cyan);
+}
+
+.badge--locked {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+}
+
+.badge--inprogress {
+  background: rgba(255, 45, 122, 0.15);
+  border-color: rgba(255, 45, 122, 0.3);
+  color: var(--accent);
+}
+
+.progress {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  border: var(--border-width) solid rgba(255, 255, 255, 0.08);
+}
+
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.4), rgba(212, 175, 55, 0.5));
+}
+
+.progress__label {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.takeover-summary-chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-sm);
+  border-top: none;
+  padding-top: 0;
+}
+
+.takeover-summary-chips .secondary-stat {
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: var(--border-width) solid var(--glass-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.takeover-retaliation-line {
+  margin-top: var(--gap-xs);
+  color: var(--text-muted);
+}
+
+.industry-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-md);
+}
+
+.industry-map-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+}
+
+.industry-map-card__badge {
+  position: absolute;
+  top: var(--gap-sm);
+  right: var(--gap-sm);
+}
+
+.industry-map-card__portrait {
+  max-height: 72px;
+}
+
+.industry-map-card__progress {
+  margin-bottom: var(--gap-sm);
+}
+
+.industry-map-card__actions {
+  margin-top: auto;
+}
+
+.industry-studio__status {
+  margin-bottom: var(--gap-xs);
+}
+
+.industry-boss-card {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--gap-md);
+  align-items: center;
+}
+
+.industry-boss__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+}
+
+.industry-boss__name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-bright);
+}
+
+.industry-boss__stage {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.industry-performer-card {
+  grid-template-columns: 72px minmax(0, 1fr) 120px auto;
+}
+
+.industry-performer__status {
+  display: flex;
+  align-items: center;
+}
+
+.industry-performer__line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.industry-performer__actions .button {
+  min-width: 160px;
+}
+
+.empire-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap-md);
+}
+
+.empire-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: var(--gap-sm);
+}
+
+.empire-trophy__badge {
+  margin-bottom: var(--gap-xs);
+}
+
+.empire-trophy__progress {
+  margin-bottom: var(--gap-sm);
+}
+
+.thumb-sm {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  border: var(--border-width) solid var(--glass-border);
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.25);
+}

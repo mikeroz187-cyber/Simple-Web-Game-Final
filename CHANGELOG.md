@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Applied Act 3 takeover UI micro-polish with badges, progress bars, and compact grids for Industry Map, Studio Detail, and Empire.
+  - Why: Improve late-game readability and hierarchy without altering mechanics or save data.
+  - Files touched: src/ui/render.js, styles.css, docs/task-checklist.md, docs/CURRENT_SCOPE.md, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
 - What: Added entry-point takeover overview comments in key takeover code sections and marked the doc audit checklist complete.
   - Why: Point future updates to the current takeover behavior overview and confirm the audit status in docs.
   - Files touched: src/systems/takeover.js, src/ui/render.js, src/ui/events.js, src/config.js, docs/task-checklist.md, docs/CURRENT_SCOPE.md, CHANGELOG.md.
