@@ -74,12 +74,13 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Story Log entries:** Success/fail outcomes add Story Log entries.
 
 ## Gallery
-- **Mode toggle:** Shoots (default), Conquests, or Bosses.
+- **Mode toggle:** Shoots (default), Conquests, Bosses, or Poached Stars.
 - **Entry list:** Shows all content entries (day, performer, location, theme, type).
 - **Details panel:** Selected entry metadata + **View Shoot Photos** button.
 - **Output cards:** Summary cards for recent shoot results.
 - **Conquests view:** Lists unlocked Conquest packs with **View** buttons when the Conquests mode is active.
 - **Bosses view:** Lists unlocked studio bosses with name, blurb, and a 10‑image placeholder slideshow.
+- **Poached Stars view:** Lists poached/trophy performers as rows with **View** buttons that open the shared slideshow viewer.
 
 ## Industry Map / Studio Detail
 - **Industry Map:** Shows the five takeover studios with status badges and progress.
@@ -94,7 +95,6 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Stage triggers:** Trigger rules can include `minDay` and `requiresDebtCleared` gates before the stat/equipment checks are evaluated.
 - **Actions:** Accept (unlocks reward pack), Close (dismisses message), View Reward (opens slideshow).
 - **Unlocked packs list:** Shows unlocked reward packs with **View** button.
-- **Trophies section:** One-time trophy cards with a single-phase “Selfies” slideshow; always available once earned.
 
 ## Slideshow (Shared Screen)
 - **Recruit Meet:** 10‑slide “Private Audition” with Next button and Hire/Decline on final slide.

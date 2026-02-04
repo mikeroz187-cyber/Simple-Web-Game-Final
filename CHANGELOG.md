@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Moved trophy selfie access into a new Gallery "Poached Stars" tab with slideshow viewing and removed the Conquests trophy section.
+  - Why: Keep Conquests focused on messages/rewards while consolidating trophies in Gallery with the shared viewer.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.
 - What: Swapped Gallery Bosses from inline slideshows to row entries that open the shared slideshow viewer.
   - Why: Align Bosses behavior with Conquests and keep the gallery layout consistent.
   - Files touched: src/ui/render.js, src/ui/events.js, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
