@@ -967,6 +967,12 @@ function getSlideshowImagePaths(gameState, slideshow) {
       : null;
     return pack && Array.isArray(pack.imagePaths) ? pack.imagePaths : [];
   }
+  if (slideshow.mode === "boss") {
+    return CONFIG.gallery && CONFIG.gallery.bossPlaceholders &&
+      Array.isArray(CONFIG.gallery.bossPlaceholders.defaultBoss)
+      ? CONFIG.gallery.bossPlaceholders.defaultBoss
+      : [];
+  }
   return [];
 }
 
@@ -1481,7 +1487,7 @@ function setupEventHandlers() {
 
     if (action === "slideshow-prev" || action === "slideshow-next") {
       const slideshow = uiState.slideshow;
-      if (!slideshow || (slideshow.mode !== "shoot" && slideshow.mode !== "conquest")) {
+      if (!slideshow || (slideshow.mode !== "shoot" && slideshow.mode !== "conquest" && slideshow.mode !== "boss")) {
         return;
       }
       const slides = getSlideshowImagePaths(window.gameState, slideshow);
@@ -1502,6 +1508,8 @@ function setupEventHandlers() {
         showScreen(origin === "social" ? "screen-social" : "screen-gallery");
       } else if (mode === "conquest") {
         showScreen(origin === "gallery" ? "screen-gallery" : "screen-conquests");
+      } else if (mode === "boss") {
+        showScreen("screen-gallery");
       } else {
         showScreen("screen-hub");
       }
@@ -2734,6 +2742,14 @@ function setupEventHandlers() {
 
     if (action === "gallery-view-conquest") {
       uiState.slideshow = { mode: "conquest", id: actionId, index: 0, origin: "gallery" };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "gallery-view-boss") {
+      uiState.slideshow = { mode: "boss", id: actionId, index: 0, origin: "gallery" };
       setUiMessage("");
       showScreen("screen-slideshow");
       renderApp(window.gameState);

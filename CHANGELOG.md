@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Swapped Gallery Bosses from inline slideshows to row entries that open the shared slideshow viewer.
+  - Why: Align Bosses behavior with Conquests and keep the gallery layout consistent.
+  - Files touched: src/ui/render.js, src/ui/events.js, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
 - What: Removed slideshow controls and forced a single image for performer takeover stage modals.
   - Why: Keep poached performer takeover stages to one static image without navigation UI.
   - Files touched: src/ui/events.js, CHANGELOG.md.
