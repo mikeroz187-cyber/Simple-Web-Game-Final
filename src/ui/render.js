@@ -7,7 +7,8 @@ function getUiState() {
         locationId: null,
         themeId: null,
         contentType: null,
-        bookingMode: "core"
+        bookingMode: "core",
+        performerSelectMessage: ""
       },
       social: {
         selectedContentId: null
@@ -1732,25 +1733,31 @@ function renderBooking(gameState) {
       '<select id="booking-performer-select" class="select-control" data-action="select-performer-a" disabled>' +
         '<option selected>Agency selection</option>' +
       '</select>' +
+      '<div id="booking-performer-select-msg" class="field-help"></div>' +
     '</div>';
   } else {
     var performerOptionsHtml = corePerformers.map(function (performer) {
       var status = getPerformerStatus(performer);
       var performerId = performer.id;
       var isSelected = performerId === selectedPerformerId;
-      var label = performer.name + " ★" + performer.starPower + " — " + status.text;
+      var availabilityLabel = status.isAvailable ? "Available" : status.text;
+      var labelPrefix = status.isAvailable ? "" : "⛔ ";
+      var label = labelPrefix + performer.name + " ★" + performer.starPower + " — " + availabilityLabel;
+      var availabilityValue = status.isAvailable ? "1" : "0";
       return '<option value="' + performerId + '"' + (isSelected ? ' selected' : '') +
-        (status.isAvailable ? '' : ' disabled') + '>' + label + '</option>';
+        ' data-available="' + availabilityValue + '" data-reason="' + availabilityLabel + '">' + label + '</option>';
     }).join('');
     var performerPlaceholder = corePerformers.length
       ? '<option value="" disabled' + (selectedPerformerId ? '' : ' selected') + '>Select a performer\u2026</option>'
       : '<option value="" disabled selected>No performers available</option>';
+    var performerSelectMessage = uiState.booking.performerSelectMessage || "";
     performerSelectHtml = '<div class="booking-performer-select">' +
       '<label class="form-label" for="booking-performer-select">Performer</label>' +
       '<select id="booking-performer-select" class="select-control" data-action="select-performer-a">' +
         performerPlaceholder +
         performerOptionsHtml +
       '</select>' +
+      '<div id="booking-performer-select-msg" class="field-help">' + performerSelectMessage + '</div>' +
     '</div>';
   }
 

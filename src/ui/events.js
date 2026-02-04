@@ -57,7 +57,8 @@ function resetBookingSelection() {
     locationId: null,
     themeId: null,
     contentType: null,
-    bookingMode: bookingMode
+    bookingMode: bookingMode,
+    performerSelectMessage: ""
   };
 }
 
@@ -2310,6 +2311,7 @@ function setupEventHandlers() {
       if (mode === "agency_pack") {
         uiState.booking.performerIdA = null;
       }
+      uiState.booking.performerSelectMessage = "";
       setUiMessage("");
       renderApp(window.gameState);
       return;
@@ -2320,6 +2322,7 @@ function setupEventHandlers() {
         return;
       }
       uiState.booking.performerIdA = actionId || null;
+      uiState.booking.performerSelectMessage = "";
       setUiMessage("");
       renderApp(window.gameState);
       return;
@@ -3413,7 +3416,27 @@ function setupEventHandlers() {
 
     if (action === "select-performer-a") {
       const uiState = getUiState();
+      const selectedOption = target.options ? target.options[target.selectedIndex] : null;
+      const availability = selectedOption && selectedOption.dataset ? selectedOption.dataset.available : "1";
+      const reason = selectedOption && selectedOption.dataset ? selectedOption.dataset.reason : "";
+      if (availability === "0") {
+        const performerId = target.value;
+        const performers = window.gameState.roster && Array.isArray(window.gameState.roster.performers)
+          ? window.gameState.roster.performers
+          : [];
+        const performer = performers.find(function (entry) {
+          return entry.id === performerId;
+        });
+        const performerName = performer ? performer.name : "Performer";
+        uiState.booking.performerIdA = null;
+        uiState.booking.performerSelectMessage = "Can't select " + performerName + " \u2014 " + reason;
+        target.value = "";
+        setUiMessage("");
+        renderApp(window.gameState);
+        return;
+      }
       uiState.booking.performerIdA = target.value || null;
+      uiState.booking.performerSelectMessage = "";
       setUiMessage("");
       renderApp(window.gameState);
       return;
@@ -3426,6 +3449,7 @@ function setupEventHandlers() {
       if (nextMode === "agency_pack") {
         uiState.booking.performerIdA = null;
       }
+      uiState.booking.performerSelectMessage = "";
       setUiMessage("");
       renderApp(window.gameState);
       return;
