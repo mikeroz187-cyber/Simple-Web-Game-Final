@@ -24,7 +24,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - **Performer dropdown:**
   - Shows all non-trophy roster performers.
   - Options show **Name ★{starPower} — Status** with status values **Available**, **Contract expired**, **Already shot today**, or **Daily cap reached**.
-  - Unavailable performers remain visible but are disabled with their status reason.
+  - Unavailable performers remain visible with a **⛔** label and a reason; selecting them shows an inline message under the dropdown and does not set a performer.
   - In Agency Pack mode, the performer selector is disabled and shows “Agency selection.”
 - **Portrait preview:** 9:16 portrait frame; shows placeholder copy until a performer is selected, then renders the performer portrait.
 - **Performer stats panel:** Name, star rating (visual + numeric ★X), loyalty (❤️), and availability status.

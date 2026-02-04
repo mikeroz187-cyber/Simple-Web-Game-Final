@@ -1029,6 +1029,13 @@ body {
   line-height: 1.4;
 }
 
+.field-help {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .muted {
   color: var(--text-muted);
   font-size: 12px;
