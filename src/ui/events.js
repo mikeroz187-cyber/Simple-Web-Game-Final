@@ -492,7 +492,7 @@ function showBossStageModal(gameState) {
   const stageKey = modalState.stageKey || "summons";
   const stageLabel = typeof getBossStageLabel === "function" ? getBossStageLabel(stageKey) : "Stage";
   const slides = typeof getBossStageImagePaths === "function"
-    ? getBossStageImagePaths(studioId, bossId, stageKey, 5)
+    ? getBossStageImagePaths(studioId, bossId, stageKey, 1)
     : [];
   const slideCount = slides.length ? slides.length : 1;
   const safeIndex = Math.min(Math.max(0, modalState.index || 0), slideCount - 1);
@@ -502,13 +502,7 @@ function showBossStageModal(gameState) {
     "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"" + stageLabel + " slide " + slideNumber + "\"" +
     (placeholderPath ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "") + " />" +
     "</div>";
-  const prevDisabled = safeIndex <= 0;
-  const nextDisabled = safeIndex >= slideCount - 1;
-  const controlsHtml = "<div class=\"slideshow-controls\">" +
-    createButton("Prev", "boss-stage-prev", "", prevDisabled) +
-    createButton("Next", "boss-stage-next", "primary", nextDisabled) +
-    "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
-    "</div>";
+  const controlsHtml = "";
   const messageHtml = getBossStageCopy(stageKey);
   const stages = typeof getBossStagesList === "function"
     ? getBossStagesList()
@@ -525,7 +519,6 @@ function showBossStageModal(gameState) {
     "<h3 class=\"modal-title\">" + stageLabel.toUpperCase() + ": " + bossName + "</h3>" +
     "<div class=\"slideshow-layout\">" +
     imageHtml +
-    controlsHtml +
     "</div>" +
     "<p class=\"modal-message\" style=\"margin-top:12px;\">" + messageHtml + "</p>" +
     "<div class=\"button-row\" style=\"margin-top:12px;\">" +
@@ -1687,7 +1680,7 @@ function setupEventHandlers() {
       const bossId = bossConfig && bossConfig.id ? bossConfig.id : null;
       const stageKey = modalState.stageKey || "summons";
       const slides = typeof getBossStageImagePaths === "function"
-        ? getBossStageImagePaths(studioId, bossId, stageKey, 5)
+        ? getBossStageImagePaths(studioId, bossId, stageKey, 1)
         : [];
       const maxIndex = Math.max(0, (slides.length ? slides.length : 1) - 1);
       const delta = action === "boss-stage-next" ? 1 : -1;
