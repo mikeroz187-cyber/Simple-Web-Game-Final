@@ -165,6 +165,85 @@ function buildShootPhotoPaths() {
   });
 }
 
+function findMatchingShootPhotoPool(selection) {
+  const config = getShootPhotoConfig();
+  const pools = Array.isArray(config.pools) ? config.pools : [];
+  if (!selection || pools.length === 0) {
+    return null;
+  }
+  const performerId = selection.performerId || selection.performerIdA || null;
+  return pools.find(function (pool) {
+    if (!pool || !pool.match || typeof pool.match !== "object") {
+      return false;
+    }
+    const match = pool.match;
+    if (match.performerId && match.performerId !== performerId) {
+      return false;
+    }
+    if (match.locationId && match.locationId !== selection.locationId) {
+      return false;
+    }
+    if (match.themeId && match.themeId !== selection.themeId) {
+      return false;
+    }
+    if (match.contentType && match.contentType !== selection.contentType) {
+      return false;
+    }
+    return true;
+  }) || null;
+}
+
+function buildPoolPaths(pool) {
+  if (!pool) {
+    return [];
+  }
+  const fileCount = Number.isFinite(pool.fileCount) ? Math.max(0, Math.floor(pool.fileCount)) : 0;
+  const pad = Number.isFinite(pool.pad) ? Math.max(0, Math.floor(pool.pad)) : 0;
+  const basePath = typeof pool.basePath === "string" ? pool.basePath : "";
+  const prefix = typeof pool.filePrefix === "string" ? pool.filePrefix : "";
+  const ext = typeof pool.fileExt === "string" ? pool.fileExt : "";
+  return Array.from({ length: fileCount }, function (_, index) {
+    const number = index + 1;
+    const padded = pad > 0 ? String(number).padStart(pad, "0") : String(number);
+    return "" + basePath + prefix + padded + ext;
+  });
+}
+
+function pickUniqueSeeded(paths, count, seed) {
+  const safePaths = Array.isArray(paths) ? paths.slice() : [];
+  const safeCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+  let nextSeed = Number.isFinite(seed) ? seed >>> 0 : 1;
+  const picks = [];
+  while (picks.length < safeCount && safePaths.length > 0) {
+    const next = getNextSeededFloat(nextSeed);
+    nextSeed = next.seed;
+    const index = Math.floor(next.value * safePaths.length);
+    picks.push(safePaths.splice(index, 1)[0]);
+  }
+  return { picks: picks, nextSeed: nextSeed };
+}
+
+function buildShootPhotoPathsForSelection(gameState, selection) {
+  const config = getShootPhotoConfig();
+  const count = Number.isFinite(config.count) ? Math.max(0, Math.floor(config.count)) : 0;
+  const pool = findMatchingShootPhotoPool(selection);
+  if (!pool) {
+    return buildShootPhotoPaths();
+  }
+  const poolPaths = buildPoolPaths(pool);
+  if (poolPaths.length < count) {
+    return buildShootPhotoPaths();
+  }
+  const seed = gameState && gameState.content && Number.isFinite(gameState.content.shootPhotosSeed)
+    ? gameState.content.shootPhotosSeed
+    : 1;
+  const result = pickUniqueSeeded(poolPaths, count, seed);
+  if (gameState && gameState.content) {
+    gameState.content.shootPhotosSeed = result.nextSeed;
+  }
+  return result.picks;
+}
+
 function isAgencyPackSelection(selection) {
   if (!selection) {
     return false;
@@ -738,7 +817,7 @@ function confirmBooking(gameState, selection) {
       divaFee: divaFee,
       totalCost: totalCost
     },
-    photoPaths: buildShootPhotoPaths(),
+    photoPaths: buildShootPhotoPathsForSelection(gameState, selection),
     results: {
       baseShootCost: baseShootCost,
       costMult: adjustedCost.mult,

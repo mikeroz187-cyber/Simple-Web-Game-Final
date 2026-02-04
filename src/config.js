@@ -1771,7 +1771,23 @@ const CONFIG = {
   },
   shootPhotos: {
     count: 5,
-    placeholderPath: SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH
+    placeholderPath: SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH,
+    pools: [
+      {
+        id: "pool_core_lena_watts_bedroom_lingerie_premium",
+        match: {
+          performerId: "core_lena_watts",
+          locationId: "bedroom",
+          themeId: "lingerie",
+          contentType: "Premium"
+        },
+        basePath: "assets/images/shoots/core_lena_watts/bedroom/lingerie/premium/",
+        filePrefix: "Kendra_Lynn_Premium_Lingerie_Bedroom_",
+        fileExt: ".webp",
+        fileCount: 32,
+        pad: 2
+      }
+    ]
   },
   social_platforms: {
     platforms: ["Instagram", "X"],

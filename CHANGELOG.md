@@ -104,6 +104,9 @@ This changelog is optimized for:
 - What: Replaced Competition after Day 181 with Industry Takeover gating and added retaliation poach attempts with modal choices, roster removal, and rep-floor handling.
   - Why: Deliver Phase 6 takeover escalation and retire legacy Competition pressure once Industry Takeover unlocks.
   - Files touched: src/config.js, src/state.js, src/utils/rng.js, src/systems/competition.js, src/systems/takeover.js, src/ui/render.js, src/ui/events.js.
+- What: Added config-driven shoot photo pools with seeded per-booking 5-of-N selection for the Lena bedroom lingerie Premium shoot.
+  - Why: Provide deterministic, randomized slideshow image sets per booking while retaining placeholder fallbacks elsewhere.
+  - Files touched: src/config.js, src/state.js, src/save.js, src/systems/booking.js, docs/GAMESTATE_DATA_MODEL.md, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/CORE_GAMEPLAY_LOOP.md, docs/task-checklist.md, CHANGELOG.md.
 - What: Updated late-game documentation and scope/checklist to reflect Phase 6 completion and retaliation flow.
   - Why: Keep docs aligned with the shipped takeover competition swap and retaliation mechanics.
   - Files touched: docs/CURRENT_SCOPE.md, docs/late-game/PRD.md, docs/late-game/GAME_FLOW.md, docs/late-game/IMPLEMENTATION_PLAN.md, docs/late-game/DATA_STRUCTURE.md, docs/task-checklist.md, CHANGELOG.md.
