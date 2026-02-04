@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Tightened the Content screen slideshow container sizing to keep the info panel visible.
+  - Why: Make the post-shoot slideshow fit more snugly in its frame without impacting other screens.
+  - Files touched: styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.
 - What: Moved trophy selfie access into a new Gallery "Poached Stars" tab with slideshow viewing and removed the Conquests trophy section.
   - Why: Keep Conquests focused on messages/rewards while consolidating trophies in Gallery with the shared viewer.
   - Files touched: src/ui/render.js, src/ui/events.js, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.

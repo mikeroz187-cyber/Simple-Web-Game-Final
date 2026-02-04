@@ -2878,6 +2878,13 @@ body {
   border-radius: var(--radius-md);
 }
 
+/* Content screen: tighter slideshow sizing */
+.screen-content .slideshow-image-container {
+  max-height: 38vh;
+  max-width: 820px;
+  padding: var(--gap-xs);
+}
+
 .slideshow-image {
   width: auto;
   height: auto;
