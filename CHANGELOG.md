@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed slideshow controls and forced a single image for performer takeover stage modals.
+  - Why: Keep poached performer takeover stages to one static image without navigation UI.
+  - Files touched: src/ui/events.js, CHANGELOG.md.
 - What: Removed the Boss stage modal slideshow controls and limited Boss stage art to a single image per stage.
   - Why: Match the updated takeover presentation requirement to show only one Boss image without navigation UI.
   - Files touched: src/ui/events.js, CHANGELOG.md.
