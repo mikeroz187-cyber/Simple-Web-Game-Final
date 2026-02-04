@@ -34,6 +34,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
 ## Content
 - **Latest shoot preview:** Five‑image slideshow with Prev/Next controls.
+- **Slideshow sizing:** Post‑shoot slideshow is constrained to a tighter viewport-based max height on the Content screen to keep the info panel visible.
 - **Photo sources:** The slideshow uses `entry.photoPaths`; some shoot configs pull from configured image pools with per-booking randomized selection.
 - **Metadata:** Performer, location, theme, content type, day created, shoot cost, and sample pack thumbnails (if applicable).
 - **Actions:** View Analytics / Back to Hub.
