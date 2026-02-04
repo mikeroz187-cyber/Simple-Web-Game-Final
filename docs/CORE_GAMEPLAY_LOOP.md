@@ -58,5 +58,5 @@ This document describes the **current implemented loop** and rules as they exist
 
 ## Slideshows
 - **Recruit Meet:** 10-image slideshow.
-- **Shoot Preview (Content screen):** 5-image slideshow for the latest shoot.
+- **Shoot Preview (Content screen):** 5-image slideshow for the latest shoot; uses placeholders unless a shoot photo pool is configured.
 - **Gallery:** A shared slideshow viewer for any saved shoot photos.

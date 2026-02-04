@@ -196,6 +196,7 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 - [x] Per-performer daily caps (max 3) + agency pack once per day.
 - [x] Shared slideshow viewer for recruit meets and shoot photos.
 - [x] Booking result slideshow (5 images) for Promo/Premium shoots.
+- [x] Shoot photo pools: config-driven, seeded per-booking random 5-of-N selection persisted via `photoPaths`.
 - [x] Late-game unlock cadence extended using only remaining meaningful unlocks (limited by available content; no duplicates; no story-only unlocks).
 
 ---

@@ -17,6 +17,10 @@ function createContentVarianceSeed() {
   return Math.floor(Math.random() * 4294967296) >>> 0;
 }
 
+function createShootPhotosSeed() {
+  return Math.floor(Math.random() * 4294967296) >>> 0;
+}
+
 function buildDefaultContentVarianceState() {
   return {
     enabled: getContentVarianceEnabledDefault(),
@@ -230,7 +234,8 @@ function newGameState() {
     content: {
       lastContentId: null,
       entries: [],
-      variance: buildDefaultContentVarianceState()
+      variance: buildDefaultContentVarianceState(),
+      shootPhotosSeed: createShootPhotosSeed()
     },
     rivals: {
       studios: buildDefaultRivalStudiosState(),

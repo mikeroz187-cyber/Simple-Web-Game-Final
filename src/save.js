@@ -351,6 +351,11 @@ function ensureContentVarianceState(candidate) {
   } else {
     variance.seed = variance.seed >>> 0;
   }
+  if (!Number.isFinite(candidate.content.shootPhotosSeed)) {
+    candidate.content.shootPhotosSeed = buildDefaultContentVarianceState().seed;
+  } else {
+    candidate.content.shootPhotosSeed = candidate.content.shootPhotosSeed >>> 0;
+  }
   if (!Array.isArray(variance.rollLog)) {
     variance.rollLog = [];
   }

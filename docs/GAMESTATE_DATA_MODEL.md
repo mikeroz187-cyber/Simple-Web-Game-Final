@@ -88,10 +88,12 @@ See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
     "enabled": true,
     "seed": 1234567890,
     "rollLog": []
-  }
+  },
+  "shootPhotosSeed": 987654321
 }
 ```
 - Agency Pack entries may include `bundleCount` and `bundleThumbs`.
+- `shootPhotosSeed` is a persisted RNG seed used to select shoot photo pools per booking.
 
 ### `social`
 ```json
