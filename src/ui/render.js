@@ -2757,7 +2757,9 @@ function renderGallery(gameState) {
   }
   var galleryMode = uiState.gallery.mode === "conquests"
     ? "conquests"
-    : (uiState.gallery.mode === "bosses" ? "bosses" : "shoots");
+    : (uiState.gallery.mode === "bosses"
+      ? "bosses"
+      : (uiState.gallery.mode === "poached" ? "poached" : "shoots"));
   var modeToggleHtml = "<div class=\"button-row\">" +
     createButton(
       "Shoots",
@@ -2779,6 +2781,13 @@ function renderGallery(gameState) {
       galleryMode === "bosses" ? "small primary" : "small secondary",
       false,
       "data-mode=\"bosses\""
+    ) +
+    createButton(
+      "Poached Stars",
+      "gallery-mode",
+      galleryMode === "poached" ? "small primary" : "small secondary",
+      false,
+      "data-mode=\"poached\""
     ) +
     "</div>";
 
@@ -2885,6 +2894,63 @@ function renderGallery(gameState) {
     container.innerHTML = renderAmbientLayers("screen-gallery") +
       "<div class=\"screen-content mascot-clearance\">" +
       bossContentHtml +
+      "</div>";
+    return;
+  }
+
+  if (galleryMode === "poached") {
+    var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
+    var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+    var imageCount = trophySelfies.length;
+    var trophyRows = trophyPerformers.slice();
+    trophyRows.sort(function (a, b) {
+      var dayA = Number.isFinite(a.unlockedDay) ? a.unlockedDay : (Number.isFinite(a.dayAcquired) ? a.dayAcquired : 0);
+      var dayB = Number.isFinite(b.unlockedDay) ? b.unlockedDay : (Number.isFinite(b.dayAcquired) ? b.dayAcquired : 0);
+      if (dayA && dayB) {
+        return dayB - dayA;
+      }
+      if (dayA) {
+        return -1;
+      }
+      if (dayB) {
+        return 1;
+      }
+      return 0;
+    });
+    var poachedHtml = "";
+    if (!trophyRows.length) {
+      poachedHtml = "<div class=\"empty-state\">" +
+        "<div class=\"empty-state__description\">No poached stars yet. Take over a studio to earn your first trophy.</div>" +
+        "</div>";
+    } else {
+      poachedHtml = trophyRows.map(function (entry) {
+        var performerId = entry.performerId;
+        var performerConfig = typeof getTakeoverPerformerConfig === "function"
+          ? getTakeoverPerformerConfig(performerId)
+          : null;
+        var name = performerConfig && performerConfig.name ? performerConfig.name : "Poached Star";
+        return "<div class=\"conquest-pack\">" +
+          "<div class=\"conquest-pack__text\">" +
+          "<div class=\"conquest-pack__title\">" + name + "</div>" +
+          "<div class=\"conquest-pack__meta\">Selfies · Trophy Reward · " + imageCount + " images</div>" +
+          "</div>" +
+          createButton("View", "gallery-view-trophy", "small", false, "data-id=\"" + performerId + "\"") +
+          "</div>";
+      }).join("");
+    }
+
+    var poachedContentHtml = "<h2 class=\"screen-title\">Gallery</h2>" +
+      modeToggleHtml +
+      "<div class=\"panel\">" +
+      "<h3 class=\"panel-title\">Poached Stars</h3>" +
+      "<p class=\"helper-text\">One-time captures. Five shameless selfies. Yours to keep.</p>" +
+      poachedHtml +
+      "</div>" +
+      "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
+
+    container.innerHTML = renderAmbientLayers("screen-gallery") +
+      "<div class=\"screen-content mascot-clearance\">" +
+      poachedContentHtml +
       "</div>";
     return;
   }
@@ -3162,58 +3228,6 @@ function renderConquests(gameState) {
       "</div>";
   }
 
-  var trophyPerformers = typeof getTrophyPerformers === "function" ? getTrophyPerformers(gameState) : [];
-  var trophySelfies = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
-  var trophyPlaceholder = trophySelfies[0] || CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
-  var trophySectionHtml = "";
-  if (trophyPerformers.length > 0) {
-    var trophyCardsHtml = trophyPerformers.map(function (entry) {
-      var performerId = entry.performerId;
-      var performerConfig = typeof getTakeoverPerformerConfig === "function"
-        ? getTakeoverPerformerConfig(performerId)
-        : null;
-      var name = performerConfig && performerConfig.name ? performerConfig.name : "Trophy Performer";
-      var slideCount = trophySelfies.length ? trophySelfies.length : 1;
-      var storedIndex = uiState.conquests && uiState.conquests.trophySlideIndex
-        ? uiState.conquests.trophySlideIndex[performerId]
-        : 0;
-      var safeIndex = Math.min(Math.max(0, Number.isFinite(storedIndex) ? storedIndex : 0), slideCount - 1);
-      if (uiState.conquests && uiState.conquests.trophySlideIndex) {
-        uiState.conquests.trophySlideIndex[performerId] = safeIndex;
-      }
-      var slidePath = trophySelfies.length ? trophySelfies[safeIndex] : trophyPlaceholder;
-      var slideNumber = slideCount ? safeIndex + 1 : 0;
-      var prevDisabled = safeIndex <= 0;
-      var nextDisabled = safeIndex >= slideCount - 1;
-      var controlsHtml = "<div class=\"slideshow-controls\">" +
-        createButton("Prev", "trophy-selfie-prev", "small", prevDisabled, "data-id=\"" + performerId + "\"") +
-        createButton("Next", "trophy-selfie-next", "small primary", nextDisabled, "data-id=\"" + performerId + "\"") +
-        "<span class=\"slideshow-counter\">Selfie " + slideNumber + " of " + slideCount + "</span>" +
-        "</div>";
-      return "<div class=\"shop-card\">" +
-        "<div class=\"conquest-detail__portrait\" style=\"margin-bottom: var(--gap-sm);\">" +
-          "<img class=\"thumb-sm\" src=\"" + slidePath + "\" alt=\"" + name + " selfie\" />" +
-        "</div>" +
-        "<div class=\"shop-card__title\">" + name + "</div>" +
-        "<div class=\"helper-text\">Selfies — Trophy Reward</div>" +
-        "<div class=\"empire-trophy__badge\">" + renderTakeoverBadge("Trophy", "defeated") + "</div>" +
-        "<div class=\"slideshow-layout\" style=\"margin-top: var(--gap-sm);\">" +
-          controlsHtml +
-        "</div>" +
-        "</div>";
-    }).join("");
-    trophySectionHtml = "<div class=\"panel\">" +
-      "<h3 class=\"panel-title\">Trophies</h3>" +
-      "<p class=\"helper-text\">One-time conquests. Five shameless selfies. Yours to keep.</p>" +
-      "<div class=\"shop-grid\">" + trophyCardsHtml + "</div>" +
-      "</div>";
-  } else {
-    trophySectionHtml = "<div class=\"panel\">" +
-      "<h3 class=\"panel-title\">Trophies</h3>" +
-      "<p class=\"helper-text\">No trophies yet. Poach performers from the Industry Map to unlock selfies here.</p>" +
-      "</div>";
-  }
-
   var contentHtml = "<div class=\"screen-header\">" +
     "<h2 class=\"screen-title\" id=\"screen-conquests-title\">Conquests</h2>" +
     "<p class=\"helper-text\">Messages from power players. Accept to unlock exclusive reward packs.</p>" +
@@ -3236,7 +3250,6 @@ function renderConquests(gameState) {
     "</div>" +
     "</div>" +
     "</div>" +
-    trophySectionHtml +
     "<div class=\"button-row\"><button class=\"button ghost\" data-action=\"nav-hub\">← Back to Hub</button></div>";
 
   container.innerHTML = renderAmbientLayers("screen-conquests") +
@@ -3424,6 +3437,46 @@ function renderSlideshow(gameState) {
     container.innerHTML = renderAmbientLayers("screen-slideshow") +
       "<div class=\"screen-content\">" +
       conquestHtml +
+      "</div>";
+    return;
+  }
+
+  if (slideshow.mode === "trophy") {
+    var performerConfig = typeof getTakeoverPerformerConfig === "function"
+      ? getTakeoverPerformerConfig(slideshow.id)
+      : null;
+    var trophyName = performerConfig && performerConfig.name ? performerConfig.name : "Poached Star";
+    var trophySlides = typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+    var trophySlideCount = trophySlides.length;
+    var trophySafeIndex = clamp(slideshow.index, 0, Math.max(0, trophySlideCount - 1));
+    var trophySlidePath = trophySlideCount ? trophySlides[trophySafeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    var trophySlideNumber = trophySlideCount ? trophySafeIndex + 1 : 0;
+    var trophyPrevDisabled = trophySafeIndex <= 0;
+    var trophyNextDisabled = trophySafeIndex >= trophySlideCount - 1;
+    var trophyTitle = trophyName + " — Trophy Set";
+    var trophyImageHtml = "<div class=\"slideshow-image-container\">" +
+      "<img class=\"slideshow-image\" src=\"" + trophySlidePath + "\" alt=\"Trophy photo " + (trophySafeIndex + 1) + "\" />" +
+      "</div>";
+    var trophyControlsHtml = "<div class=\"slideshow-controls\">" +
+      createButton("Prev", "slideshow-prev", "", trophyPrevDisabled) +
+      createButton("Next", "slideshow-next", "primary", trophyNextDisabled) +
+      "<span class=\"slideshow-counter\">Photo " + trophySlideNumber + " of " + trophySlideCount + "</span>" +
+      "</div>";
+    var trophyBackRow = "<div class=\"slideshow-back-row\">" +
+      createButton("Back to Gallery", "slideshow-close", "secondary slideshow-back-button") +
+      "</div>";
+    var trophyBody = "<div class=\"panel\">" +
+      trophyBackRow +
+      "<h3 class=\"panel-title\">" + trophyTitle + "</h3>" +
+      "<div class=\"slideshow-layout\">" +
+      trophyImageHtml +
+      trophyControlsHtml +
+      "</div>" +
+      "</div>";
+    var trophyHtml = createPanel(trophyTitle, trophyBody, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      trophyHtml +
       "</div>";
     return;
   }

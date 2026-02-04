@@ -967,6 +967,9 @@ function getSlideshowImagePaths(gameState, slideshow) {
       : null;
     return pack && Array.isArray(pack.imagePaths) ? pack.imagePaths : [];
   }
+  if (slideshow.mode === "trophy") {
+    return typeof getTrophySelfiePaths === "function" ? getTrophySelfiePaths() : [];
+  }
   if (slideshow.mode === "boss") {
     return CONFIG.gallery && CONFIG.gallery.bossPlaceholders &&
       Array.isArray(CONFIG.gallery.bossPlaceholders.defaultBoss)
@@ -1487,7 +1490,8 @@ function setupEventHandlers() {
 
     if (action === "slideshow-prev" || action === "slideshow-next") {
       const slideshow = uiState.slideshow;
-      if (!slideshow || (slideshow.mode !== "shoot" && slideshow.mode !== "conquest" && slideshow.mode !== "boss")) {
+      if (!slideshow || (slideshow.mode !== "shoot" && slideshow.mode !== "conquest" &&
+          slideshow.mode !== "boss" && slideshow.mode !== "trophy")) {
         return;
       }
       const slides = getSlideshowImagePaths(window.gameState, slideshow);
@@ -1509,6 +1513,8 @@ function setupEventHandlers() {
       } else if (mode === "conquest") {
         showScreen(origin === "gallery" ? "screen-gallery" : "screen-conquests");
       } else if (mode === "boss") {
+        showScreen("screen-gallery");
+      } else if (mode === "trophy") {
         showScreen("screen-gallery");
       } else {
         showScreen("screen-hub");
@@ -2681,7 +2687,7 @@ function setupEventHandlers() {
       if (!uiState.gallery) {
         uiState.gallery = { selectedContentId: null, mode: "shoots", bossSlides: {} };
       }
-      if (mode === "shoots" || mode === "conquests" || mode === "bosses") {
+      if (mode === "shoots" || mode === "conquests" || mode === "bosses" || mode === "poached") {
         uiState.gallery.mode = mode;
         if (!uiState.gallery.bossSlides || typeof uiState.gallery.bossSlides !== "object") {
           uiState.gallery.bossSlides = {};
@@ -2750,6 +2756,14 @@ function setupEventHandlers() {
 
     if (action === "gallery-view-boss") {
       uiState.slideshow = { mode: "boss", id: actionId, index: 0, origin: "gallery" };
+      setUiMessage("");
+      showScreen("screen-slideshow");
+      renderApp(window.gameState);
+      return;
+    }
+
+    if (action === "gallery-view-trophy") {
+      uiState.slideshow = { mode: "trophy", id: actionId, index: 0, origin: "gallery" };
       setUiMessage("");
       showScreen("screen-slideshow");
       renderApp(window.gameState);
