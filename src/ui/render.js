@@ -791,6 +791,9 @@ function renderIndustryStudio(gameState) {
     : (gameState && gameState.takeover && typeof gameState.takeover.activePerformerId === "string"
       ? gameState.takeover.activePerformerId
       : null);
+  var currentDay = gameState && gameState.player && Number.isFinite(gameState.player.day)
+    ? gameState.player.day
+    : null;
 
   var performersHtml = performerIds.map(function (performerId) {
     var performer = performerConfig[performerId] || {};
@@ -809,7 +812,15 @@ function renderIndustryStudio(gameState) {
     var actionDisabled = true;
     var actionAttr = "";
     var lockHtml = "";
-    var isLockedByActive = !studioDefeated && activePerformerId && performerId !== activePerformerId;
+    var isPoachBackEligible = false;
+    if (performerStatus === "lost") {
+      if (typeof canPoachBackLostPerformer === "function") {
+        isPoachBackEligible = canPoachBackLostPerformer(gameState, performerId);
+      } else if (Number.isFinite(performerData.nextAvailableDay) && currentDay !== null) {
+        isPoachBackEligible = currentDay >= performerData.nextAvailableDay;
+      }
+    }
+    var isLockedByActive = !studioDefeated && activePerformerId && performerId !== activePerformerId && !isPoachBackEligible;
     if (performerStatus === "available") {
       actionLabel = "Begin Acquisition";
       actionDisabled = false;
@@ -842,12 +853,18 @@ function renderIndustryStudio(gameState) {
         actionDisabled = true;
       }
     } else if (performerStatus === "lost") {
-      if (Number.isFinite(performerData.nextAvailableDay)) {
+      if (isPoachBackEligible) {
+        actionLabel = "Poach back";
+        actionDisabled = false;
+        actionAttr = " data-action=\"industry-poach-back\" data-id=\"" + performerId + "\"";
+        lockHtml = "<div class=\"helper-text\">Cooldown over. Pay the fee to take her back.</div>";
+      } else if (Number.isFinite(performerData.nextAvailableDay)) {
         actionLabel = "Lost — Available Day " + performerData.nextAvailableDay;
+        actionDisabled = true;
       } else {
         actionLabel = "Lost";
+        actionDisabled = true;
       }
-      actionDisabled = true;
     }
     if (studioDefeated) {
       actionLabel = "Studio Defeated";

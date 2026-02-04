@@ -2107,6 +2107,29 @@ function setupEventHandlers() {
       return;
     }
 
+    if (action === "industry-poach-back") {
+      event.preventDefault();
+      event.stopPropagation();
+      const performerId = actionId;
+      const result = typeof poachBackLostPerformer === "function"
+        ? poachBackLostPerformer(window.gameState, performerId)
+        : { ok: false, message: "Unavailable." };
+      if (!result || !result.ok) {
+        if (typeof showToast === "function") {
+          showToast(result && result.message ? result.message : "Not available yet.", "error");
+        } else {
+          setUiMessage(result && result.message ? result.message : "Not available yet.");
+        }
+        return;
+      }
+      if (typeof showToast === "function") {
+        showToast("Poached back. Trophy secured.", "success");
+      }
+      saveGame(window.gameState, CONFIG.save.autosave_slot_id);
+      renderApp(window.gameState);
+      return;
+    }
+
     if (action === "industry-begin-acquisition") {
       event.preventDefault();
       event.stopPropagation();
