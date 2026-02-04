@@ -2750,13 +2750,10 @@ function renderGallery(gameState) {
 
   var uiState = getUiState();
   if (!uiState.gallery) {
-    uiState.gallery = { selectedContentId: null, mode: "shoots", bossSlides: {} };
+    uiState.gallery = { selectedContentId: null, mode: "shoots" };
   }
   if (!uiState.gallery.mode) {
     uiState.gallery.mode = "shoots";
-  }
-  if (!uiState.gallery.bossSlides || typeof uiState.gallery.bossSlides !== "object") {
-    uiState.gallery.bossSlides = {};
   }
   var galleryMode = uiState.gallery.mode === "conquests"
     ? "conquests"
@@ -2862,30 +2859,19 @@ function renderGallery(gameState) {
       var bossMeta = studioConfig.bossMeta || {};
       var bossName = bossMeta.name || bossId;
       var bossBlurb = bossMeta.blurb || "";
-      var maxIndex = Math.max(0, bossPlaceholders.length - 1);
-      var currentIndex = Number.isFinite(uiState.gallery.bossSlides[bossId])
-        ? uiState.gallery.bossSlides[bossId]
-        : 0;
-      var safeIndex = clamp(currentIndex, 0, maxIndex);
-      uiState.gallery.bossSlides[bossId] = safeIndex;
-      var imagePath = bossPlaceholders.length ? bossPlaceholders[safeIndex] : "";
-      var prevDisabled = safeIndex <= 0;
-      var nextDisabled = safeIndex >= maxIndex;
-      var slideLabel = bossPlaceholders.length
-        ? "Image " + (safeIndex + 1) + " / " + bossPlaceholders.length
-        : "No images";
-      return "<div class=\"panel\">" +
-        "<h3 class=\"panel-title\">" + bossName + "</h3>" +
-        (bossBlurb ? "<div class=\"helper-text\" style=\"margin-bottom:var(--gap-sm);\">" + bossBlurb + "</div>" : "") +
-        "<div class=\"slideshow\">" +
-          "<img class=\"slideshow__image\" src=\"" + imagePath + "\" alt=\"" + bossName + " gallery image\">" +
-          "<div class=\"slideshow__controls\">" +
-            createButton("Prev", "boss-gallery-prev", "", prevDisabled, "data-id=\"" + bossId + "\"") +
-            "<span class=\"slideshow__meta\">" + slideLabel + "</span>" +
-            createButton("Next", "boss-gallery-next", "primary", nextDisabled, "data-id=\"" + bossId + "\"") +
-          "</div>" +
+      var imageCount = bossPlaceholders.length;
+      var metaParts = [];
+      if (bossBlurb) {
+        metaParts.push(bossBlurb);
+      }
+      metaParts.push(imageCount + " images");
+      return "<div class=\"conquest-pack\">" +
+        "<div class=\"conquest-pack__text\">" +
+          "<div class=\"conquest-pack__title\">" + bossName + "</div>" +
+          "<div class=\"conquest-pack__meta\">" + metaParts.join(" · ") + "</div>" +
         "</div>" +
-      "</div>";
+        createButton("View", "gallery-view-boss", "small", false, "data-id=\"" + bossId + "\"") +
+        "</div>";
     }).filter(function (card) { return card; }).join("");
 
     var bossContentHtml = "<h2 class=\"screen-title\">Gallery</h2>" +
@@ -3438,6 +3424,62 @@ function renderSlideshow(gameState) {
     container.innerHTML = renderAmbientLayers("screen-slideshow") +
       "<div class=\"screen-content\">" +
       conquestHtml +
+      "</div>";
+    return;
+  }
+
+  if (slideshow.mode === "boss") {
+    const placeholders = CONFIG.gallery && CONFIG.gallery.bossPlaceholders &&
+      Array.isArray(CONFIG.gallery.bossPlaceholders.defaultBoss)
+      ? CONFIG.gallery.bossPlaceholders.defaultBoss
+      : [];
+    const photos = placeholders;
+    const slideCount = photos.length;
+    const safeIndex = clamp(slideshow.index, 0, Math.max(0, slideCount - 1));
+    const slidePath = slideCount ? photos[safeIndex] : CONFIG.SHOOT_OUTPUT_PLACEHOLDER_IMAGE_PATH;
+    const slideNumber = slideCount ? safeIndex + 1 : 0;
+    const prevDisabled = safeIndex <= 0;
+    const nextDisabled = safeIndex >= slideCount - 1;
+    const takeoverConfig = CONFIG.takeover && typeof CONFIG.takeover === "object" ? CONFIG.takeover : {};
+    const studios = takeoverConfig.studios && typeof takeoverConfig.studios === "object" ? takeoverConfig.studios : {};
+    let bossName = slideshow.id || "Boss";
+    let bossDescription = "A private pack reserved for top-tier owners.";
+    for (const studioId in studios) {
+      if (!Object.prototype.hasOwnProperty.call(studios, studioId)) {
+        continue;
+      }
+      const studioConfig = studios[studioId];
+      if (studioConfig && studioConfig.bossId === slideshow.id) {
+        const bossMeta = studioConfig.bossMeta || {};
+        bossName = bossMeta.name || bossName;
+        bossDescription = bossMeta.blurb || bossDescription;
+        break;
+      }
+    }
+    const imageHtml = "<div class=\"slideshow-image-container\">" +
+      "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"Boss photo " + (safeIndex + 1) + "\" />" +
+      "</div>";
+    const controlsHtml = "<div class=\"slideshow-controls\">" +
+      createButton("Prev", "slideshow-prev", "", prevDisabled) +
+      createButton("Next", "slideshow-next", "primary", nextDisabled) +
+      "<span class=\"slideshow-counter\">Photo " + slideNumber + " of " + slideCount + "</span>" +
+      "</div>";
+    const backButtonRow = "<div class=\"slideshow-back-row\">" +
+      createButton("Back to Gallery", "slideshow-close", "secondary slideshow-back-button") +
+      "</div>";
+    const body = "<div class=\"panel\">" +
+      backButtonRow +
+      "<h3 class=\"panel-title\">" + bossName + "</h3>" +
+      "<p class=\"helper-text\">" + bossDescription + "</p>" +
+      "<div class=\"slideshow-layout\">" +
+      imageHtml +
+      controlsHtml +
+      "</div>" +
+      "</div>";
+    const bossHtml = createPanel(bossName, body, "screen-slideshow-title");
+    container.innerHTML = renderAmbientLayers("screen-slideshow") +
+      "<div class=\"screen-content\">" +
+      bossHtml +
       "</div>";
     return;
   }

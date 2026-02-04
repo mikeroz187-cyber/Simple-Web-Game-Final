@@ -72,6 +72,7 @@ On a poach attempt:
 ## UI Notes
 - UI: Added compact status badges across takeover cards and boss/roster rows.
 - UI: Added lightweight progress bars for studio acquisition and Empire trophies.
+- UI: Gallery → Bosses now lists unlocked bosses as rows with a View button that opens the slideshow viewer.
 
 ---
 
