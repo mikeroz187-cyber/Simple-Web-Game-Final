@@ -383,7 +383,7 @@ function showTakeoverStageModal(gameState) {
   const weaknessLabel = getTakeoverWeaknessLabel(weaknessType);
   const weaknessAngle = getTakeoverWeaknessAngle(weaknessType);
   const repDelta = getTakeoverWeaknessRepDelta(weaknessType);
-  const maxSlides = getTakeoverStageSlideLimit(stage);
+  const maxSlides = 1;
   const slides = typeof getTakeoverStageImagePaths === "function"
     ? getTakeoverStageImagePaths(modalState.performerId, stage, maxSlides)
     : [];
@@ -395,13 +395,7 @@ function showTakeoverStageModal(gameState) {
     "<img class=\"slideshow-image\" src=\"" + slidePath + "\" alt=\"" + stageLabel + " slide " + slideNumber + "\"" +
     (placeholderPath ? " onerror=\"this.onerror=null;this.src='" + placeholderPath + "'\"" : "") + " />" +
     "</div>";
-  const prevDisabled = safeIndex <= 0;
-  const nextDisabled = safeIndex >= slideCount - 1;
-  const controlsHtml = "<div class=\"slideshow-controls\">" +
-    createButton("Prev", "takeover-stage-prev", "", prevDisabled) +
-    createButton("Next", "takeover-stage-next", "primary", nextDisabled) +
-    "<span class=\"slideshow-counter\">Slide " + slideNumber + " of " + slideCount + "</span>" +
-    "</div>";
+  const controlsHtml = "";
   const currentDay = gameState && gameState.player && Number.isFinite(gameState.player.day)
     ? gameState.player.day
     : 0;
@@ -453,7 +447,6 @@ function showTakeoverStageModal(gameState) {
     "<h3 class=\"modal-title\">" + stageLabel.toUpperCase() + ": " + performerName + "</h3>" +
     "<div class=\"slideshow-layout\">" +
     imageHtml +
-    controlsHtml +
     "</div>" +
     "<p class=\"modal-message\" style=\"margin-top:12px;\">" + messageHtml + "</p>" +
     stageMetaHtml +
@@ -1659,7 +1652,7 @@ function setupEventHandlers() {
         return;
       }
       const stage = modalState.stage;
-      const maxSlides = getTakeoverStageSlideLimit(stage);
+      const maxSlides = 1;
       const slides = typeof getTakeoverStageImagePaths === "function"
         ? getTakeoverStageImagePaths(modalState.performerId, stage, maxSlides)
         : [];
