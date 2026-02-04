@@ -59,6 +59,9 @@ On a poach attempt:
 - **Defend cost:** `CONFIG.takeover.retaliation.poachDefenseCost`
 - **Lose outcome:** Performer is removed, rep penalty `CONFIG.takeover.retaliation.poachRepPenaltyOnLoss` (respects the floor)
 - **Cooldown:** Lost performers are marked **lost** and can be re-acquired after `CONFIG.takeover.retaliation.lostCooldownDays`
+- **Poach back:** After cooldown, use **Poach back** to instantly re-acquire at
+  `CONFIG.takeover.retaliation.poachBaseCost + (starPower * CONFIG.takeover.retaliation.poachCostPerStarPower)`
+- **Rules:** Poach back ignores reputation gates and skips the 4-stage acquisition loop
 
 ---
 

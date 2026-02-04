@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX: Enabled lost takeover performers to return via a Poach back action with instant re-acquire and config-based costs.
+  - Why: Restore re-acquisition after cooldowns and align retaliation behavior with the UI.
+  - Files touched: src/systems/takeover.js, src/ui/render.js, src/ui/events.js, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
 - What: Replaced the Booking quick-book grid with a Select → Preview → Confirm flow using a performer dropdown, portrait preview, and itemized cost breakdown tied to the existing booking totals.
   - Why: Give players a clear preview and cost context before committing to a shoot while keeping booking logic intact.
   - Files touched: src/ui/render.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, docs/DATA_UI_COPY.md, docs/task-checklist.md, CHANGELOG.md.

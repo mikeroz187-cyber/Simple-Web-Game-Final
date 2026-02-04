@@ -437,6 +437,90 @@ function getRetaliationConfig() {
   return {};
 }
 
+function canPoachBackLostPerformer(gameState, performerId) {
+  if (!gameState || !gameState.player || !performerId) {
+    return false;
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  const performerState = getTakeoverPerformerState(gameState, performerId);
+  if (!performerState || performerState.status !== "lost") {
+    return false;
+  }
+  if (!Number.isFinite(performerState.nextAvailableDay)) {
+    return false;
+  }
+  return gameState.player.day >= performerState.nextAvailableDay;
+}
+
+function getPoachBackCost(gameState, performerId) {
+  const retaliationConfig = getRetaliationConfig();
+  const baseCost = Number.isFinite(retaliationConfig.poachBaseCost)
+    ? retaliationConfig.poachBaseCost
+    : 0;
+  const perStarPower = Number.isFinite(retaliationConfig.poachCostPerStarPower)
+    ? retaliationConfig.poachCostPerStarPower
+    : 0;
+  const performerConfig = getTakeoverPerformerConfig(performerId) || {};
+  const starPower = Number.isFinite(performerConfig.starPower) ? performerConfig.starPower : 0;
+  return baseCost + (starPower * perStarPower);
+}
+
+function poachBackLostPerformer(gameState, performerId) {
+  if (!gameState || !gameState.player) {
+    return { ok: false, message: "Missing player state." };
+  }
+  if (!performerId) {
+    return { ok: false, message: "Missing performer." };
+  }
+  if (typeof ensureTakeoverState === "function") {
+    ensureTakeoverState(gameState);
+  }
+  if (typeof canPoachBackLostPerformer !== "function" || !canPoachBackLostPerformer(gameState, performerId)) {
+    return { ok: false, message: "Not available yet." };
+  }
+  const cost = getPoachBackCost(gameState, performerId);
+  if (!Number.isFinite(gameState.player.cash) || gameState.player.cash < cost) {
+    return { ok: false, message: "Not enough cash." };
+  }
+  const performerState = getTakeoverPerformerState(gameState, performerId);
+  if (!performerState) {
+    return { ok: false, message: "Missing performer state." };
+  }
+  gameState.player.cash = Math.max(0, gameState.player.cash - cost);
+  performerState.status = "acquired";
+  performerState.currentStage = null;
+  performerState.stageStartDay = null;
+  performerState.stageCompleteDay = null;
+  performerState.stageReady = false;
+  performerState.nextAvailableDay = null;
+  performerState.lastOutcome = "poach_back";
+  performerState.lockReason = null;
+  if (typeof addTrophyPerformer === "function") {
+    addTrophyPerformer(gameState, performerId);
+  }
+  if (gameState.takeover && gameState.takeover.stats) {
+    gameState.takeover.stats.performersAcquired = Number.isFinite(gameState.takeover.stats.performersAcquired)
+      ? gameState.takeover.stats.performersAcquired + 1
+      : 1;
+  }
+  const performerConfig = getTakeoverPerformerConfig(performerId) || {};
+  if (typeof buildTakeoverStoryLogEntry === "function" && typeof addStoryLogEntry === "function") {
+    const performerName = performerConfig.name || "Performer";
+    const logEntry = buildTakeoverStoryLogEntry(
+      gameState,
+      performerName,
+      "Poached back — paid the fee and put her on the shelf again.",
+      "poach_back_day" + gameState.player.day
+    );
+    if (logEntry) {
+      addStoryLogEntry(gameState, logEntry);
+    }
+  }
+  return { ok: true, performerId: performerId, cost: cost };
+}
+
 function scheduleNextPoachDay(gameState) {
   if (!gameState || !gameState.player) {
     return;
