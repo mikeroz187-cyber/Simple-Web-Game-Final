@@ -373,6 +373,16 @@ function getStageCost(stage, tier) {
   return Math.round(base * multiplier);
 }
 
+function getFullAcquisitionCost(gameState, performerId) {
+  const performerConfig = getTakeoverPerformerConfig(performerId) || {};
+  const tier = performerConfig.tier || "tier1";
+  const total = getStageCost("intel", tier) +
+    getStageCost("approach", tier) +
+    getStageCost("turn", tier) +
+    getStageCost("debut", tier);
+  return Number.isFinite(total) ? total : 0;
+}
+
 function getStageDurationDays() {
   const config = getTakeoverConfig();
   return Number.isFinite(config.daysPerStage) ? config.daysPerStage : 2;
@@ -455,16 +465,7 @@ function canPoachBackLostPerformer(gameState, performerId) {
 }
 
 function getPoachBackCost(gameState, performerId) {
-  const retaliationConfig = getRetaliationConfig();
-  const baseCost = Number.isFinite(retaliationConfig.poachBaseCost)
-    ? retaliationConfig.poachBaseCost
-    : 0;
-  const perStarPower = Number.isFinite(retaliationConfig.poachCostPerStarPower)
-    ? retaliationConfig.poachCostPerStarPower
-    : 0;
-  const performerConfig = getTakeoverPerformerConfig(performerId) || {};
-  const starPower = Number.isFinite(performerConfig.starPower) ? performerConfig.starPower : 0;
-  return baseCost + (starPower * perStarPower);
+  return getFullAcquisitionCost(gameState, performerId);
 }
 
 function poachBackLostPerformer(gameState, performerId) {

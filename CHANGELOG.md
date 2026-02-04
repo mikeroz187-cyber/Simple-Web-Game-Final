@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: FIX: Added a poach-back confirmation modal and aligned poach-back costs with the full acquisition total.
+  - Why: Require explicit confirmation and ensure retaliation pricing matches first-time takeover costs.
+  - Files touched: src/systems/takeover.js, src/ui/events.js, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
 - What: FIX: Keep unavailable performers readable in the booking dropdown with a clear inline block message when selected.
   - Why: Preserve high-contrast visibility while preventing invalid selections without changing booking logic.
   - Files touched: src/ui/render.js, src/ui/events.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.

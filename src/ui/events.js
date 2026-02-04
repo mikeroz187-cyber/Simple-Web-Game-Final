@@ -1160,6 +1160,9 @@ function setupEventHandlers() {
       if (uiState.bossStageModal) {
         uiState.bossStageModal = null;
       }
+      if (uiState.takeoverPoachBackPerformerId) {
+        uiState.takeoverPoachBackPerformerId = null;
+      }
       clearModal();
       return;
     }
@@ -2112,9 +2115,61 @@ function setupEventHandlers() {
       event.preventDefault();
       event.stopPropagation();
       const performerId = actionId;
+      const canPoach = typeof canPoachBackLostPerformer === "function"
+        ? canPoachBackLostPerformer(window.gameState, performerId)
+        : false;
+      if (!canPoach) {
+        if (typeof showToast === "function") {
+          showToast("Not available yet.", "error");
+        } else {
+          setUiMessage("Not available yet.");
+        }
+        return;
+      }
+      const performerConfig = typeof getTakeoverPerformerConfig === "function"
+        ? getTakeoverPerformerConfig(performerId)
+        : null;
+      const performerName = performerConfig && performerConfig.name ? performerConfig.name : "Performer";
+      const cost = typeof getPoachBackCost === "function" ? getPoachBackCost(window.gameState, performerId) : 0;
+      const cash = window.gameState && window.gameState.player && Number.isFinite(window.gameState.player.cash)
+        ? window.gameState.player.cash
+        : 0;
+      const canAfford = cash >= cost;
+      uiState.takeoverPoachBackPerformerId = performerId;
+      showDecisionModal({
+        title: "POACH BACK",
+        messageHtml: "<strong>" + performerName + "</strong> is off cooldown.<br><br>" +
+          "Pay <strong>" + formatCurrency(cost) + "</strong> right now to yank her back as a trophy. " +
+          "No stages. No flirting. Just the receipt." +
+          (canAfford ? "" : "<br><br><strong>Not enough cash.</strong>"),
+        primaryLabel: "Pay " + formatCurrency(cost) + " — Reclaim Trophy",
+        primaryAction: "industry-confirm-poach-back",
+        secondaryLabel: "Cancel",
+        secondaryAction: "dismiss-modal",
+        primaryDisabled: !canAfford
+      });
+      return;
+    }
+
+    if (action === "industry-confirm-poach-back") {
+      event.preventDefault();
+      event.stopPropagation();
+      const performerId = uiState.takeoverPoachBackPerformerId;
+      if (!performerId) {
+        uiState.takeoverPoachBackPerformerId = null;
+        clearModal();
+        if (typeof showToast === "function") {
+          showToast("Missing poach-back target.", "error");
+        } else {
+          setUiMessage("Missing poach-back target.");
+        }
+        return;
+      }
       const result = typeof poachBackLostPerformer === "function"
         ? poachBackLostPerformer(window.gameState, performerId)
         : { ok: false, message: "Unavailable." };
+      uiState.takeoverPoachBackPerformerId = null;
+      clearModal();
       if (!result || !result.ok) {
         if (typeof showToast === "function") {
           showToast(result && result.message ? result.message : "Not available yet.", "error");
