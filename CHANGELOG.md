@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Removed the Boss stage modal slideshow controls and limited Boss stage art to a single image per stage.
+  - Why: Match the updated takeover presentation requirement to show only one Boss image without navigation UI.
+  - Files touched: src/ui/events.js, CHANGELOG.md.
 - What: FIX: Added a poach-back confirmation modal and aligned poach-back costs with the full acquisition total.
   - Why: Require explicit confirmation and ensure retaliation pricing matches first-time takeover costs.
   - Files touched: src/systems/takeover.js, src/ui/events.js, docs/late-game/TAKEOVER_SYSTEM_OVERVIEW.md, CHANGELOG.md.
