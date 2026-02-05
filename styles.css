@@ -3674,8 +3674,8 @@ body {
 .ambient-mascot-container .ambient-mascot {
   position: relative;
   display: block;
-  max-height: var(--ambient-mascot-max-height, 55vh);
-  max-width: var(--ambient-mascot-max-width, 280px);
+  max-height: var(--ambient-mascot-max-height, 65vh);
+  max-width: var(--ambient-mascot-max-width, 520px);
   width: auto;
   height: auto;
   object-fit: contain;
@@ -3725,18 +3725,18 @@ body {
 
 /* Apply to screen-content containers that need mascot clearance */
 .mascot-clearance {
-  padding-right: var(--ambient-mascot-clearance-lg, 260px);
+  padding-right: var(--ambient-mascot-clearance-lg, 520px);
 }
 
 @media (max-width: 1400px) {
   .mascot-clearance {
-    padding-right: var(--ambient-mascot-clearance-md, 200px);
+    padding-right: var(--ambient-mascot-clearance-md, 420px);
   }
 }
 
 @media (max-width: 1200px) {
   .mascot-clearance {
-    padding-right: var(--ambient-mascot-clearance-sm, 160px);
+    padding-right: var(--ambient-mascot-clearance-sm, 0px);
   }
 }
 

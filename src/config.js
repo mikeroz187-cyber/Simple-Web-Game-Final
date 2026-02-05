@@ -128,13 +128,13 @@ const CONFIG = {
   ambientArt: {
     enabled: true,
     layout: {
-      rightOffsetRem: 2,
+      rightOffsetRem: 1.5,
       bottomOffsetPx: 0,
-      maxWidthPx: 360,
-      maxHeightVh: 55,
-      clearanceLgPx: 340,
-      clearanceMdPx: 260,
-      clearanceSmPx: 200
+      maxWidthPx: 520,
+      maxHeightVh: 65,
+      clearanceLgPx: 520,
+      clearanceMdPx: 420,
+      clearanceSmPx: 0
     },
     mascots: {
       assistant: {
