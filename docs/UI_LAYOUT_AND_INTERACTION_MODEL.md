@@ -3,6 +3,13 @@
 This document describes the **current UI layout and interaction behavior** implemented in `src/ui/render.js` and `src/ui/events.js`.
 See `docs/SAVE_LOAD_AND_PERSISTENCE_RULES.md` for the canonical save/load rules.
 
+## Ambient Mascot Layout (Config-Driven)
+- Mascot placement/sizing is driven by `CONFIG.ambientArt.layout`.
+- `rightOffsetRem` / `bottomOffsetPx` control the bottom-right anchor offset for the persistent mascot container.
+- `maxWidthPx` / `maxHeightVh` constrain mascot rendering so 768×768 mascots stay large but contained.
+- `clearanceLgPx`, `clearanceMdPx`, `clearanceSmPx` feed the `.mascot-clearance` padding values so content avoids overlapping the mascot on large/medium/smaller desktop widths.
+- Screens opting out of mascot-aware padding still use `.no-mascot-clearance`.
+
 ## Hub
 - **Status panel:** Day, Days Left, Shoots Today, Cash, Debt Remaining, Social Followers/Subs, OF Subs, MRR, Reputation, Next Action.
 - **Competition panel:** Shows start day before activation; after Day 181 shows standings + active market shift.

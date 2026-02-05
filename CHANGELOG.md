@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Added config-driven ambient mascot layout sizing/clearance with larger defaults and CSS variables.
+  - Why: Make 768x768 mascots display bigger by default while keeping layout spacing configurable.
+  - Files touched: src/config.js, src/main.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.
 - What: Tightened the Content screen slideshow container sizing to keep the info panel visible.
   - Why: Make the post-shoot slideshow fit more snugly in its frame without impacting other screens.
   - Files touched: styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.

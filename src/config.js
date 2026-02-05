@@ -127,6 +127,15 @@ const CONFIG = {
   },
   ambientArt: {
     enabled: true,
+    layout: {
+      rightOffsetRem: 2,
+      bottomOffsetPx: 0,
+      maxWidthPx: 360,
+      maxHeightVh: 55,
+      clearanceLgPx: 340,
+      clearanceMdPx: 260,
+      clearanceSmPx: 200
+    },
     mascots: {
       assistant: {
         id: "assistant",
