@@ -11,6 +11,9 @@ This changelog is optimized for:
 
 ## [Unreleased]
 ### Changed
+- What: Increased ambient mascot layout defaults for a larger hero presence and updated clearance spacing defaults.
+  - Why: Make the persistent mascot feel more prominent while keeping content panels clear of overlap on desktop.
+  - Files touched: src/config.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.
 - What: Added config-driven ambient mascot layout sizing/clearance with larger defaults and CSS variables.
   - Why: Make 768x768 mascots display bigger by default while keeping layout spacing configurable.
   - Files touched: src/config.js, src/main.js, styles.css, docs/UI_LAYOUT_AND_INTERACTION_MODEL.md, CHANGELOG.md.
