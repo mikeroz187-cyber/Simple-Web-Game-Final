@@ -3665,8 +3665,8 @@ body {
 /* === PERSISTENT MASCOT CONTAINER === */
 .ambient-mascot-container {
   position: fixed;
-  bottom: 0;
-  right: 2rem;
+  bottom: var(--ambient-mascot-bottom, 0px);
+  right: var(--ambient-mascot-right, 2rem);
   z-index: 100;
   pointer-events: none;
 }
@@ -3674,9 +3674,10 @@ body {
 .ambient-mascot-container .ambient-mascot {
   position: relative;
   display: block;
-  max-height: 55vh;
-  max-width: 280px;
+  max-height: var(--ambient-mascot-max-height, 55vh);
+  max-width: var(--ambient-mascot-max-width, 280px);
   width: auto;
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
   animation: ambient-breathe-bottom 4s ease-in-out infinite;
@@ -3687,11 +3688,11 @@ body {
 }
 
 .ambient-mascot-container.pos-right {
-  right: 2rem;
+  right: var(--ambient-mascot-right, 2rem);
 }
 
 .ambient-mascot-container.pos-right-inset {
-  right: 3rem;
+  right: calc(var(--ambient-mascot-right, 2rem) + 1rem);
 }
 
 .ambient-mascot-container.pos-crop {
@@ -3724,18 +3725,18 @@ body {
 
 /* Apply to screen-content containers that need mascot clearance */
 .mascot-clearance {
-  padding-right: 260px;
+  padding-right: var(--ambient-mascot-clearance-lg, 260px);
 }
 
 @media (max-width: 1400px) {
   .mascot-clearance {
-    padding-right: 200px;
+    padding-right: var(--ambient-mascot-clearance-md, 200px);
   }
 }
 
 @media (max-width: 1200px) {
   .mascot-clearance {
-    padding-right: 160px;
+    padding-right: var(--ambient-mascot-clearance-sm, 160px);
   }
 }
 
